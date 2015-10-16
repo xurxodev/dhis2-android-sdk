@@ -26,4 +26,31 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.clients;
+
+import org.hisp.dhis.sdk.java.user.IUserApiClient;
+import org.hisp.dhis.java.sdk.models.user.UserAccount;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.hisp.dhis.sdk.android.utils.NetworkUtils.call;
+
+public class UserApiClient implements IUserApiClient {
+    private final UserApiClientRetrofit mApiClient;
+
+    public UserApiClient(UserApiClientRetrofit mApiClient) {
+        this.mApiClient = mApiClient;
+    }
+
+    @Override
+    public UserAccount getUserAccount() {
+        final Map<String, String> QUERY_PARAMS = new HashMap<>();
+        QUERY_PARAMS.put("fields", "id,created,lastUpdated,name,displayName," +
+                "firstName,surname,gender,birthday,introduction," +
+                "education,employer,interests,jobTitle,languages,email,phoneNumber," +
+                "organisationUnits[id]");
+
+        return call(mApiClient.getCurrentUserAccount(QUERY_PARAMS));
+    }
+}

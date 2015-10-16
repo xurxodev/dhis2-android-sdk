@@ -26,4 +26,39 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.dashboard;
+
+import com.raizlabs.android.dbflow.sql.builder.Condition;
+import com.raizlabs.android.dbflow.sql.language.Select;
+
+import org.hisp.dhis.sdk.android.common.base.AbsIdentifiableObjectStore;
+import org.hisp.dhis.sdk.android.common.base.IMapper;
+import org.hisp.dhis.sdk.android.flow.DashboardElement$Flow;
+import org.hisp.dhis.sdk.java.dashboard.IDashboardElementStore;
+import org.hisp.dhis.java.sdk.models.dashboard.DashboardElement;
+import org.hisp.dhis.java.sdk.models.dashboard.DashboardItem;
+import org.hisp.dhis.sdk.java.utils.Preconditions;
+import org.hisp.dhis.java.sdk.core.flow.DashboardElement$Flow$Table;
+
+import java.util.List;
+
+public class DashboardElementStore extends AbsIdentifiableObjectStore<DashboardElement, DashboardElement$Flow> implements IDashboardElementStore {
+
+    public DashboardElementStore(IMapper<DashboardElement, DashboardElement$Flow> mapper) {
+        super(mapper);
+    }
+
+    @Override
+    public List<DashboardElement> queryByDashboardItem(DashboardItem dashboardItem) {
+        Preconditions.isNull(dashboardItem, "dashboard item must not be null");
+
+        List<DashboardElement$Flow> elementFlows = new Select()
+                .from(DashboardElement$Flow.class)
+                .where(Condition.column(DashboardElement$Flow$Table
+                        .DASHBOARDITEM_DASHBOARDITEM).is(dashboardItem.getId()))
+                .queryList();
+
+        // converting flow models to Dashboard
+        return getMapper().mapToModels(elementFlows);
+    }
+}

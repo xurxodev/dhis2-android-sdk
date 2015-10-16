@@ -26,4 +26,22 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.clients;
+
+import org.hisp.dhis.java.sdk.models.user.UserAccount;
+
+import java.util.Map;
+
+import retrofit.Call;
+import retrofit.http.GET;
+import retrofit.http.QueryMap;
+
+public interface UserApiClientRetrofit {
+
+    /////////////////////////////////////////////////////////////////////////
+    // Methods for getting user information
+    /////////////////////////////////////////////////////////////////////////
+
+    @GET("/me/")
+    Call<UserAccount> getCurrentUserAccount(@QueryMap Map<String, String> queryParams);
+}

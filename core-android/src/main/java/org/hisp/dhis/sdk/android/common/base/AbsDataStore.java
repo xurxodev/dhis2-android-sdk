@@ -26,27 +26,57 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-apply plugin: 'com.android.library'
-apply plugin: 'com.neenbedankt.android-apt'
+package org.hisp.dhis.sdk.android.common.base;
 
-android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+import com.raizlabs.android.dbflow.structure.Model;
 
-    defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
+import org.hisp.dhis.java.sdk.models.common.base.IModel;
+import org.hisp.dhis.java.sdk.models.common.state.Action;
+import org.hisp.dhis.sdk.java.common.IStateStore;
+
+import static org.hisp.dhis.sdk.java.utils.Preconditions.isNull;
+
+public class AbsDataStore<ModelType extends IModel, DatabaseEntityType
+        extends IModel & Model> extends AbsStore<ModelType, DatabaseEntityType> {
+
+    private final IStateStore stateStore;
+
+    public AbsDataStore(IMapper<ModelType, DatabaseEntityType> mapper, IStateStore stateStore) {
+        super(mapper);
+
+        this.stateStore = isNull(stateStore, "stateStore object must not be null");
     }
-}
 
-dependencies {
-    // Raizlabs libraries.
-    apt 'com.raizlabs.android:DBFlow-Compiler:2.2.1'
-    compile 'com.raizlabs.android:DBFlow-Core:2.2.1'
-    compile 'com.raizlabs.android:DBFlow:2.2.1'
+    @Override
+    public boolean insert(ModelType object) {
+        if (super.insert(object)) {
+            stateStore.saveActionForModel(object, Action.SYNCED);
+            return true;
+        }
+        return false;
+    }
 
-    // testing dependencies
-    testCompile 'junit:junit:4.12'
+    @Override
+    public boolean save(ModelType object) {
+        if (super.save(object)) {
+            Action action = stateStore.queryActionForModel(object);
+            if (action == null) {
+                action = Action.SYNCED;
+            }
+            stateStore.saveActionForModel(object, action);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean delete(ModelType object) {
+        if (super.delete(object)) {
+            stateStore.deleteActionForModel(object);
+            return true;
+        }
+
+        return false;
+    }
 }

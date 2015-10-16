@@ -26,4 +26,57 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.flow;
+
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.ForeignKeyAction;
+import com.raizlabs.android.dbflow.annotation.ForeignKeyReference;
+import com.raizlabs.android.dbflow.annotation.Table;
+
+import org.hisp.dhis.sdk.android.common.meta.DbDhis;
+
+@Table(databaseName = DbDhis.NAME)
+public final class DashboardItem$Flow extends BaseIdentifiableObject$Flow {
+
+    @Column(name = "type")
+    String type;
+
+    @Column(name = "shape")
+    String shape;
+
+    @Column
+    @ForeignKey(
+            references = {
+                    @ForeignKeyReference(columnName = "dashboard", columnType = long.class, foreignColumnName = "id")
+            }, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE
+    )
+    Dashboard$Flow dashboard;
+
+    public DashboardItem$Flow() {
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getShape() {
+        return shape;
+    }
+
+    public void setShape(String shape) {
+        this.shape = shape;
+    }
+
+    public Dashboard$Flow getDashboard() {
+        return dashboard;
+    }
+
+    public void setDashboard(Dashboard$Flow dashboard) {
+        this.dashboard = dashboard;
+    }
+}

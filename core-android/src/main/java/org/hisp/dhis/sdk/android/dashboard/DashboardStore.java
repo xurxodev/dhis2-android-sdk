@@ -26,4 +26,17 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.dashboard;
+
+import org.hisp.dhis.sdk.android.common.base.AbsIdentifiableObjectStore;
+import org.hisp.dhis.sdk.android.common.base.IMapper;
+import org.hisp.dhis.sdk.java.dashboard.IDashboardStore;
+import org.hisp.dhis.java.sdk.models.dashboard.Dashboard;
+import org.hisp.dhis.sdk.android.flow.Dashboard$Flow;
+
+public class DashboardStore extends AbsIdentifiableObjectStore<Dashboard, Dashboard$Flow> implements IDashboardStore {
+
+    public DashboardStore(IMapper<Dashboard, Dashboard$Flow> mapper) {
+        super(mapper);
+    }
+}

@@ -26,4 +26,49 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.flow;
+
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.Table;
+
+import org.hisp.dhis.sdk.android.common.meta.DbDhis;
+
+@Table(databaseName = DbDhis.NAME)
+public final class Category$Flow extends BaseIdentifiableObject$Flow {
+
+    @Column
+    String dataDimension;
+
+    @Column
+    String dataDimensionType;
+
+    @Column
+    String dimension;
+
+    public Category$Flow() {
+    }
+
+    public String getDataDimension() {
+        return dataDimension;
+    }
+
+    public void setDataDimension(String dataDimension) {
+        this.dataDimension = dataDimension;
+    }
+
+    public String getDataDimensionType() {
+        return dataDimensionType;
+    }
+
+    public void setDataDimensionType(String dataDimensionType) {
+        this.dataDimensionType = dataDimensionType;
+    }
+
+    public String getDimension() {
+        return dimension;
+    }
+
+    public void setDimension(String dimension) {
+        this.dimension = dimension;
+    }
+}

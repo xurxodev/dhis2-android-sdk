@@ -26,4 +26,29 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.flow;
+
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.NotNull;
+import com.raizlabs.android.dbflow.annotation.Table;
+
+import org.hisp.dhis.sdk.android.common.meta.DbDhis;
+
+@Table(databaseName = DbDhis.NAME)
+public final class DashboardContent$Flow extends BaseIdentifiableObject$Flow {
+
+    @Column(name = "type")
+    @NotNull
+    String type;
+
+    public DashboardContent$Flow() {
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+}

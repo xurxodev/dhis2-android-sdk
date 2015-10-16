@@ -26,4 +26,19 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.common.state;
+
+import com.raizlabs.android.dbflow.structure.Model;
+
+import org.hisp.dhis.sdk.android.common.base.IMapper;
+import org.hisp.dhis.java.sdk.models.common.base.IModel;
+import org.hisp.dhis.java.sdk.models.common.state.State;
+import org.hisp.dhis.sdk.android.flow.State$Flow;
+
+public interface IStateMapper extends IMapper<State, State$Flow> {
+    Class<? extends IModel> getRelatedModelClass(String type);
+
+    String getRelatedModelClass(Class<? extends IModel> clazz);
+
+    Class<? extends Model> getRelatedDatabaseEntityClass(Class<? extends IModel> clazz);
+}

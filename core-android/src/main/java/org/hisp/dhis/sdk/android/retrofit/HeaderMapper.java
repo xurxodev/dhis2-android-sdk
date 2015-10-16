@@ -26,4 +26,31 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.retrofit;
+
+import com.squareup.okhttp.Headers;
+
+import org.hisp.dhis.sdk.java.common.network.Header;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public final class HeaderMapper {
+
+    private HeaderMapper() {
+        // private constructor
+    }
+
+    public static List<Header> fromOkHeaders(Headers okHeaders) {
+        List<Header> headers = new ArrayList<>();
+
+        if (okHeaders != null) {
+            for (String name : okHeaders.names()) {
+                String value = okHeaders.get(name);
+                headers.add(new Header(name, value));
+            }
+        }
+
+        return headers;
+    }
+}

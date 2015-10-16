@@ -26,4 +26,36 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.common.base;
+
+import com.raizlabs.android.dbflow.structure.Model;
+
+import org.hisp.dhis.java.sdk.models.common.base.IModel;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class AbsMapper<ModelType extends IModel, DatabaseEntityType extends IModel & Model> implements IMapper<ModelType, DatabaseEntityType> {
+
+    @Override
+    public List<DatabaseEntityType> mapToDatabaseEntities(List<ModelType> models) {
+        List<DatabaseEntityType> modelObjects = new ArrayList<>();
+        if (models != null && !models.isEmpty()) {
+            for (ModelType model : models) {
+                modelObjects.add(mapToDatabaseEntity(model));
+            }
+        }
+        return modelObjects;
+    }
+
+    @Override
+    public List<ModelType> mapToModels(List<DatabaseEntityType> dataBaseEntities) {
+        List<ModelType> modelObjects = new ArrayList<>();
+        if (dataBaseEntities != null && !dataBaseEntities.isEmpty()) {
+            for (DatabaseEntityType dataBaseEntity : dataBaseEntities) {
+                modelObjects.add(mapToModel(dataBaseEntity));
+            }
+        }
+        return modelObjects;
+    }
+}

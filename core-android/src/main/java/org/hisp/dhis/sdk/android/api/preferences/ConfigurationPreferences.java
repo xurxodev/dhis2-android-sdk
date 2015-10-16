@@ -26,4 +26,48 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.api.preferences;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import org.hisp.dhis.sdk.java.common.network.Configuration;
+import org.hisp.dhis.sdk.java.common.preferences.IConfigurationPreferences;
+
+import static org.hisp.dhis.sdk.java.utils.Preconditions.isNull;
+
+public class ConfigurationPreferences implements IConfigurationPreferences {
+    private static final String CONFIGURATION_PREFERENCES = "preferences:configuration";
+    private static final String SERVER_URL_KEY = "key:serverUrl";
+
+    private final SharedPreferences mPrefs;
+
+    public ConfigurationPreferences(Context context) {
+        mPrefs = context.getSharedPreferences(CONFIGURATION_PREFERENCES, Context.MODE_PRIVATE);
+    }
+
+    @Override
+    public boolean save(Configuration configuration) {
+        isNull(configuration, "configuration must not be null");
+        return putString(SERVER_URL_KEY, configuration.getServerUrl());
+    }
+
+    @Override
+    public Configuration get() {
+        String serverUrl = getString(SERVER_URL_KEY);
+        return new Configuration(serverUrl);
+    }
+
+    @Override
+    public boolean clear() {
+        return mPrefs.edit().clear().commit();
+    }
+
+    private boolean putString(String key, String value) {
+        return mPrefs.edit().putString(key, value).commit();
+    }
+
+    private String getString(String key) {
+        return mPrefs.getString(key, null);
+    }
+}

@@ -26,4 +26,41 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.api.modules;
+
+import android.content.Context;
+
+import org.hisp.dhis.sdk.java.common.preferences.IPreferencesModule;
+import org.hisp.dhis.sdk.java.common.preferences.IConfigurationPreferences;
+import org.hisp.dhis.sdk.java.common.preferences.ILastUpdatedPreferences;
+import org.hisp.dhis.sdk.java.common.preferences.IUserPreferences;
+import org.hisp.dhis.sdk.android.api.preferences.ConfigurationPreferences;
+import org.hisp.dhis.sdk.android.api.preferences.LastUpdatedPreferences;
+import org.hisp.dhis.sdk.android.api.preferences.UserPreferences;
+
+public class PreferencesModule implements IPreferencesModule {
+    private final ILastUpdatedPreferences mLastUpdatedPreferences;
+    private final IUserPreferences mUserPreferences;
+    private final IConfigurationPreferences mConfigurationPreferences;
+
+    public PreferencesModule(Context context) {
+        mLastUpdatedPreferences = new LastUpdatedPreferences(context);
+        mUserPreferences = new UserPreferences(context);
+        mConfigurationPreferences = new ConfigurationPreferences(context);
+    }
+
+    @Override
+    public ILastUpdatedPreferences getLastUpdatedPreferences() {
+        return mLastUpdatedPreferences;
+    }
+
+    @Override
+    public IUserPreferences getUserPreferences() {
+        return mUserPreferences;
+    }
+
+    @Override
+    public IConfigurationPreferences getConfigurationPreferences() {
+        return mConfigurationPreferences;
+    }
+}

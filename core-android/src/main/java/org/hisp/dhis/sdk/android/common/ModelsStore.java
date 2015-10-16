@@ -26,4 +26,39 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.common;
+
+import com.raizlabs.android.dbflow.sql.language.Delete;
+
+import org.hisp.dhis.sdk.android.flow.DashboardItem$Flow;
+import org.hisp.dhis.sdk.android.flow.User$Flow;
+import org.hisp.dhis.sdk.android.flow.Dashboard$Flow;
+import org.hisp.dhis.sdk.android.flow.DashboardElement$Flow;
+import org.hisp.dhis.sdk.android.flow.DashboardContent$Flow;
+import org.hisp.dhis.sdk.android.flow.Interpretation$Flow;
+import org.hisp.dhis.sdk.android.flow.InterpretationComment$Flow;
+import org.hisp.dhis.sdk.android.flow.InterpretationElement$Flow;
+import org.hisp.dhis.sdk.android.flow.UserAccount$Flow;
+import org.hisp.dhis.sdk.java.common.IModelsStore;
+
+public class ModelsStore implements IModelsStore {
+
+    public ModelsStore() {
+        // empty constructor
+    }
+
+    @Override
+    public void deleteAllTables() {
+        Delete.tables(
+                Dashboard$Flow.class,
+                DashboardItem$Flow.class,
+                DashboardElement$Flow.class,
+                DashboardContent$Flow.class,
+                Interpretation$Flow.class,
+                InterpretationComment$Flow.class,
+                InterpretationElement$Flow.class,
+                UserAccount$Flow.class,
+                User$Flow.class
+        );
+    }
+}

@@ -26,4 +26,15 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.clients;
+
+import org.hisp.dhis.java.sdk.models.common.SystemInfo;
+
+import retrofit.Call;
+import retrofit.http.GET;
+
+public interface SystemInfoApiClientRetrofit {
+
+    @GET("/system/info/")
+    Call<SystemInfo> getSystemInfo();
+}

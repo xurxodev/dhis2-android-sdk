@@ -26,4 +26,49 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.api.api;
+
+import com.squareup.okhttp.HttpUrl;
+
+import org.hisp.dhis.sdk.java.user.IUserAccountController;
+import org.hisp.dhis.java.sdk.core.network.APIException;
+import org.hisp.dhis.java.sdk.core.models.Credentials;
+import org.hisp.dhis.sdk.java.user.IUserAccountService;
+import org.hisp.dhis.java.sdk.models.user.User;
+import org.hisp.dhis.java.sdk.models.user.UserAccount;
+
+final class UserAccountScope implements IUserAccountController, IUserAccountService {
+    private final IUserAccountController userAccountController;
+    private final IUserAccountService userAccountService;
+
+    public UserAccountScope(IUserAccountController userAccountController,
+                            IUserAccountService userAccountService) {
+        this.userAccountController = userAccountController;
+        this.userAccountService = userAccountService;
+    }
+
+    @Override
+    public UserAccount logIn(HttpUrl serverUrl, Credentials credentials) throws APIException {
+        return userAccountController.logIn(serverUrl, credentials);
+    }
+
+    @Override
+    public UserAccount updateAccount() throws APIException {
+        return userAccountController.updateAccount();
+    }
+
+    @Override
+    public UserAccount getCurrentUserAccount() {
+        return userAccountService.getCurrentUserAccount();
+    }
+
+    @Override
+    public User toUser(UserAccount userAccount) {
+        return userAccountService.toUser(userAccount);
+    }
+
+    @Override
+    public void logOut() {
+        userAccountService.logOut();
+    }
+}

@@ -26,4 +26,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.common.meta;
+
+import com.raizlabs.android.dbflow.annotation.Database;
+
+@Database(name = DbDhis.NAME, version = DbDhis.VERSION)
+public final class DbDhis {
+    public static final String NAME = "dhis";
+    public static final int VERSION = 3;
+}

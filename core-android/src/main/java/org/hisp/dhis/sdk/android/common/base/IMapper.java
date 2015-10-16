@@ -26,4 +26,24 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.common.base;
+
+import com.raizlabs.android.dbflow.structure.Model;
+
+import org.hisp.dhis.java.sdk.models.common.base.IModel;
+
+import java.util.List;
+
+public interface IMapper<ModelType extends IModel, DatabaseEntityType extends Model & IModel> {
+    DatabaseEntityType mapToDatabaseEntity(ModelType model);
+
+    ModelType mapToModel(DatabaseEntityType dataBaseEntity);
+
+    List<DatabaseEntityType> mapToDatabaseEntities(List<ModelType> models);
+
+    List<ModelType> mapToModels(List<DatabaseEntityType> dataBaseEntity);
+
+    Class<ModelType> getModelTypeClass();
+
+    Class<DatabaseEntityType> getDatabaseEntityTypeClass();
+}

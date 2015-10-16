@@ -26,4 +26,22 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.clients;
+
+import org.hisp.dhis.sdk.java.systeminfo.ISystemInfoApiClient;
+import org.hisp.dhis.java.sdk.models.common.SystemInfo;
+
+import static org.hisp.dhis.sdk.android.utils.NetworkUtils.call;
+
+public class SystemInfoApiClient implements ISystemInfoApiClient {
+    private final SystemInfoApiClientRetrofit mClient;
+
+    public SystemInfoApiClient(SystemInfoApiClientRetrofit client) {
+        mClient = client;
+    }
+
+    @Override
+    public SystemInfo getSystemInfo() {
+        return call(mClient.getSystemInfo());
+    }
+}

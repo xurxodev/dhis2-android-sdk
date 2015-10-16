@@ -26,4 +26,46 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.api.converters;
+
+
+
+import com.raizlabs.android.dbflow.converter.TypeConverter;
+
+import org.hisp.dhis.java.sdk.models.common.Access;
+
+@SuppressWarnings("unused")
+@com.raizlabs.android.dbflow.annotation.TypeConverter
+public final class AccessConverter extends TypeConverter<String, Access> {
+
+    @Override
+    public String getDBValue(Access model) {
+        /* String access = null;
+        try {
+            access = ObjectMapperProvider
+                    .getInstance().writeValueAsString(model);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return access; */
+        return null;
+    }
+
+    @Override
+    public Access getModelValue(String data) {
+        /* Access access = null;
+        try {
+            access = ObjectMapperProvider
+                    .getInstance().readValue(data, Access.class);
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return access; */
+        return null;
+    }
+}

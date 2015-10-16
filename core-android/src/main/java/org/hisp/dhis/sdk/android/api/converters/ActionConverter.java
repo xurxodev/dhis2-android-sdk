@@ -26,4 +26,24 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.api.converters;
+
+
+import com.raizlabs.android.dbflow.converter.TypeConverter;
+
+import org.hisp.dhis.java.sdk.models.common.state.Action;
+
+@SuppressWarnings("unused")
+@com.raizlabs.android.dbflow.annotation.TypeConverter
+public final class ActionConverter extends TypeConverter<String, Action> {
+
+    @Override
+    public String getDBValue(Action model) {
+        return model.toString();
+    }
+
+    @Override
+    public Action getModelValue(String data) {
+        return Action.valueOf(data);
+    }
+}

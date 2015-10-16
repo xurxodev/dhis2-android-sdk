@@ -26,4 +26,15 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ':app', ':ui', ':core-android'
+package org.hisp.dhis.sdk.android.flow;
+
+import com.raizlabs.android.dbflow.annotation.Table;
+
+import org.hisp.dhis.sdk.android.common.meta.DbDhis;
+
+@Table(databaseName = DbDhis.NAME)
+public final class CategoryOptionCombo$Flow extends BaseIdentifiableObject$Flow {
+
+    public CategoryOptionCombo$Flow() {
+    }
+}
