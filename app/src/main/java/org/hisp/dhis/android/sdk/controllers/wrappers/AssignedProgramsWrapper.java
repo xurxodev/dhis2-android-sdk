@@ -44,6 +44,8 @@ import org.hisp.dhis.android.sdk.persistence.models.Attribute;
 import org.hisp.dhis.android.sdk.persistence.models.AttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitAttributeValue;
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitDataSet;
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitGroup;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitProgramRelationship;
 import org.hisp.dhis.android.sdk.persistence.models.meta.DbOperation;
 import org.hisp.dhis.android.sdk.utils.StringConverter;
@@ -163,6 +165,33 @@ public class AssignedProgramsWrapper extends JsonDeserializer<List<OrganisationU
         }
         return organisationUnitsAttributeValues;
     }
+
+    public static List<DbOperation> saveDataSets(OrganisationUnit organisationUnit){
+        List<DbOperation> operations = new ArrayList<>();
+        List<String> organisationUnitDataSets=organisationUnit.getDataSets();
+        for(String organisationUnitDataSetUid:organisationUnitDataSets)
+        {
+            OrganisationUnitDataSet organisationUnitDataSet=new OrganisationUnitDataSet();
+            organisationUnitDataSet.setOrganisationUnitId(organisationUnit.getId());
+            organisationUnitDataSet.setDataSetId(organisationUnitDataSetUid);
+            operations.add(DbOperation.save(organisationUnitDataSet));
+        }
+        return operations;
+    }
+
+    public static List<DbOperation> saveOrganisationUnitGroups(OrganisationUnit organisationUnit){
+        List<DbOperation> operations = new ArrayList<>();
+        List<String> organisationUnitGroupsUid=organisationUnit.getOrganisationUnitGroups();
+        for(String organisationUnitGroupUid:organisationUnitGroupsUid)
+        {
+            OrganisationUnitGroup organisationUnitGroup=new OrganisationUnitGroup();
+            organisationUnitGroup.setOrganisationUnitId(organisationUnit.getId());
+            organisationUnitGroup.setOrganisationUnitGroupId(organisationUnitGroupUid);
+            operations.add(DbOperation.save(organisationUnitGroup));
+        }
+        return operations;
+    }
+
 
     public static List<DbOperation> saveOrganisationUnitAttributes(OrganisationUnit organisationUnit, List<OrganisationUnitAttributeValue> OrganisationUnitAttributeValues){
         List<DbOperation> operations = new ArrayList<>();

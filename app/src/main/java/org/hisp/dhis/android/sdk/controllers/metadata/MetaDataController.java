@@ -668,6 +668,11 @@ public final class MetaDataController extends ResourceController {
                     QUERY_MAP_FULL.put("fields","[:all],!parent");
                     response= dhisApi.getOrganistationUnit(organisationUnit.getId(), QUERY_MAP_FULL);
                     organisationUnit=AssignedProgramsWrapper.deserializeOrganisationUnit(response, organisationUnit);
+                    if(organisationUnit.getDataSets()!=null)
+                    operations.addAll(AssignedProgramsWrapper.saveDataSets(organisationUnit));
+                    if(organisationUnit.getOrganisationUnitGroups()!=null)
+                    operations.addAll(AssignedProgramsWrapper.saveOrganisationUnitGroups(organisationUnit));
+
                     QUERY_MAP_FULL = new HashMap<>();
                     QUERY_MAP_FULL.put("fields","*,attributeValues[*,attribute[name,displayName,created,lastUpdated,access,id,valueType,code]],all");
                     response= dhisApi.getOrganistationUnit(organisationUnit.getId(), QUERY_MAP_FULL);
