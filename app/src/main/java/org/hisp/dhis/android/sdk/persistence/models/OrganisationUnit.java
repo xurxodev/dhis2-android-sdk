@@ -66,10 +66,69 @@ public class OrganisationUnit extends BaseModel {
     @Column(name = "parent")
     String parent;
 
+    @JsonProperty("uuid")
+    @Column(name = "uuid")
+    String uuid;
+
+    @JsonProperty("lastUpdated")
+    @Column(name = "lastUpdated")
+    String lastUpdated;
+
+    @JsonProperty("created")
+    @Column(name = "created")
+    String created;
+
+    @JsonProperty("name")
+    @Column(name = "name")
+    String name;
+
+    @JsonProperty("user")
+    @Column(name = "user")
+    String user;
+
+    @JsonProperty("shortName")
+    @Column(name = "shortName")
+    String shortName;
+
+    @JsonProperty("displayName")
+    @Column(name = "displayName")
+    String displayName;
+
+    @JsonProperty("displayShortName")
+    @Column(name = "displayShortName")
+    String displayShortName;
+
+    @JsonProperty("externalAccess")
+    @Column(name = "externalAccess")
+    Boolean externalAccess;
+
+    @JsonProperty("path")
+    @Column(name = "path")
+    String path;
+
+    @JsonProperty("featureType")
+    @Column(name = "featureType")
+    String featureType;
+
+    @JsonProperty("openingDate")
+    @Column(name = "openingDate")
+    String openingDate;
+
+    @JsonProperty("dimensionItem")
+    @Column(name = "dimensionItem")
+    String dimensionItem;
+
     @JsonProperty("attributeValues")
     List<OrganisationUnitAttributeValue> attributeValues;
 
+    @JsonProperty("programs")
     List<String> programs;
+
+    @JsonProperty("ancestors")
+    List<String> ancestors;
+
+    @JsonProperty("children")
+    List<String> children;
 
     public OrganisationUnit() {
     }
@@ -85,6 +144,15 @@ public class OrganisationUnit extends BaseModel {
 
     public void setParent(String parent) {
         this.parent = parent;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    @JsonProperty("user")
+    public void setUser(Map<String,Object> user) {
+        this.user = ((String) user.get("id"));
     }
 
     public String getId() {
@@ -122,6 +190,39 @@ public class OrganisationUnit extends BaseModel {
             tempPrograms.add((String) program.get("id"));
         }
         this.programs = tempPrograms;
+    }
+
+    public List<String> getChildren() {
+        return children;
+    }
+
+    @JsonProperty("children")
+    public void setChildren(List<Map<String, Object>> childs) {
+        List<String> tempChilds = new ArrayList<>();
+        for (Map<String, Object> child : childs) {
+            tempChilds.add((String) child.get("id"));
+        }
+        this.children = tempChilds;
+    }
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public List<String> getAncestors() {
+        return ancestors;
+    }
+
+    @JsonProperty("ancestors")
+    public void setAncestors(List<Map<String, Object>> organisationUnits) {
+        List<String> tempAncestors = new ArrayList<>();
+        for (Map<String, Object> organisationUnit : organisationUnits) {
+            tempAncestors.add((String) organisationUnit.get("id"));
+        }
+        this.ancestors = tempAncestors;
     }
 
 
