@@ -118,17 +118,19 @@ public class OrganisationUnit extends BaseModel {
     @Column(name = "dimensionItem")
     String dimensionItem;
 
-    @JsonProperty("attributeValues")
     List<OrganisationUnitAttributeValue> attributeValues;
 
-    @JsonProperty("programs")
     List<String> programs;
 
-    @JsonProperty("ancestors")
     List<String> ancestors;
 
-    @JsonProperty("children")
     List<String> children;
+
+    List<String> organisationUnitGroups;
+
+    List<String> dataSets;
+
+    List<String> assignedUsers;
 
     public OrganisationUnit() {
     }
@@ -204,6 +206,47 @@ public class OrganisationUnit extends BaseModel {
         }
         this.children = tempChilds;
     }
+
+
+    public List<String> getOrganisationUnitGroups() {
+        return organisationUnitGroups;
+    }
+
+    @JsonProperty("organisationUnitGroups")
+    public void setOrganisationUnitGroups(List<Map<String, Object>> organisationUnitGroups) {
+        List<String> tempOrganisationUnitGroups = new ArrayList<>();
+        for (Map<String, Object> organisationUnitGroup : organisationUnitGroups) {
+            tempOrganisationUnitGroups.add((String) organisationUnitGroup.get("id"));
+        }
+        this.organisationUnitGroups = tempOrganisationUnitGroups;
+    }
+
+    public List<String> getDataSets() {
+        return dataSets;
+    }
+
+    @JsonProperty("dataSets")
+    public void setDataSets(List<Map<String, Object>> dataSets) {
+        List<String> tempDataSets = new ArrayList<>();
+        for (Map<String, Object> dataSet : dataSets) {
+            tempDataSets.add((String) dataSet.get("id"));
+        }
+        this.dataSets = tempDataSets;
+    }
+
+    public List<String> getAssignedUsers() {
+        return assignedUsers;
+    }
+
+    @JsonProperty("users")
+    public void setAssignedUsers(List<Map<String, Object>> users) {
+        List<String> tempUsers = new ArrayList<>();
+        for (Map<String, Object> user : users) {
+            tempUsers.add((String) user.get("id"));
+        }
+        this.assignedUsers = tempUsers;
+    }
+
     public String getUuid() {
         return uuid;
     }
