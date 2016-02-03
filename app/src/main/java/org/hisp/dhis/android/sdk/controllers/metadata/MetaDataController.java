@@ -61,6 +61,8 @@ import org.hisp.dhis.android.sdk.persistence.models.OptionSet;
 import org.hisp.dhis.android.sdk.persistence.models.OptionSet$Table;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit$Table;
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitDataSet;
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitGroup;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitProgramRelationship;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitProgramRelationship$Table;
 import org.hisp.dhis.android.sdk.persistence.models.Program;
@@ -572,7 +574,9 @@ public final class MetaDataController extends ResourceController {
                 RelationshipType.class,
                 Attribute.class,
                 DataElementAttributeValue.class,
-                OrganisationUnitAttributeValue.class);
+                OrganisationUnitAttributeValue.class,
+                OrganisationUnitDataSet.class,
+                OrganisationUnitGroup.class);
     }
 
     /**
