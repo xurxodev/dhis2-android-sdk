@@ -31,7 +31,6 @@ public class Version8AddOrganisationUnitColumns extends AlterTableMigration<Orga
         addColumn(String.class, "lastUpdated");
         addColumn(String.class, "openingDate");
         addColumn(String.class, "dimensionItem");
-        addColumn(String.class, "children");
         addColumn(String.class, "user");
     }
 
