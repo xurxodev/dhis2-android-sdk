@@ -32,8 +32,10 @@ package org.hisp.dhis.android.sdk.controllers.wrappers;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.hisp.dhis.android.sdk.controllers.ApiEndpointContainer;
 import org.hisp.dhis.android.sdk.controllers.DhisController;
@@ -122,7 +124,25 @@ public class AssignedProgramsWrapper extends JsonDeserializer<List<OrganisationU
         return operations;
     }
 
-    public static List<OrganisationUnitAttributeValue> deserializeAttributeValues(Response response,OrganisationUnit organisationUnit) throws ConversionException, IOException {
+    public static OrganisationUnit deserializeOrganisationUnit(Response response,OrganisationUnit organisationUnit) throws ConversionException, IOException {
+        String responseBodyString = new StringConverter().fromBody(response.getBody(), String.class);
+        JsonNode node = DhisController.getInstance().getObjectMapper().
+                readTree(responseBodyString);
+        OrganisationUnit finalOrganisationUnit=organisationUnit;
+        if (node == null) { /* in case there are no items */
+            return null;
+        } else {
+
+            ObjectMapper objectMapper=DhisController.getInstance().getObjectMapper();
+            objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+            finalOrganisationUnit = objectMapper.readValue(responseBodyString, OrganisationUnit.class);
+            finalOrganisationUnit.setLabel(organisationUnit.getLabel());
+            finalOrganisationUnit.setParent(organisationUnit.getParent());
+        }
+        return finalOrganisationUnit;
+    }
+
+        public static List<OrganisationUnitAttributeValue> deserializeAttributeValues(Response response,OrganisationUnit organisationUnit) throws ConversionException, IOException {
         List<OrganisationUnitAttributeValue> organisationUnitsAttributeValues = new ArrayList<>();
         String responseBodyString = new StringConverter().fromBody(response.getBody(), String.class);
         JsonNode node = DhisController.getInstance().getObjectMapper().
