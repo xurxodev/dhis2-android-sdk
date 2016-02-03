@@ -65,6 +65,8 @@ import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitProgramRelat
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitProgramRelationship$Table;
 import org.hisp.dhis.android.sdk.persistence.models.Program;
 import org.hisp.dhis.android.sdk.persistence.models.Program$Table;
+import org.hisp.dhis.android.sdk.persistence.models.ProgramAttributeValue;
+import org.hisp.dhis.android.sdk.persistence.models.ProgramAttributeValue$Table;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramIndicator;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramIndicator$Table;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramIndicatorToSectionRelationship;
@@ -236,6 +238,42 @@ public final class MetaDataController extends ResourceController {
     }
 
     /**
+     * Get a concrete DataElementAttributeValue entry given its id
+     *
+     * @param id PK of the DataElementAttributeValue table
+     * @return The DataElementAttributeValue object or null if not found
+     */
+    public static DataElementAttributeValue getDataElementAttributeValue(Long id){
+        if (id == null) return null;
+        return new Select().from(DataElementAttributeValue.class)
+                .where(Condition.column(DataElementAttributeValue$Table.ID).is(id)).querySingle();
+    }
+
+    /**
+     * Get all the ProgramAttributeValue that belongs to a given Program
+     *
+     * @param program to get the Attributes from
+     * @return List of ProgramAttributeValue objects that belongs to the given Program
+     */
+    public static List<ProgramAttributeValue> getProgramAttributeValues(Program program){
+        if (program == null) return null;
+        return new Select().from(ProgramAttributeValue.class)
+                .where(Condition.column(ProgramAttributeValue$Table.PROGRAM).is(program.getUid()))
+                .orderBy(ProgramAttributeValue$Table.ID).queryList();
+    }
+    /**
+     * Get a concrete ProgramAttributeValue entry given its id
+     *
+     * @param id PK of the ProgramAttributeValue table
+     * @return The ProgramAttributeValue object or null if not found
+     */
+    public static ProgramAttributeValue getProgramAttributeValue(Long id){
+        if (id == null) return null;
+        return new Select().from(ProgramAttributeValue.class)
+                .where(Condition.column(ProgramAttributeValue$Table.ID).is(id)).querySingle();
+    }
+
+    /**
      * Get all the OrganisationUnitAttributeValue that belongs to a given organistation unit
      *
      * @param organisationUnit to get the Attributes from
@@ -247,17 +285,7 @@ public final class MetaDataController extends ResourceController {
                 .where(Condition.column(OrganisationUnitAttributeValue$Table.ORGANISATIONUNIT).is(organisationUnit.getId()))
                 .orderBy(OrganisationUnitAttributeValue$Table.ID).queryList();
     }
-    /**
-     * Get a concrete DataElementAttributeValue entry given its id
-     *
-     * @param id PK of the DataElementAttributeValue table
-     * @return The DataElementAttributeValue object or null if not found
-     */
-    public static DataElementAttributeValue getDataElementAttributeValue(Long id){
-        if (id == null) return null;
-        return new Select().from(DataElementAttributeValue.class)
-                .where(Condition.column(DataElementAttributeValue$Table.ID).is(id)).querySingle();
-    }
+
     /**
      * Get a concrete OrganisationUnitAttributeValue entry given its id
      *
@@ -269,6 +297,7 @@ public final class MetaDataController extends ResourceController {
         return new Select().from(OrganisationUnitAttributeValue.class)
                 .where(Condition.column(OrganisationUnitAttributeValue$Table.ID).is(id)).querySingle();
     }
+
     /**
      * Get a concrete Attribute entry given its string ID
      *
@@ -701,6 +730,7 @@ public final class MetaDataController extends ResourceController {
 
         QUERY_MAP_FULL.put("fields",
                 "*,programStages[*,!dataEntryForm,program[id],programIndicators[*]," +
+                "attributeValues[*,attribute[name,displayName,created,lastUpdated,access,id,valueType,code]]," +
                 "programStageSections[*,programStageDataElements[*,programStage[id]," +
                 "dataElement[*,id,attributeValues[*,attribute[*]],optionSet[id]]],programIndicators[*]],programStageDataElements" +
                 "[*,programStage[id],dataElement[*,optionSet[id]]]],programTrackedEntityAttributes" +

@@ -124,6 +124,9 @@ public class Program extends BaseMetaDataObject {
     @JsonProperty("programTrackedEntityAttributes")
     List<ProgramTrackedEntityAttribute> programTrackedEntityAttributes;
 
+    @JsonProperty("attributeValues")
+    List<ProgramAttributeValue> attributeValues;
+
     public Program() {
     }
 
@@ -293,5 +296,26 @@ public class Program extends BaseMetaDataObject {
 
     public void setSelectIncidentDatesInFuture(boolean selectIncidentDatesInFuture) {
         this.selectIncidentDatesInFuture = selectIncidentDatesInFuture;
+    }
+
+
+    public List<ProgramAttributeValue> getAttributeValues() {
+        if (attributeValues == null) {
+            attributeValues = MetaDataController.getProgramAttributeValues(this);
+        }
+        return attributeValues;
+    }
+
+    public ProgramAttributeValue getAttributeValue(String attributeId){
+        if (getAttributeValues() == null) return null;
+        for (ProgramAttributeValue attributeValue: getAttributeValues()){
+            if (attributeValue.getAttribute().equals(attributeId))
+                return attributeValue;
+        }
+        return null;
+    }
+
+    public ProgramAttributeValue getAttributeValue(long id){
+        return MetaDataController.getProgramAttributeValue(id);
     }
 }
