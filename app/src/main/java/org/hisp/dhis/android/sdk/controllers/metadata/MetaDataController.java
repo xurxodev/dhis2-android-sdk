@@ -666,21 +666,11 @@ public final class MetaDataController extends ResourceController {
         }
             List<DbOperation> operations = AssignedProgramsWrapper.getOperations(organisationUnits);
             for(OrganisationUnit organisationUnit:organisationUnits){
+                final Map<String, String> QUERY_MAP_FULL = new HashMap<>();
+                QUERY_MAP_FULL.put("fields","attributeValues[*,attribute[name,displayName,created,lastUpdated,access,id,valueType,code]]");
                 List<OrganisationUnitAttributeValue> organisationUnitAttributeValues = null;
                 try {
-                    Map<String, String> QUERY_MAP_FULL = new HashMap<>();
-                    QUERY_MAP_FULL.put("fields","[:all],!parent");
-                    response= dhisApi.getOrganisationUnit(organisationUnit.getId(), QUERY_MAP_FULL);
-                    organisationUnit=AssignedProgramsWrapper.deserializeOrganisationUnit(response, organisationUnit);
-                    if(organisationUnit.getDataSets()!=null)
-                    operations.addAll(AssignedProgramsWrapper.saveDataSets(organisationUnit));
-                    if(organisationUnit.getOrganisationUnitGroups()!=null)
-                    operations.addAll(AssignedProgramsWrapper.saveOrganisationUnitGroups(organisationUnit));
-
-                    QUERY_MAP_FULL = new HashMap<>();
-                    QUERY_MAP_FULL.put("fields","*,attributeValues[*,attribute[name,displayName,created,lastUpdated,access,id,valueType,code]],all");
-                    response= dhisApi.getOrganisationUnit(organisationUnit.getId(), QUERY_MAP_FULL);
-                    organisationUnitAttributeValues = AssignedProgramsWrapper.deserializeAttributeValues(response, organisationUnit);
+                    organisationUnitAttributeValues=AssignedProgramsWrapper.deserializeAttributeValues(dhisApi.getOrganistationUnitAttributeValues(organisationUnit.getId(), QUERY_MAP_FULL), organisationUnit);
 
                     for(OrganisationUnitAttributeValue organisationUnitAttributeValue:organisationUnitAttributeValues)
                     {
