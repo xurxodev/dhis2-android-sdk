@@ -32,8 +32,10 @@ package org.hisp.dhis.android.sdk.controllers.wrappers;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.hisp.dhis.android.sdk.controllers.ApiEndpointContainer;
 import org.hisp.dhis.android.sdk.controllers.DhisController;
@@ -42,6 +44,8 @@ import org.hisp.dhis.android.sdk.persistence.models.Attribute;
 import org.hisp.dhis.android.sdk.persistence.models.AttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitAttributeValue;
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitDataSet;
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitGroup;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitProgramRelationship;
 import org.hisp.dhis.android.sdk.persistence.models.meta.DbOperation;
 import org.hisp.dhis.android.sdk.utils.StringConverter;
@@ -122,7 +126,25 @@ public class AssignedProgramsWrapper extends JsonDeserializer<List<OrganisationU
         return operations;
     }
 
-    public static List<OrganisationUnitAttributeValue> deserializeAttributeValues(Response response,OrganisationUnit organisationUnit) throws ConversionException, IOException {
+    public static OrganisationUnit deserializeOrganisationUnit(Response response,OrganisationUnit organisationUnit) throws ConversionException, IOException {
+        String responseBodyString = new StringConverter().fromBody(response.getBody(), String.class);
+        JsonNode node = DhisController.getInstance().getObjectMapper().
+                readTree(responseBodyString);
+        OrganisationUnit finalOrganisationUnit=organisationUnit;
+        if (node == null) { /* in case there are no items */
+            return null;
+        } else {
+
+            ObjectMapper objectMapper=DhisController.getInstance().getObjectMapper();
+            objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+            finalOrganisationUnit = objectMapper.readValue(responseBodyString, OrganisationUnit.class);
+            finalOrganisationUnit.setLabel(organisationUnit.getLabel());
+            finalOrganisationUnit.setParent(organisationUnit.getParent());
+        }
+        return finalOrganisationUnit;
+    }
+
+        public static List<OrganisationUnitAttributeValue> deserializeAttributeValues(Response response,OrganisationUnit organisationUnit) throws ConversionException, IOException {
         List<OrganisationUnitAttributeValue> organisationUnitsAttributeValues = new ArrayList<>();
         String responseBodyString = new StringConverter().fromBody(response.getBody(), String.class);
         JsonNode node = DhisController.getInstance().getObjectMapper().
@@ -143,6 +165,33 @@ public class AssignedProgramsWrapper extends JsonDeserializer<List<OrganisationU
         }
         return organisationUnitsAttributeValues;
     }
+
+    public static List<DbOperation> saveDataSets(OrganisationUnit organisationUnit){
+        List<DbOperation> operations = new ArrayList<>();
+        List<String> organisationUnitDataSets=organisationUnit.getDataSets();
+        for(String organisationUnitDataSetUid:organisationUnitDataSets)
+        {
+            OrganisationUnitDataSet organisationUnitDataSet=new OrganisationUnitDataSet();
+            organisationUnitDataSet.setOrganisationUnitId(organisationUnit.getId());
+            organisationUnitDataSet.setDataSetId(organisationUnitDataSetUid);
+            operations.add(DbOperation.save(organisationUnitDataSet));
+        }
+        return operations;
+    }
+
+    public static List<DbOperation> saveOrganisationUnitGroups(OrganisationUnit organisationUnit){
+        List<DbOperation> operations = new ArrayList<>();
+        List<String> organisationUnitGroupsUid=organisationUnit.getOrganisationUnitGroups();
+        for(String organisationUnitGroupUid:organisationUnitGroupsUid)
+        {
+            OrganisationUnitGroup organisationUnitGroup=new OrganisationUnitGroup();
+            organisationUnitGroup.setOrganisationUnitId(organisationUnit.getId());
+            organisationUnitGroup.setOrganisationUnitGroupId(organisationUnitGroupUid);
+            operations.add(DbOperation.save(organisationUnitGroup));
+        }
+        return operations;
+    }
+
 
     public static List<DbOperation> saveOrganisationUnitAttributes(OrganisationUnit organisationUnit, List<OrganisationUnitAttributeValue> OrganisationUnitAttributeValues){
         List<DbOperation> operations = new ArrayList<>();
