@@ -199,12 +199,12 @@ public class OrganisationUnit extends BaseModel {
     }
 
     @JsonProperty("children")
-    public void setChildren(List<Map<String, Object>> childs) {
-        List<String> tempChilds = new ArrayList<>();
-        for (Map<String, Object> child : childs) {
-            tempChilds.add((String) child.get("id"));
+    public void setChildren(List<Map<String, Object>> children) {
+        List<String> tempChildren = new ArrayList<>();
+        for (Map<String, Object> child : children) {
+            tempChildren.add((String) child.get("id"));
         }
-        this.children = tempChilds;
+        this.children = tempChildren;
     }
 
 
