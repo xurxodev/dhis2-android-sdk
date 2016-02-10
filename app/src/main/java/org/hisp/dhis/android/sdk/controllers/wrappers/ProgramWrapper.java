@@ -34,6 +34,7 @@ import org.hisp.dhis.android.sdk.persistence.models.Attribute;
 import org.hisp.dhis.android.sdk.persistence.models.DataElement;
 import org.hisp.dhis.android.sdk.persistence.models.DataElementAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.Program;
+import org.hisp.dhis.android.sdk.persistence.models.ProgramAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramIndicator;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramIndicatorToSectionRelationship;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage;
@@ -60,6 +61,7 @@ public class ProgramWrapper {
             operations.addAll(update(program));
             operations.add(DbOperation.save(program));
             int sortOrder = 0;
+            operations.addAll(saveProgramAttributes(program,attributes));
             for (ProgramTrackedEntityAttribute ptea : program.getProgramTrackedEntityAttributes()) {
                 ptea.setProgram(program.getUid());
                 ptea.setSortOrder(sortOrder);
@@ -161,6 +163,26 @@ public class ProgramWrapper {
         if (attributeValues!=null && !attributeValues.isEmpty()) {
             for (DataElementAttributeValue attributeValue : attributeValues) {
                 attributeValue.setDataElement(dataElement.getUid());
+                //Search for the attribute in the map, if not there, search for it in the DB, if not there create it
+                operations.add(DbOperation.save(attributeValue));
+                Attribute attribute = attributes.get(attributeValue.getAttributeId());
+                if (attribute == null)
+                    attribute = attributeValue.getAttributeObj();
+                if (attribute == null)
+                    attribute = attributeValue.getAttribute();
+                attributes.put(attributeValue.getAttributeId(), attribute);
+                operations.add(DbOperation.save(attribute));
+            }
+        }
+        return operations;
+    }
+
+    private static List<DbOperation> saveProgramAttributes(Program program, Map<String, Attribute> attributes){
+        List<DbOperation> operations = new ArrayList<>();
+        List<ProgramAttributeValue> attributeValues = program.getAttributeValues();
+        if (attributeValues!=null && !attributeValues.isEmpty()) {
+            for (ProgramAttributeValue attributeValue : attributeValues) {
+                attributeValue.setProgram(program.getUid());
                 //Search for the attribute in the map, if not there, search for it in the DB, if not there create it
                 operations.add(DbOperation.save(attributeValue));
                 Attribute attribute = attributes.get(attributeValue.getAttributeId());
