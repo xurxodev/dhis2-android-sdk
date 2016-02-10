@@ -66,10 +66,71 @@ public class OrganisationUnit extends BaseModel {
     @Column(name = "parent")
     String parent;
 
-    @JsonProperty("attributeValues")
+    @JsonProperty("uuid")
+    @Column(name = "uuid")
+    String uuid;
+
+    @JsonProperty("lastUpdated")
+    @Column(name = "lastUpdated")
+    String lastUpdated;
+
+    @JsonProperty("created")
+    @Column(name = "created")
+    String created;
+
+    @JsonProperty("name")
+    @Column(name = "name")
+    String name;
+
+    @JsonProperty("user")
+    @Column(name = "user")
+    String user;
+
+    @JsonProperty("shortName")
+    @Column(name = "shortName")
+    String shortName;
+
+    @JsonProperty("displayName")
+    @Column(name = "displayName")
+    String displayName;
+
+    @JsonProperty("displayShortName")
+    @Column(name = "displayShortName")
+    String displayShortName;
+
+    @JsonProperty("externalAccess")
+    @Column(name = "externalAccess")
+    Boolean externalAccess;
+
+    @JsonProperty("path")
+    @Column(name = "path")
+    String path;
+
+    @JsonProperty("featureType")
+    @Column(name = "featureType")
+    String featureType;
+
+    @JsonProperty("openingDate")
+    @Column(name = "openingDate")
+    String openingDate;
+
+    @JsonProperty("dimensionItem")
+    @Column(name = "dimensionItem")
+    String dimensionItem;
+
     List<OrganisationUnitAttributeValue> attributeValues;
 
     List<String> programs;
+
+    List<String> ancestors;
+
+    List<String> children;
+
+    List<String> organisationUnitGroups;
+
+    List<String> dataSets;
+
+    List<String> assignedUsers;
 
     public OrganisationUnit() {
     }
@@ -85,6 +146,15 @@ public class OrganisationUnit extends BaseModel {
 
     public void setParent(String parent) {
         this.parent = parent;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    @JsonProperty("user")
+    public void setUser(Map<String,Object> user) {
+        this.user = ((String) user.get("id"));
     }
 
     public String getId() {
@@ -122,6 +192,80 @@ public class OrganisationUnit extends BaseModel {
             tempPrograms.add((String) program.get("id"));
         }
         this.programs = tempPrograms;
+    }
+
+    public List<String> getChildren() {
+        return children;
+    }
+
+    @JsonProperty("children")
+    public void setChildren(List<Map<String, Object>> children) {
+        List<String> tempChildren = new ArrayList<>();
+        for (Map<String, Object> child : children) {
+            tempChildren.add((String) child.get("id"));
+        }
+        this.children = tempChildren;
+    }
+
+
+    public List<String> getOrganisationUnitGroups() {
+        return organisationUnitGroups;
+    }
+
+    @JsonProperty("organisationUnitGroups")
+    public void setOrganisationUnitGroups(List<Map<String, Object>> organisationUnitGroups) {
+        List<String> tempOrganisationUnitGroups = new ArrayList<>();
+        for (Map<String, Object> organisationUnitGroup : organisationUnitGroups) {
+            tempOrganisationUnitGroups.add((String) organisationUnitGroup.get("id"));
+        }
+        this.organisationUnitGroups = tempOrganisationUnitGroups;
+    }
+
+    public List<String> getDataSets() {
+        return dataSets;
+    }
+
+    @JsonProperty("dataSets")
+    public void setDataSets(List<Map<String, Object>> dataSets) {
+        List<String> tempDataSets = new ArrayList<>();
+        for (Map<String, Object> dataSet : dataSets) {
+            tempDataSets.add((String) dataSet.get("id"));
+        }
+        this.dataSets = tempDataSets;
+    }
+
+    public List<String> getAssignedUsers() {
+        return assignedUsers;
+    }
+
+    @JsonProperty("users")
+    public void setAssignedUsers(List<Map<String, Object>> users) {
+        List<String> tempUsers = new ArrayList<>();
+        for (Map<String, Object> user : users) {
+            tempUsers.add((String) user.get("id"));
+        }
+        this.assignedUsers = tempUsers;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public List<String> getAncestors() {
+        return ancestors;
+    }
+
+    @JsonProperty("ancestors")
+    public void setAncestors(List<Map<String, Object>> organisationUnits) {
+        List<String> tempAncestors = new ArrayList<>();
+        for (Map<String, Object> organisationUnit : organisationUnits) {
+            tempAncestors.add((String) organisationUnit.get("id"));
+        }
+        this.ancestors = tempAncestors;
     }
 
 
