@@ -47,6 +47,7 @@ import org.hisp.dhis.android.sdk.persistence.models.ImportSummary;
 import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
 import org.hisp.dhis.android.sdk.network.Credentials;
 import org.hisp.dhis.android.sdk.persistence.preferences.ResourceType;
+import org.hisp.dhis.android.sdk.utils.log.SdkLogger;
 
 import java.util.Map;
 
@@ -175,8 +176,9 @@ public final class DhisService extends Service {
         Job job=JobExecutor.enqueueJob(new NetworkJob<Object>(0,null) {
             @Override
             public Object execute() throws APIException {
+                SdkLogger.getInstance().initLog();
                 DhisController.loadData(context);
-                return new Object();
+                return SdkLogger.getInstance().finishLog();
             }
         });
         return job;
@@ -197,8 +199,9 @@ public final class DhisService extends Service {
         Job job=JobExecutor.enqueueJob(new NetworkJob<Object>(0,null) {
             @Override
             public Object execute() throws APIException {
+                SdkLogger.getInstance().initLog();
                 DhisController.loadDataValues(context);
-                return new Object();
+                return SdkLogger.getInstance().finishLog();
             }
         });
         return job;
