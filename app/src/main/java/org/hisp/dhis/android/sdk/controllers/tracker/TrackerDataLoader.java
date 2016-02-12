@@ -134,10 +134,10 @@ final class TrackerDataLoader extends ResourceController {
                         try {
                         getEventsDataFromServer(dhisApi, organisationUnit.getId(), program.getUid(), serverDateTime);
                         } catch (APIException e) {
-                        e.printStackTrace();
-                            SdkLogger.getInstance().addErrorMessage("ERROR donwloading events from organisationUnit uid: "+organisationUnit.getId()+" and program uid: "+program.getUid());
-                        //todo: could probably do something prettier here. This catch is done to prevent
-                        // stopping loading of the following program/orgUnit as throwing and exception would exit the loop..
+                            SdkLogger.getInstance().addError("ERROR donwloading events from organisationUnit uid: "+organisationUnit.getId()+" and program uid: "+program.getUid(),e);
+                            e.printStackTrace();
+                            //todo: could probably do something prettier here. This catch is done to prevent
+                            // stopping loading of the following program/orgUnit as throwing and exception would exit the loop..
                         }
                     }
                 }

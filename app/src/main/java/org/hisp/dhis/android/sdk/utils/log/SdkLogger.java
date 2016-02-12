@@ -23,20 +23,16 @@ public class SdkLogger {
         logMessages=new ArrayList<>();
     }
 
-    public void addInfoMessage(String message){
-        logMessages.add(new LogMessage(message,INFO));
+    public void addInfo(String message){
+        logMessages.add(new LogMessage(message, INFO));
     }
 
-    public void addWarningMessage(String message){
-        logMessages.add(new LogMessage(message,WARNING));
+    public void addWarning(String message, Exception e){
+        logMessages.add(new LogMessage(message, e, WARNING));
     }
 
-    public void addErrorMessage(String message){
-        logMessages.add(new LogMessage(message,ERROR));
-    }
-
-    public void addLogMessage(String message,int type){
-        logMessages.add(new LogMessage(message,type));
+    public void addError(String message, Exception e){
+        logMessages.add(new LogMessage(message, e, ERROR));
     }
 
     public List<LogMessage> finishLog(){
