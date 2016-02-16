@@ -27,19 +27,40 @@
  *
  */
 
-package org.hisp.dhis.android.sdk.persistence;
+package org.hisp.dhis.android.sdk.persistence.models;
 
-import com.raizlabs.android.dbflow.annotation.Database;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
 
-/**
- * @author Simen Skogly Russnes
- * Database definition for DbFlow
- */
-@Database(name = Dhis2Database.NAME, version = Dhis2Database.VERSION, foreignKeysSupported = true)
-public class Dhis2Database {
+import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 
-    public static final String NAME = "Dhis2";
 
-    public static final int VERSION = 8;
+@Table(databaseName = Dhis2Database.NAME)
+public class OrganisationUnitGroup extends BaseModel {
 
+    @Column(name = "organisationUnitId")
+    @PrimaryKey
+    String organisationUnitId;
+
+    @Column(name = "organisationUnitGroupId")
+    @PrimaryKey
+    String organisationUnitGroupId;
+
+    public String getOrganisationUnitId() {
+        return organisationUnitId;
+    }
+
+    public void setOrganisationUnitId(String organisationUnitId) {
+        this.organisationUnitId = organisationUnitId;
+    }
+
+    public String getOrganisationUnitGroupId() {
+        return organisationUnitGroupId;
+    }
+
+    public void setOrganisationUnitGroupId(String organisationUnitGroupId) {
+        this.organisationUnitGroupId = organisationUnitGroupId;
+    }
 }

@@ -213,7 +213,7 @@ public interface DhisApi {
     Response getOrganisationUnitLevels();
 
     @GET("/" + ApiEndpointContainer.ORGANISATIONUNITS+"/{organisationUnitUid}")
-    Response getOrganistationUnitAttributeValues(@Path("organisationUnitUid") String organisationUnitUid, @QueryMap Map<String, String> queryMap);
+    Response getOrganisationUnit(@Path("organisationUnitUid") String organisationUnitUid, @QueryMap Map<String, String> queryMap);
 
     @GET("/" + ApiEndpointContainer.PROGRAMS + "/{programUid}")
     Program getProgram(@Path("programUid") String programUid, @QueryMap Map<String, String> queryMap);
