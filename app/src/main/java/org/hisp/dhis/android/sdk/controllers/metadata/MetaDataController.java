@@ -42,6 +42,7 @@ import org.hisp.dhis.android.sdk.controllers.LoadingController;
 import org.hisp.dhis.android.sdk.controllers.ResourceController;
 import org.hisp.dhis.android.sdk.controllers.wrappers.AssignedProgramsWrapper;
 import org.hisp.dhis.android.sdk.controllers.wrappers.OptionSetWrapper;
+import org.hisp.dhis.android.sdk.controllers.wrappers.OrganisationUnitLevelWrapper;
 import org.hisp.dhis.android.sdk.controllers.wrappers.ProgramWrapper;
 import org.hisp.dhis.android.sdk.network.APIException;
 import org.hisp.dhis.android.sdk.network.DhisApi;
@@ -61,6 +62,8 @@ import org.hisp.dhis.android.sdk.persistence.models.OptionSet;
 import org.hisp.dhis.android.sdk.persistence.models.OptionSet$Table;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit$Table;
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitLevel;
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitLevel$Table;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitDataSet;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitGroup;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitProgramRelationship;
@@ -444,6 +447,10 @@ public final class MetaDataController extends ResourceController {
         return assignedPrograms;
     }
 
+    public static List<OrganisationUnitLevel> getOrganisationUnitLevels(){
+        return new Select().from(OrganisationUnitLevel.class).orderBy(true, OrganisationUnitLevel$Table.LEVEL).queryList();
+    }
+
     public static OrganisationUnit getOrganisationUnit(String id) {
         return new Select().from(OrganisationUnit.class).where(Condition.column(OrganisationUnit$Table.ID).is(id)).querySingle();
     }
@@ -606,7 +613,8 @@ public final class MetaDataController extends ResourceController {
                 DataElementAttributeValue.class,
                 OrganisationUnitAttributeValue.class,
                 OrganisationUnitDataSet.class,
-                OrganisationUnitGroup.class);
+                OrganisationUnitGroup.class,
+                OrganisationUnitLevel.class);
     }
 
     /**
@@ -682,6 +690,9 @@ public final class MetaDataController extends ResourceController {
         Log.d(CLASS_TAG, "getAssignedProgramsDataFromServer");
         DateTime lastUpdated = DateTimeManager.getInstance()
                 .getLastUpdated(ResourceType.ASSIGNEDPROGRAMS);
+
+        getOrganisationUnitLevelsFromServer(dhisApi);
+
         Response response = dhisApi.getAssignedPrograms(getBasicQueryMap(lastUpdated));
 
         List<OrganisationUnit> organisationUnits;
@@ -728,6 +739,23 @@ public final class MetaDataController extends ResourceController {
         DbUtils.applyBatch(operations);
         DateTimeManager.getInstance()
                 .setLastUpdated(ResourceType.ASSIGNEDPROGRAMS, serverDateTime);
+    }
+
+    private static void getOrganisationUnitLevelsFromServer(DhisApi dhisApi) {
+        Response response = dhisApi.getOrganisationUnitLevels();
+
+        List<OrganisationUnitLevel> organisationUnitLevels;
+        try {
+            organisationUnitLevels = OrganisationUnitLevelWrapper.deserialize(response);
+        } catch (ConversionException e) {
+            e.printStackTrace();
+            return; //todo: handle
+        } catch (IOException e) {
+            e.printStackTrace();
+            return; //todo: handle
+        }
+        List<DbOperation> operations = OrganisationUnitLevelWrapper.getOperations(organisationUnitLevels);
+        DbUtils.applyBatch(operations);
     }
 
     private static void getProgramDataFromServer(DhisApi dhisApi, String uid, DateTime serverDateTime) throws APIException {

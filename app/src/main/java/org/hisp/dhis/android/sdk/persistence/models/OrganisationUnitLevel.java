@@ -27,27 +27,70 @@
  *
  */
 
-package org.hisp.dhis.android.sdk.controllers;
+package org.hisp.dhis.android.sdk.persistence.models;
+
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
+import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
+import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
- * @author Simen Skogly Russnes on 05.08.15.
+ * @author Simen Skogly Russnes on 17.02.15.
  */
-public final class ApiEndpointContainer {
+@Table(databaseName = Dhis2Database.NAME)
+public class OrganisationUnitLevel extends BaseModel {
 
-    private ApiEndpointContainer() {}
+    @JsonProperty("id")
+    @Column(name = "id")
+    @PrimaryKey
+    String id;
 
-    public static final String ORGANISATIONUNITS = "organisationUnits";
-    public static final String ORGANISATIONUNITLEVELS = "organisationUnitLevels";
-    public static final String ATTRIBUTEVALUES = "attributeValues";
-    public static final String PROGRAMS = "programs";
-    public static final String OPTION_SETS = "optionSets";
-    public static final String TRACKED_ENTITY_ATTRIBUTES = "trackedEntityAttributes";
-    public static final String CONSTANTS = "constants";
-    public static final String PROGRAMRULES = "programRules";
-    public static final String PROGRAMRULEVARIABLES = "programRuleVariables";
-    public static final String PROGRAMRULEACTIONS = "programRuleActions";
-    public static final String RELATIONSHIPTYPES = "relationshipTypes";
-    public static final String EVENTS = "events";
-    public static final String TRACKED_ENTITY_INSTANCES = "trackedEntityInstances";
-    public static final String ENROLLMENTS = "enrollments";
+    @JsonProperty("displayName")
+    @Column(name = "displayName")
+    String displayName;
+
+    @JsonProperty("level")
+    @Column(name = "level")
+    int level;
+
+    public OrganisationUnitLevel() {
+    }
+
+    @JsonAnySetter
+    public void handleUnknown(String key, Object value) {
+        // do something: put to a Map; log a warning, whatever
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
 }
