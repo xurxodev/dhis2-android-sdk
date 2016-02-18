@@ -59,6 +59,7 @@ import org.hisp.dhis.android.sdk.utils.DbUtils;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
 import org.hisp.dhis.android.sdk.utils.Utils;
 import org.hisp.dhis.android.sdk.utils.api.ProgramType;
+import org.hisp.dhis.android.sdk.utils.log.SdkLogger;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
@@ -140,9 +141,10 @@ final class TrackerDataLoader extends ResourceController {
                         try {
                         getEventsDataFromServer(dhisApi, organisationUnit.getId(), program.getUid(), serverDateTime);
                         } catch (APIException e) {
-                        e.printStackTrace();
-                        //todo: could probably do something prettier here. This catch is done to prevent
-                        // stopping loading of the following program/orgUnit as throwing and exception would exit the loop..
+                            SdkLogger.getInstance().addError("Error downloading events from organisationUnit uid: "+organisationUnit.getId()+" and program uid: "+program.getUid(),e);
+                            e.printStackTrace();
+                            //todo: could probably do something prettier here. This catch is done to prevent
+                            // stopping loading of the following program/orgUnit as throwing and exception would exit the loop..
                         }
                     }
                 }
