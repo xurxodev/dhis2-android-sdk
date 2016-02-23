@@ -465,6 +465,12 @@ public final class MetaDataController extends ResourceController {
                 is(programId)).querySingle();
     }
 
+    public static Option getOption(String optionId) {
+        if (optionId == null) return null;
+        return new Select().from(Option.class).where(Condition.column(Option$Table.ID).
+                is(optionId)).querySingle();
+    }
+
     /**
      * Returns a list of organisation units assigned to the current user
      *
@@ -794,7 +800,7 @@ public final class MetaDataController extends ResourceController {
     private static void getOptionSetDataFromServer(DhisApi dhisApi, DateTime serverDateTime) throws APIException {
         Log.d(CLASS_TAG, "getOptionSetDataFromServer");
         Map<String, String> QUERY_MAP_FULL = new HashMap<>();
-        QUERY_MAP_FULL.put("fields", "*,options[*]");
+        QUERY_MAP_FULL.put("fields", "*,options[*,attributeValues[*,attribute[name,displayName,created,lastUpdated,access,id,valueType,code]]]");
         DateTime lastUpdated = DateTimeManager.getInstance()
                 .getLastUpdated(ResourceType.OPTIONSETS);
 
