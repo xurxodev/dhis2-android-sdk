@@ -50,6 +50,8 @@ import org.hisp.dhis.android.sdk.persistence.models.Attribute;
 import org.hisp.dhis.android.sdk.persistence.models.Attribute$Table;
 import org.hisp.dhis.android.sdk.persistence.models.DataElementAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.DataElementAttributeValue$Table;
+import org.hisp.dhis.android.sdk.persistence.models.OptionAttributeValue;
+import org.hisp.dhis.android.sdk.persistence.models.OptionAttributeValue$Table;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitAttributeValue$Table;
 import org.hisp.dhis.android.sdk.persistence.models.Constant;
@@ -301,6 +303,23 @@ public final class MetaDataController extends ResourceController {
         if (id == null) return null;
         return new Select().from(OrganisationUnitAttributeValue.class)
                 .where(Condition.column(OrganisationUnitAttributeValue$Table.ID).is(id)).querySingle();
+    }
+
+    /**
+     * Get all the OptionAttributeValue that belongs to a given option
+     *
+     * @param option to get the Attributes from
+     * @return List of OrganisationUnitAttributeValue objects that belongs to the given OrganisationUnit
+     */
+    public static List<OptionAttributeValue> getOptionAttributeValues(Option option){
+        if (option == null){
+            return null;
+        }
+
+        return new Select()
+                .from(OptionAttributeValue.class)
+                .where(Condition.column(OptionAttributeValue$Table.OPTION).is(option.getUid()))
+                .queryList();
     }
 
     /**
