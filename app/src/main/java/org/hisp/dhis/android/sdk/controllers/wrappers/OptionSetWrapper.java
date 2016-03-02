@@ -33,6 +33,7 @@ import android.util.Log;
 
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.models.Option;
+import org.hisp.dhis.android.sdk.persistence.models.OptionAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.OptionSet;
 import org.hisp.dhis.android.sdk.persistence.models.meta.DbOperation;
 import org.hisp.dhis.android.sdk.utils.DbUtils;
@@ -69,6 +70,7 @@ public class OptionSetWrapper {
                     option.setOptionSet(optionSet.getUid());
                     option.setSortIndex(sortIndex);
                     sortIndex++;
+                    operations.addAll(getOptionAttributeValueOperations(option));
                 }
                 operations.addAll(DbUtils.createOperations(persistedOptions, optionSet.getOptions(), false));
             }
@@ -76,5 +78,28 @@ public class OptionSetWrapper {
         operations.addAll(DbUtils.createOperations(persistedOptionSets, optionSets, true));
         return operations;
     }
+
+
+    private static List<DbOperation> getOptionAttributeValueOperations(Option option){
+        List<DbOperation> optionAttributeValuesOperations=new ArrayList<>();
+        //No optionAttributeValues to link and save
+        if (option==null || option.getAttributeValues()==null || option.getAttributeValues().size()==0){
+            return optionAttributeValuesOperations;
+        }
+
+        for(OptionAttributeValue optionAttributeValue:option.getAttributeValues()){
+
+            //Attribute not saved -> add db operation
+            if(optionAttributeValue.getAttribute()==null){
+                optionAttributeValuesOperations.add(DbOperation.save(optionAttributeValue.getAttributeObj()));
+            }
+            //Link option
+            optionAttributeValue.setOption(option.getUid());
+            optionAttributeValuesOperations.add(DbOperation.save(optionAttributeValue));
+        }
+        return optionAttributeValuesOperations;
+    }
+
+
 
 }

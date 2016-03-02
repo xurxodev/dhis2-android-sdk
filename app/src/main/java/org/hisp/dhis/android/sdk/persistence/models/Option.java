@@ -34,7 +34,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.Table;
 
+import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
+
+import java.util.List;
 
 /**
  * @author Simen Skogly Russnes on 20.02.15.
@@ -52,6 +55,9 @@ public class Option extends BaseMetaDataObject {
     @JsonProperty("code")
     @Column(name = "code")
     String code;
+
+    @JsonProperty("attributeValues")
+    List<OptionAttributeValue> attributeValues;
 
     public String getCode() {
         return code;
@@ -75,5 +81,16 @@ public class Option extends BaseMetaDataObject {
 
     public void setSortIndex(int sortIndex) {
         this.sortIndex = sortIndex;
+    }
+
+    public void setAttributeValues(List<OptionAttributeValue> attributeValues){
+        this.attributeValues=attributeValues;
+    }
+
+    public List<OptionAttributeValue> getAttributeValues() {
+        if (attributeValues == null) {
+            attributeValues = MetaDataController.getOptionAttributeValues(this);
+        }
+        return attributeValues;
     }
 }
