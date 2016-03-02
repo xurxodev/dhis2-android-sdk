@@ -50,6 +50,8 @@ import org.hisp.dhis.android.sdk.persistence.models.Attribute;
 import org.hisp.dhis.android.sdk.persistence.models.Attribute$Table;
 import org.hisp.dhis.android.sdk.persistence.models.DataElementAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.DataElementAttributeValue$Table;
+import org.hisp.dhis.android.sdk.persistence.models.OptionAttributeValue;
+import org.hisp.dhis.android.sdk.persistence.models.OptionAttributeValue$Table;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitAttributeValue$Table;
 import org.hisp.dhis.android.sdk.persistence.models.Constant;
@@ -304,6 +306,23 @@ public final class MetaDataController extends ResourceController {
     }
 
     /**
+     * Get all the OptionAttributeValue that belongs to a given option
+     *
+     * @param option to get the Attributes from
+     * @return List of OrganisationUnitAttributeValue objects that belongs to the given OrganisationUnit
+     */
+    public static List<OptionAttributeValue> getOptionAttributeValues(Option option){
+        if (option == null){
+            return null;
+        }
+
+        return new Select()
+                .from(OptionAttributeValue.class)
+                .where(Condition.column(OptionAttributeValue$Table.OPTION).is(option.getUid()))
+                .queryList();
+    }
+
+    /**
      * Get a concrete Attribute entry given its string ID
      *
      * @param attributeId The ID used in DHIS2 to identify the Attribute
@@ -463,6 +482,12 @@ public final class MetaDataController extends ResourceController {
         if (programId == null) return null;
         return new Select().from(Program.class).where(Condition.column(Program$Table.ID).
                 is(programId)).querySingle();
+    }
+
+    public static Option getOption(String optionId) {
+        if (optionId == null) return null;
+        return new Select().from(Option.class).where(Condition.column(Option$Table.ID).
+                is(optionId)).querySingle();
     }
 
     /**
@@ -794,7 +819,7 @@ public final class MetaDataController extends ResourceController {
     private static void getOptionSetDataFromServer(DhisApi dhisApi, DateTime serverDateTime) throws APIException {
         Log.d(CLASS_TAG, "getOptionSetDataFromServer");
         Map<String, String> QUERY_MAP_FULL = new HashMap<>();
-        QUERY_MAP_FULL.put("fields", "*,options[*]");
+        QUERY_MAP_FULL.put("fields", "*,options[*,attributeValues[*,attribute[name,displayName,created,lastUpdated,access,id,valueType,code]]]");
         DateTime lastUpdated = DateTimeManager.getInstance()
                 .getLastUpdated(ResourceType.OPTIONSETS);
 
