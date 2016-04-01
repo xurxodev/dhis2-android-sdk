@@ -91,7 +91,36 @@ public final class TrackerController extends ResourceController {
      */
     public static int getMaxEvents(){
         return TrackerDataLoader.getMaxEvents();
-    }    
+    }
+
+    /**
+     * Changes the start date value of events to retreive from the server (by orgunit/program)
+     * @param startDate
+     */
+    public static void setStartDate(String startDate){
+        TrackerDataLoader.setStartDate(startDate);
+    }
+
+    /**
+     * Returns the start date value of events to retreive from the server (by orgunit/program)
+     */
+    public static String getStartDate(){
+        return TrackerDataLoader.getStartDate();
+    }
+    /**
+     * Changes the end date of events to retreive from the server (by orgunit/program)
+     * @param max
+     */
+    public static void setEndDate(String max){
+        TrackerDataLoader.setEndDate(max);
+    }
+
+    /**
+     * Returns the end date of events to retreive from the server (by orgunit/program)
+     */
+    public static String getEndDate(){
+        return TrackerDataLoader.getEndDate();
+    }
 
     /**
      * Returns false if some data value flags that have been enabled have not been downloaded.

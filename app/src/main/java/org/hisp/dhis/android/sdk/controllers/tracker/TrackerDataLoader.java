@@ -79,10 +79,25 @@ final class TrackerDataLoader extends ResourceController {
 
     public static final String CLASS_TAG = TrackerDataLoader.class.getSimpleName();
 
+
+    public static final String WITHOUT_DATE = "WHITOUT_DATE";
     /**
      * Max number of events to retrieve from server
      */
     private static int maxEvents = 200;
+    /**
+     * Start date to retrieve from server
+     */
+    private static String startDate = WITHOUT_DATE;
+    /**
+     * End date to retrieve from server
+     */
+    private static String endDate = WITHOUT_DATE;
+
+    /**
+     * save event changes value by value
+     */
+    private static boolean updateEvent;
 
     private TrackerDataLoader() {}
 
@@ -99,8 +114,36 @@ final class TrackerDataLoader extends ResourceController {
      */
     public static int getMaxEvents(){
         return maxEvents;
-    }    
+    }
 
+    /**
+     * Changes the start date value of events to retreive from the server (by orgunit/program)
+     * @param date
+     */
+    public static void setStartDate(String date){
+        startDate=date;
+    }
+
+    /**
+     * Returns the start date value of events to retreive from the server (by orgunit/program)
+     */
+    public static String getStartDate(){
+        return startDate;
+    }
+    /**
+     * Changes the end date of events to retreive from the server (by orgunit/program)
+     * @param date
+     */
+    public static void setEndDate(String date){
+        endDate=date;
+    }
+
+    /**
+     * Returns the end date of events to retreive from the server (by orgunit/program)
+     */
+    public static String getEndDate(){
+        return endDate;
+    }
     /**
      * Loads datavalue items that is scheduled to be loaded but has not yet been.
      */
@@ -161,8 +204,18 @@ final class TrackerDataLoader extends ResourceController {
         if (lastUpdated != null) {
             map.put("lastUpdated", lastUpdated.toString());
         }
-        JsonNode response = dhisApi.getEvents(programUid, organisationUnitUid, maxEvents,
-                map);
+
+        JsonNode response;
+        if (startDate == WITHOUT_DATE) {
+            response = dhisApi.getEvents(programUid, organisationUnitUid, maxEvents,
+                    map);
+        } else if (endDate != WITHOUT_DATE)
+            response = dhisApi.getEventsBetweenDate(programUid, organisationUnitUid, maxEvents, startDate, endDate,
+                    map);
+        else{
+            response = dhisApi.getEventsFromDate(programUid, organisationUnitUid, maxEvents, startDate,
+                    map);
+        }
         List<Event> events = EventsWrapper.getEvents(response);
         saveResourceDataFromServer(ResourceType.EVENTS,organisationUnitUid+programUid, dhisApi, events, null, serverDateTime);
     }
