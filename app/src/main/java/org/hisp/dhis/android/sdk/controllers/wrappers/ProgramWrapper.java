@@ -70,6 +70,8 @@ public class ProgramWrapper {
             }
 
             for (ProgramStage programStage : program.getProgramStages()) {
+                List<ProgramStageDataElement> programStageDataElementsInProgramStageSection=new ArrayList<>();
+                List<ProgramStageDataElement> programStageDataElementsInProgram=programStage.getProgramStageDataElements();
                 operations.add(DbOperation.save(programStage));
                 if (programStage.getProgramStageSections() != null && !programStage.getProgramStageSections().isEmpty()) {
                     // due to the way the WebAPI lists programStageSections we have to manually
@@ -78,11 +80,15 @@ public class ProgramWrapper {
                     for (ProgramStageSection programStageSection : programStage.getProgramStageSections()) {
                         operations.add(DbOperation.save(programStageSection));
                         //programStageSection.async().save();
-                        for (ProgramStageDataElement programStageDataElement : programStageSection.getProgramStageDataElements()) {
+                        programStageDataElementsInProgram.removeAll(programStageSection.getProgramStageDataElements());
+                        programStageDataElementsInProgramStageSection=programStageSection.getProgramStageDataElements();
+                        for (ProgramStageDataElement programStageDataElement : programStageDataElementsInProgramStageSection) {
                             programStageDataElement.setProgramStageSection(programStageSection.getUid());
-                            operations.add(DbOperation.save(programStageDataElement));
+                            programStageDataElementsInProgram.add(programStageDataElement);
                             operations.addAll(saveDataElementAttributes(programStageDataElement.getDataElementObj(), attributes));
                         }
+                        programStageDataElementsInProgram.addAll(programStageSection.getProgramStageDataElements());
+
                         for (ProgramIndicator programIndicator : programStageSection.getProgramIndicators()) {
                             operations.add(DbOperation.save(programIndicator));
 
@@ -105,6 +111,11 @@ public class ProgramWrapper {
                         // relation to stage
                         operations.add(saveStageRelation(programIndicator, programStage.getUid()));
                     }
+                }
+                for (ProgramStageDataElement programStageDataElement : programStageDataElementsInProgram) {
+                    programStageDataElement.setProgramStageSection(programStageDataElement.getProgramStageSection());
+                    operations.add(DbOperation.save(programStageDataElement));
+                    operations.addAll(saveDataElementAttributes(programStageDataElement.getDataElementObj(), attributes));
                 }
             }
         }
