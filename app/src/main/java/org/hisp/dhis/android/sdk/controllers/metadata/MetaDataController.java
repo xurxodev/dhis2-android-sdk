@@ -639,7 +639,8 @@ public final class MetaDataController extends ResourceController {
                 OrganisationUnitAttributeValue.class,
                 OrganisationUnitDataSet.class,
                 OrganisationUnitGroup.class,
-                OrganisationUnitLevel.class);
+                OrganisationUnitLevel.class,
+                OptionAttributeValue.class);
     }
 
     /**
