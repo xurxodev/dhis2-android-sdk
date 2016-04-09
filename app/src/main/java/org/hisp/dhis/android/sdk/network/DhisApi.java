@@ -36,6 +36,7 @@ import org.hisp.dhis.android.sdk.persistence.models.Constant;
 import org.hisp.dhis.android.sdk.persistence.models.Dashboard;
 import org.hisp.dhis.android.sdk.persistence.models.DashboardItem;
 import org.hisp.dhis.android.sdk.persistence.models.DashboardItemContent;
+import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.Interpretation;
@@ -248,6 +249,21 @@ public interface DhisApi {
                                        @Query("orgUnit") String organisationUnitUid,
                                        @Query("pageSize") int eventLimit,
                                        @QueryMap Map<String, String> queryParams);
+
+    @GET("/" + ApiEndpointContainer.EVENTS + "?page=0")
+    JsonNode getEventsFromDate(@Query("program") String programUid,
+                       @Query("orgUnit") String organisationUnitUid,
+                       @Query("pageSize") int eventLimit,
+                       @Query("startDate") String startDate,
+                       @QueryMap Map<String, String> queryParams);
+
+    @GET("/" + ApiEndpointContainer.EVENTS + "?page=0")
+    JsonNode getEventsBetweenDate(@Query("program") String programUid,
+                       @Query("orgUnit") String organisationUnitUid,
+                       @Query("pageSize") int eventLimit,
+                       @Query("startDate") String startDate,
+                       @Query("endDate") String endDate,
+                       @QueryMap Map<String, String> queryParams);
 
     @GET("/" + ApiEndpointContainer.EVENTS + "?skipPaging=true&ouMode=ACCESSIBLE")
     JsonNode getEventsForEnrollment(@Query("program") String programUid,
