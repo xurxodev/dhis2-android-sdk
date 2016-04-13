@@ -184,6 +184,18 @@ public final class DhisService extends Service {
         return job;
     }
 
+    public static Job loadLastData(final Context context) {
+        Job job=JobExecutor.enqueueJob(new NetworkJob<Object>(0,null) {
+            @Override
+            public Object execute() throws APIException {
+                SdkLogger.getInstance().initLog();
+                DhisController.loadLastData(context);
+                return SdkLogger.getInstance().finishLog();
+            }
+        });
+        return job;
+    }
+
     public static Job loadMetaData(final Context context) {
         Job job=JobExecutor.enqueueJob(new NetworkJob<Object>(0,null) {
             @Override
