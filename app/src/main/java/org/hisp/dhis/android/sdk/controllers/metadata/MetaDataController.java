@@ -739,22 +739,12 @@ public final class MetaDataController extends ResourceController {
                     QUERY_MAP_FULL.put("fields","[:all],!parent");
                     response= dhisApi.getOrganisationUnit(organisationUnit.getId(), QUERY_MAP_FULL);
                     organisationUnit=AssignedProgramsWrapper.deserializeOrganisationUnit(response, organisationUnit);
-                    if(organisationUnit.getDataSets()!=null)
-                    operations.addAll(AssignedProgramsWrapper.saveDataSets(organisationUnit));
-                    if(organisationUnit.getOrganisationUnitGroups()!=null)
-                    operations.addAll(AssignedProgramsWrapper.saveOrganisationUnitGroups(organisationUnit));
-
-                    QUERY_MAP_FULL = new HashMap<>();
-                    QUERY_MAP_FULL.put("fields","*,attributeValues[*,attribute[name,displayName,created,lastUpdated,access,id,valueType,code]],all");
-                    response= dhisApi.getOrganisationUnit(organisationUnit.getId(), QUERY_MAP_FULL);
-                    organisationUnitAttributeValues = AssignedProgramsWrapper.deserializeAttributeValues(response, organisationUnit);
-
-                    for(OrganisationUnitAttributeValue organisationUnitAttributeValue:organisationUnitAttributeValues)
-                    {
-                        organisationUnitAttributeValue.setOrganisationUnit(organisationUnit.getId());
+                    for(String organistaionUnitAncestorUid:organisationUnit.getAncestors()){
+                        OrganisationUnit organisationUnitAncestor=new OrganisationUnit();
+                        organisationUnitAncestor.setId(organistaionUnitAncestorUid);
+                        saveOrganisationUnit(dhisApi, operations, organisationUnitAncestor);
                     }
-                    operations.addAll(AssignedProgramsWrapper.saveOrganisationUnitAttributes(organisationUnit, organisationUnitAttributeValues));
-                    operations.add(DbOperation.save(organisationUnit));
+                    saveOrganisationUnit(dhisApi, operations, organisationUnit);
                 } catch(ConversionException e) {
                     e.printStackTrace();
                 } catch(IOException e) {
@@ -765,6 +755,32 @@ public final class MetaDataController extends ResourceController {
         DbUtils.applyBatch(operations);
         DateTimeManager.getInstance()
                 .setLastUpdated(ResourceType.ASSIGNEDPROGRAMS, serverDateTime);
+    }
+
+    private static void saveOrganisationUnit(DhisApi dhisApi, List<DbOperation> operations, OrganisationUnit organisationUnit) throws ConversionException, IOException {
+        Response response;
+        List<OrganisationUnitAttributeValue> organisationUnitAttributeValues;
+        Map<String, String> QUERY_MAP_FULL = new HashMap<>();
+        QUERY_MAP_FULL.put("fields","[:all],!parent");
+        response= dhisApi.getOrganisationUnit(organisationUnit.getId(), QUERY_MAP_FULL);
+        organisationUnit= AssignedProgramsWrapper.deserializeOrganisationUnit(response, organisationUnit);
+        operations.add(DbOperation.save(organisationUnit));
+        if(organisationUnit.getDataSets()!=null)
+            operations.addAll(AssignedProgramsWrapper.saveDataSets(organisationUnit));
+        if(organisationUnit.getOrganisationUnitGroups()!=null)
+            operations.addAll(AssignedProgramsWrapper.saveOrganisationUnitGroups(organisationUnit));
+
+        QUERY_MAP_FULL = new HashMap<>();
+        QUERY_MAP_FULL.put("fields","*,attributeValues[*,attribute[name,displayName,created,lastUpdated,access,id,valueType,code]],all");
+        response= dhisApi.getOrganisationUnit(organisationUnit.getId(), QUERY_MAP_FULL);
+        organisationUnitAttributeValues = AssignedProgramsWrapper.deserializeAttributeValues(response, organisationUnit);
+
+        for(OrganisationUnitAttributeValue organisationUnitAttributeValue:organisationUnitAttributeValues)
+        {
+            organisationUnitAttributeValue.setOrganisationUnit(organisationUnit.getId());
+        }
+        operations.addAll(AssignedProgramsWrapper.saveOrganisationUnitAttributes(organisationUnit, organisationUnitAttributeValues));
+        operations.add(DbOperation.save(organisationUnit));
     }
 
     private static void getOrganisationUnitLevelsFromServer(DhisApi dhisApi) {
