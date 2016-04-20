@@ -453,6 +453,14 @@ public final class TrackerController extends ResourceController {
         TrackerDataLoader.updateDataValueDataItems(context, dhisApi);
     }
 
+    /**
+     * Loads datavalues from the server and stores it in local persistence.
+     */
+    public static void loadLastDataValues(Context context, DhisApi dhisApi) throws APIException {
+        UiUtils.postProgressMessage(context.getString(R.string.loading_metadata));
+        TrackerDataLoader.updateLastDataValueDataItems(context, dhisApi);
+    }
+
     public static List<TrackedEntityInstance> queryTrackedEntityInstancesDataFromServer(DhisApi dhisApi,
                                                                                  String organisationUnitUid,
                                                                                  String programUid,
