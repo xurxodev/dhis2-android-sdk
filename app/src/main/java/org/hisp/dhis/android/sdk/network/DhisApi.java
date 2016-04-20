@@ -250,6 +250,11 @@ public interface DhisApi {
                                        @Query("pageSize") int eventLimit,
                                        @QueryMap Map<String, String> queryParams);
 
+    @GET("/" + ApiEndpointContainer.EVENTS + "?paging=false")
+    JsonNode getMinimizedEvents(@Query("program") String programUid,
+                       @Query("orgUnit") String organisationUnitUid,
+                       @QueryMap Map<String, String> queryParams);
+
     @GET("/" + ApiEndpointContainer.EVENTS + "?page=0")
     JsonNode getEventsFromDate(@Query("program") String programUid,
                        @Query("orgUnit") String organisationUnitUid,

@@ -56,10 +56,12 @@ import org.hisp.dhis.android.sdk.persistence.models.meta.DbOperation;
 import org.hisp.dhis.android.sdk.persistence.preferences.DateTimeManager;
 import org.hisp.dhis.android.sdk.persistence.preferences.ResourceType;
 import org.hisp.dhis.android.sdk.utils.DbUtils;
+import org.hisp.dhis.android.sdk.utils.StringUtils;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
 import org.hisp.dhis.android.sdk.utils.Utils;
 import org.hisp.dhis.android.sdk.utils.api.ProgramType;
 import org.hisp.dhis.android.sdk.utils.log.SdkLogger;
+import org.hisp.dhis.android.sdk.utils.support.DateUtils;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
@@ -144,10 +146,25 @@ final class TrackerDataLoader extends ResourceController {
     public static String getEndDate(){
         return endDate;
     }
+
     /**
      * Loads datavalue items that is scheduled to be loaded but has not yet been.
      */
     static void updateDataValueDataItems(Context context, DhisApi dhisApi) throws APIException {
+        updateDataValueDataItems(context,dhisApi,false);
+    }
+
+    /**
+     * Loads datavalue items that is scheduled to be loaded but has not yet been.
+     */
+    static void updateLastDataValueDataItems(Context context, DhisApi dhisApi) throws APIException {
+        updateDataValueDataItems(context, dhisApi, true);
+    }
+    /**
+     * Loads datavalue items that is scheduled to be loaded but has not yet been.
+     * OnlyLastEvent tells if every event for each orgUnit/program pair must be loaded or only the last one.
+     */
+    static void updateDataValueDataItems(Context context, DhisApi dhisApi, boolean onlyLastEvent) throws APIException {
         SystemInfo serverSystemInfo = dhisApi.getSystemInfo();
         DateTime serverDateTime = serverSystemInfo.getServerDate();
         List<OrganisationUnit> assignedOrganisationUnits = MetaDataController.getAssignedOrganisationUnits();
@@ -182,7 +199,11 @@ final class TrackerDataLoader extends ResourceController {
                         UiUtils.postProgressMessage(context.getString(R.string.loading_events) + ": "
                                 + organisationUnit.getLabel() + ": " + program.getName());
                         try {
-                        getEventsDataFromServer(dhisApi, organisationUnit.getId(), program.getUid(), serverDateTime);
+                            if(onlyLastEvent){
+                                getLastEventDataFromServer(dhisApi, organisationUnit.getId(), program.getUid(), serverDateTime);
+                            }else{
+                                getEventsDataFromServer(dhisApi, organisationUnit.getId(), program.getUid(), serverDateTime);
+                            }
                         } catch (APIException e) {
                             SdkLogger.getInstance().addError("Error downloading events from organisationUnit uid: "+organisationUnit.getId()+" and program uid: "+program.getUid(),e);
                             e.printStackTrace();
@@ -217,7 +238,33 @@ final class TrackerDataLoader extends ResourceController {
                     map);
         }
         List<Event> events = EventsWrapper.getEvents(response);
-        saveResourceDataFromServer(ResourceType.EVENTS,organisationUnitUid+programUid, dhisApi, events, null, serverDateTime);
+        saveResourceDataFromServer(ResourceType.EVENTS, organisationUnitUid + programUid, dhisApi, events, null, serverDateTime);
+    }
+
+    static void getLastEventDataFromServer(DhisApi dhisApi, String organisationUnitUid, String programUid, DateTime serverDateTime) throws APIException {
+        Log.d(CLASS_TAG, "getLastEventDataFromServer");
+        String lastEventUID = findLastEvent(dhisApi, organisationUnitUid, programUid);
+        if(lastEventUID==null || lastEventUID.isEmpty()){
+            Log.d(CLASS_TAG, String.format("No events found for program: %s, organisationUnit: %s",programUid,organisationUnitUid));
+            return;
+        }
+        getEventDataFromServer(dhisApi, lastEventUID);
+    }
+
+    private static String findLastEvent(DhisApi dhisApi, String organisationUnitUid, String programUid){
+        final Map<String, String> map = new HashMap<>();
+        map.put("fields", "event,lastUpdated");
+
+        Event lastEvent=null;
+        JsonNode response = dhisApi.getMinimizedEvents(programUid, organisationUnitUid, map);
+        List<Event> pageEvents = EventsWrapper.getEvents(response);
+        for(Event event:pageEvents){
+            if(lastEvent==null || DateUtils.parseDate(lastEvent.getLastUpdated()).before(DateUtils.parseDate(event.getLastUpdated()))){
+                lastEvent = event;
+            }
+        }
+
+        return lastEvent==null?null:lastEvent.getUid();
     }
 
     static List<TrackedEntityInstance> queryTrackedEntityInstancesDataFromServer(DhisApi dhisApi,
