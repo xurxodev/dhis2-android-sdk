@@ -713,6 +713,10 @@ public final class MetaDataController extends ResourceController {
     }
 
     private static void getAssignedProgramsDataFromServer(DhisApi dhisApi, DateTime serverDateTime) throws APIException {
+        getAssignedProgramsDataFromServer(dhisApi, serverDateTime, false);
+    }
+
+    private static void getAssignedProgramsDataFromServer(DhisApi dhisApi, DateTime serverDateTime, boolean getOUHierarchy) throws APIException {
         Log.d(CLASS_TAG, "getAssignedProgramsDataFromServer");
         DateTime lastUpdated = DateTimeManager.getInstance()
                 .getLastUpdated(ResourceType.ASSIGNEDPROGRAMS);
@@ -733,16 +737,17 @@ public final class MetaDataController extends ResourceController {
         }
             List<DbOperation> operations = AssignedProgramsWrapper.getOperations(organisationUnits);
             for(OrganisationUnit organisationUnit:organisationUnits){
-                List<OrganisationUnitAttributeValue> organisationUnitAttributeValues = null;
                 try {
                     Map<String, String> QUERY_MAP_FULL = new HashMap<>();
                     QUERY_MAP_FULL.put("fields","[:all],!parent");
                     response= dhisApi.getOrganisationUnit(organisationUnit.getId(), QUERY_MAP_FULL);
                     organisationUnit=AssignedProgramsWrapper.deserializeOrganisationUnit(response, organisationUnit);
-                    for(String organistaionUnitAncestorUid:organisationUnit.getAncestors()){
-                        OrganisationUnit organisationUnitAncestor=new OrganisationUnit();
-                        organisationUnitAncestor.setId(organistaionUnitAncestorUid);
-                        saveOrganisationUnit(dhisApi, operations, organisationUnitAncestor);
+                    if (getOUHierarchy) {
+                        for (String organisationUnitAncestorUid : organisationUnit.getAncestors()) {
+                            OrganisationUnit organisationUnitAncestor = new OrganisationUnit();
+                            organisationUnitAncestor.setId(organisationUnitAncestorUid);
+                            saveOrganisationUnit(dhisApi, operations, organisationUnitAncestor);
+                        }
                     }
                     saveOrganisationUnit(dhisApi, operations, organisationUnit);
                 } catch(ConversionException e) {
