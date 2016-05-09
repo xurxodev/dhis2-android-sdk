@@ -125,7 +125,20 @@ import static org.hisp.dhis.android.sdk.utils.NetworkUtils.unwrapResponse;
 public final class MetaDataController extends ResourceController {
     private final static String CLASS_TAG = "MetaDataController";
 
+    /**
+     * Flag that indicates if the full organisationUnit hierarchy is retrieved or only the leaves of the hierarchy
+     */
+    private static boolean fullOrganisationUnitHierarchy;
+
     private MetaDataController() {
+    }
+
+    public static void setFullOrganisationUnitHierarchy(boolean fullHierarchy){
+        fullOrganisationUnitHierarchy=fullHierarchy;
+    }
+
+    public static boolean isFullOrganisationUnitHierarchy(){
+        return fullOrganisationUnitHierarchy;
     }
 
     /**
@@ -713,10 +726,6 @@ public final class MetaDataController extends ResourceController {
     }
 
     private static void getAssignedProgramsDataFromServer(DhisApi dhisApi, DateTime serverDateTime) throws APIException {
-        getAssignedProgramsDataFromServer(dhisApi, serverDateTime, false);
-    }
-
-    private static void getAssignedProgramsDataFromServer(DhisApi dhisApi, DateTime serverDateTime, boolean getOUHierarchy) throws APIException {
         Log.d(CLASS_TAG, "getAssignedProgramsDataFromServer");
         DateTime lastUpdated = DateTimeManager.getInstance()
                 .getLastUpdated(ResourceType.ASSIGNEDPROGRAMS);
@@ -735,27 +744,28 @@ public final class MetaDataController extends ResourceController {
             e.printStackTrace();
             return; //todo: handle
         }
-            List<DbOperation> operations = AssignedProgramsWrapper.getOperations(organisationUnits);
-            for(OrganisationUnit organisationUnit:organisationUnits){
-                try {
-                    Map<String, String> QUERY_MAP_FULL = new HashMap<>();
-                    QUERY_MAP_FULL.put("fields","[:all],!parent");
-                    response= dhisApi.getOrganisationUnit(organisationUnit.getId(), QUERY_MAP_FULL);
-                    organisationUnit=AssignedProgramsWrapper.deserializeOrganisationUnit(response, organisationUnit);
-                    if (getOUHierarchy) {
-                        for (String organisationUnitAncestorUid : organisationUnit.getAncestors()) {
-                            OrganisationUnit organisationUnitAncestor = new OrganisationUnit();
-                            organisationUnitAncestor.setId(organisationUnitAncestorUid);
-                            saveOrganisationUnit(dhisApi, operations, organisationUnitAncestor);
-                        }
+
+        List<DbOperation> operations = AssignedProgramsWrapper.getOperations(organisationUnits);
+        for(OrganisationUnit organisationUnit:organisationUnits){
+            try {
+                Map<String, String> QUERY_MAP_FULL = new HashMap<>();
+                QUERY_MAP_FULL.put("fields","[:all],!parent");
+                response= dhisApi.getOrganisationUnit(organisationUnit.getId(), QUERY_MAP_FULL);
+                organisationUnit=AssignedProgramsWrapper.deserializeOrganisationUnit(response, organisationUnit);
+                if (isFullOrganisationUnitHierarchy()) {
+                    for (String organisationUnitAncestorUid : organisationUnit.getAncestors()) {
+                        OrganisationUnit organisationUnitAncestor = new OrganisationUnit();
+                        organisationUnitAncestor.setId(organisationUnitAncestorUid);
+                        saveOrganisationUnit(dhisApi, operations, organisationUnitAncestor);
                     }
-                    saveOrganisationUnit(dhisApi, operations, organisationUnit);
-                } catch(ConversionException e) {
-                    e.printStackTrace();
-                } catch(IOException e) {
-                    e.printStackTrace();
                 }
+                saveOrganisationUnit(dhisApi, operations, organisationUnit);
+            } catch(ConversionException e) {
+                e.printStackTrace();
+            } catch(IOException e) {
+                e.printStackTrace();
             }
+        }
 
         DbUtils.applyBatch(operations);
         DateTimeManager.getInstance()
