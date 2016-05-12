@@ -59,6 +59,9 @@ public final class UserAccount extends BaseModel implements IdentifiableObject {
     @Column(name = "uId")
     String uId;
 
+    @Column(name = "username")
+    String username;
+
     @JsonProperty("name")
     @Column(name = "name")
     String name;
@@ -371,5 +374,13 @@ public final class UserAccount extends BaseModel implements IdentifiableObject {
     @JsonIgnore
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

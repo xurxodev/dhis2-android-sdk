@@ -62,6 +62,7 @@ final class UserController {
                 "organisationUnits[id]");
         UserAccount userAccount = dhisApi
                 .getCurrentUserAccount(QUERY_PARAMS);
+        userAccount.setUsername(credentials.getUsername());
 
         // if we got here, it means http
         // request was executed successfully
