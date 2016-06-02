@@ -51,12 +51,10 @@ public class OrganisationUnitLevelWrapper {
             return organisationUnitLevels;
         } else {
             Iterator<JsonNode> nodes = organisationUnitsNode.elements();
-            int levelCounter=1;
             while(nodes.hasNext()) {
                 JsonNode indexNode = nodes.next();
                 OrganisationUnitLevel item = DhisController.getInstance().getObjectMapper().
                         readValue(indexNode.toString(), OrganisationUnitLevel.class);
-                item.setLevel(levelCounter++);
                 organisationUnitLevels.add(item);
             }
         }
