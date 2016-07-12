@@ -125,6 +125,10 @@ final class TrackerDataSender {
     private static ImportSummary postEvent(Event event, DhisApi dhisApi) throws APIException {
         try {
             ImportSummary importSummary=null;
+            if (event.getDataValues() == null || event.getDataValues().size() == 0) {
+                event.delete();
+                return importSummary;
+            }
             Response response = dhisApi.postEvent(event);
 
             if(response.getStatus() == 200) {
