@@ -29,6 +29,8 @@
 
 package org.hisp.dhis.android.sdk.controllers.wrappers;
 
+import android.util.Log;
+
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.models.Attribute;
 import org.hisp.dhis.android.sdk.persistence.models.DataElement;
@@ -174,15 +176,22 @@ public class ProgramWrapper {
         if (attributeValues!=null && !attributeValues.isEmpty()) {
             for (DataElementAttributeValue attributeValue : attributeValues) {
                 attributeValue.setDataElement(dataElement.getUid());
-                //Search for the attribute in the map, if not there, search for it in the DB, if not there create it
+                // Search for the attribute in the map, if not there, search for it in the DB, if not there create it
                 operations.add(DbOperation.save(attributeValue));
                 Attribute attribute = attributes.get(attributeValue.getAttributeId());
                 if (attribute == null)
                     attribute = attributeValue.getAttributeObj();
                 if (attribute == null)
                     attribute = attributeValue.getAttribute();
-                attributes.put(attributeValue.getAttributeId(), attribute);
-                operations.add(DbOperation.save(attribute));
+
+                // A completely null attribute makes no sense, and apparently there's a bug on API causing sometimes attributes to show null
+                // On null attribute, discard this attribute
+                if (attribute.getCode() == null && attribute.getName() == null && attribute.getValueType() == null) {
+                    Log.d(".ProgramWrapper", String.format("ERROR: null attribute found. Attribute with id %s not saved", attributeValue.getAttributeId()));
+                } else {
+                    attributes.put(attributeValue.getAttributeId(), attribute);
+                    operations.add(DbOperation.save(attribute));
+                }
             }
         }
         return operations;
