@@ -29,8 +29,6 @@
 
 package org.hisp.dhis.android.sdk.controllers.wrappers;
 
-import android.util.Log;
-
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.models.Option;
 import org.hisp.dhis.android.sdk.persistence.models.OptionAttributeValue;
@@ -64,7 +62,7 @@ public class OptionSetWrapper {
 
                 int sortIndex = 0;
                 for (Option option : optionSet.getOptions()) {
-                    option.setUid(optionSet.getUid() + option.getCode());//options don't have uid, but uid is used in createOperations
+                    option.setUid(option.getUid());
                     option.setLastUpdated(new DateTime().toString());//same with these dates
                     option.setCreated(new DateTime().toString());
                     option.setOptionSet(optionSet.getUid());
