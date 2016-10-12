@@ -26,4 +26,11 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-include ":models", ":core", ':core-rules', ":core-android", ":ui", ':ui-bindings', ':utils'
+include ':app', ':core', ':core-android', ':core-rules', ':models', ':ui', ':ui-bindings', ':utils'
+project(':core').projectDir = new File(settingsDir, 'sdk/core')
+project(':core-android').projectDir = new File(settingsDir, 'sdk/core-android')
+project(':core-rules').projectDir = new File(settingsDir, 'sdk/core-rules')
+project(':models').projectDir = new File(settingsDir, 'sdk/models')
+project(':ui').projectDir = new File(settingsDir, 'sdk/ui')
+project(':ui-bindings').projectDir = new File(settingsDir, 'sdk/ui-bindings')
+project(':utils').projectDir = new File(settingsDir, 'sdk/utils')

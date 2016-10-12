@@ -51,6 +51,11 @@ android {
     lintOptions {
         abortOnError false
     }
+    apt {
+        arguments {
+            targetModuleName 'DHIS2'
+        }
+    }
 }
 
 dependencies {
@@ -68,11 +73,14 @@ dependencies {
     compile "io.reactivex:rxandroid:${libs.rxAndroidVersion}";
 
     // Raizlabs.
-    apt "com.github.Raizlabs.DBFlow:dbflow-processor:${libs.dbFlowVersion}"
-    compile "com.github.Raizlabs.DBFlow:dbflow:${libs.dbFlowVersion}"
-    compile "com.github.Raizlabs.DBFlow:dbflow-core:${libs.dbFlowVersion}"
-    compile "com.github.Raizlabs.DBFlow:dbflow-sqlcipher:${libs.dbFlowVersion}"
+    apt files(absoluteProjectPath('libs/dbflow-processor-3.0.1.jar'))
+    compile files(absoluteProjectPath('libs/dbflow.jar'))
+    compile files(absoluteProjectPath('libs/dbflow-core-3.0.1.jar'))
 
     // Test
     testCompile "junit:junit:${libs.jUnitVersion}"
+
+    // Needed to compile from jars
+    compile "com.squareup:javapoet:${libs.javapoetVersion}"
+    compile "com.google.guava:guava:${libs.guavaVersion}"
 }
