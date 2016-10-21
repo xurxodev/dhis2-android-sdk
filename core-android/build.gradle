@@ -73,9 +73,10 @@ dependencies {
     compile "io.reactivex:rxandroid:${libs.rxAndroidVersion}";
 
     // Raizlabs.
-    apt files(absoluteProjectPath('libs/dbflow-processor-3.0.1.jar'))
-    compile files(absoluteProjectPath('libs/dbflow.jar'))
-    compile files(absoluteProjectPath('libs/dbflow-core-3.0.1.jar'))
+    apt "com.github.Raizlabs.DBFlow:dbflow-processor:${libs.dbFlowVersion}"
+    compile "com.github.Raizlabs.DBFlow:dbflow:${libs.dbFlowVersion}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-core:${libs.dbFlowVersion}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-sqlcipher:${libs.dbFlowVersion}"
 
     // Test
     testCompile "junit:junit:${libs.jUnitVersion}"

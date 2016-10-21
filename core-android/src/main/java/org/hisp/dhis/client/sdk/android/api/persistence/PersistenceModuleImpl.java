@@ -30,6 +30,7 @@ package org.hisp.dhis.client.sdk.android.api.persistence;
 
 import android.content.Context;
 
+import com.raizlabs.android.dbflow.config.DHIS2GeneratedDatabaseHolder;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
@@ -112,6 +113,7 @@ public class PersistenceModuleImpl implements PersistenceModule {
     public PersistenceModuleImpl(Context context) {
         FlowConfig flowConfig = new FlowConfig
                 .Builder(context)
+                .addDatabaseHolder(DHIS2GeneratedDatabaseHolder.class)
                 .build();
         FlowManager.init(flowConfig);
 
