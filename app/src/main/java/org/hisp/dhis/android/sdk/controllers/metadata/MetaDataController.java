@@ -148,6 +148,11 @@ public final class MetaDataController extends ResourceController {
      * @return
      */
     public static boolean isDataLoaded(Context context) {
+        if (LoadingController.isLoadFlagEnabled(context, ResourceType.ASSIGNEDPROGRAMSWITHOUTEXTRAS)) {
+            if( DateTimeManager.getInstance().getLastUpdated(ResourceType.ASSIGNEDPROGRAMSWITHOUTEXTRAS) == null) {
+                return false;
+            }
+        }
         if (LoadingController.isLoadFlagEnabled(context, ResourceType.ASSIGNEDPROGRAMS)) {
             if( DateTimeManager.getInstance().getLastUpdated(ResourceType.ASSIGNEDPROGRAMS) == null) {
                 return false;
@@ -606,6 +611,7 @@ public final class MetaDataController extends ResourceController {
       * Clears status and time of loaded meta data items
       */
     public static void clearMetaDataLoadedFlags() {
+        DateTimeManager.getInstance().deleteLastUpdated(ResourceType.ASSIGNEDPROGRAMSWITHOUTEXTRAS);
         DateTimeManager.getInstance().deleteLastUpdated(ResourceType.ASSIGNEDPROGRAMS);
         List<String> assignedPrograms = MetaDataController.getAssignedPrograms();
         for (String program : assignedPrograms) {
@@ -678,6 +684,11 @@ public final class MetaDataController extends ResourceController {
                 getAssignedProgramsDataFromServer(dhisApi, serverDateTime);
             }
         }
+        if (LoadingController.isLoadFlagEnabled(context, ResourceType.ASSIGNEDPROGRAMSWITHOUTEXTRAS)) {
+            if ( shouldLoad(dhisApi, ResourceType.ASSIGNEDPROGRAMSWITHOUTEXTRAS) ) {
+                getAssignedProgramsWithoutExtrasFromServer(dhisApi, serverDateTime);
+            }
+        }
         if (LoadingController.isLoadFlagEnabled(context, ResourceType.PROGRAMS)) {
             List<String> assignedPrograms = MetaDataController.getAssignedPrograms();
             if (assignedPrograms != null) {
@@ -723,6 +734,33 @@ public final class MetaDataController extends ResourceController {
                 getRelationshipTypesDataFromServer(dhisApi, serverDateTime);
             }
         }
+    }
+
+    private static void getAssignedProgramsWithoutExtrasFromServer(DhisApi dhisApi, DateTime serverDateTime) throws APIException {
+        Log.d(CLASS_TAG, "getAssignedProgramsWithoutExtrasFromServer");
+        DateTime lastUpdated = DateTimeManager.getInstance()
+                .getLastUpdated(ResourceType.ASSIGNEDPROGRAMSWITHOUTEXTRAS);
+
+        getOrganisationUnitLevelsFromServer(dhisApi);
+
+        Response response = dhisApi.getAssignedPrograms(getBasicQueryMap(lastUpdated));
+
+        List<OrganisationUnit> organisationUnits;
+        try {
+            organisationUnits = new AssignedProgramsWrapper().deserialize(response);
+        } catch (ConversionException e) {
+            e.printStackTrace();
+            return; //todo: handle
+        } catch (IOException e) {
+            e.printStackTrace();
+            return; //todo: handle
+        }
+
+        List<DbOperation> operations = AssignedProgramsWrapper.getOperations(organisationUnits);
+
+        DbUtils.applyBatch(operations);
+        DateTimeManager.getInstance()
+                .setLastUpdated(ResourceType.ASSIGNEDPROGRAMSWITHOUTEXTRAS, serverDateTime);
     }
 
     private static void getAssignedProgramsDataFromServer(DhisApi dhisApi, DateTime serverDateTime) throws APIException {
