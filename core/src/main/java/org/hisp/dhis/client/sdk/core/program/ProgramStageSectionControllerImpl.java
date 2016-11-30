@@ -118,7 +118,8 @@ public class ProgramStageSectionControllerImpl extends
                 allExistingProgramStageSections, updatedProgramStageSections,
                 persistedProgramStageSections);
         for (ProgramStageSection programStageSection : mergedProgramStageSections) {
-            programStageSectionUids.add(programStageSection.getProgramStage().getUId());
+            if(programStageSection.getProgramStage()!=null)
+                programStageSectionUids.add(programStageSection.getProgramStage().getUId());
         }
 
         // Syncing programs before saving program stages (since
