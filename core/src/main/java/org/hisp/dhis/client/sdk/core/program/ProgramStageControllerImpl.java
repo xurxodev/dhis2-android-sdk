@@ -115,7 +115,8 @@ public class ProgramStageControllerImpl extends
                 allExistingProgramStages, updatedProgramStages, persistedProgramStages);
 
         for (ProgramStage programStage : mergedProgramStages) {
-            programUids.add(programStage.getProgram().getUId());
+            if(programStage.getProgram()!=null)
+                programUids.add(programStage.getProgram().getUId());
         }
 
         // Syncing programs before saving program stages (since
