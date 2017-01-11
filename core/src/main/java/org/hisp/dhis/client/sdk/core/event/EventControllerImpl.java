@@ -51,7 +51,6 @@ import org.hisp.dhis.client.sdk.models.program.Program;
 import org.hisp.dhis.client.sdk.utils.Logger;
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -140,7 +139,8 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
 
         // we have to download all ids from server in order to
         // find out what was removed on the server side
-        List<Event> allExistingEvents = new ArrayList<>();
+        List<Event> allExistingEvents = eventApiClient.getEvents(Fields.BASIC, null, uids);
+
         Set<String> uidSet = ModelUtils.toUidSet(persistedEvents);
         uidSet.addAll(uids);
 
@@ -160,7 +160,7 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
 
         List<Event> updatedEvents = eventApiClient.getEvents(
                 Fields.ALL, organisationUnit, program);
-        
+
         List<DbOperation> dbOperations = DbUtils.createOperations(eventStore, updatedEvents);
         transactionManager.transact(dbOperations);
 
