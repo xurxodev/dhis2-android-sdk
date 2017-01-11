@@ -140,9 +140,6 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
 
         // we have to download all ids from server in order to
         // find out what was removed on the server side
-
-        //// FIXME: 10/01/17
-        //List<Event> allExistingEvents = eventApiClient.getEvents(Fields.BASIC, null, uids);
         List<Event> allExistingEvents = new ArrayList<>();
         Set<String> uidSet = ModelUtils.toUidSet(persistedEvents);
         uidSet.addAll(uids);
@@ -163,7 +160,7 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
 
         List<Event> updatedEvents = eventApiClient.getEvents(
                 Fields.ALL, organisationUnit, program);
-        // we will have to perform something similar to what happens in AbsController
+        
         List<DbOperation> dbOperations = DbUtils.createOperations(eventStore, updatedEvents);
         transactionManager.transact(dbOperations);
 
