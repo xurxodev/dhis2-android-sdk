@@ -78,6 +78,22 @@ public class DbUtils {
         return operations;
     }
 
+    public static <T extends IdentifiableObject> List<DbOperation> createOperations(IdentifiableObjectStore<T> modelStore, List<T> newModels){
+
+        List<DbOperation> ops = new ArrayList<>();
+
+        Map<String, T> newModelsMap = ModelUtils.toMap(newModels);
+
+        // Inserting new items.
+        for (String newModelKey : newModelsMap.keySet()) {
+            T item = newModelsMap.get(newModelKey);
+            ops.add(DbOperationImpl.with(modelStore)
+                    .insert(item));
+        }
+
+        return ops;
+    }
+
     public static <T extends IdentifiableObject> List<DbOperation> createOperations(
             IdentifiableObjectStore<T> modelStore, List<T> oldModels, List<T> newModels) {
         List<DbOperation> ops = new ArrayList<>();

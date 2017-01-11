@@ -32,12 +32,17 @@ import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.core.common.network.ApiMessage;
 import org.hisp.dhis.client.sdk.models.event.Event;
+import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
+import org.hisp.dhis.client.sdk.models.program.Program;
 import org.joda.time.DateTime;
 
 import java.util.List;
 import java.util.Set;
 
 public interface EventApiClient {
+    List<Event> getEvents(
+            Fields fields, OrganisationUnit organisationUnit, Program program) throws ApiException;
+
     List<Event> getEvents(
             Fields fields, DateTime lastUpdated, Set<String> uids) throws ApiException;
 

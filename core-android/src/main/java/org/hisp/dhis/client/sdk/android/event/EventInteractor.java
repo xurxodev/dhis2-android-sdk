@@ -66,6 +66,8 @@ public interface EventInteractor {
 
     Observable<List<Event>> listByActions(Set<Action> actionSet);
 
+    Observable<List<Event>> pull(OrganisationUnit organisationUnit, Program program);
+
     Observable<List<Event>> pull(Set<String> uids);
 
     Observable<List<Event>> pull(SyncStrategy strategy, Set<String> uids);

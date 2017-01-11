@@ -35,6 +35,7 @@ import org.hisp.dhis.client.sdk.models.common.base.IdentifiableObject;
 import java.util.Set;
 
 public interface IdentifiableController<T extends IdentifiableObject> {
+
     void pull(SyncStrategy syncStrategy) throws ApiException;
 
     void pull(SyncStrategy syncStrategy, Set<String> uids) throws ApiException;

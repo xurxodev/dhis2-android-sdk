@@ -46,9 +46,12 @@ import org.hisp.dhis.client.sdk.core.systeminfo.SystemInfoController;
 import org.hisp.dhis.client.sdk.models.common.importsummary.ImportSummary;
 import org.hisp.dhis.client.sdk.models.common.state.Action;
 import org.hisp.dhis.client.sdk.models.event.Event;
+import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
+import org.hisp.dhis.client.sdk.models.program.Program;
 import org.hisp.dhis.client.sdk.utils.Logger;
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -137,8 +140,10 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
 
         // we have to download all ids from server in order to
         // find out what was removed on the server side
-        List<Event> allExistingEvents = eventApiClient.getEvents(Fields.BASIC, null, uids);
 
+        //// FIXME: 10/01/17
+        //List<Event> allExistingEvents = eventApiClient.getEvents(Fields.BASIC, null, uids);
+        List<Event> allExistingEvents = new ArrayList<>();
         Set<String> uidSet = ModelUtils.toUidSet(persistedEvents);
         uidSet.addAll(uids);
 
@@ -151,6 +156,18 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
         transactionManager.transact(dbOperations);
 
         lastUpdatedPreferences.save(ResourceType.EVENTS, DateType.SERVER, serverTime);
+    }
+
+    @Override
+    public void pull(OrganisationUnit organisationUnit, Program program) throws ApiException {
+
+        List<Event> updatedEvents = eventApiClient.getEvents(
+                Fields.ALL, organisationUnit, program);
+        // we will have to perform something similar to what happens in AbsController
+        List<DbOperation> dbOperations = DbUtils.createOperations(eventStore, updatedEvents);
+        transactionManager.transact(dbOperations);
+
+        lastUpdatedPreferences.save(ResourceType.EVENTS, DateType.SERVER, new DateTime());
     }
 
     @Override
