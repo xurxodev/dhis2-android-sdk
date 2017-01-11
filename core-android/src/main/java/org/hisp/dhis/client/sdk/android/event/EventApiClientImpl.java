@@ -31,32 +31,32 @@ public class EventApiClientImpl implements EventApiClient {
 
     @Override
     public List<Event> getEvents(Fields fields, OrganisationUnit organisationUnit, Program program) throws ApiException {
-            Map<String, String> queryMap = new HashMap<>();
+        Map<String, String> queryMap = new HashMap<>();
 
         //filter by org unit
         queryMap.put("orgUnit",organisationUnit.getUId());
         //filter by program
         queryMap.put("program",program.getUId());
         /* disable paging */
-            queryMap.put("skipPaging", "true");
+        queryMap.put("skipPaging", "true");
 
-            switch (fields) {
-                case BASIC: {
-                    queryMap.put("fields", "event");
-                    break;
-                }
-                case ALL: {
-                    queryMap.put("fields", "event,name,displayName,created,lastUpdated,access," +
-                            "program,programStage,status,orgUnit,eventDate,dueDate," +
-                            "coordinate,dataValues");
-                    break;
-                }
+        switch (fields) {
+            case BASIC: {
+                queryMap.put("fields", "event");
+                break;
             }
+            case ALL: {
+                queryMap.put("fields", "event,name,displayName,created,lastUpdated,access," +
+                        "program,programStage,status,orgUnit,eventDate,dueDate," +
+                        "coordinate,dataValues");
+                break;
+            }
+        }
 
-            List<Event> allEvents = new ArrayList<>();
-            allEvents.addAll(unwrap(call(
-                    eventApiclientRetrofit.getEvents(queryMap)), "events"));
-            return allEvents;
+        List<Event> allEvents = new ArrayList<>();
+        allEvents.addAll(unwrap(call(
+                eventApiclientRetrofit.getEvents(queryMap)), "events"));
+        return allEvents;
     }
 
     @Override
