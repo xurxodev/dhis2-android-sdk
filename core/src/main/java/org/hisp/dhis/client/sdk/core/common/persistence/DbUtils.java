@@ -30,7 +30,6 @@ package org.hisp.dhis.client.sdk.core.common.persistence;
 
 import org.hisp.dhis.client.sdk.core.common.utils.ModelUtils;
 import org.hisp.dhis.client.sdk.models.common.base.IdentifiableObject;
-import org.hisp.dhis.client.sdk.models.common.base.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,25 +106,26 @@ public class DbUtils {
 
             // if the last updated field in up to date model is after the same
             // field in persisted model, it means we need to update it.
-            saveNewModel(modelStore, ops, newModel, oldModel);
+            if (newModel.getLastUpdated().isAfter(oldModel.getLastUpdated())) {
+                // note, we need to pass database primary id to updated model
+                // in order to avoid creation of new object.
+                newModel.setId(oldModel.getId());
+                ops.add(DbOperationImpl.with(modelStore)
+                        .update(newModel));
+            }
 
             // as we have processed given old (persisted) model,
             // we can remove it from map of new models.
             newModelsMap.remove(oldModelKey);
         }
 
+        // Inserting new items.
+        for (String newModelKey : newModelsMap.keySet()) {
+            T item = newModelsMap.get(newModelKey);
+            ops.add(DbOperationImpl.with(modelStore)
+                    .insert(item));
+        }
 
         return ops;
-    }
-
-    private static <T extends IdentifiableObject> void saveNewModel(
-            IdentifiableObjectStore<T> modelStore, List<DbOperation> ops, T newModel, T oldModel) {
-        if (newModel.getLastUpdated().isAfter(oldModel.getLastUpdated())) {
-            // note, we need to pass database primary id to updated model
-            // in order to avoid creation of new object.
-            newModel.setId(oldModel.getId());
-            ops.add(DbOperationImpl.with(modelStore)
-                    .update(newModel));
-        }
     }
 }

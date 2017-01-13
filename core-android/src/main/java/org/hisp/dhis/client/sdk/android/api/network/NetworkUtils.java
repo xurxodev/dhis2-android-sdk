@@ -138,7 +138,6 @@ public class NetworkUtils {
 
         try {
             response = call.execute();
-            System.out.println("SDK QUERY: " + call.request().url().uri().toString());
         } catch (IOException ioException) {
             apiException = ApiException.networkError(null, ioException);
         }

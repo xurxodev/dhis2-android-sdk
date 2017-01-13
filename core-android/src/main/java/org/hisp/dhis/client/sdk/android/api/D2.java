@@ -392,6 +392,7 @@ public class D2 {
     public static ProgramStageInteractor programStages() {
         return configuredInstance().programStageInteractor;
     }
+
     public static ProgramStageSectionInteractor programStageSections() {
         return configuredInstance().programStageSectionInteractor;
     }
