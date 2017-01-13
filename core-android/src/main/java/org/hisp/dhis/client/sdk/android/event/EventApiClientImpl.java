@@ -1,16 +1,11 @@
 package org.hisp.dhis.client.sdk.android.event;
 
-import org.hisp.dhis.client.sdk.android.api.D2;
-import org.hisp.dhis.client.sdk.android.api.persistence.flow.ProgramFlow;
 import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.core.common.network.ApiMessage;
-import org.hisp.dhis.client.sdk.core.common.network.ApiResponse;
 import org.hisp.dhis.client.sdk.core.common.utils.CollectionUtils;
 import org.hisp.dhis.client.sdk.core.event.EventApiClient;
 import org.hisp.dhis.client.sdk.models.event.Event;
-import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
-import org.hisp.dhis.client.sdk.models.program.Program;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -30,13 +25,13 @@ public class EventApiClientImpl implements EventApiClient {
     }
 
     @Override
-    public List<Event> getEvents(Fields fields, OrganisationUnit organisationUnit, Program program) throws ApiException {
+    public List<Event> getEvents(Fields fields, String organisationUnit, String program) throws ApiException {
         Map<String, String> queryMap = new HashMap<>();
 
         //filter by org unit
-        queryMap.put("orgUnit",organisationUnit.getUId());
+        queryMap.put("orgUnit",organisationUnit );
         //filter by program
-        queryMap.put("program",program.getUId());
+        queryMap.put("program",program);
         /* disable paging */
         queryMap.put("skipPaging", "true");
 
@@ -133,5 +128,4 @@ public class EventApiClientImpl implements EventApiClient {
 
         return idFilters;
     }
-
 }

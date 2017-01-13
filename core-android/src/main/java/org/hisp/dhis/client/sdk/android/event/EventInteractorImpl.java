@@ -187,8 +187,8 @@ public class EventInteractorImpl implements EventInteractor {
     }
 
     @Override
-    public Observable<List<Event>> pull(final OrganisationUnit organisationUnit,
-            final Program program) {
+    public Observable<List<Event>> pull(final String organisationUnit,
+            final String program) {
         return Observable.create(new DefaultOnSubscribe<List<Event>>() {
             @Override
             public List<Event> call() {
@@ -197,6 +197,19 @@ public class EventInteractorImpl implements EventInteractor {
             }
         });
     }
+
+    @Override
+    public Observable<List<Event>> pull(final OrganisationUnit organisationUnit,
+            final Program program) {
+        return Observable.create(new DefaultOnSubscribe<List<Event>>() {
+            @Override
+            public List<Event> call() {
+                eventController.pull(organisationUnit.getUId(), program.getUId());
+                return eventService.list();
+            }
+        });
+    }
+
     @Override
     public Observable<List<Event>> list(final OrganisationUnit organisationUnit,
                                         final Program program) {

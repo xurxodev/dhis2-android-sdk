@@ -31,9 +31,7 @@ package org.hisp.dhis.client.sdk.core.event;
 import org.hisp.dhis.client.sdk.core.common.controllers.IdentifiableDataController;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.models.event.Event;
-import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
-import org.hisp.dhis.client.sdk.models.program.Program;
 
 public interface EventController extends IdentifiableDataController<Event> {
-    void pull(OrganisationUnit organisationUnit, Program program) throws ApiException;
+    void pull(String organisationUnit, String program) throws ApiException;
 }

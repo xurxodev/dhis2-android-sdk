@@ -84,12 +84,7 @@ public class DbUtils {
 
         Map<String, T> newModelsMap = ModelUtils.toMap(newModels);
 
-        // Inserting new items.
-        for (String newModelKey : newModelsMap.keySet()) {
-            T item = newModelsMap.get(newModelKey);
-            ops.add(DbOperationImpl.with(modelStore)
-                    .insert(item));
-        }
+        insertNewItems(modelStore, ops, newModelsMap);
 
         return ops;
     }
@@ -136,12 +131,19 @@ public class DbUtils {
         }
 
         // Inserting new items.
+        insertNewItems(modelStore, ops, newModelsMap);
+
+        return ops;
+    }
+
+    private static <T extends IdentifiableObject> void insertNewItems(
+            IdentifiableObjectStore<T> modelStore, List<DbOperation> ops,
+            Map<String, T> newModelsMap) {
+        // Inserting new items.
         for (String newModelKey : newModelsMap.keySet()) {
             T item = newModelsMap.get(newModelKey);
             ops.add(DbOperationImpl.with(modelStore)
                     .insert(item));
         }
-
-        return ops;
     }
 }

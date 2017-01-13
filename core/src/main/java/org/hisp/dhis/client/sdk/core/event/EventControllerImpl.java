@@ -46,8 +46,6 @@ import org.hisp.dhis.client.sdk.core.systeminfo.SystemInfoController;
 import org.hisp.dhis.client.sdk.models.common.importsummary.ImportSummary;
 import org.hisp.dhis.client.sdk.models.common.state.Action;
 import org.hisp.dhis.client.sdk.models.event.Event;
-import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
-import org.hisp.dhis.client.sdk.models.program.Program;
 import org.hisp.dhis.client.sdk.utils.Logger;
 import org.joda.time.DateTime;
 
@@ -156,7 +154,7 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
     }
 
     @Override
-    public void pull(OrganisationUnit organisationUnit, Program program) throws ApiException {
+    public void pull(String organisationUnit, String program) throws ApiException {
 
         List<Event> updatedEvents = eventApiClient.getEvents(
                 Fields.ALL, organisationUnit, program);
