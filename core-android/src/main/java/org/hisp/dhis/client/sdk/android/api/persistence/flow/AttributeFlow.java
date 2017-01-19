@@ -8,18 +8,7 @@ import org.hisp.dhis.client.sdk.android.common.AbsMapper;
 import org.hisp.dhis.client.sdk.android.common.Mapper;
 import org.hisp.dhis.client.sdk.models.attribute.Attribute;
 
-/**
- * Created by idelcano on 14/11/2016.
- */
 
-
-/**
- * This class will be disappeared soon.
- * This is a SDK Pojo and is created to fix the Queries,
- * is in the app side and with hardcoded methods.
- * It makes the project compile and centralized the necessary methods
- * and necessary sdk new Pojos..
- */
 @Table(database = DbDhis.class)
 public class AttributeFlow extends BaseModelFlow {
     public static final Mapper<Attribute, AttributeFlow> MAPPER = new AttributeMapper();
