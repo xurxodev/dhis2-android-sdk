@@ -36,6 +36,7 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 
 import org.hisp.dhis.client.sdk.android.api.persistence.flow.EventFlow;
 import org.hisp.dhis.client.sdk.android.attributes.AttributeStoreImpl;
+import org.hisp.dhis.client.sdk.android.attributes.AttributeValueStoreImpl;
 import org.hisp.dhis.client.sdk.android.common.StateStoreImpl;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementStoreImpl;
 import org.hisp.dhis.client.sdk.android.enrollment.EnrollmentStoreImpl;
@@ -60,6 +61,7 @@ import org.hisp.dhis.client.sdk.android.trackedentity.TrackedEntityInstanceStore
 import org.hisp.dhis.client.sdk.android.trackedentity.TrackedEntityStoreImpl;
 import org.hisp.dhis.client.sdk.android.user.UserAccountStoreImpl;
 import org.hisp.dhis.client.sdk.core.attribute.AttributeStore;
+import org.hisp.dhis.client.sdk.core.attribute.AttributeValueStore;
 import org.hisp.dhis.client.sdk.core.common.StateStore;
 import org.hisp.dhis.client.sdk.core.common.persistence.PersistenceModule;
 import org.hisp.dhis.client.sdk.core.common.persistence.TransactionManager;
@@ -92,6 +94,7 @@ public class PersistenceModuleImpl implements PersistenceModule {
     private final UserAccountStore userAccountStore;
     private final ProgramStore programStore;
     private final AttributeStore attributeStore;
+    private final AttributeValueStore attributeValueStore;
     private final ProgramStageStore programStageStore;
     private final ProgramStageSectionStore programStageSectionStore;
     private final ProgramRuleStore programRuleStore;
@@ -124,6 +127,7 @@ public class PersistenceModuleImpl implements PersistenceModule {
         stateStore = new StateStoreImpl(EventFlow.MAPPER);
         programStore = new ProgramStoreImpl(transactionManager);
         attributeStore = new AttributeStoreImpl(transactionManager);
+        attributeValueStore = new AttributeValueStoreImpl(transactionManager);
         programStageStore = new ProgramStageStoreImpl(transactionManager);
         programStageSectionStore = new ProgramStageSectionStoreImpl(transactionManager);
         programRuleStore = new ProgramRuleStoreImpl(transactionManager);
@@ -169,6 +173,11 @@ public class PersistenceModuleImpl implements PersistenceModule {
     @Override
     public AttributeStore getAttributeStore() {
         return attributeStore;
+    }
+
+    @Override
+    public AttributeValueStore getAttributeValueStore() {
+        return attributeValueStore;
     }
 
     @Override

@@ -38,6 +38,8 @@ import org.hisp.dhis.client.sdk.android.api.utils.DefaultOnSubscribe;
 import org.hisp.dhis.client.sdk.android.api.utils.LoggerImpl;
 import org.hisp.dhis.client.sdk.android.attributes.AttributeInteractor;
 import org.hisp.dhis.client.sdk.android.attributes.AttributeInteractorImpl;
+import org.hisp.dhis.client.sdk.android.attributes.AttributeValueInteractor;
+import org.hisp.dhis.client.sdk.android.attributes.AttributeValueInteractorImpl;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementInteractor;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementInteractorImpl;
 import org.hisp.dhis.client.sdk.android.enrollment.EnrollmentInteractor;
@@ -120,6 +122,7 @@ public class D2 {
     private final CurrentUserInteractor currentUserInteractor;
     private final OrganisationUnitInteractor organisationUnitInteractor;
     private final AttributeInteractor attributeInteractor;
+    private final AttributeValueInteractor attributeValueInteractor;
     private final ProgramInteractor programInteractor;
     private final ProgramStageInteractor programStageInteractor;
     private final ProgramStageSectionInteractor programStageSectionInteractor;
@@ -158,6 +161,7 @@ public class D2 {
             currentUserInteractor = null;
             organisationUnitInteractor = null;
             attributeInteractor = null;
+            attributeValueInteractor = null;
             programInteractor = null;
             programStageInteractor = null;
             programStageSectionInteractor = null;
@@ -201,6 +205,10 @@ public class D2 {
         attributeInteractor = new AttributeInteractorImpl(
                 servicesModule.getAttributeService(),
                 controllersModule.getAttributeController());
+
+        attributeValueInteractor = new AttributeValueInteractorImpl(
+                servicesModule.getAttributeValueService());
+
 
         programInteractor = new ProgramInteractorImpl(
                 servicesModule.getProgramService(),
@@ -385,6 +393,9 @@ public class D2 {
         return configuredInstance().attributeInteractor;
     }
 
+    public static AttributeValueInteractor attributeValues() {
+        return configuredInstance().attributeValueInteractor;
+    }
     public static ProgramInteractor programs() {
         return configuredInstance().programInteractor;
     }
