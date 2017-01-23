@@ -141,6 +141,7 @@ public class ControllersModuleImpl implements ControllersModule {
         optionSetController = new OptionSetControllerImpl(
                 systemInfoController,
                 networkModule.getOptionSetApiClient(),
+                persistenceModule.getAttributeValueStore(),
                 persistenceModule.getOptionStore(),
                 persistenceModule.getOptionSetStore(),
                 preferencesModule.getLastUpdatedPreferences(),
