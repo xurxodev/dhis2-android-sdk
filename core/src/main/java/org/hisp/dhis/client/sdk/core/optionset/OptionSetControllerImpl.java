@@ -29,11 +29,13 @@
 package org.hisp.dhis.client.sdk.core.optionset;
 
 
+import org.hisp.dhis.client.sdk.core.attribute.AttributeValueStore;
 import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.controllers.AbsSyncStrategyController;
 import org.hisp.dhis.client.sdk.core.common.controllers.SyncStrategy;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.core.common.persistence.DbOperation;
+import org.hisp.dhis.client.sdk.core.common.persistence.DbOperationImpl;
 import org.hisp.dhis.client.sdk.core.common.persistence.DbUtils;
 import org.hisp.dhis.client.sdk.core.common.persistence.TransactionManager;
 import org.hisp.dhis.client.sdk.core.common.preferences.DateType;
@@ -41,6 +43,7 @@ import org.hisp.dhis.client.sdk.core.common.preferences.LastUpdatedPreferences;
 import org.hisp.dhis.client.sdk.core.common.preferences.ResourceType;
 import org.hisp.dhis.client.sdk.core.common.utils.ModelUtils;
 import org.hisp.dhis.client.sdk.core.systeminfo.SystemInfoController;
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.optionset.Option;
 import org.hisp.dhis.client.sdk.models.optionset.OptionSet;
 import org.joda.time.DateTime;
@@ -55,11 +58,13 @@ public final class OptionSetControllerImpl extends
     private final OptionSetApiClient optionSetApiClient;
     private final SystemInfoController systemInfoController;
     private final TransactionManager transactionManager;
+    private final AttributeValueStore attributeValueStore;
     private final OptionStore optionStore;
     private final OptionSetStore optionSetStore;
 
     public OptionSetControllerImpl(SystemInfoController systemInfoController,
                                    OptionSetApiClient optionSetApiClient,
+                                   AttributeValueStore attributeValueStore,
                                    OptionStore optionStore,
                                    OptionSetStore optionSetStore,
                                    LastUpdatedPreferences lastUpdatedPreferences,
@@ -67,6 +72,7 @@ public final class OptionSetControllerImpl extends
         super(ResourceType.OPTION_SETS, optionSetStore, lastUpdatedPreferences);
         this.systemInfoController = systemInfoController;
         this.optionSetApiClient = optionSetApiClient;
+        this.attributeValueStore = attributeValueStore;
         this.optionStore = optionStore;
         this.optionSetStore = optionSetStore;
         this.transactionManager = transactionManager;
@@ -108,11 +114,27 @@ public final class OptionSetControllerImpl extends
         }
 
         List<Option> updatedOptions = new ArrayList<>();
+
+        ArrayList<AttributeValue> attributeValues = new ArrayList<>();
         for (OptionSet updatedOptionSet : updatedOptionSets) {
+            for(Option option:updatedOptions) {
+                if (option.getAttributeValues() != null) {
+                    for (AttributeValue attributeValue : option.getAttributeValues()) {
+                        attributeValue.setReferenceUId(option.getUId());
+                        attributeValue.setItemType(option.getClass().getName());
+                        attributeValues.add(attributeValue);
+                    }
+                }
+            }
             updatedOptions.addAll(updatedOptionSet.getOptions());
         }
 
         List<DbOperation> dbOperations = new ArrayList<>();
+        for (AttributeValue attributeValue : attributeValues) {
+            dbOperations.add(DbOperationImpl.with(attributeValueStore)
+                    .insert(attributeValue));
+        }
+
         dbOperations.addAll(DbUtils.createOperations(optionStore,
                 optionStore.queryAll(), updatedOptions));
 
@@ -132,15 +154,29 @@ public final class OptionSetControllerImpl extends
                 .getOptionSets(Fields.BASIC, null, null);
         List<OptionSet> persistedOptionSets = identifiableObjectStore
                 .queryAll();
+
         List<Option> updatedOptions = new ArrayList<>();
 
-        for (OptionSet optionSet : updatedOptionSets) {
-            if (optionSet.getOptions() != null) {
-                updatedOptions.addAll(optionSet.getOptions());
+        ArrayList<AttributeValue> attributeValues = new ArrayList<>();
+        for (OptionSet updatedOptionSet : updatedOptionSets) {
+            for(Option option:updatedOptions) {
+                if (option.getAttributeValues() != null) {
+                    for (AttributeValue attributeValue : option.getAttributeValues()) {
+                        attributeValue.setReferenceUId(option.getUId());
+                        attributeValue.setItemType(option.getClass().getName());
+                        attributeValues.add(attributeValue);
+                    }
+                }
             }
+            updatedOptions.addAll(updatedOptionSet.getOptions());
         }
 
         List<DbOperation> dbOperations = new ArrayList<>();
+        for (AttributeValue attributeValue : attributeValues) {
+            dbOperations.add(DbOperationImpl.with(attributeValueStore)
+                    .insert(attributeValue));
+        }
+
         dbOperations.addAll(DbUtils.createOperations(optionStore,
                 optionStore.queryAll(), updatedOptions));
         dbOperations.addAll(DbUtils.createOperations(allExistingOptionSets,

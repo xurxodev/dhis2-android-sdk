@@ -37,7 +37,11 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
 import org.hisp.dhis.client.sdk.android.common.AbsMapper;
 import org.hisp.dhis.client.sdk.android.common.Mapper;
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.optionset.Option;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(database = DbDhis.class)
 public final class OptionFlow extends BaseIdentifiableObjectFlow {
@@ -60,6 +64,9 @@ public final class OptionFlow extends BaseIdentifiableObjectFlow {
 
     @Column
     String code;
+
+    List<AttributeValueFlow> attributeValueFlow;
+
 
     public OptionFlow() {
         // empty constructor
@@ -89,6 +96,15 @@ public final class OptionFlow extends BaseIdentifiableObjectFlow {
         this.code = code;
     }
 
+    public List<AttributeValueFlow> getAttributeValueFlow() {
+        return attributeValueFlow;
+    }
+
+    public void setAttributeValueFlow(
+            List<AttributeValueFlow> attributeValueFlow) {
+        this.attributeValueFlow = attributeValueFlow;
+    }
+
     private static class OptionMapper extends AbsMapper<Option, OptionFlow> {
 
         @Override
@@ -109,6 +125,15 @@ public final class OptionFlow extends BaseIdentifiableObjectFlow {
             optionFlow.setOptionSet(OptionSetFlow.MAPPER
                     .mapToDatabaseEntity(option.getOptionSet()));
             optionFlow.setCode(option.getCode());
+
+            List<AttributeValueFlow> attributeValueFlows = new ArrayList<>();
+            if (option.getAttributeValues() != null) {
+                for (AttributeValue attributeValue : option.getAttributeValues()) {
+                    attributeValueFlows.add(AttributeValueFlow.MAPPER
+                            .mapToDatabaseEntity(attributeValue));
+                }
+                optionFlow.setAttributeValueFlow(attributeValueFlows);
+            }
             return optionFlow;
         }
 
@@ -130,6 +155,17 @@ public final class OptionFlow extends BaseIdentifiableObjectFlow {
             option.setOptionSet(OptionSetFlow.MAPPER
                     .mapToModel(optionFlow.getOptionSet()));
             option.setCode(optionFlow.getCode());
+            List<AttributeValue> attributeValues = new ArrayList<>();
+            if (option.getAttributeValues() != null) {
+                for (AttributeValueFlow attributeValueFlow : optionFlow.getAttributeValueFlow()) {
+
+                    AttributeValue attributeValue = AttributeValueFlow.MAPPER
+                            .mapToModel(attributeValueFlow);
+                    attributeValue.setReferenceUId(optionFlow.getUId());
+                    attributeValues.add(attributeValue);
+                }
+            }
+            option.setAttributeValues(attributeValues);
             return option;
         }
 

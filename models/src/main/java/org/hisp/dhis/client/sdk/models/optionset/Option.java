@@ -32,10 +32,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.common.base.BaseIdentifiableObject;
-import org.hisp.dhis.client.sdk.models.program.ProgramStageDataElement;
 
 import java.util.Comparator;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class Option extends BaseIdentifiableObject {
@@ -50,6 +51,8 @@ public final class Option extends BaseIdentifiableObject {
 
     @JsonProperty("code")
     private String code;
+
+    private List<AttributeValue> attributeValues;
 
     public OptionSet getOptionSet() {
         return optionSet;
@@ -73,6 +76,15 @@ public final class Option extends BaseIdentifiableObject {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public List<AttributeValue> getAttributeValues() {
+        return attributeValues;
+    }
+
+    public void setAttributeValues(
+            List<AttributeValue> attributeValues) {
+        this.attributeValues = attributeValues;
     }
 
     private static final class SortOrderComparator implements Comparator<Option> {

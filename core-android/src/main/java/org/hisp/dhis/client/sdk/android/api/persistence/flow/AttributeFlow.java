@@ -22,7 +22,7 @@ public class AttributeFlow extends BaseModelFlow {
     @Column(name = "valueType")
     String valueType;
 
-    @Column(name = "Uid")
+    @Column(name = "uId")
     String UId;
 
     @Column(name = "lastUpdated")
