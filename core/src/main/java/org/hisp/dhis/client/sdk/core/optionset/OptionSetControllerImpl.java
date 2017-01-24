@@ -158,7 +158,7 @@ public final class OptionSetControllerImpl extends
         List<Option> updatedOptions = new ArrayList<>();
 
         ArrayList<AttributeValue> attributeValues = new ArrayList<>();
-        for (OptionSet updatedOptionSet : updatedOptionSets) {
+        for (OptionSet updatedOptionSet : allExistingOptionSets) {
             for(Option option:updatedOptions) {
                 if (option.getAttributeValues() != null) {
                     for (AttributeValue attributeValue : option.getAttributeValues()) {

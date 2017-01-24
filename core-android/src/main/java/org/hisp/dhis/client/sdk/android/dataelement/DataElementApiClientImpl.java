@@ -65,7 +65,7 @@ public class DataElementApiClientImpl implements DataElementApiClient {
 
             @Override
             public String getBasicProperties() {
-                return "id,displayName,attributeValues[*,attribute[id, code]]";
+                return "id,displayName,attributeValues[*,attribute[id,code]]";
             }
 
             @Override

@@ -37,7 +37,11 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
 import org.hisp.dhis.client.sdk.android.common.AbsMapper;
 import org.hisp.dhis.client.sdk.android.common.Mapper;
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(database = DbDhis.class)
 public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
@@ -60,6 +64,8 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
 
     @Column
     boolean isAssignedToUser;
+
+    private List<AttributeValueFlow> attributeValues;
 
     public OrganisationUnitFlow() {
         // empty constructor
@@ -89,6 +95,16 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
         this.isAssignedToUser = isAssignedToUser;
     }
 
+
+    public List<AttributeValueFlow> getAttributeValueFlow() {
+        return attributeValues;
+    }
+
+    public void setAttributeValueFlow(
+            List<AttributeValueFlow> attributeValues) {
+        this.attributeValues = attributeValues;
+    }
+
     private static class OrganisationUnitMapper extends AbsMapper<OrganisationUnit,
             OrganisationUnitFlow> {
 
@@ -113,6 +129,14 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
             organisationUnitFlow.setLevel(organisationUnit.getLevel());
             organisationUnitFlow.setParent(mapToDatabaseEntity(organisationUnit.getParent()));
             organisationUnitFlow.setIsAssignedToUser(organisationUnit.isAssignedToUser());
+            List<AttributeValueFlow> attributeValueFlows = new ArrayList<>();
+            if (organisationUnit.getAttributeValues() != null) {
+                for (AttributeValue attributeValue : organisationUnit.getAttributeValues()) {
+                    attributeValueFlows.add(AttributeValueFlow.MAPPER
+                            .mapToDatabaseEntity(attributeValue));
+                }
+                organisationUnitFlow.setAttributeValueFlow(attributeValueFlows);
+            }
             return organisationUnitFlow;
         }
 
@@ -133,6 +157,18 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
             organisationUnit.setLevel(organisationUnitFlow.getLevel());
             organisationUnit.setParent(mapToModel(organisationUnitFlow.getParent()));
             organisationUnit.setIsAssignedToUser(organisationUnitFlow.isAssignedToUser());
+            List<AttributeValue> attributeValues = new ArrayList<>();
+            if (organisationUnit.getAttributeValues() != null) {
+                for (AttributeValueFlow attributeValueFlow : organisationUnitFlow
+                        .getAttributeValueFlow()) {
+
+                    AttributeValue attributeValue = AttributeValueFlow.MAPPER
+                            .mapToModel(attributeValueFlow);
+                    attributeValue.setReferenceUId(organisationUnitFlow.getUId());
+                    attributeValues.add(attributeValue);
+                }
+                organisationUnit.setAttributeValues(attributeValues);
+            }
             return organisationUnit;
         }
 

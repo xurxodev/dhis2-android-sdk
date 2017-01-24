@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.common.base.BaseIdentifiableObject;
 import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
 import org.hisp.dhis.client.sdk.models.trackedentity.TrackedEntity;
@@ -103,6 +104,8 @@ public final class Program extends BaseIdentifiableObject {
 
     @JsonIgnore
     private boolean isAssignedToUser;
+
+    private List<AttributeValue> attributeValues;
 
     public Program() {
         // explicit empty constructor
@@ -275,5 +278,14 @@ public final class Program extends BaseIdentifiableObject {
 
     public void setIsAssignedToUser(boolean isAssignedToUser) {
         this.isAssignedToUser = isAssignedToUser;
+    }
+
+    public List<AttributeValue> getAttributeValues() {
+        return attributeValues;
+    }
+
+    public void setAttributeValues(
+            List<AttributeValue> attributeValues) {
+        this.attributeValues = attributeValues;
     }
 }

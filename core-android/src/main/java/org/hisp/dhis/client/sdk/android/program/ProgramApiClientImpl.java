@@ -76,12 +76,13 @@ public class ProgramApiClientImpl implements ProgramApiClient {
             public String getAllProperties() {
                 return IDENTIFIABLE_PROPERTIES + ",version,programType," +
                         "organisationUnits[id],programStages[id],trackedEntity[id]," +
-                        "programTrackedEntityAttributes[id]";
+                        "programTrackedEntityAttributes[id],attributeValues[*,attribute[id,code]]";
             }
 
             @Override
             public String getDescendantProperties() {
-                return IDENTIFIABLE_PROPERTIES + ",version,programType,organisationUnits[id],trackedEntity[" + IDENTIFIABLE_PROPERTIES + "]," +
+                return IDENTIFIABLE_PROPERTIES + ",attributeValues[*,attribute[id,code]]"
+                        + ",version,programType,organisationUnits[id],trackedEntity[" + IDENTIFIABLE_PROPERTIES + "]," +
                         "programTrackedEntityAttributes[" + IDENTIFIABLE_PROPERTIES + ",mandatory," + // start programTrackedEntityAttributes
                         "displayShortName,externalAccess,valueType,allowFutureDate,displayInList,program[id]," +
                         "trackedEntityAttribute[" + IDENTIFIABLE_PROPERTIES + ",unique,programScope," + // start trackedEntityAttribute of parent programTrackedEntityAttributes

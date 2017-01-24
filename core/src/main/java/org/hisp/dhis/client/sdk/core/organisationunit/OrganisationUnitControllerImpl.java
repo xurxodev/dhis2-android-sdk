@@ -28,10 +28,12 @@
 
 package org.hisp.dhis.client.sdk.core.organisationunit;
 
+import org.hisp.dhis.client.sdk.core.attribute.AttributeValueStore;
 import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.controllers.AbsSyncStrategyController;
 import org.hisp.dhis.client.sdk.core.common.controllers.SyncStrategy;
 import org.hisp.dhis.client.sdk.core.common.persistence.DbOperation;
+import org.hisp.dhis.client.sdk.core.common.persistence.DbOperationImpl;
 import org.hisp.dhis.client.sdk.core.common.persistence.DbUtils;
 import org.hisp.dhis.client.sdk.core.common.persistence.TransactionManager;
 import org.hisp.dhis.client.sdk.core.common.preferences.DateType;
@@ -40,6 +42,7 @@ import org.hisp.dhis.client.sdk.core.common.preferences.ResourceType;
 import org.hisp.dhis.client.sdk.core.common.utils.ModelUtils;
 import org.hisp.dhis.client.sdk.core.systeminfo.SystemInfoController;
 import org.hisp.dhis.client.sdk.core.user.UserApiClient;
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
 import org.joda.time.DateTime;
 
@@ -59,17 +62,19 @@ public class OrganisationUnitControllerImpl extends AbsSyncStrategyController<Or
     private final OrganisationUnitApiClient organisationUnitApiClient;
     private final UserApiClient userApiClient;
 
+    private final AttributeValueStore attributeValueStore;
     /* Utilities */
     private final TransactionManager transactionManager;
 
     public OrganisationUnitControllerImpl(SystemInfoController systemInfoController,
             OrganisationUnitApiClient organisationUnitApiClient,
             UserApiClient userApiClient,
+            AttributeValueStore attributeValueStore,
             OrganisationUnitStore organisationUnitStore,
             LastUpdatedPreferences lastUpdatedPreferences,
             TransactionManager transactionManager) {
         super(ResourceType.ORGANISATION_UNITS, organisationUnitStore, lastUpdatedPreferences);
-
+        this.attributeValueStore = attributeValueStore;
         this.systemInfoController = systemInfoController;
         this.organisationUnitApiClient = organisationUnitApiClient;
         this.userApiClient = userApiClient;
@@ -121,9 +126,24 @@ public class OrganisationUnitControllerImpl extends AbsSyncStrategyController<Or
             updatedOrganisationUnit.setIsAssignedToUser(assignedOrganisationUnit != null);
         }
 
+        ArrayList<AttributeValue> attributeValues = new ArrayList<>();
+        for (OrganisationUnit organisationUnit : updatedOrganisationUnits) {
+            if (organisationUnit.getAttributeValues() != null) {
+                for (AttributeValue attributeValue : organisationUnit.getAttributeValues()) {
+                    attributeValue.setReferenceUId(organisationUnit.getUId());
+                    attributeValue.setItemType(organisationUnit.getClass().getName());
+                    attributeValues.add(attributeValue);
+                }
+            }
+        }
         // we will have to perform something similar to what happens in AbsController
         List<DbOperation> dbOperations = DbUtils.createOperations(allExistingOrganisationUnits,
                 updatedOrganisationUnits, persistedOrganisationUnits, identifiableObjectStore);
+
+        for (AttributeValue attributeValue : attributeValues) {
+            dbOperations.add(DbOperationImpl.with(attributeValueStore)
+                    .insert(attributeValue));
+        }
         transactionManager.transact(dbOperations);
 
         lastUpdatedPreferences.save(ResourceType.ORGANISATION_UNITS, DateType.SERVER, serverTime);

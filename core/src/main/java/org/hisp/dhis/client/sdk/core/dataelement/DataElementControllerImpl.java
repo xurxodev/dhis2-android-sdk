@@ -163,7 +163,7 @@ public final class DataElementControllerImpl extends
                 .getDataElements(Fields.BASIC, null, null);
 
         ArrayList<AttributeValue> attributeValues = new ArrayList<>();
-        for (DataElement dataElement : updatedDataElements) {
+        for (DataElement dataElement : allExistingDataElements) {
             if (dataElement.getAttributeValues() != null) {
                 for (AttributeValue attributeValue : dataElement.getAttributeValues()) {
                     attributeValue.setReferenceUId(dataElement.getUId());
