@@ -95,6 +95,12 @@ public final class DataElementControllerImpl extends
         List<DataElement> allExistingDataElements = new ArrayList<>();
 
 
+        if (strategy != SyncStrategy.NO_DELETE) {
+            allExistingDataElements = dataElementApiClient
+                    .getDataElements(Fields.BASIC, null, null);
+        }
+
+
         List<DataElement> updatedDataElements = new ArrayList<>();
         if (uids == null) {
             updatedDataElements.addAll(dataElementApiClient.getDataElements(
