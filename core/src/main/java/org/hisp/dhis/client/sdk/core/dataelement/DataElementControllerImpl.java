@@ -179,15 +179,20 @@ public final class DataElementControllerImpl extends
             }
         }
 
-        List<DataElement> persistedDataElements = identifiableObjectStore.queryAll();
-
-        List<DbOperation> dbOperations = DbUtils.createOperations(allExistingDataElements,
-                updatedDataElements, persistedDataElements, identifiableObjectStore);
+        List<DbOperation> dbOperations = new ArrayList<>();
 
         for (AttributeValue attributeValue : attributeValues) {
             dbOperations.add(DbOperationImpl.with(attributeValueStore)
                     .insert(attributeValue));
         }
+
+        transactionManager.transact(dbOperations);
+
+        List<DataElement> persistedDataElements = identifiableObjectStore.queryAll();
+
+        dbOperations = DbUtils.createOperations(allExistingDataElements,
+                updatedDataElements, persistedDataElements, identifiableObjectStore);
+
 
         return dbOperations;
     }
