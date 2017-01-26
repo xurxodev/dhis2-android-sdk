@@ -20,7 +20,7 @@ public class AttributeValueFlow extends BaseModelFlow {
     @Column(name = "attribute")
     String attributeUId;
 
-    AttributeFlow attribute;
+    Attribute attribute;
 
     @Column(name = "value")
     String value;
@@ -61,11 +61,13 @@ public class AttributeValueFlow extends BaseModelFlow {
         this.lastUpdated = lastUpdated;
     }
 
-    public void setAttribute(AttributeFlow attribute) {
+    public void setAttribute(Attribute attribute) {
+        if(attribute!=null)
+            attributeUId=attribute.getUId();
         this.attribute = attribute;
     }
 
-    public AttributeFlow getAttribute() {
+    public Attribute getAttribute() {
         return attribute;
     }
 

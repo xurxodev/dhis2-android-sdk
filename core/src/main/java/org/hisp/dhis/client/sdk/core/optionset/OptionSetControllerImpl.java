@@ -88,11 +88,8 @@ public final class OptionSetControllerImpl extends
 
         // we have to download all ids from server in order to
         // find out what was removed on the server side
-        List<OptionSet> allExistingOptionSets = new ArrayList<>();
-        if (strategy != SyncStrategy.NO_DELETE) {
-            allExistingOptionSets =
-                    optionSetApiClient.getOptionSets(Fields.BASIC, null, null);
-        }
+        List<OptionSet> allExistingOptionSets = optionSetApiClient.getOptionSets(Fields.BASIC, null, null);
+
 
         List<OptionSet> updatedOptionSets = new ArrayList<>();
         if (uids == null) {
@@ -119,8 +116,8 @@ public final class OptionSetControllerImpl extends
         List<Option> updatedOptions = new ArrayList<>();
 
         ArrayList<AttributeValue> attributeValues = new ArrayList<>();
-        for (OptionSet updatedOptionSet : updatedOptionSets) {
-            for (Option option : updatedOptions) {
+        for (OptionSet updatedOptionSet : allExistingOptionSets) {
+            for(Option option : updatedOptionSet.getOptions()) {
                 if (option.getAttributeValues() != null) {
                     for (AttributeValue attributeValue : option.getAttributeValues()) {
                         attributeValue.setReferenceUId(option.getUId());
@@ -141,6 +138,9 @@ public final class OptionSetControllerImpl extends
         dbOperations.addAll(DbUtils.createOperations(optionStore,
                 optionStore.queryAll(), updatedOptions));
 
+        if (strategy == SyncStrategy.NO_DELETE) {
+            allExistingOptionSets = new ArrayList<>();
+        }
         // we will have to perform something similar to what happens in AbsController
         dbOperations.addAll(DbUtils.createOperations(allExistingOptionSets,
                 updatedOptionSets, persistedOptionSets, identifiableObjectStore));
@@ -162,7 +162,7 @@ public final class OptionSetControllerImpl extends
 
         ArrayList<AttributeValue> attributeValues = new ArrayList<>();
         for (OptionSet updatedOptionSet : allExistingOptionSets) {
-            for (Option option : updatedOptions) {
+            for (Option option : updatedOptionSet.getOptions()) {
                 if (option.getAttributeValues() != null) {
                     for (AttributeValue attributeValue : option.getAttributeValues()) {
                         attributeValue.setReferenceUId(option.getUId());
@@ -170,6 +170,7 @@ public final class OptionSetControllerImpl extends
                         if(!attributeValues.contains(attributeValue)) {
                             attributeValues.add(attributeValue);
                         }
+                        attributeValues.add(attributeValue);
                     }
                 }
             }

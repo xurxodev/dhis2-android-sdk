@@ -190,9 +190,10 @@ public final class DataElementControllerImpl extends
 
         List<DataElement> persistedDataElements = identifiableObjectStore.queryAll();
 
+        allExistingDataElements = new ArrayList<>();
+
         dbOperations = DbUtils.createOperations(allExistingDataElements,
                 updatedDataElements, persistedDataElements, identifiableObjectStore);
-
 
         return dbOperations;
     }
