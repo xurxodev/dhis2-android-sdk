@@ -78,6 +78,7 @@ import org.hisp.dhis.client.sdk.core.user.AssignedProgramsControllerImpl;
 import org.hisp.dhis.client.sdk.core.user.UserAccountController;
 import org.hisp.dhis.client.sdk.core.user.UserAccountControllerImpl;
 import org.hisp.dhis.client.sdk.utils.Logger;
+import org.omg.CORBA.PERSIST_STORE;
 
 public class ControllersModuleImpl implements ControllersModule {
     private final SystemInfoController systemInfoController;
@@ -116,15 +117,17 @@ public class ControllersModuleImpl implements ControllersModule {
                 preferencesModule.getSystemInfoPreferences(),
                 preferencesModule.getLastUpdatedPreferences());
 
+
         ProgramControllerImpl programControllerImpl = new ProgramControllerImpl(
-                systemInfoController,
-                persistenceModule.getProgramStore(), networkModule.getUserApiClient(),
+                systemInfoController, persistenceModule.getProgramStore(),
+                persistenceModule.getAttributeValueStore(), networkModule.getUserApiClient(),
                 networkModule.getProgramApiClient(), preferencesModule.getLastUpdatedPreferences(),
                 persistenceModule.getTransactionManager(), logger);
 
-        attributeController =  new AttributeControllerImpl(systemInfoController,
+        attributeController = new AttributeControllerImpl(systemInfoController,
                 persistenceModule.getAttributeStore(), networkModule.getUserApiClient(),
-                networkModule.getAttributeApiClient(), preferencesModule.getLastUpdatedPreferences(),
+                networkModule.getAttributeApiClient(),
+                preferencesModule.getLastUpdatedPreferences(),
                 persistenceModule.getTransactionManager(), logger);
 
         programStageController = new ProgramStageControllerImpl(
@@ -180,6 +183,7 @@ public class ControllersModuleImpl implements ControllersModule {
         organisationUnitController = new OrganisationUnitControllerImpl(
                 systemInfoController, networkModule.getOrganisationUnitApiClient(),
                 networkModule.getUserApiClient(),
+                persistenceModule.getAttributeValueStore(),
                 persistenceModule.getOrganisationUnitStore(),
                 preferencesModule.getLastUpdatedPreferences(),
                 persistenceModule.getTransactionManager());

@@ -120,7 +120,7 @@ public final class OptionSetControllerImpl extends
 
         ArrayList<AttributeValue> attributeValues = new ArrayList<>();
         for (OptionSet updatedOptionSet : updatedOptionSets) {
-            for(Option option:updatedOptions) {
+            for (Option option : updatedOptions) {
                 if (option.getAttributeValues() != null) {
                     for (AttributeValue attributeValue : option.getAttributeValues()) {
                         attributeValue.setReferenceUId(option.getUId());
@@ -161,13 +161,15 @@ public final class OptionSetControllerImpl extends
         List<Option> updatedOptions = new ArrayList<>();
 
         ArrayList<AttributeValue> attributeValues = new ArrayList<>();
-        for (OptionSet updatedOptionSet : updatedOptionSets) {
-            for(Option option:updatedOptions) {
+        for (OptionSet updatedOptionSet : allExistingOptionSets) {
+            for (Option option : updatedOptions) {
                 if (option.getAttributeValues() != null) {
                     for (AttributeValue attributeValue : option.getAttributeValues()) {
                         attributeValue.setReferenceUId(option.getUId());
                         attributeValue.setItemType(option.getClass().getName());
-                        attributeValues.add(attributeValue);
+                        if(!attributeValues.contains(attributeValue)) {
+                            attributeValues.add(attributeValue);
+                        }
                     }
                 }
             }

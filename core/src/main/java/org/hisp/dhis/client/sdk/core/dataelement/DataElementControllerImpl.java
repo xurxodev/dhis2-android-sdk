@@ -167,7 +167,7 @@ public final class DataElementControllerImpl extends
                 .getDataElements(Fields.BASIC, null, null);
 
         ArrayList<AttributeValue> attributeValues = new ArrayList<>();
-        for (DataElement dataElement : updatedDataElements) {
+        for (DataElement dataElement : allExistingDataElements) {
             if (dataElement.getAttributeValues() != null) {
                 for (AttributeValue attributeValue : dataElement.getAttributeValues()) {
                     attributeValue.setReferenceUId(dataElement.getUId());
@@ -177,15 +177,20 @@ public final class DataElementControllerImpl extends
             }
         }
 
-        List<DataElement> persistedDataElements = identifiableObjectStore.queryAll();
-
-        List<DbOperation> dbOperations = DbUtils.createOperations(allExistingDataElements,
-                updatedDataElements, persistedDataElements, identifiableObjectStore);
+        List<DbOperation> dbOperations = new ArrayList<>();
 
         for (AttributeValue attributeValue : attributeValues) {
             dbOperations.add(DbOperationImpl.with(attributeValueStore)
                     .insert(attributeValue));
         }
+
+        transactionManager.transact(dbOperations);
+
+        List<DataElement> persistedDataElements = identifiableObjectStore.queryAll();
+
+        dbOperations = DbUtils.createOperations(allExistingDataElements,
+                updatedDataElements, persistedDataElements, identifiableObjectStore);
+
 
         return dbOperations;
     }
