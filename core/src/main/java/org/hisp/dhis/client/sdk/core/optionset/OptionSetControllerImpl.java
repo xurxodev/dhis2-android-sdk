@@ -159,10 +159,9 @@ public final class OptionSetControllerImpl extends
     @Override
     public List<DbOperation> merge(List<OptionSet> updatedOptionSets) throws ApiException {
         List<OptionSet> allExistingOptionSets = optionSetApiClient
-                .getOptionSets(Fields.BASIC, null, null);
+                .getOptionSets(Fields.ALL, null, null);
         List<OptionSet> persistedOptionSets = identifiableObjectStore
                 .queryAll();
-
         List<Option> updatedOptions = new ArrayList<>();
 
         ArrayList<AttributeValue> attributeValues = new ArrayList<>();
@@ -187,10 +186,14 @@ public final class OptionSetControllerImpl extends
         }
         transactionManager.transact(dbOperations);
 
-        for (OptionSet updatedOptionSet : updatedOptionSets) {
+        //Update all the options
+        for (OptionSet updatedOptionSet : allExistingOptionSets) {
             updatedOptions.addAll(updatedOptionSet.getOptions());
         }
 
+        //Update all the optionSets
+        updatedOptionSets = allExistingOptionSets;
+        allExistingOptionSets = new ArrayList<>();
         dbOperations = new ArrayList<>();
         dbOperations.addAll(DbUtils.createOperations(optionStore,
                 optionStore.queryAll(), updatedOptions));

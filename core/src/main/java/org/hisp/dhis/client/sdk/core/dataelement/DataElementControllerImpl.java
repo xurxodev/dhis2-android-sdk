@@ -93,10 +93,6 @@ public final class DataElementControllerImpl extends
         // we have to download all ids from server in order to
         // find out what was removed on the server side
         List<DataElement> allExistingDataElements = new ArrayList<>();
-<<<<<<< HEAD
-=======
-
->>>>>>> 2.25-EyeSeeTea_add_option_and_programAttributeValues
         if (strategy != SyncStrategy.NO_DELETE) {
             allExistingDataElements = dataElementApiClient
                     .getDataElements(Fields.BASIC, null, null);
@@ -172,11 +168,7 @@ public final class DataElementControllerImpl extends
                 .getDataElements(Fields.BASIC, null, null);
 
         ArrayList<AttributeValue> attributeValues = new ArrayList<>();
-<<<<<<< HEAD
-        for (DataElement dataElement : allExistingDataElements) {
-=======
         for (DataElement dataElement : updatedDataElements) {
->>>>>>> 2.25-EyeSeeTea_add_option_and_programAttributeValues
             if (dataElement.getAttributeValues() != null) {
                 for (AttributeValue attributeValue : dataElement.getAttributeValues()) {
                     attributeValue.setReferenceUId(dataElement.getUId());
