@@ -32,8 +32,6 @@ import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
 
 import org.hisp.dhis.client.sdk.core.attribute.AttributeService;
 import org.hisp.dhis.client.sdk.core.attribute.AttributeServiceImpl;
-import org.hisp.dhis.client.sdk.core.attribute.AttributeValueService;
-import org.hisp.dhis.client.sdk.core.attribute.AttributeValueServiceImpl;
 import org.hisp.dhis.client.sdk.core.common.persistence.PersistenceModule;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementService;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementServiceImpl;
@@ -78,7 +76,6 @@ public final class ServicesModuleImpl implements ServicesModule {
     private final UserAccountService userAccountService;
     private final ProgramService programService;
     private final AttributeService attributeService;
-    private final AttributeValueService attributeValueService;
     private final ProgramStageService programStageService;
     private final ProgramStageSectionService programStageSectionService;
     private final OrganisationUnitService organisationUnitService;
@@ -104,7 +101,6 @@ public final class ServicesModuleImpl implements ServicesModule {
                 persistenceModule.getUserAccountStore(),
                 persistenceModule.getStateStore());
         attributeService = new AttributeServiceImpl(persistenceModule.getAttributeStore());
-        attributeValueService = new AttributeValueServiceImpl(persistenceModule.getAttributeValueStore());
         programService = new ProgramServiceImpl(
                 persistenceModule.getProgramStore());
         programStageService = new ProgramStageServiceImpl(
@@ -172,11 +168,6 @@ public final class ServicesModuleImpl implements ServicesModule {
     @Override
     public AttributeService getAttributeService() {
         return attributeService;
-    }
-
-    @Override
-    public AttributeValueService getAttributeValueService() {
-        return attributeValueService;
     }
 
     @Override

@@ -63,7 +63,7 @@ public class DataElementApiClientImpl implements DataElementApiClient {
 
             @Override
             public String getBasicProperties() {
-                return "id,displayName,attributeValues[*,attribute[id, code]]";
+                return "id,displayName,attributeValues[*,attribute[id,code]]";
             }
 
             @Override
@@ -71,7 +71,7 @@ public class DataElementApiClientImpl implements DataElementApiClient {
                 return "id,name,displayName,created,lastUpdated,access," +
                         "shortName,valueType,zeroIsSignificant,aggregationOperator" +
                         "formName,numberType,domainType,dimension,displayFormName," +
-                        "optionSet[id],attributeValues[*,attribute[id, code]]";
+                        "optionSet[id],attributeValues[*,attribute[id,code]]";
             }
 
             @Override
