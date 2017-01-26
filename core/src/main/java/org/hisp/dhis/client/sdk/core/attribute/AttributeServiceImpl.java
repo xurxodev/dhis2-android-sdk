@@ -6,10 +6,6 @@ import org.hisp.dhis.client.sdk.utils.Preconditions;
 
 import java.util.List;
 
-/**
- * Created by idelcano on 12/01/2017.
- */
-
 public class AttributeServiceImpl implements AttributeService {
     private final AttributeStore attributeStore;
 
