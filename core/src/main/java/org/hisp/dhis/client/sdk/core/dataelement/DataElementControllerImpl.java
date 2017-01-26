@@ -132,6 +132,7 @@ public final class DataElementControllerImpl extends
                 optionSetUids.add(dataElement.getOptionSet().getUId());
             }
         }
+
         // Syncing option sets before saving data elements(since
         // data elements are referencing them directly)
         optionSetController.pull(strategy, optionSetUids);
@@ -150,7 +151,7 @@ public final class DataElementControllerImpl extends
 
 
         List<DbOperation> dbOperations = DbUtils.createOperations(allExistingDataElements,
-                        updatedDataElements, persistedDataElements, identifiableObjectStore);
+                updatedDataElements, persistedDataElements, identifiableObjectStore);
         for (AttributeValue attributeValue : attributeValues) {
             dbOperations.add(DbOperationImpl.with(attributeValueStore)
                     .insert(attributeValue));
@@ -188,10 +189,7 @@ public final class DataElementControllerImpl extends
 
         List<DataElement> persistedDataElements = identifiableObjectStore.queryAll();
 
-        dbOperations = DbUtils.createOperations(allExistingDataElements,
+        return DbUtils.createOperations(allExistingDataElements,
                 updatedDataElements, persistedDataElements, identifiableObjectStore);
-
-
-        return dbOperations;
     }
 }
