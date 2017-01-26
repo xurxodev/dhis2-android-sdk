@@ -28,6 +28,9 @@
 
 package org.hisp.dhis.client.sdk.android.api.persistence.flow;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ConflictAction;
 import com.raizlabs.android.dbflow.annotation.ForeignKey;
@@ -40,6 +43,13 @@ import com.raizlabs.android.dbflow.annotation.UniqueGroup;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
+import org.hisp.dhis.client.sdk.android.api.persistence.DbFlowOperation;
+import org.hisp.dhis.client.sdk.core.common.persistence.DbOperation;
+import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
+import org.hisp.dhis.client.sdk.models.program.Program;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(database = DbDhis.class, uniqueColumnGroups = {@UniqueGroup(
         groupNumber = OrganisationUnitToProgramRelationFlow.UNIQUE_ORGANISATION_UNIT_PROGRAM_GROUP,
@@ -99,5 +109,26 @@ public final class OrganisationUnitToProgramRelationFlow extends BaseModel {
 
     public void setProgram(ProgramFlow program) {
         this.program = program;
+    }
+
+    @NonNull
+    public static List<DbOperation> updateLinksToModel(
+            @NonNull OrganisationUnit organisationUnit,
+            @Nullable List<? extends Program> programs) {
+
+        List<DbOperation> dbOperations = new ArrayList<>();
+        if (organisationUnit != null) {
+            for (Program program : programs) {
+                OrganisationUnitToProgramRelationFlow organisationUnitToProgramRelationFlow =
+                        new OrganisationUnitToProgramRelationFlow();
+                organisationUnitToProgramRelationFlow.setOrganisationUnit(
+                        OrganisationUnitFlow.MAPPER.mapToDatabaseEntity(organisationUnit));
+                organisationUnitToProgramRelationFlow.setProgram(
+                        ProgramFlow.MAPPER.mapToDatabaseEntity(program));
+                dbOperations.add(DbFlowOperation.insert(organisationUnitToProgramRelationFlow));
+            }
+        }
+
+        return dbOperations;
     }
 }

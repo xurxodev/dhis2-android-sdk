@@ -87,6 +87,9 @@ public class OrganisationUnitControllerImpl extends AbsSyncStrategyController<Or
         // we have to download all ids from server in order to
         // find out what was removed on the server side
         List<OrganisationUnit> allExistingOrganisationUnits = new ArrayList<>();
+        if (strategy != SyncStrategy.NO_DELETE) {
+            organisationUnitApiClient.getOrganisationUnits(Fields.BASIC, null, null);
+        }
 
 
         List<OrganisationUnit> updatedOrganisationUnits = new ArrayList<>();
