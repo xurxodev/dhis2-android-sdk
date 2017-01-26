@@ -11,10 +11,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
-/**
- * Created by idelcano on 12/01/2017.
- */
-
 public interface AttributeApiClientRetrofit {
 
     @GET("attributes")
