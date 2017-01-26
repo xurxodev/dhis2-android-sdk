@@ -62,6 +62,8 @@ public class AttributeValueFlow extends BaseModelFlow {
     }
 
     public void setAttribute(Attribute attribute) {
+        if(attribute!=null)
+            attributeUId=attribute.getUId();
         this.attribute = attribute;
     }
 

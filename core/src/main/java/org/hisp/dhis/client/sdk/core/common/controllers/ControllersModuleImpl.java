@@ -124,7 +124,7 @@ public class ControllersModuleImpl implements ControllersModule {
                 networkModule.getProgramApiClient(), preferencesModule.getLastUpdatedPreferences(),
                 persistenceModule.getTransactionManager(), logger);
 
-        attributeController = new AttributeControllerImpl(systemInfoController,
+        attributeController =  new AttributeControllerImpl(systemInfoController,
                 persistenceModule.getAttributeStore(), networkModule.getUserApiClient(),
                 networkModule.getAttributeApiClient(),
                 preferencesModule.getLastUpdatedPreferences(),

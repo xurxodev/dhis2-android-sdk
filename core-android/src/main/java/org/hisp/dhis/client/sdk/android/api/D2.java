@@ -28,6 +28,8 @@
 
 package org.hisp.dhis.client.sdk.android.api;
 
+import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
+
 import android.content.Context;
 import android.support.annotation.NonNull;
 
@@ -38,8 +40,6 @@ import org.hisp.dhis.client.sdk.android.api.utils.DefaultOnSubscribe;
 import org.hisp.dhis.client.sdk.android.api.utils.LoggerImpl;
 import org.hisp.dhis.client.sdk.android.attributes.AttributeInteractor;
 import org.hisp.dhis.client.sdk.android.attributes.AttributeInteractorImpl;
-import org.hisp.dhis.client.sdk.android.attributes.AttributeValueInteractor;
-import org.hisp.dhis.client.sdk.android.attributes.AttributeValueInteractorImpl;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementInteractor;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementInteractorImpl;
 import org.hisp.dhis.client.sdk.android.enrollment.EnrollmentInteractor;
@@ -99,8 +99,6 @@ import org.hisp.dhis.client.sdk.utils.Logger;
 import okhttp3.OkHttpClient;
 import rx.Observable;
 
-import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
-
 // TODO D2 fails on 500 errors (because of
 // TODO response conversion in NetworkModule)
 // TODO consider handling 403 errors in more general way
@@ -124,7 +122,6 @@ public class D2 {
     private final CurrentUserInteractor currentUserInteractor;
     private final OrganisationUnitInteractor organisationUnitInteractor;
     private final AttributeInteractor attributeInteractor;
-    private final AttributeValueInteractor attributeValueInteractor;
     private final OrganisationUnitLevelInteractor organisationUnitLevelInteractor;
     private final ProgramInteractor programInteractor;
     private final ProgramStageInteractor programStageInteractor;
@@ -164,7 +161,6 @@ public class D2 {
             currentUserInteractor = null;
             organisationUnitInteractor = null;
             attributeInteractor = null;
-            attributeValueInteractor = null;
             organisationUnitLevelInteractor = null;
             programInteractor = null;
             programStageInteractor = null;
@@ -209,9 +205,6 @@ public class D2 {
         attributeInteractor = new AttributeInteractorImpl(
                 servicesModule.getAttributeService(),
                 controllersModule.getAttributeController());
-
-        attributeValueInteractor = new AttributeValueInteractorImpl(
-                servicesModule.getAttributeValueService());
 
 
         programInteractor = new ProgramInteractorImpl(
@@ -402,9 +395,6 @@ public class D2 {
         return configuredInstance().attributeInteractor;
     }
 
-    public static AttributeValueInteractor attributeValues() {
-        return configuredInstance().attributeValueInteractor;
-    }
     public static ProgramInteractor programs() {
         return configuredInstance().programInteractor;
     }
