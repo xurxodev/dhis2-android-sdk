@@ -36,6 +36,8 @@ import org.hisp.dhis.client.sdk.android.api.persistence.PersistenceModuleImpl;
 import org.hisp.dhis.client.sdk.android.api.preferences.PreferencesModuleImpl;
 import org.hisp.dhis.client.sdk.android.api.utils.DefaultOnSubscribe;
 import org.hisp.dhis.client.sdk.android.api.utils.LoggerImpl;
+import org.hisp.dhis.client.sdk.android.attributes.AttributeInteractor;
+import org.hisp.dhis.client.sdk.android.attributes.AttributeInteractorImpl;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementInteractor;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementInteractorImpl;
 import org.hisp.dhis.client.sdk.android.enrollment.EnrollmentInteractor;
@@ -117,6 +119,7 @@ public class D2 {
 
     private final CurrentUserInteractor currentUserInteractor;
     private final OrganisationUnitInteractor organisationUnitInteractor;
+    private final AttributeInteractor attributeInteractor;
     private final ProgramInteractor programInteractor;
     private final ProgramStageInteractor programStageInteractor;
     private final ProgramStageSectionInteractor programStageSectionInteractor;
@@ -154,6 +157,7 @@ public class D2 {
         if (!isD2Configured) {
             currentUserInteractor = null;
             organisationUnitInteractor = null;
+            attributeInteractor = null;
             programInteractor = null;
             programStageInteractor = null;
             programStageSectionInteractor = null;
@@ -193,6 +197,10 @@ public class D2 {
                 new UserOrganisationUnitInteractorImpl(
                         servicesModule.getOrganisationUnitService(),
                         controllersModule.getAssignedOrganisationUnitsController());
+
+        attributeInteractor = new AttributeInteractorImpl(
+                servicesModule.getAttributeService(),
+                controllersModule.getAttributeController());
 
         programInteractor = new ProgramInteractorImpl(
                 servicesModule.getProgramService(),
@@ -371,6 +379,10 @@ public class D2 {
      */
     public static CurrentUserInteractor me() {
         return configuredInstance().currentUserInteractor;
+    }
+
+    public static AttributeInteractor attributes() {
+        return configuredInstance().attributeInteractor;
     }
 
     public static ProgramInteractor programs() {
