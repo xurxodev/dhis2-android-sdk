@@ -94,6 +94,11 @@ public final class DataElementControllerImpl extends
         // find out what was removed on the server side
         List<DataElement> allExistingDataElements = new ArrayList<>();
 
+        if (strategy != SyncStrategy.NO_DELETE) {
+            allExistingDataElements = dataElementApiClient
+                    .getDataElements(Fields.BASIC, null, null);
+        }
+
 
         List<DataElement> updatedDataElements = new ArrayList<>();
         if (uids == null) {

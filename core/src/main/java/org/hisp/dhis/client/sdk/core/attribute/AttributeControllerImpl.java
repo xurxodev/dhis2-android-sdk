@@ -18,11 +18,7 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by idelcano on 12/01/2017.
- */
-
-public class AttributeControllerImp implements AttributeController {
+public class AttributeControllerImpl implements AttributeController {
 
     private final SystemInfoController systemInfoController;
     private final AttributeApiClient attributeApiClient;
@@ -39,7 +35,7 @@ public class AttributeControllerImp implements AttributeController {
     private final Logger logger;
 
 
-    public AttributeControllerImp(SystemInfoController systemInfoController,
+    public AttributeControllerImpl(SystemInfoController systemInfoController,
             AttributeStore attributeStore, UserApiClient userApiClient,
             AttributeApiClient attributeApiClient, LastUpdatedPreferences lastUpdatedPreferences,
             TransactionManager transactionManager, Logger logger) {
@@ -56,16 +52,16 @@ public class AttributeControllerImp implements AttributeController {
     public void pull() throws ApiException {
 
         DateTime serverTime = systemInfoController.getSystemInfo().getServerDate();
-        List<Attribute> allExistingOptionSets = attributeApiClient
+        List<Attribute> allAttributes = attributeApiClient
                 .getAttributes(Fields.ALL, null, null);
 
         List<DbOperation> dbOperations = new ArrayList<>();
-        for (Attribute attribute : allExistingOptionSets) {
+        for (Attribute attribute : allAttributes) {
             dbOperations.add(DbOperationImpl.with(attributeStore)
                     .save(attribute));
         }
         transactionManager.transact(dbOperations);
 
-        lastUpdatedPreferences.save(ResourceType.EVENTS, DateType.SERVER, serverTime);
+        lastUpdatedPreferences.save(ResourceType.ATTRIBUTES, DateType.SERVER, serverTime);
     }
 }
