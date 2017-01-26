@@ -7,10 +7,6 @@ import org.hisp.dhis.client.sdk.core.attribute.AttributeStore;
 import org.hisp.dhis.client.sdk.core.common.persistence.TransactionManager;
 import org.hisp.dhis.client.sdk.models.attribute.Attribute;
 
-/**
- * Created by idelcano on 12/01/2017.
- */
-
 public class AttributeStoreImpl extends AbsStore<Attribute, AttributeFlow>
         implements AttributeStore {
     private final TransactionManager transactionManager;

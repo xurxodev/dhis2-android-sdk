@@ -16,10 +16,6 @@ import java.util.Set;
 
 import retrofit2.Call;
 
-/**
- * Created by idelcano on 12/01/2017.
- */
-
 public class AttributeApiClientImpl implements AttributeApiClient {
     private final AttributeApiClientRetrofit attributeApiClientRetrofit;
 

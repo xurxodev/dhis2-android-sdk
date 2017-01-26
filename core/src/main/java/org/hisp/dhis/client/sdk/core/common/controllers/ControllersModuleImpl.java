@@ -31,7 +31,7 @@ package org.hisp.dhis.client.sdk.core.common.controllers;
 import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
 
 import org.hisp.dhis.client.sdk.core.attribute.AttributeController;
-import org.hisp.dhis.client.sdk.core.attribute.AttributeControllerImp;
+import org.hisp.dhis.client.sdk.core.attribute.AttributeControllerImpl;
 import org.hisp.dhis.client.sdk.core.common.network.NetworkModule;
 import org.hisp.dhis.client.sdk.core.common.persistence.PersistenceModule;
 import org.hisp.dhis.client.sdk.core.common.preferences.PreferencesModule;
@@ -120,7 +120,7 @@ public class ControllersModuleImpl implements ControllersModule {
                 networkModule.getProgramApiClient(), preferencesModule.getLastUpdatedPreferences(),
                 persistenceModule.getTransactionManager(), logger);
 
-        attributeController = new AttributeControllerImp(systemInfoController,
+        attributeController =  new AttributeControllerImpl(systemInfoController,
                 persistenceModule.getAttributeStore(), networkModule.getUserApiClient(),
                 networkModule.getAttributeApiClient(),
                 preferencesModule.getLastUpdatedPreferences(),

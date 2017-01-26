@@ -61,6 +61,8 @@ public class ProgramApiClientImpl implements ProgramApiClient {
         ApiResource<Program> apiResource = new ApiResource<Program>() {
             static final String IDENTIFIABLE_PROPERTIES =
                     "id,name,displayName,created,lastUpdated,access";
+            static final String ATTRIBUTEVALUES_PROPERTIES =
+                    "attributeValues[*,attribute[id,code]]";
 
             @Override
             public String getResourceName() {
@@ -81,7 +83,7 @@ public class ProgramApiClientImpl implements ProgramApiClient {
 
             @Override
             public String getDescendantProperties() {
-                return IDENTIFIABLE_PROPERTIES + ",attributeValues[*,attribute[id,code]]"
+                return IDENTIFIABLE_PROPERTIES + "," + ATTRIBUTEVALUES_PROPERTIES
                         + ",version,programType,organisationUnits[id],trackedEntity[" + IDENTIFIABLE_PROPERTIES + "]," +
                         "programTrackedEntityAttributes[" + IDENTIFIABLE_PROPERTIES + ",mandatory," + // start programTrackedEntityAttributes
                         "displayShortName,externalAccess,valueType,allowFutureDate,displayInList,program[id]," +
@@ -103,7 +105,8 @@ public class ProgramApiClientImpl implements ProgramApiClient {
                         "programStage[id],programStageDataElements[id]" + "]," +
                         "programStageDataElements[" + IDENTIFIABLE_PROPERTIES + ",programStage[id]," + // start programStageDataElements of parent programStageSections
                         "allowFutureDate,sortOrder,displayInReports,allowProvidedElsewhere," +
-                        "compulsory,dataElement[" + IDENTIFIABLE_PROPERTIES + "shortName,valueType," + // start dataElement of parent programStageDataElements
+                        "compulsory,dataElement[" +ATTRIBUTEVALUES_PROPERTIES + "," +
+                        IDENTIFIABLE_PROPERTIES + "shortName,valueType," + // start dataElement of parent programStageDataElements
                         "zeroIsSignificant,aggregationOperator,formName,numberType,domainType," +
                         "dimension,displayFormName,optionSet[" + IDENTIFIABLE_PROPERTIES + // start optionSet of parent dataElement
                         ",version,options[" + IDENTIFIABLE_PROPERTIES + ",code]]]]]"; // end

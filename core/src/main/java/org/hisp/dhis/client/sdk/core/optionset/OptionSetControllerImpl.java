@@ -116,13 +116,15 @@ public final class OptionSetControllerImpl extends
         List<Option> updatedOptions = new ArrayList<>();
 
         ArrayList<AttributeValue> attributeValues = new ArrayList<>();
-        for (OptionSet updatedOptionSet : allExistingOptionSets) {
+        for (OptionSet updatedOptionSet : updatedOptionSets) {
             for(Option option : updatedOptionSet.getOptions()) {
                 if (option.getAttributeValues() != null) {
                     for (AttributeValue attributeValue : option.getAttributeValues()) {
                         attributeValue.setReferenceUId(option.getUId());
                         attributeValue.setItemType(option.getClass().getName());
-                        attributeValues.add(attributeValue);
+                        if(!attributeValues.contains(attributeValue)) {
+                            attributeValues.add(attributeValue);
+                        }
                     }
                 }
             }
@@ -170,11 +172,9 @@ public final class OptionSetControllerImpl extends
                         if(!attributeValues.contains(attributeValue)) {
                             attributeValues.add(attributeValue);
                         }
-                        attributeValues.add(attributeValue);
                     }
                 }
             }
-            updatedOptions.addAll(updatedOptionSet.getOptions());
         }
 
         List<DbOperation> dbOperations = new ArrayList<>();
@@ -182,7 +182,13 @@ public final class OptionSetControllerImpl extends
             dbOperations.add(DbOperationImpl.with(attributeValueStore)
                     .insert(attributeValue));
         }
+        transactionManager.transact(dbOperations);
 
+        for (OptionSet updatedOptionSet : updatedOptionSets) {
+            updatedOptions.addAll(updatedOptionSet.getOptions());
+        }
+
+        dbOperations = new ArrayList<>();
         dbOperations.addAll(DbUtils.createOperations(optionStore,
                 optionStore.queryAll(), updatedOptions));
         dbOperations.addAll(DbUtils.createOperations(allExistingOptionSets,

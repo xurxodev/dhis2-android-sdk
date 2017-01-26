@@ -94,7 +94,6 @@ public final class DataElementControllerImpl extends
         // find out what was removed on the server side
         List<DataElement> allExistingDataElements = new ArrayList<>();
 
-
         if (strategy != SyncStrategy.NO_DELETE) {
             allExistingDataElements = dataElementApiClient
                     .getDataElements(Fields.BASIC, null, null);
@@ -169,7 +168,7 @@ public final class DataElementControllerImpl extends
                 .getDataElements(Fields.BASIC, null, null);
 
         ArrayList<AttributeValue> attributeValues = new ArrayList<>();
-        for (DataElement dataElement : allExistingDataElements) {
+        for (DataElement dataElement : updatedDataElements) {
             if (dataElement.getAttributeValues() != null) {
                 for (AttributeValue attributeValue : dataElement.getAttributeValues()) {
                     attributeValue.setReferenceUId(dataElement.getUId());
@@ -185,16 +184,11 @@ public final class DataElementControllerImpl extends
             dbOperations.add(DbOperationImpl.with(attributeValueStore)
                     .insert(attributeValue));
         }
-
         transactionManager.transact(dbOperations);
 
         List<DataElement> persistedDataElements = identifiableObjectStore.queryAll();
 
-        allExistingDataElements = new ArrayList<>();
-
-        dbOperations = DbUtils.createOperations(allExistingDataElements,
+        return DbUtils.createOperations(allExistingDataElements,
                 updatedDataElements, persistedDataElements, identifiableObjectStore);
-
-        return dbOperations;
     }
 }
