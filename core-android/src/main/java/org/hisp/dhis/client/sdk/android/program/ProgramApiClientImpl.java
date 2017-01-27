@@ -105,7 +105,7 @@ public class ProgramApiClientImpl implements ProgramApiClient {
                         "programStage[id],programStageDataElements[id]" + "]," +
                         "programStageDataElements[" + IDENTIFIABLE_PROPERTIES + ",programStage[id]," + // start programStageDataElements of parent programStageSections
                         "allowFutureDate,sortOrder,displayInReports,allowProvidedElsewhere," +
-                        "compulsory,dataElement[" +ATTRIBUTEVALUES_PROPERTIES + "," +
+                        "compulsory,dataElement[code, " +ATTRIBUTEVALUES_PROPERTIES + "," +
                         IDENTIFIABLE_PROPERTIES + "shortName,valueType," + // start dataElement of parent programStageDataElements
                         "zeroIsSignificant,aggregationOperator,formName,numberType,domainType," +
                         "dimension,displayFormName,optionSet[" + IDENTIFIABLE_PROPERTIES + // start optionSet of parent dataElement

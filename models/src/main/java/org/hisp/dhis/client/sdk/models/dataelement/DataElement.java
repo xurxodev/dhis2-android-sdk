@@ -71,6 +71,9 @@ public final class DataElement extends BaseNameableObject {
     //@JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<AttributeValue> attributeValues;
 
+    @JsonProperty("code")
+    private String code;
+
     public ValueType getValueType() {
         return valueType;
     }
@@ -150,5 +153,13 @@ public final class DataElement extends BaseNameableObject {
     public void setAttributeValues(
             List<AttributeValue> attributeValues) {
         this.attributeValues = attributeValues;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }
