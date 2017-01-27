@@ -28,10 +28,12 @@
 
 package org.hisp.dhis.client.sdk.core.dataelement;
 
+import org.hisp.dhis.client.sdk.core.attribute.AttributeValueStore;
 import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.controllers.AbsSyncStrategyController;
 import org.hisp.dhis.client.sdk.core.common.controllers.SyncStrategy;
 import org.hisp.dhis.client.sdk.core.common.persistence.DbOperation;
+import org.hisp.dhis.client.sdk.core.common.persistence.DbOperationImpl;
 import org.hisp.dhis.client.sdk.core.common.persistence.DbUtils;
 import org.hisp.dhis.client.sdk.core.common.persistence.TransactionManager;
 import org.hisp.dhis.client.sdk.core.common.preferences.DateType;
@@ -40,6 +42,7 @@ import org.hisp.dhis.client.sdk.core.common.preferences.ResourceType;
 import org.hisp.dhis.client.sdk.core.common.utils.ModelUtils;
 import org.hisp.dhis.client.sdk.core.optionset.OptionSetController;
 import org.hisp.dhis.client.sdk.core.systeminfo.SystemInfoController;
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.dataelement.DataElement;
 import org.joda.time.DateTime;
 
@@ -57,20 +60,25 @@ public final class DataElementControllerImpl extends
     /* Api clients */
     private final DataElementApiClient dataElementApiClient;
 
+    /* Persistence */
+    private final AttributeValueStore attributeValueStore;
+
     /* Utilities */
     private final TransactionManager transactionManager;
     private final OptionSetController optionSetController;
 
     public DataElementControllerImpl(SystemInfoController systemInfoController,
-                                     OptionSetController optionSetController,
-                                     DataElementApiClient dataElementApiClient,
-                                     DataElementStore dataElementStore,
-                                     LastUpdatedPreferences lastUpdatedPreferences,
-                                     TransactionManager transactionManager) {
+            OptionSetController optionSetController,
+            DataElementApiClient dataElementApiClient,
+            DataElementStore dataElementStore,
+            AttributeValueStore attributeValueStore,
+            LastUpdatedPreferences lastUpdatedPreferences,
+            TransactionManager transactionManager) {
         super(ResourceType.DATA_ELEMENTS, dataElementStore, lastUpdatedPreferences);
         this.systemInfoController = systemInfoController;
         this.optionSetController = optionSetController;
         this.dataElementApiClient = dataElementApiClient;
+        this.attributeValueStore = attributeValueStore;
         this.transactionManager = transactionManager;
     }
 
@@ -125,15 +133,32 @@ public final class DataElementControllerImpl extends
                 optionSetUids.add(dataElement.getOptionSet().getUId());
             }
         }
-
         // Syncing option sets before saving data elements(since
         // data elements are referencing them directly)
         optionSetController.pull(strategy, optionSetUids);
 
+
+        ArrayList<AttributeValue> attributeValues = new ArrayList<>();
+        for (DataElement dataElement : updatedDataElements) {
+            if (dataElement.getAttributeValues() != null) {
+                for (AttributeValue attributeValue : dataElement.getAttributeValues()) {
+                    attributeValue.setReferenceUId(dataElement.getUId());
+                    attributeValue.setItemType(dataElement.getClass().getName());
+                    attributeValues.add(attributeValue);
+                }
+            }
+        }
+
+
         List<DbOperation> dbOperations = DbUtils.createOperations(allExistingDataElements,
-                updatedDataElements, persistedDataElements, identifiableObjectStore);
+                        updatedDataElements, persistedDataElements, identifiableObjectStore);
+        for (AttributeValue attributeValue : attributeValues) {
+            dbOperations.add(DbOperationImpl.with(attributeValueStore)
+                    .insert(attributeValue));
+        }
 
         transactionManager.transact(dbOperations);
+
         lastUpdatedPreferences.save(ResourceType.DATA_ELEMENTS, DateType.SERVER, serverTime);
     }
 
@@ -141,6 +166,26 @@ public final class DataElementControllerImpl extends
     public List<DbOperation> merge(List<DataElement> updatedDataElements) {
         List<DataElement> allExistingDataElements = dataElementApiClient
                 .getDataElements(Fields.BASIC, null, null);
+
+        ArrayList<AttributeValue> attributeValues = new ArrayList<>();
+        for (DataElement dataElement : updatedDataElements) {
+            if (dataElement.getAttributeValues() != null) {
+                for (AttributeValue attributeValue : dataElement.getAttributeValues()) {
+                    attributeValue.setReferenceUId(dataElement.getUId());
+                    attributeValue.setItemType(dataElement.getClass().getName());
+                    attributeValues.add(attributeValue);
+                }
+            }
+        }
+
+        List<DbOperation> dbOperations = new ArrayList<>();
+
+        for (AttributeValue attributeValue : attributeValues) {
+            dbOperations.add(DbOperationImpl.with(attributeValueStore)
+                    .insert(attributeValue));
+        }
+        transactionManager.transact(dbOperations);
+
         List<DataElement> persistedDataElements = identifiableObjectStore.queryAll();
 
         return DbUtils.createOperations(allExistingDataElements,

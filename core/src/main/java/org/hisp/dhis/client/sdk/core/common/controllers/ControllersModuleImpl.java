@@ -28,6 +28,10 @@
 
 package org.hisp.dhis.client.sdk.core.common.controllers;
 
+import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
+
+import org.hisp.dhis.client.sdk.core.attribute.AttributeController;
+import org.hisp.dhis.client.sdk.core.attribute.AttributeControllerImpl;
 import org.hisp.dhis.client.sdk.core.common.network.NetworkModule;
 import org.hisp.dhis.client.sdk.core.common.persistence.PersistenceModule;
 import org.hisp.dhis.client.sdk.core.common.preferences.PreferencesModule;
@@ -74,12 +78,11 @@ import org.hisp.dhis.client.sdk.core.user.UserAccountController;
 import org.hisp.dhis.client.sdk.core.user.UserAccountControllerImpl;
 import org.hisp.dhis.client.sdk.utils.Logger;
 
-import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
-
 public class ControllersModuleImpl implements ControllersModule {
     private final SystemInfoController systemInfoController;
     private final UserAccountController userAccountController;
     private final ProgramController programController;
+    private final AttributeController attributeController;
     private final ProgramStageController programStageController;
     private final ProgramStageSectionController programStageSectionController;
     private final ProgramRuleController programRuleController;
@@ -99,8 +102,8 @@ public class ControllersModuleImpl implements ControllersModule {
     private final EnrollmentController enrollmentController;
 
     public ControllersModuleImpl(NetworkModule networkModule,
-                                 PersistenceModule persistenceModule,
-                                 PreferencesModule preferencesModule, Logger logger) {
+            PersistenceModule persistenceModule,
+            PreferencesModule preferencesModule, Logger logger) {
         isNull(networkModule, "networkModule must not be null");
         isNull(persistenceModule, "persistenceModule must not be null");
         isNull(preferencesModule, "preferencesModule must not be null");
@@ -111,9 +114,16 @@ public class ControllersModuleImpl implements ControllersModule {
                 preferencesModule.getSystemInfoPreferences(),
                 preferencesModule.getLastUpdatedPreferences());
 
-        ProgramControllerImpl programControllerImpl = new ProgramControllerImpl(systemInfoController,
-                persistenceModule.getProgramStore(), networkModule.getUserApiClient(),
+        ProgramControllerImpl programControllerImpl = new ProgramControllerImpl(
+                systemInfoController, persistenceModule.getProgramStore(),
+                persistenceModule.getAttributeValueStore(), networkModule.getUserApiClient(),
                 networkModule.getProgramApiClient(), preferencesModule.getLastUpdatedPreferences(),
+                persistenceModule.getTransactionManager(), logger);
+
+        attributeController =  new AttributeControllerImpl(systemInfoController,
+                persistenceModule.getAttributeStore(), networkModule.getUserApiClient(),
+                networkModule.getAttributeApiClient(),
+                preferencesModule.getLastUpdatedPreferences(),
                 persistenceModule.getTransactionManager(), logger);
 
         programStageController = new ProgramStageControllerImpl(
@@ -133,6 +143,7 @@ public class ControllersModuleImpl implements ControllersModule {
         optionSetController = new OptionSetControllerImpl(
                 systemInfoController,
                 networkModule.getOptionSetApiClient(),
+                persistenceModule.getAttributeValueStore(),
                 persistenceModule.getOptionStore(),
                 persistenceModule.getOptionSetStore(),
                 preferencesModule.getLastUpdatedPreferences(),
@@ -142,6 +153,7 @@ public class ControllersModuleImpl implements ControllersModule {
                 systemInfoController, optionSetController,
                 networkModule.getDataElementApiClient(),
                 persistenceModule.getDataElementStore(),
+                persistenceModule.getAttributeValueStore(),
                 preferencesModule.getLastUpdatedPreferences(),
                 persistenceModule.getTransactionManager());
 
@@ -167,6 +179,7 @@ public class ControllersModuleImpl implements ControllersModule {
         organisationUnitController = new OrganisationUnitControllerImpl(
                 systemInfoController, networkModule.getOrganisationUnitApiClient(),
                 networkModule.getUserApiClient(),
+                persistenceModule.getAttributeValueStore(),
                 persistenceModule.getOrganisationUnitStore(),
                 preferencesModule.getLastUpdatedPreferences(),
                 persistenceModule.getTransactionManager());
@@ -218,7 +231,6 @@ public class ControllersModuleImpl implements ControllersModule {
                 systemInfoController);
 
 
-
         programTrackedEntityAttributeController = new ProgramTrackedEntityAttributeControllerImpl(
                 persistenceModule.getProgramTrackedEntityAttributeStore(),
                 preferencesModule.getLastUpdatedPreferences(),
@@ -235,12 +247,14 @@ public class ControllersModuleImpl implements ControllersModule {
         // rest of dependencies of program controller through setters
         programControllerImpl.setProgramStageController(programStageController);
         programControllerImpl.setProgramStageSectionController(programStageSectionController);
-        programControllerImpl.setProgramStageDataElementController(programStageDataElementController);
+        programControllerImpl.setProgramStageDataElementController(
+                programStageDataElementController);
         programControllerImpl.setDataElementController(dataElementController);
         programControllerImpl.setOptionSetController(optionSetController);
         programControllerImpl.setProgramRuleController(programRuleController);
         programControllerImpl.setTrackedEntityController(trackedEntityController);
-        programControllerImpl.setProgramTrackedEntityAttributeController(programTrackedEntityAttributeController);
+        programControllerImpl.setProgramTrackedEntityAttributeController(
+                programTrackedEntityAttributeController);
         programController = programControllerImpl;
 
         eventController = new EventControllerImpl(systemInfoController,
@@ -271,6 +285,12 @@ public class ControllersModuleImpl implements ControllersModule {
     public ProgramController getProgramController() {
         return programController;
     }
+
+    @Override
+    public AttributeController getAttributeController() {
+        return attributeController;
+    }
+
 
     @Override
     public ProgramStageController getProgramStageController() {

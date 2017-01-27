@@ -37,8 +37,12 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
 import org.hisp.dhis.client.sdk.android.common.AbsMapper;
 import org.hisp.dhis.client.sdk.android.common.Mapper;
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.dataelement.ValueType;
 import org.hisp.dhis.client.sdk.models.dataelement.DataElement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(database = DbDhis.class)
 public final class DataElementFlow extends BaseIdentifiableObjectFlow {
@@ -79,6 +83,7 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
     )
     OptionSetFlow optionSet;
 
+    List<AttributeValueFlow> attributeValueFlow;
 
     public DataElementFlow() {
         // empty constructor
@@ -156,6 +161,15 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
         this.optionSet = optionSet;
     }
 
+    public List<AttributeValueFlow> getAttributeValueFlow() {
+        return attributeValueFlow;
+    }
+
+    public void setAttributeValueFlow(
+            List<AttributeValueFlow> attributeValueFlow) {
+        this.attributeValueFlow = attributeValueFlow;
+    }
+
     private static class DataElementMapper extends AbsMapper<DataElement, DataElementFlow> {
 
         @Override
@@ -182,6 +196,14 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
             dataElementFlow.setDisplayFormName(dataElement.getDisplayFormName());
             dataElementFlow.setOptionSet(OptionSetFlow.MAPPER
                     .mapToDatabaseEntity(dataElement.getOptionSet()));
+            List<AttributeValueFlow> attributeValueFlows = new ArrayList<>();
+            if(dataElement.getAttributeValues()!=null) {
+                for (AttributeValue attributeValue : dataElement.getAttributeValues()) {
+                    attributeValueFlows.add(AttributeValueFlow.MAPPER
+                            .mapToDatabaseEntity(attributeValue));
+                }
+            dataElementFlow.setAttributeValueFlow(attributeValueFlows);
+            }
             return dataElementFlow;
         }
 
@@ -209,6 +231,17 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
             dataElement.setDisplayFormName(dataElementFlow.getDisplayFormName());
             dataElement.setOptionSet(OptionSetFlow.MAPPER
                     .mapToModel(dataElementFlow.getOptionSet()));
+            List<AttributeValue> attributeValues = new ArrayList<>();
+            if(dataElement.getAttributeValues() != null) {
+                for (AttributeValueFlow attributeValueFlow : dataElementFlow.getAttributeValueFlow()) {
+
+                    AttributeValue attributeValue = AttributeValueFlow.MAPPER
+                            .mapToModel(attributeValueFlow);
+                    attributeValue.setReferenceUId(dataElementFlow.getUId());
+                    attributeValues.add(attributeValue);
+                }
+            }
+            dataElement.setAttributeValues(attributeValues);
             return dataElement;
         }
 

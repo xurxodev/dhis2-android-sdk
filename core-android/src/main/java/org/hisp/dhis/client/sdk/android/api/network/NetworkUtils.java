@@ -137,8 +137,10 @@ public class NetworkUtils {
         ApiException apiException = null;
 
         try {
+            System.out.println(call.request().url().toString());
             response = call.execute();
         } catch (IOException ioException) {
+            System.out.println("Exception "+call.request().url().toString());
             apiException = ApiException.networkError(null, ioException);
         }
 

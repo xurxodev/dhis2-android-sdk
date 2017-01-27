@@ -58,4 +58,6 @@ public enum ResourceType {
     TRACKED_ENTITY_INSTANCE,
     RELATIONSHIP_TYPES,
     ENROLLMENTS,
+
+    ATTRIBUTES,
 }
