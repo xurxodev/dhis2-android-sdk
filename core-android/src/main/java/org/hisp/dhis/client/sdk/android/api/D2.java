@@ -28,6 +28,8 @@
 
 package org.hisp.dhis.client.sdk.android.api;
 
+import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
+
 import android.content.Context;
 import android.support.annotation.NonNull;
 
@@ -94,8 +96,6 @@ import org.hisp.dhis.client.sdk.utils.Logger;
 
 import okhttp3.OkHttpClient;
 import rx.Observable;
-
-import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
 
 // TODO D2 fails on 500 errors (because of
 // TODO response conversion in NetworkModule)
@@ -201,6 +201,7 @@ public class D2 {
         attributeInteractor = new AttributeInteractorImpl(
                 servicesModule.getAttributeService(),
                 controllersModule.getAttributeController());
+
 
         programInteractor = new ProgramInteractorImpl(
                 servicesModule.getProgramService(),

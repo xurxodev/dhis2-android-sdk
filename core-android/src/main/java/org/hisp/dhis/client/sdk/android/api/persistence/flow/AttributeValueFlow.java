@@ -1,44 +1,144 @@
 package org.hisp.dhis.client.sdk.android.api.persistence.flow;
 
+import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.Table;
 
 import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
+import org.hisp.dhis.client.sdk.android.common.AbsMapper;
+import org.hisp.dhis.client.sdk.models.attribute.Attribute;
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 
-/**
- * Created by idelcano on 14/11/2016.
- */
-
-/**
- * This class will be disappeared soon.
- * This is a SDK Pojo and is created to fix the Queries,
- * is in the app side and with hardcoded methods.
- * It makes the project compile and centralized the necessary methods
- * and necessary sdk new Pojos..
- */
 @Table(database = DbDhis.class)
-public class AttributeValueFlow extends BaseIdentifiableObjectFlow {
+public class AttributeValueFlow extends BaseModelFlow {
+
+    public static final AttributeValueMapper MAPPER = new AttributeValueMapper();
 
     public AttributeValueFlow() {
     }
 
-    public AttributeValueFlow getAttributeValue() {
-        return this;
-    }
 
-    public AttributeFlow getAttribute() {
-        return null;
-    }
+    @Column(name = "attribute")
+    String attributeUId;
+
+    Attribute attribute;
+
+    @Column(name = "value")
+    String value;
+
+    @Column(name = "created")
+    String created;
+
+    @Column(name = "lastUpdated")
+    String lastUpdated;
+
+    @Column(name = "reference")
+    String reference;
+
+    @Column(name = "itemType")
+    String itemType;
 
     public String getValue() {
-        return null;
+        return value;
     }
 
-    public String getCode() {
-        return null;
+    public void setValue(String value) {
+        this.value = value;
     }
 
-    public String getAttributeId() {
-        return getAttribute().getUId();
+    public String getCreated() {
+        return created;
     }
 
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
+    public String getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(String lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public void setAttribute(Attribute attribute) {
+        this.attribute = attribute;
+    }
+
+    public Attribute getAttribute() {
+        return attribute;
+    }
+
+    public String getAttributeUId() {
+        return attributeUId;
+    }
+
+    public void setAttributeUId(String attributeUId) {
+        this.attributeUId = attributeUId;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
+    }
+
+    public static class AttributeValueMapper extends
+            AbsMapper<AttributeValue, AttributeValueFlow> {
+
+        @Override
+        public AttributeValueFlow mapToDatabaseEntity(AttributeValue attributeValue) {
+            if (attributeValue == null) {
+                return null;
+            }
+
+            AttributeValueFlow attributeValueFlow = new AttributeValueFlow();
+            attributeValueFlow.setAttributeUId(attributeValue.getAttributeUId());
+            attributeValueFlow.setValue(attributeValue.getValue());
+            attributeValueFlow.setReference(attributeValue.getReferenceUId());
+            attributeValueFlow.setCreated(attributeValue.getCreated());
+            attributeValueFlow.setLastUpdated(attributeValue.getLastUpdated());
+            attributeValueFlow.setItemType(attributeValue.getItemType());
+
+            return attributeValueFlow;
+        }
+
+        @Override
+        public AttributeValue mapToModel(AttributeValueFlow attributeValueFlow) {
+            if (attributeValueFlow == null) {
+                return null;
+            }
+
+            AttributeValue attributeValue = new AttributeValue();
+            attributeValue.setAttribute(attributeValueFlow.getAttribute());
+            attributeValue.setAttributeUId(attributeValueFlow.getAttributeUId());
+            attributeValue.setValue(attributeValueFlow.getValue());
+            attributeValue.setReferenceUId(attributeValueFlow.getReference());
+            attributeValue.setCreated(attributeValueFlow.getCreated());
+            attributeValue.setLastUpdated(attributeValueFlow.getLastUpdated());
+            attributeValue.setItemType(attributeValueFlow.getItemType());
+
+            return attributeValue;
+        }
+
+        @Override
+        public Class<AttributeValue> getModelTypeClass() {
+            return AttributeValue.class;
+        }
+
+        @Override
+        public Class<AttributeValueFlow> getDatabaseEntityTypeClass() {
+            return AttributeValueFlow.class;
+        }
+    }
 }
