@@ -62,6 +62,8 @@ public class AttributeValueFlow extends BaseModelFlow {
     }
 
     public void setAttribute(Attribute attribute) {
+        if(attribute!=null)
+            attributeUId=attribute.getUId();
         this.attribute = attribute;
     }
 
@@ -120,7 +122,6 @@ public class AttributeValueFlow extends BaseModelFlow {
             }
 
             AttributeValue attributeValue = new AttributeValue();
-            attributeValue.setAttribute(attributeValueFlow.getAttribute());
             attributeValue.setAttributeUId(attributeValueFlow.getAttributeUId());
             attributeValue.setValue(attributeValueFlow.getValue());
             attributeValue.setReferenceUId(attributeValueFlow.getReference());

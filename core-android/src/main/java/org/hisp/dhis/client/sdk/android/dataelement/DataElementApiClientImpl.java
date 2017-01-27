@@ -43,6 +43,8 @@ import java.util.Set;
 
 import retrofit2.Call;
 
+import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.getCollection;
+
 public class DataElementApiClientImpl implements DataElementApiClient {
     private final DataElementApiClientRetrofit dataElementApiClientRetrofit;
 
@@ -63,7 +65,7 @@ public class DataElementApiClientImpl implements DataElementApiClient {
 
             @Override
             public String getBasicProperties() {
-                return "id,displayName,attributeValues[*,attribute[id,code]]";
+                return "id,displayName";
             }
 
             @Override

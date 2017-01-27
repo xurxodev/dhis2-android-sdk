@@ -42,8 +42,8 @@ public final class AttributeValue extends BaseModel {
     }
 
     public void setAttribute(Attribute attribute) {
-        if(attribute!=null){
-            attributeUId=attribute.getUId();
+        if (attribute != null && attribute.getUId() != null) {
+            setAttributeUId(attribute.getUId());
         }
         this.attribute = attribute;
     }
