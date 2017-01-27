@@ -46,6 +46,7 @@ import org.hisp.dhis.client.sdk.core.systeminfo.SystemInfoController;
 import org.hisp.dhis.client.sdk.models.common.importsummary.ImportSummary;
 import org.hisp.dhis.client.sdk.models.common.state.Action;
 import org.hisp.dhis.client.sdk.models.event.Event;
+import org.hisp.dhis.client.sdk.models.trackedentity.TrackedEntityDataValue;
 import org.hisp.dhis.client.sdk.utils.Logger;
 import org.joda.time.DateTime;
 
@@ -165,7 +166,15 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
 
         List<Event> updatedEvents = eventApiClient.getEvents(
                 Fields.ALL, organisationUnit, program);
-
+        for(Event updateEvent : updatedEvents){
+            List<TrackedEntityDataValue> updatedDataValues = new ArrayList<>();
+            for(TrackedEntityDataValue trackedEntityDataValue : updateEvent.getDataValues())
+            {
+                trackedEntityDataValue.setEvent(updateEvent);
+                updatedDataValues.add(trackedEntityDataValue);
+            }
+            updateEvent.setDataValues(updatedDataValues);
+        }
         List<DbOperation> dbOperations = DbUtils.createOperations(eventStore, updatedEvents);
         transactionManager.transact(dbOperations);
 
