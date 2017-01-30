@@ -41,6 +41,8 @@ import org.hisp.dhis.client.sdk.core.event.EventService;
 import org.hisp.dhis.client.sdk.core.event.EventServiceImpl;
 import org.hisp.dhis.client.sdk.core.optionset.OptionSetService;
 import org.hisp.dhis.client.sdk.core.optionset.OptionSetServiceImpl;
+import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitLevelService;
+import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitLevelServiceImpl;
 import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitService;
 import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitServiceImpl;
 import org.hisp.dhis.client.sdk.core.program.ProgramIndicatorService;
@@ -79,6 +81,7 @@ public final class ServicesModuleImpl implements ServicesModule {
     private final ProgramStageService programStageService;
     private final ProgramStageSectionService programStageSectionService;
     private final OrganisationUnitService organisationUnitService;
+    private final OrganisationUnitLevelService organisationUnitLevelService;
     private final EventService eventService;
     private final ProgramStageDataElementService programStageDataElementService;
     private final DataElementService dataElementService;
@@ -126,6 +129,9 @@ public final class ServicesModuleImpl implements ServicesModule {
 
         organisationUnitService = new OrganisationUnitServiceImpl(
                 persistenceModule.getOrganisationUnitStore());
+
+        organisationUnitLevelService = new OrganisationUnitLevelServiceImpl(
+                persistenceModule.getOrganisationUnitLevelStore());
 
         eventService = new EventServiceImpl(
                 persistenceModule.getEventStore(),
@@ -178,6 +184,11 @@ public final class ServicesModuleImpl implements ServicesModule {
     @Override
     public OrganisationUnitService getOrganisationUnitService() {
         return organisationUnitService;
+    }
+
+    @Override
+    public OrganisationUnitLevelService getOrganisationUnitLevelService() {
+        return organisationUnitLevelService;
     }
 
     @Override
