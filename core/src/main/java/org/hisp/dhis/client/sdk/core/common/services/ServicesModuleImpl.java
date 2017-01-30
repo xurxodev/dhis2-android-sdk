@@ -28,6 +28,10 @@
 
 package org.hisp.dhis.client.sdk.core.common.services;
 
+import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
+
+import org.hisp.dhis.client.sdk.core.attribute.AttributeService;
+import org.hisp.dhis.client.sdk.core.attribute.AttributeServiceImpl;
 import org.hisp.dhis.client.sdk.core.common.persistence.PersistenceModule;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementService;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementServiceImpl;
@@ -70,11 +74,10 @@ import org.hisp.dhis.client.sdk.core.trackedentity.TrackedEntityInstanceServiceI
 import org.hisp.dhis.client.sdk.core.user.UserAccountService;
 import org.hisp.dhis.client.sdk.core.user.UserAccountServiceImpl;
 
-import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
-
 public final class ServicesModuleImpl implements ServicesModule {
     private final UserAccountService userAccountService;
     private final ProgramService programService;
+    private final AttributeService attributeService;
     private final ProgramStageService programStageService;
     private final ProgramStageSectionService programStageSectionService;
     private final OrganisationUnitService organisationUnitService;
@@ -100,6 +103,7 @@ public final class ServicesModuleImpl implements ServicesModule {
         userAccountService = new UserAccountServiceImpl(
                 persistenceModule.getUserAccountStore(),
                 persistenceModule.getStateStore());
+        attributeService = new AttributeServiceImpl(persistenceModule.getAttributeStore());
         programService = new ProgramServiceImpl(
                 persistenceModule.getProgramStore());
         programStageService = new ProgramStageServiceImpl(
@@ -149,7 +153,8 @@ public final class ServicesModuleImpl implements ServicesModule {
         enrollmentService = new EnrollmentServiceImpl(persistenceModule.getEnrollmentStore(),
                 persistenceModule.getStateStore(), eventService);
 
-        trackedEntityInstanceService = new TrackedEntityInstanceServiceImpl(persistenceModule.getTrackedEntityInstanceStore(),
+        trackedEntityInstanceService = new TrackedEntityInstanceServiceImpl(
+                persistenceModule.getTrackedEntityInstanceStore(),
                 persistenceModule.getRelationshipStore(),
                 persistenceModule.getStateStore());
 
@@ -164,6 +169,11 @@ public final class ServicesModuleImpl implements ServicesModule {
     @Override
     public UserAccountService getUserAccountService() {
         return userAccountService;
+    }
+
+    @Override
+    public AttributeService getAttributeService() {
+        return attributeService;
     }
 
     @Override

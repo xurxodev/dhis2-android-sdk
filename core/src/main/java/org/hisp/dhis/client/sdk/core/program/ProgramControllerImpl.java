@@ -28,12 +28,14 @@
 
 package org.hisp.dhis.client.sdk.core.program;
 
+import org.hisp.dhis.client.sdk.core.attribute.AttributeValueStore;
 import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.KeyValue;
 import org.hisp.dhis.client.sdk.core.common.controllers.AbsSyncStrategyController;
 import org.hisp.dhis.client.sdk.core.common.controllers.SyncStrategy;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.core.common.persistence.DbOperation;
+import org.hisp.dhis.client.sdk.core.common.persistence.DbOperationImpl;
 import org.hisp.dhis.client.sdk.core.common.persistence.DbUtils;
 import org.hisp.dhis.client.sdk.core.common.persistence.TransactionManager;
 import org.hisp.dhis.client.sdk.core.common.preferences.DateType;
@@ -45,6 +47,7 @@ import org.hisp.dhis.client.sdk.core.optionset.OptionSetController;
 import org.hisp.dhis.client.sdk.core.systeminfo.SystemInfoController;
 import org.hisp.dhis.client.sdk.core.trackedentity.TrackedEntityController;
 import org.hisp.dhis.client.sdk.core.user.UserApiClient;
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.dataelement.DataElement;
 import org.hisp.dhis.client.sdk.models.optionset.Option;
 import org.hisp.dhis.client.sdk.models.optionset.OptionSet;
@@ -87,12 +90,15 @@ public class ProgramControllerImpl extends
     private final ProgramApiClient programApiClient;
     private final UserApiClient userApiClient;
 
+    private final AttributeValueStore attributeValueStore;
+
     /* Utilities */
     private final TransactionManager transactionManager;
     private final Logger logger;
 
     public ProgramControllerImpl(SystemInfoController systemInfoController,
                                  ProgramStore programStore,
+                                 AttributeValueStore attributeValueStore,
                                  UserApiClient userApiClient, ProgramApiClient programApiClient,
                                  LastUpdatedPreferences lastUpdatedPreferences,
                                  TransactionManager transactionManager,
@@ -100,6 +106,8 @@ public class ProgramControllerImpl extends
         super(ResourceType.PROGRAMS, programStore, lastUpdatedPreferences);
 
         this.systemInfoController = systemInfoController;
+
+        this.attributeValueStore=attributeValueStore;
 
         this.programApiClient = programApiClient;
         this.userApiClient = userApiClient;
@@ -128,7 +136,7 @@ public class ProgramControllerImpl extends
             synchronizeProgramsByVersions(uids);
         }
     }
-    
+
     private void synchronizeByLastUpdated(Set<String> uids) {
         DateTime serverTime = systemInfoController.getSystemInfo().getServerDate();
         DateTime lastUpdated = lastUpdatedPreferences.get(ResourceType.PROGRAMS, DateType.SERVER);
@@ -273,8 +281,26 @@ public class ProgramControllerImpl extends
             updatedProgram.setIsAssignedToUser(assignedProgram != null);
         }
 
+        ArrayList<AttributeValue> attributeValues = new ArrayList<>();
+        for (Program program : updatedPrograms) {
+            if (program.getAttributeValues() != null) {
+                for (AttributeValue attributeValue : program.getAttributeValues()) {
+                    attributeValue.setReferenceUId(program.getUId());
+                    attributeValue.setItemType(program.getClass().getName());
+                    attributeValues.add(attributeValue);
+                }
+            }
+        }
+        List<DbOperation> dbAttributeValuesOperations = new ArrayList<>();
+        for (AttributeValue attributeValue : attributeValues) {
+            dbAttributeValuesOperations.add(DbOperationImpl.with(attributeValueStore)
+                    .insert(attributeValue));
+        }
+        transactionManager.transact(dbAttributeValuesOperations);
+
         List<DbOperation> dbOperations = DbUtils.createOperations(allExistingPrograms,
                 updatedPrograms, persistedPrograms, identifiableObjectStore);
+
 
         // since we care only about updated programs, we don't need to merge persisted programs
         return new KeyValue<>(updatedPrograms, dbOperations);
@@ -444,6 +470,30 @@ public class ProgramControllerImpl extends
                 }
             }
         }
+
+
+        List<Option> updatedOptions = new ArrayList<>();
+
+        ArrayList<AttributeValue> attributeValues = new ArrayList<>();
+        for (OptionSet updatedOptionSet : optionSetMap.values()) {
+            for(Option option:updatedOptions) {
+                if (option.getAttributeValues() != null) {
+                    for (AttributeValue attributeValue : option.getAttributeValues()) {
+                        attributeValue.setReferenceUId(option.getUId());
+                        attributeValue.setItemType(option.getClass().getName());
+                        attributeValues.add(attributeValue);
+                    }
+                }
+            }
+            updatedOptions.addAll(updatedOptionSet.getOptions());
+        }
+
+        List<DbOperation> optionAttributesdbOperations = new ArrayList<>();
+        for (AttributeValue attributeValue : attributeValues) {
+            optionAttributesdbOperations.add(DbOperationImpl.with(attributeValueStore)
+                    .insert(attributeValue));
+        }
+        transactionManager.transact(optionAttributesdbOperations);
 
         List<OptionSet> optionSets = new ArrayList<>(optionSetMap.values());
 

@@ -30,6 +30,8 @@ package org.hisp.dhis.client.sdk.core.common.controllers;
 
 import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
 
+import org.hisp.dhis.client.sdk.core.attribute.AttributeController;
+import org.hisp.dhis.client.sdk.core.attribute.AttributeControllerImpl;
 import org.hisp.dhis.client.sdk.core.common.network.NetworkModule;
 import org.hisp.dhis.client.sdk.core.common.persistence.PersistenceModule;
 import org.hisp.dhis.client.sdk.core.common.preferences.PreferencesModule;
@@ -82,6 +84,7 @@ public class ControllersModuleImpl implements ControllersModule {
     private final SystemInfoController systemInfoController;
     private final UserAccountController userAccountController;
     private final ProgramController programController;
+    private final AttributeController attributeController;
     private final ProgramStageController programStageController;
     private final ProgramStageSectionController programStageSectionController;
     private final ProgramRuleController programRuleController;
@@ -115,9 +118,15 @@ public class ControllersModuleImpl implements ControllersModule {
                 preferencesModule.getLastUpdatedPreferences());
 
         ProgramControllerImpl programControllerImpl = new ProgramControllerImpl(
-                systemInfoController,
-                persistenceModule.getProgramStore(), networkModule.getUserApiClient(),
+                systemInfoController, persistenceModule.getProgramStore(),
+                persistenceModule.getAttributeValueStore(), networkModule.getUserApiClient(),
                 networkModule.getProgramApiClient(), preferencesModule.getLastUpdatedPreferences(),
+                persistenceModule.getTransactionManager(), logger);
+
+        attributeController =  new AttributeControllerImpl(systemInfoController,
+                persistenceModule.getAttributeStore(), networkModule.getUserApiClient(),
+                networkModule.getAttributeApiClient(),
+                preferencesModule.getLastUpdatedPreferences(),
                 persistenceModule.getTransactionManager(), logger);
 
         programStageController = new ProgramStageControllerImpl(
@@ -137,6 +146,7 @@ public class ControllersModuleImpl implements ControllersModule {
         optionSetController = new OptionSetControllerImpl(
                 systemInfoController,
                 networkModule.getOptionSetApiClient(),
+                persistenceModule.getAttributeValueStore(),
                 persistenceModule.getOptionStore(),
                 persistenceModule.getOptionSetStore(),
                 preferencesModule.getLastUpdatedPreferences(),
@@ -146,6 +156,7 @@ public class ControllersModuleImpl implements ControllersModule {
                 systemInfoController, optionSetController,
                 networkModule.getDataElementApiClient(),
                 persistenceModule.getDataElementStore(),
+                persistenceModule.getAttributeValueStore(),
                 preferencesModule.getLastUpdatedPreferences(),
                 persistenceModule.getTransactionManager());
 
@@ -171,6 +182,7 @@ public class ControllersModuleImpl implements ControllersModule {
         organisationUnitController = new OrganisationUnitControllerImpl(
                 systemInfoController, networkModule.getOrganisationUnitApiClient(),
                 networkModule.getUserApiClient(),
+                persistenceModule.getAttributeValueStore(),
                 persistenceModule.getOrganisationUnitStore(),
                 preferencesModule.getLastUpdatedPreferences(),
                 persistenceModule.getTransactionManager());
@@ -282,6 +294,12 @@ public class ControllersModuleImpl implements ControllersModule {
     public ProgramController getProgramController() {
         return programController;
     }
+
+    @Override
+    public AttributeController getAttributeController() {
+        return attributeController;
+    }
+
 
     @Override
     public ProgramStageController getProgramStageController() {

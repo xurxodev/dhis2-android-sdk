@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.common.base.BaseIdentifiableObject;
 import org.hisp.dhis.client.sdk.models.dataset.DataSet;
 import org.hisp.dhis.client.sdk.models.program.Program;
@@ -59,6 +60,8 @@ public final class OrganisationUnit extends BaseIdentifiableObject {
 
     @JsonIgnore
     private boolean isAssignedToUser;
+
+    private List<AttributeValue> attributeValues;
 
     public OrganisationUnit() {
         // explicit empty constructor
@@ -110,6 +113,15 @@ public final class OrganisationUnit extends BaseIdentifiableObject {
 
     public void setIsAssignedToUser(boolean isAssignedToUser) {
         this.isAssignedToUser = isAssignedToUser;
+    }
+
+    public List<AttributeValue> getAttributeValues() {
+        return attributeValues;
+    }
+
+    public void setAttributeValues(
+            List<AttributeValue> attributeValues) {
+        this.attributeValues = attributeValues;
     }
 
     public static class LevelComparator implements Comparator<OrganisationUnit> {

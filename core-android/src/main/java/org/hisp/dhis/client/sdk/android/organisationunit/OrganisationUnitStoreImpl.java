@@ -35,6 +35,7 @@ import com.raizlabs.android.dbflow.sql.language.Select;
 import org.hisp.dhis.client.sdk.android.api.persistence.flow.ModelLinkFlow;
 import org.hisp.dhis.client.sdk.android.api.persistence.flow.OrganisationUnitFlow;
 import org.hisp.dhis.client.sdk.android.api.persistence.flow.OrganisationUnitFlow_Table;
+import org.hisp.dhis.client.sdk.android.api.persistence.flow.OrganisationUnitToProgramRelationFlow;
 import org.hisp.dhis.client.sdk.android.common.AbsIdentifiableObjectStore;
 import org.hisp.dhis.client.sdk.core.common.persistence.DbOperation;
 import org.hisp.dhis.client.sdk.core.common.persistence.TransactionManager;
@@ -157,6 +158,9 @@ public final class OrganisationUnitStoreImpl extends AbsIdentifiableObjectStore<
     private void updateOrganisationUnitRelationships(OrganisationUnit organisationUnit) {
         List<DbOperation> dbOperations = ModelLinkFlow.updateLinksToModel(organisationUnit,
                 organisationUnit.getPrograms(), UNITS_TO_PROGRAMS);
+        transactionManager.transact(dbOperations);
+        dbOperations = OrganisationUnitToProgramRelationFlow.updateLinksToModel(organisationUnit,
+                organisationUnit.getPrograms());
         transactionManager.transact(dbOperations);
     }
 

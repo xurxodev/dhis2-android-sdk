@@ -28,6 +28,8 @@
 
 package org.hisp.dhis.client.sdk.android.dataelement;
 
+import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.getCollection;
+
 import org.hisp.dhis.client.sdk.android.api.network.ApiResource;
 import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
@@ -71,7 +73,7 @@ public class DataElementApiClientImpl implements DataElementApiClient {
                 return "id,name,displayName,created,lastUpdated,access," +
                         "shortName,valueType,zeroIsSignificant,aggregationOperator" +
                         "formName,numberType,domainType,dimension,displayFormName," +
-                        "optionSet[id]";
+                        "optionSet[id],attributeValues[*,attribute[id,code]]";
             }
 
             @Override
