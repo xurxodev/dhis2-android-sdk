@@ -4,22 +4,31 @@ import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.Table;
 
 import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
+import org.hisp.dhis.client.sdk.android.common.AbsMapper;
+import org.hisp.dhis.client.sdk.android.common.Mapper;
+import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnitLevel;
 
-/**
- * Created by idelcano on 14/11/2016.
- */
-
-/**
- * This class will be disappeared soon.
- * This is a SDK Pojo and is created to fix the Queries,
- * is in the app side and with hardcoded methods.
- * It makes the project compile and centralized the necessary methods
- * and necessary sdk new Pojos..
- */
 @Table(database = DbDhis.class)
-public class OrganisationUnitLevelFlow extends BaseIdentifiableObjectFlow {
+public class OrganisationUnitLevelFlow extends BaseModelFlow {
+    public static final Mapper<OrganisationUnitLevel, OrganisationUnitLevelFlow> MAPPER =
+            new OrganisationUnitLevelMapper();
+
+    @Column(name = "uId")
+    String uId;
+
+    @Column(name = "displayName")
+    String displayName;
+
     @Column(name = "level")
     int level;
+
+    public String getUId() {
+        return uId;
+    }
+
+    public void setUId(String uId) {
+        this.uId = uId;
+    }
 
     public int getLevel() {
         return level;
@@ -29,13 +38,57 @@ public class OrganisationUnitLevelFlow extends BaseIdentifiableObjectFlow {
         this.level = level;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
     public OrganisationUnitLevelFlow() {
     }
 
+    private static class OrganisationUnitLevelMapper extends
+            AbsMapper<OrganisationUnitLevel, OrganisationUnitLevelFlow> {
 
-    public String getUid() {
-        //return getUId();
-        return null;
+        @Override
+        public OrganisationUnitLevelFlow mapToDatabaseEntity(
+                OrganisationUnitLevel organisationUnitLevel) {
+            if (organisationUnitLevel == null) {
+                return null;
+            }
+
+            OrganisationUnitLevelFlow organisationUnitLevelFlow = new OrganisationUnitLevelFlow();
+            organisationUnitLevelFlow.setUId(organisationUnitLevel.getUId());
+            organisationUnitLevelFlow.setLevel(organisationUnitLevel.getLevel());
+            organisationUnitLevelFlow.setDisplayName(organisationUnitLevel.getDisplayName());
+            return organisationUnitLevelFlow;
+        }
+
+        @Override
+        public OrganisationUnitLevel mapToModel(
+                OrganisationUnitLevelFlow organisationUnitLevelFlow) {
+            if (organisationUnitLevelFlow == null) {
+                return null;
+            }
+
+            OrganisationUnitLevel organisationUnitLevel = new OrganisationUnitLevel();
+            organisationUnitLevel.setUId(organisationUnitLevelFlow.getUId());
+            organisationUnitLevel.setLevel(organisationUnitLevelFlow.getLevel());
+            organisationUnitLevel.setDisplayName(organisationUnitLevelFlow.getDisplayName());
+
+            return organisationUnitLevel;
+        }
+
+        @Override
+        public Class<OrganisationUnitLevel> getModelTypeClass() {
+            return OrganisationUnitLevel.class;
+        }
+
+        @Override
+        public Class<OrganisationUnitLevelFlow> getDatabaseEntityTypeClass() {
+            return OrganisationUnitLevelFlow.class;
+        }
     }
-
 }
