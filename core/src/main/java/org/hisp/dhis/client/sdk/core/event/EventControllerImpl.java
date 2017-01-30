@@ -186,20 +186,23 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
         isEmpty(uids, "Set of event uids must not be null");
 
         List <ImportSummary> importSummaries = sendEvents(uids);
-        deleteEvents(uids);
+        //deleteEvents(uids);
         return importSummaries;
     }
 
-    private List<ImportSummary> sendEvents(Set<String> uids) throws ApiException {
+    private List<ImportSummary> sendEvents(Set<String> eventUids) throws ApiException {
         // retrieve basic events with given state from database
-        List<Event> eventStates = stateStore.queryModelsWithActions(
-                Event.class, uids, Action.TO_POST, Action.TO_UPDATE);
+
+        //TODO  Implement the action event states
+        /*List<Event> eventStates = stateStore.queryModelsWithActions(
+                Event.class, eventUids, Action.TO_POST, Action.TO_UPDATE);
 
         if (eventStates == null || eventStates.isEmpty()) {
             return null;
         }
-
         Set<String> eventUids = ModelUtils.toUidSet(eventStates);
+        */
+
         List<Event> events = eventStore.queryByUids(eventUids);
 
         try {
