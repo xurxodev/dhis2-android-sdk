@@ -260,11 +260,11 @@ public class NetworkModuleImpl implements NetworkModule {
     }
 
     @Override
-
     public AttributeApiClient getAttributeApiClient() {
         return attributeApiClient;
     }
 
+    @Override
     public OrganisationUnitLevelApiClient getOrganisationUnitLevelApiClient() {
         return organisationUnitLevelApiClient;
     }

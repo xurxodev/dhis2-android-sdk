@@ -30,6 +30,7 @@ package org.hisp.dhis.client.sdk.core.common.controllers;
 
 import org.hisp.dhis.client.sdk.core.attribute.AttributeController;  
 import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
+import org.hisp.dhis.client.sdk.core.attribute.AttributeController;
 import org.hisp.dhis.client.sdk.core.attribute.AttributeControllerImpl;
 import org.hisp.dhis.client.sdk.core.common.network.NetworkModule;
 import org.hisp.dhis.client.sdk.core.common.persistence.PersistenceModule;
