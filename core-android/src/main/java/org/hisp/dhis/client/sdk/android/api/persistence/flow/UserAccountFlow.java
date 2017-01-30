@@ -36,10 +36,14 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
 import org.hisp.dhis.client.sdk.android.common.AbsMapper;
 import org.hisp.dhis.client.sdk.android.common.Mapper;
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.common.Access;
 import org.hisp.dhis.client.sdk.models.common.base.IdentifiableObject;
 import org.hisp.dhis.client.sdk.models.user.UserAccount;
 import org.joda.time.DateTime;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(database = DbDhis.class)
 public final class UserAccountFlow extends BaseModel implements IdentifiableObject {
@@ -110,8 +114,18 @@ public final class UserAccountFlow extends BaseModel implements IdentifiableObje
     @Column(name = "apiSortOrder")
     int apiSortOrder;
 
+    List<AttributeValueFlow> attributeValueFlow;
+
     public UserAccountFlow() {
         action = org.hisp.dhis.client.sdk.models.common.state.Action.SYNCED;
+    }
+
+    public List<AttributeValueFlow> getAttributeValueFlow() {
+        return attributeValueFlow;
+    }
+
+    public void setAttributeValueFlow(List<AttributeValueFlow> attributeValueFlow) {
+        this.attributeValueFlow = attributeValueFlow;
     }
 
     @Override
@@ -329,6 +343,22 @@ public final class UserAccountFlow extends BaseModel implements IdentifiableObje
             flowAccount.setEmail(userAccount.getEmail());
             flowAccount.setPhoneNumber(userAccount.getPhoneNumber());
 
+            List<AttributeValueFlow> attributeValueFlows = new ArrayList<>();
+
+            List<AttributeValue> attributeValues = userAccount.getAttributeValues();
+
+            if (attributeValues != null) {
+                for (AttributeValue attributeValue :attributeValues) {
+                    AttributeValueFlow attributeValueFlow = AttributeValueFlow.MAPPER
+                                    .mapToDatabaseEntity(attributeValue);
+
+                    attributeValueFlow.itemType =  userAccount.getClass().getName();
+
+                    attributeValueFlows.add(attributeValueFlow);
+                }
+                flowAccount.setAttributeValueFlow(attributeValueFlows);
+            }
+
             return flowAccount;
         }
 
@@ -359,6 +389,21 @@ public final class UserAccountFlow extends BaseModel implements IdentifiableObje
             account.setLanguages(flowAccount.getLanguages());
             account.setEmail(flowAccount.getEmail());
             account.setPhoneNumber(flowAccount.getPhoneNumber());
+
+            List<AttributeValue> attributeValues = new ArrayList<>();
+
+            List<AttributeValueFlow> attributeValueFlows = flowAccount.getAttributeValueFlow();
+
+            if (attributeValueFlows != null) {
+                for (AttributeValueFlow attributeValueFlow : attributeValueFlows) {
+
+                    AttributeValue attributeValue = AttributeValueFlow.MAPPER
+                            .mapToModel(attributeValueFlow);
+                    attributeValue.setReferenceUId(flowAccount.getUId());
+                    attributeValues.add(attributeValue);
+                }
+                account.setAttributeValues(attributeValues);
+            }
 
             return account;
         }
