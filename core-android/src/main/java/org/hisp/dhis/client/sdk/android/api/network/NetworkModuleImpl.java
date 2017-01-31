@@ -48,6 +48,8 @@ import org.hisp.dhis.client.sdk.android.optionset.OptionSetApiClientImpl;
 import org.hisp.dhis.client.sdk.android.optionset.OptionSetApiClientRetrofit;
 import org.hisp.dhis.client.sdk.android.organisationunit.OrganisationUnitApiClientImpl;
 import org.hisp.dhis.client.sdk.android.organisationunit.OrganisationUnitApiClientRetrofit;
+import org.hisp.dhis.client.sdk.android.organisationunit.OrganisationUnitLevelApiClientImpl;
+import org.hisp.dhis.client.sdk.android.organisationunit.OrganisationUnitLevelApiClientRetrofit;
 import org.hisp.dhis.client.sdk.android.program.ProgramApiClientImpl;
 import org.hisp.dhis.client.sdk.android.program.ProgramApiClientRetrofit;
 import org.hisp.dhis.client.sdk.android.program.ProgramIndicatorApiClientImpl;
@@ -86,6 +88,7 @@ import org.hisp.dhis.client.sdk.core.enrollment.EnrollmentApiClient;
 import org.hisp.dhis.client.sdk.core.event.EventApiClient;
 import org.hisp.dhis.client.sdk.core.optionset.OptionSetApiClient;
 import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitApiClient;
+import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitLevelApiClient;
 import org.hisp.dhis.client.sdk.core.program.ProgramApiClient;
 import org.hisp.dhis.client.sdk.core.program.ProgramIndicatorApiClient;
 import org.hisp.dhis.client.sdk.core.program.ProgramRuleActionApiClient;
@@ -126,6 +129,7 @@ public class NetworkModuleImpl implements NetworkModule {
     private static final int DEFAULT_WRITE_TIMEOUT_MILLIS = 20 * 1000;     // 20s
 
     private final OrganisationUnitApiClient organisationUnitApiClient;
+    private final OrganisationUnitLevelApiClient organisationUnitLevelApiClient;
     private final AttributeApiClient attributeApiClient;
     private final SystemInfoApiClient systemInfoApiClient;
     private final ProgramApiClient programApiClient;
@@ -209,6 +213,8 @@ public class NetworkModuleImpl implements NetworkModule {
                 retrofit.create(UserApiClientRetrofit.class));
         organisationUnitApiClient = new OrganisationUnitApiClientImpl(
                 retrofit.create(OrganisationUnitApiClientRetrofit.class));
+        organisationUnitLevelApiClient = new OrganisationUnitLevelApiClientImpl(
+                retrofit.create(OrganisationUnitLevelApiClientRetrofit.class));
         eventApiClient = new EventApiClientImpl(
                 retrofit.create(EventApiClientRetrofit.class));
         dataElementApiClient = new DataElementApiClientImpl(
@@ -256,6 +262,11 @@ public class NetworkModuleImpl implements NetworkModule {
     @Override
     public AttributeApiClient getAttributeApiClient() {
         return attributeApiClient;
+    }
+
+    @Override
+    public OrganisationUnitLevelApiClient getOrganisationUnitLevelApiClient() {
+        return organisationUnitLevelApiClient;
     }
 
     @Override

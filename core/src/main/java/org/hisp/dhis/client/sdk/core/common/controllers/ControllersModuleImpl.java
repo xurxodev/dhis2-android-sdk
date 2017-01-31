@@ -45,6 +45,8 @@ import org.hisp.dhis.client.sdk.core.optionset.OptionSetController;
 import org.hisp.dhis.client.sdk.core.optionset.OptionSetControllerImpl;
 import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitController;
 import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitControllerImpl;
+import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitLevelController;
+import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitLevelControllerImpl;
 import org.hisp.dhis.client.sdk.core.program.ProgramController;
 import org.hisp.dhis.client.sdk.core.program.ProgramControllerImpl;
 import org.hisp.dhis.client.sdk.core.program.ProgramIndicatorController;
@@ -91,6 +93,7 @@ public class ControllersModuleImpl implements ControllersModule {
     private final ProgramIndicatorController programIndicatorController;
     private final ProgramStageDataElementController programStageDataElementController;
     private final OrganisationUnitController organisationUnitController;
+    private final OrganisationUnitLevelController organisationUnitLevelController;
     private final AssignedProgramsController assignedProgramsController;
     private final AssignedOrganisationUnitsController assignedOrganisationUnitsController;
     private final DataElementController dataElementController;
@@ -181,6 +184,12 @@ public class ControllersModuleImpl implements ControllersModule {
                 networkModule.getUserApiClient(),
                 persistenceModule.getAttributeValueStore(),
                 persistenceModule.getOrganisationUnitStore(),
+                preferencesModule.getLastUpdatedPreferences(),
+                persistenceModule.getTransactionManager());
+
+        organisationUnitLevelController = new OrganisationUnitLevelControllerImpl(systemInfoController,
+                networkModule.getOrganisationUnitLevelApiClient(), networkModule.getUserApiClient(),
+                persistenceModule.getOrganisationUnitLevelStore(),
                 preferencesModule.getLastUpdatedPreferences(),
                 persistenceModule.getTransactionManager());
 
@@ -305,6 +314,11 @@ public class ControllersModuleImpl implements ControllersModule {
     @Override
     public OrganisationUnitController getOrganisationUnitController() {
         return organisationUnitController;
+    }
+
+    @Override
+    public OrganisationUnitLevelController getOrganisationUnitLevelController() {
+        return organisationUnitLevelController;
     }
 
     @Override

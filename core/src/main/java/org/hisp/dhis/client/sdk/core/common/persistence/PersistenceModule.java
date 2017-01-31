@@ -36,6 +36,7 @@ import org.hisp.dhis.client.sdk.core.enrollment.EnrollmentStore;
 import org.hisp.dhis.client.sdk.core.event.EventStore;
 import org.hisp.dhis.client.sdk.core.optionset.OptionSetStore;
 import org.hisp.dhis.client.sdk.core.optionset.OptionStore;
+import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitLevelStore;
 import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitStore;
 import org.hisp.dhis.client.sdk.core.program.ProgramIndicatorStore;
 import org.hisp.dhis.client.sdk.core.program.ProgramRuleActionStore;
@@ -85,6 +86,8 @@ public interface PersistenceModule {
     TrackedEntityAttributeStore getTrackedEntityAttributeStore();
 
     OrganisationUnitStore getOrganisationUnitStore();
+
+    OrganisationUnitLevelStore getOrganisationUnitLevelStore();
 
     EventStore getEventStore();
 
