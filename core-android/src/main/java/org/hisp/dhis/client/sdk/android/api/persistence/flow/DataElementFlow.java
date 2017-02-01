@@ -75,6 +75,9 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
     String displayFormName;
 
     @Column
+    String code;
+
+    @Column
     @ForeignKey(
             references = {
                     @ForeignKeyReference(columnName = OPTION_SET_KEY, columnType = String.class,
@@ -170,6 +173,14 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
         this.attributeValueFlow = attributeValueFlow;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     private static class DataElementMapper extends AbsMapper<DataElement, DataElementFlow> {
 
         @Override
@@ -204,6 +215,7 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
                 }
             dataElementFlow.setAttributeValueFlow(attributeValueFlows);
             }
+            dataElementFlow.setCode(dataElement.getCode());
             return dataElementFlow;
         }
 
@@ -240,8 +252,9 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
                     attributeValue.setReferenceUId(dataElementFlow.getUId());
                     attributeValues.add(attributeValue);
                 }
+                dataElement.setAttributeValues(attributeValues);
             }
-            dataElement.setAttributeValues(attributeValues);
+            dataElement.setCode(dataElementFlow.getCode());
             return dataElement;
         }
 

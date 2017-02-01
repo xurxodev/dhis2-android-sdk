@@ -54,6 +54,9 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
     int level;
 
     @Column
+    String path;
+
+    @Column
     @ForeignKey(
             references = {
                     @ForeignKeyReference(columnName = ORGANISATION_UNIT_PARENT_KEY,
@@ -105,6 +108,14 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
         this.attributeValues = attributeValues;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     private static class OrganisationUnitMapper extends AbsMapper<OrganisationUnit,
             OrganisationUnitFlow> {
 
@@ -137,6 +148,7 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
                 }
                 organisationUnitFlow.setAttributeValueFlow(attributeValueFlows);
             }
+            organisationUnitFlow.setPath(organisationUnit.getPath());
             return organisationUnitFlow;
         }
 
@@ -169,6 +181,7 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
                 }
                 organisationUnit.setAttributeValues(attributeValues);
             }
+            organisationUnit.setPath(organisationUnitFlow.getPath());
             return organisationUnit;
         }
 
