@@ -63,12 +63,12 @@ public final class OptionSetControllerImpl extends
     private final OptionSetStore optionSetStore;
 
     public OptionSetControllerImpl(SystemInfoController systemInfoController,
-            OptionSetApiClient optionSetApiClient,
-            AttributeValueStore attributeValueStore,
-            OptionStore optionStore,
-            OptionSetStore optionSetStore,
-            LastUpdatedPreferences lastUpdatedPreferences,
-            TransactionManager transactionManager) {
+                                   OptionSetApiClient optionSetApiClient,
+                                   AttributeValueStore attributeValueStore,
+                                   OptionStore optionStore,
+                                   OptionSetStore optionSetStore,
+                                   LastUpdatedPreferences lastUpdatedPreferences,
+                                   TransactionManager transactionManager) {
         super(ResourceType.OPTION_SETS, optionSetStore, lastUpdatedPreferences);
         this.systemInfoController = systemInfoController;
         this.optionSetApiClient = optionSetApiClient;
@@ -88,8 +88,11 @@ public final class OptionSetControllerImpl extends
 
         // we have to download all ids from server in order to
         // find out what was removed on the server side
-        List<OptionSet> allExistingOptionSets = optionSetApiClient.getOptionSets(Fields.BASIC, null, null);
-
+        List<OptionSet> allExistingOptionSets = new ArrayList<>();
+        if (strategy != SyncStrategy.NO_DELETE) {
+            allExistingOptionSets =
+                    optionSetApiClient.getOptionSets(Fields.BASIC, null, null);
+        }
 
         List<OptionSet> updatedOptionSets = new ArrayList<>();
         if (uids == null) {
@@ -156,10 +159,9 @@ public final class OptionSetControllerImpl extends
     @Override
     public List<DbOperation> merge(List<OptionSet> updatedOptionSets) throws ApiException {
         List<OptionSet> allExistingOptionSets = optionSetApiClient
-                .getOptionSets(Fields.BASIC, null, null);
+                .getOptionSets(Fields.ALL, null, null);
         List<OptionSet> persistedOptionSets = identifiableObjectStore
                 .queryAll();
-
         List<Option> updatedOptions = new ArrayList<>();
 
         ArrayList<AttributeValue> attributeValues = new ArrayList<>();
@@ -184,10 +186,14 @@ public final class OptionSetControllerImpl extends
         }
         transactionManager.transact(dbOperations);
 
-        for (OptionSet updatedOptionSet : updatedOptionSets) {
+        //Update all the options
+        for (OptionSet updatedOptionSet : allExistingOptionSets) {
             updatedOptions.addAll(updatedOptionSet.getOptions());
         }
 
+        //Update all the optionSets
+        updatedOptionSets = allExistingOptionSets;
+        allExistingOptionSets = new ArrayList<>();
         dbOperations = new ArrayList<>();
         dbOperations.addAll(DbUtils.createOperations(optionStore,
                 optionStore.queryAll(), updatedOptions));

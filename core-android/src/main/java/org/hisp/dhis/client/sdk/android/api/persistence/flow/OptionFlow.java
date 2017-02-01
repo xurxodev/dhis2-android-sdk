@@ -33,6 +33,7 @@ import com.raizlabs.android.dbflow.annotation.ForeignKey;
 import com.raizlabs.android.dbflow.annotation.ForeignKeyAction;
 import com.raizlabs.android.dbflow.annotation.ForeignKeyReference;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
 import org.hisp.dhis.client.sdk.android.common.AbsMapper;
@@ -97,6 +98,14 @@ public final class OptionFlow extends BaseIdentifiableObjectFlow {
     }
 
     public List<AttributeValueFlow> getAttributeValueFlow() {
+        if(attributeValueFlow==null){
+            attributeValueFlow = new Select()
+                    .from(AttributeValueFlow.class)
+                    .where(AttributeValueFlow_Table.reference
+                            .is(getUId())).queryList();
+            if(attributeValueFlow==null) return null;
+            return  attributeValueFlow;
+        }
         return attributeValueFlow;
     }
 

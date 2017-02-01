@@ -301,7 +301,6 @@ public class ProgramControllerImpl extends
         List<DbOperation> dbOperations = DbUtils.createOperations(allExistingPrograms,
                 updatedPrograms, persistedPrograms, identifiableObjectStore);
 
-
         // since we care only about updated programs, we don't need to merge persisted programs
         return new KeyValue<>(updatedPrograms, dbOperations);
     }
@@ -476,12 +475,14 @@ public class ProgramControllerImpl extends
 
         ArrayList<AttributeValue> attributeValues = new ArrayList<>();
         for (OptionSet updatedOptionSet : optionSetMap.values()) {
-            for(Option option:updatedOptions) {
+            for(Option option:updatedOptionSet.getOptions()) {
                 if (option.getAttributeValues() != null) {
                     for (AttributeValue attributeValue : option.getAttributeValues()) {
                         attributeValue.setReferenceUId(option.getUId());
                         attributeValue.setItemType(option.getClass().getName());
-                        attributeValues.add(attributeValue);
+                        if(!attributeValues.contains(attributeValue)) {
+                            attributeValues.add(attributeValue);
+                        }
                     }
                 }
             }

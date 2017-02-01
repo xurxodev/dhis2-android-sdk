@@ -2,6 +2,7 @@ package org.hisp.dhis.client.sdk.android.api.persistence.flow;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
 import org.hisp.dhis.client.sdk.android.common.AbsMapper;
@@ -68,6 +69,14 @@ public class AttributeValueFlow extends BaseModelFlow {
     }
 
     public Attribute getAttribute() {
+        if(attribute==null) {
+            AttributeFlow attributeFlow = new Select()
+                    .from(AttributeFlow.class)
+                    .where(AttributeFlow_Table.uId
+                            .is(getAttributeUId())).querySingle();
+            if(attributeFlow==null) return null;
+            setAttribute(AttributeFlow.MAPPER.mapToModel(attributeFlow));
+        }
         return attribute;
     }
 
@@ -122,6 +131,7 @@ public class AttributeValueFlow extends BaseModelFlow {
             }
 
             AttributeValue attributeValue = new AttributeValue();
+            attributeValue.setAttribute(attributeValueFlow.getAttribute());
             attributeValue.setAttributeUId(attributeValueFlow.getAttributeUId());
             attributeValue.setValue(attributeValueFlow.getValue());
             attributeValue.setReferenceUId(attributeValueFlow.getReference());

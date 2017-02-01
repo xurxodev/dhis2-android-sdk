@@ -129,8 +129,8 @@ public class NetworkModuleImpl implements NetworkModule {
     private static final int DEFAULT_WRITE_TIMEOUT_MILLIS = 20 * 1000;     // 20s
 
     private final OrganisationUnitApiClient organisationUnitApiClient;
-    private final OrganisationUnitLevelApiClient organisationUnitLevelApiClient;
     private final AttributeApiClient attributeApiClient;
+    private final OrganisationUnitLevelApiClient organisationUnitLevelApiClient;
     private final SystemInfoApiClient systemInfoApiClient;
     private final ProgramApiClient programApiClient;
     private final ProgramStageApiClient programStageApiClient;

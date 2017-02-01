@@ -28,6 +28,7 @@
 
 package org.hisp.dhis.client.sdk.models.dataelement;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -65,6 +66,9 @@ public final class DataElement extends BaseNameableObject {
 
     @JsonProperty("optionSet")
     private OptionSet optionSet;
+
+    @JsonIgnore
+    private String optionSetUId;
 
 
     @JsonProperty("attributeValues")

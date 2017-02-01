@@ -121,8 +121,8 @@ public class D2 {
 
     private final CurrentUserInteractor currentUserInteractor;
     private final OrganisationUnitInteractor organisationUnitInteractor;
-    private final OrganisationUnitLevelInteractor organisationUnitLevelInteractor;
     private final AttributeInteractor attributeInteractor;
+    private final OrganisationUnitLevelInteractor organisationUnitLevelInteractor;
     private final ProgramInteractor programInteractor;
     private final ProgramStageInteractor programStageInteractor;
     private final ProgramStageSectionInteractor programStageSectionInteractor;
@@ -160,8 +160,8 @@ public class D2 {
         if (!isD2Configured) {
             currentUserInteractor = null;
             organisationUnitInteractor = null;
-            organisationUnitLevelInteractor = null;
             attributeInteractor = null;
+            organisationUnitLevelInteractor = null;
             programInteractor = null;
             programStageInteractor = null;
             programStageSectionInteractor = null;
