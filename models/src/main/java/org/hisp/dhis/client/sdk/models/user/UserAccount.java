@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.common.Access;
 import org.hisp.dhis.client.sdk.models.common.base.IdentifiableObject;
 import org.hisp.dhis.client.sdk.models.common.state.Action;
@@ -124,6 +125,9 @@ public class UserAccount implements IdentifiableObject {
 
     @JsonProperty("organisationUnits")
     List<OrganisationUnit> organisationUnits;
+
+
+    private List<AttributeValue> attributeValues;
 
     public UserAccount() {
         action = Action.SYNCED;
@@ -333,5 +337,14 @@ public class UserAccount implements IdentifiableObject {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public List<AttributeValue> getAttributeValues() {
+        return attributeValues;
+    }
+
+    public void setAttributeValues(
+            List<AttributeValue> attributeValues) {
+        this.attributeValues = attributeValues;
     }
 }
