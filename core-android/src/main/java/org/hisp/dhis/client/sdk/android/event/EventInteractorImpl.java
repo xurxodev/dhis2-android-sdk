@@ -280,16 +280,10 @@ public class EventInteractorImpl implements EventInteractor {
         if (startDate == null && maxEvents <= 0) {
             return pull(organisationUnit, program);
         } else {
-            return Observable.create(new DefaultOnSubscribe<List<Event>>() {
-                @Override
-                public List<Event> call() {
-                    SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(AMERICAN_DATE_FORMAT);
-                    pull(organisationUnit, program,
-                            DATE_FORMAT.format(startDate),
-                            maxEvents);
-                    return eventService.list();
-                }
-            });
+            SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(AMERICAN_DATE_FORMAT);
+            return pull(organisationUnit, program,
+                    DATE_FORMAT.format(startDate),
+                    maxEvents);
         }
     }
 
