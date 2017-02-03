@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.core.common.network.ApiMessage;
+import org.hisp.dhis.client.sdk.models.event.EventWrapper;
 import org.hisp.dhis.client.sdk.core.common.utils.CollectionUtils;
 import org.hisp.dhis.client.sdk.core.event.EventApiClient;
 import org.hisp.dhis.client.sdk.models.event.Event;
@@ -35,7 +36,7 @@ public class EventApiClientImpl implements EventApiClient {
 
         addCommonFields(fields, queryMap);
 
-        return callAndUnwrapEvents(queryMap);
+        return callEvents(queryMap);
     }
 
 
@@ -49,7 +50,7 @@ public class EventApiClientImpl implements EventApiClient {
 
         addCommonFields(fields, queryMap);
 
-        return callAndUnwrapEvents(queryMap);
+        return callEvents(queryMap);
     }
 
     @Override
@@ -65,7 +66,7 @@ public class EventApiClientImpl implements EventApiClient {
 
         addCommonFields(fields, queryMap);
 
-        return callAndUnwrapEvents(queryMap);
+        return callEvents(queryMap);
     }
 
     @Override
@@ -83,7 +84,7 @@ public class EventApiClientImpl implements EventApiClient {
 
         addCommonFields(fields, queryMap);
 
-        return callAndUnwrapEvents(queryMap);
+        return callEvents(queryMap);
     }
 
     private void addBasicFilters(String organisationUnit, String program, int maxEvents,
@@ -186,10 +187,11 @@ public class EventApiClientImpl implements EventApiClient {
 
 
     @NonNull
-    private List<Event> callAndUnwrapEvents(Map<String, String> queryMap) {
+    private List<Event> callEvents(Map<String, String> queryMap) {
+        EventWrapper response = call(
+                eventApiclientRetrofit.getEventsAndPager(queryMap));
         List<Event> allEvents = new ArrayList<>();
-        allEvents.addAll(unwrap(call(
-                eventApiclientRetrofit.getEvents(queryMap)), "events"));
+        allEvents.addAll(response.getEvents());
         return allEvents;
     }
 }
