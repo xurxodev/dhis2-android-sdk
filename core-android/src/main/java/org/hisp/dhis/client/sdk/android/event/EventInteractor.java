@@ -74,7 +74,7 @@ public interface EventInteractor {
 
     Observable<List<Event>> pull(OrganisationUnit organisationUnit, Program program);
 
-    Observable<Map<Event,ImportSummary>> push(Set<String> uids);
+    Observable<Map<String,ImportSummary>> push(Set<String> uids);
 
     Observable<List<Event>> sync(Set<String> uids);
 
