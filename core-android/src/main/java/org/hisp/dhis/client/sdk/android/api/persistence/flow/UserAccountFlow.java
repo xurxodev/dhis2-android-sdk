@@ -31,6 +31,7 @@ package org.hisp.dhis.client.sdk.android.api.persistence.flow;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
@@ -121,7 +122,15 @@ public final class UserAccountFlow extends BaseModel implements IdentifiableObje
     }
 
     public List<AttributeValueFlow> getAttributeValueFlow() {
+        if (attributeValueFlow == null) {
+            attributeValueFlow = new Select()
+                    .from(AttributeValueFlow.class)
+                    .where(AttributeValueFlow_Table.reference.is(getUId())).queryList();
+            if (attributeValueFlow == null) return null;
+            return attributeValueFlow;
+        }
         return attributeValueFlow;
+
     }
 
     public void setAttributeValueFlow(List<AttributeValueFlow> attributeValueFlow) {
