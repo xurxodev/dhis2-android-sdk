@@ -317,6 +317,7 @@ public class PersistenceModuleImpl implements PersistenceModule {
                 enrollmentStore.deleteAll() &&
                 trackedEntityInstanceStore.deleteAll() &&
                 trackedEntityAttributeValueStore.deleteAll() &&
-                optionSetStore.deleteAll();
+                optionSetStore.deleteAll() &&
+                attributeValueStore.deleteAll();
     }
 }
