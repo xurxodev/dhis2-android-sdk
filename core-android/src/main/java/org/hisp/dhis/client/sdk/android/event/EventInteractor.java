@@ -37,6 +37,7 @@ import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
 import org.hisp.dhis.client.sdk.models.program.Program;
 import org.hisp.dhis.client.sdk.models.program.ProgramStage;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -72,9 +73,28 @@ public interface EventInteractor {
 
     Observable<List<Event>> pull(String organisationUnit, String program);
 
+    Observable<List<Event>> pull(String organisationUnit,
+            String program, String startDate, int maxEvents);
+
+    Observable<List<Event>> pull(String organisationUnit,
+            String program, String startDate, String endDate,
+            int maxEvents);
+
     Observable<List<Event>> pull(OrganisationUnit organisationUnit, Program program);
 
-    Observable<Map<Event,ImportSummary>> push(Set<String> uids);
+    Observable<List<Event>> pull(String organisationUnit, String program, int maxEvents);
+
+    Observable<List<Event>> pull(OrganisationUnit organisationUnit, Program program, int maxEvents);
+
+    Observable<List<Event>> pull(String organisationUnit, String program, Date startDate, int maxEvents);
+
+    Observable<List<Event>> pull(OrganisationUnit organisationUnit, Program program, Date startDate, int maxEvents);
+
+    Observable<List<Event>> pull(String organisationUnit, String program, Date startDate, Date endDate, int maxEvents);
+
+    Observable<List<Event>> pull(OrganisationUnit organisationUnit, Program program, Date startDate, Date endDate, int maxEvents);
+
+    Observable<Map<String,ImportSummary>> push(Set<String> uids);
 
     Observable<List<Event>> sync(Set<String> uids);
 

@@ -247,7 +247,6 @@ public final class Event extends BaseModel implements IdentifiableObject {
     public enum EventStatus {
         ACTIVE, COMPLETED, SCHEDULED, SKIPPED , OVERDUE
     }
-
     /**
      * Comparator that returns the Event with the latest EventDate
      * as the greater of the two given.

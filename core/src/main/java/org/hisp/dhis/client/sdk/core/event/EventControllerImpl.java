@@ -166,6 +166,44 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
 
         List<Event> updatedEvents = eventApiClient.getEvents(
                 Fields.ALL, organisationUnit, program);
+        saveEvents(serverTime, updatedEvents);
+    }
+
+    @Override
+    public void pull(String organisationUnit, String program, int maxEvents)
+            throws ApiException {
+
+        DateTime serverTime = systemInfoController.getSystemInfo().getServerDate();
+
+        List<Event> updatedEvents = eventApiClient.getEvents(
+                Fields.ALL, organisationUnit, program, maxEvents);
+        saveEvents(serverTime, updatedEvents);
+    }
+
+    @Override
+    public void pull(String organisationUnit, String program, String startDate, int maxEvents)
+            throws ApiException {
+
+        DateTime serverTime = systemInfoController.getSystemInfo().getServerDate();
+
+        List<Event> updatedEvents = eventApiClient.getEvents(
+                Fields.ALL, organisationUnit, program, startDate, maxEvents);
+        saveEvents(serverTime, updatedEvents);
+    }
+
+    @Override
+    public void pull(String organisationUnit, String program, String startDate, String endDate,
+            int maxEvents) throws ApiException {
+
+        DateTime serverTime = systemInfoController.getSystemInfo().getServerDate();
+
+        List<Event> updatedEvents = eventApiClient.getEvents(
+                Fields.ALL, organisationUnit, program, startDate, endDate, maxEvents);
+
+        saveEvents(serverTime, updatedEvents);
+    }
+
+    private void saveEvents(DateTime serverTime, List<Event> updatedEvents) {
         for(Event updateEvent : updatedEvents){
             List<TrackedEntityDataValue> updatedDataValues = new ArrayList<>();
             for(TrackedEntityDataValue trackedEntityDataValue : updateEvent.getDataValues())
@@ -186,20 +224,23 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
         isEmpty(uids, "Set of event uids must not be null");
 
         List <ImportSummary> importSummaries = sendEvents(uids);
-        deleteEvents(uids);
+        //deleteEvents(uids);
         return importSummaries;
     }
 
-    private List<ImportSummary> sendEvents(Set<String> uids) throws ApiException {
+    private List<ImportSummary> sendEvents(Set<String> eventUids) throws ApiException {
         // retrieve basic events with given state from database
-        List<Event> eventStates = stateStore.queryModelsWithActions(
-                Event.class, uids, Action.TO_POST, Action.TO_UPDATE);
+
+        //TODO  Implement the action event states
+        /*List<Event> eventStates = stateStore.queryModelsWithActions(
+                Event.class, eventUids, Action.TO_POST, Action.TO_UPDATE);
 
         if (eventStates == null || eventStates.isEmpty()) {
             return null;
         }
-
         Set<String> eventUids = ModelUtils.toUidSet(eventStates);
+        */
+
         List<Event> events = eventStore.queryByUids(eventUids);
 
         try {

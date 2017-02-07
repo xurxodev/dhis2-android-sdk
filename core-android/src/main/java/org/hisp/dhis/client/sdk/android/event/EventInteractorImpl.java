@@ -40,6 +40,8 @@ import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
 import org.hisp.dhis.client.sdk.models.program.Program;
 import org.hisp.dhis.client.sdk.models.program.ProgramStage;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +50,7 @@ import java.util.Set;
 import rx.Observable;
 
 public class EventInteractorImpl implements EventInteractor {
+    public static final String AMERICAN_DATE_FORMAT = "yyyy-MM-dd";
     private final EventService eventService;
     private final EventController eventController;
 
@@ -89,18 +92,15 @@ public class EventInteractorImpl implements EventInteractor {
     }
 
     @Override
-    public Observable<Map<Event,ImportSummary>> push(final Set<String> uids) {
-        return Observable.create(new DefaultOnSubscribe<Map<Event,ImportSummary>>() {
+    public Observable<Map<String,ImportSummary>> push(final Set<String> uids) {
+        return Observable.create(new DefaultOnSubscribe<Map<String,ImportSummary>>() {
             @Override
-            public Map<Event,ImportSummary> call() {
-                Map<Event,ImportSummary> importSumariesAndEventsMap = new HashMap<Event,
-                        ImportSummary>();
-
+            public Map<String,ImportSummary> call() {
+                Map<String,ImportSummary> importSumariesAndEventsMap = new HashMap<String, ImportSummary>();
                 List<ImportSummary> importSummaries = eventController.push(uids);
-                List<Event> events = eventService.list(uids);
                 for(ImportSummary importSummary:importSummaries){
-                    for(Event event:events){
-                        if(importSummary.getReference().equals(event.getUId())){
+                    for(String event:uids){
+                        if(importSummary.getReference().equals(event)){
                             importSumariesAndEventsMap.put(event,importSummary);
                         }
                     }
@@ -112,7 +112,7 @@ public class EventInteractorImpl implements EventInteractor {
 
     @Override
     public Event create(OrganisationUnit organisationUnit, Program program,
-                        ProgramStage programStage, Event.EventStatus status) {
+            ProgramStage programStage, Event.EventStatus status) {
         return eventService.create(organisationUnit, program, programStage, status);
     }
 
@@ -187,6 +187,13 @@ public class EventInteractorImpl implements EventInteractor {
     }
 
     @Override
+    public Observable<List<Event>> pull(final OrganisationUnit organisationUnit,
+            final Program program) {
+        return pull(organisationUnit.getUId(), program.getUId());
+    }
+
+
+    @Override
     public Observable<List<Event>> pull(final String organisationUnit,
             final String program) {
         return Observable.create(new DefaultOnSubscribe<List<Event>>() {
@@ -199,26 +206,113 @@ public class EventInteractorImpl implements EventInteractor {
     }
 
     @Override
-    public Observable<List<Event>> pull(final OrganisationUnit organisationUnit,
-            final Program program) {
+    public Observable<List<Event>> pull(final String organisationUnit,
+            final String program,
+            final int maxEvents) {
         return Observable.create(new DefaultOnSubscribe<List<Event>>() {
             @Override
             public List<Event> call() {
-                eventController.pull(organisationUnit.getUId(), program.getUId());
+                eventController.pull(organisationUnit, program, maxEvents);
                 return eventService.list();
             }
         });
     }
 
     @Override
+    public Observable<List<Event>> pull(final String organisationUnit,
+            final String program, final String startDate, final int maxEvents) {
+        return Observable.create(new DefaultOnSubscribe<List<Event>>() {
+            @Override
+            public List<Event> call() {
+                eventController.pull(organisationUnit, program, startDate, maxEvents);
+                return eventService.list();
+            }
+        });
+    }
+
+    @Override
+    public Observable<List<Event>> pull(final String organisationUnit,
+            final String program, final String startDate, final String endDate,
+            final int maxEvents) {
+        return Observable.create(new DefaultOnSubscribe<List<Event>>() {
+            @Override
+            public List<Event> call() {
+                eventController.pull(organisationUnit, program, startDate, endDate, maxEvents);
+                return eventService.list();
+            }
+        });
+    }
+
+    @Override
+    public Observable<List<Event>> pull(final OrganisationUnit organisationUnit,
+            final Program program, final int maxEvents) {
+        if (maxEvents > 0) {
+            return pull(organisationUnit.getUId(), program.getUId(), maxEvents);
+        } else {
+            return pull(organisationUnit.getUId(), program.getUId());
+        }
+    }
+
+    @Override
     public Observable<List<Event>> list(final OrganisationUnit organisationUnit,
-                                        final Program program) {
+            final Program program) {
         return Observable.create(new DefaultOnSubscribe<List<Event>>() {
             @Override
             public List<Event> call() {
                 return eventService.list(organisationUnit, program);
             }
         });
+    }
+
+    @Override
+    public Observable<List<Event>> pull(final OrganisationUnit organisationUnit,
+            final Program program, final Date startDate, final int maxEvents) {
+        return pull(organisationUnit.getUId(), program.getUId(), startDate, maxEvents);
+    }
+
+    @Override
+    public Observable<List<Event>> pull(final String organisationUnit, final String program,
+            final Date startDate,
+            final int maxEvents) {
+        if (startDate == null && maxEvents <= 0) {
+            return pull(organisationUnit, program);
+        } else {
+            SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(AMERICAN_DATE_FORMAT);
+            return pull(organisationUnit, program,
+                    DATE_FORMAT.format(startDate),
+                    maxEvents);
+        }
+    }
+
+    @Override
+    public Observable<List<Event>> pull(final String organisationUnit, final String program,
+            final Date startDate,
+            final Date endDate, final int maxEvents) {
+        if (endDate == null) {
+            return pull(organisationUnit, program,
+                    startDate,
+                    maxEvents);
+        } else if (startDate == null) {
+            return pull(organisationUnit, program, maxEvents);
+        } else {
+            return Observable.create(new DefaultOnSubscribe<List<Event>>() {
+                @Override
+                public List<Event> call() {
+                    SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(AMERICAN_DATE_FORMAT);
+                    pull(organisationUnit, program,
+                            DATE_FORMAT.format(startDate), DATE_FORMAT.format(endDate),
+                            maxEvents);
+                    return eventService.list();
+                }
+            });
+        }
+    }
+
+    @Override
+    public Observable<List<Event>> pull(final OrganisationUnit organisationUnit,
+            final Program program, final Date startDate, final Date endDate,
+            final int maxEvents) {
+        return pull(organisationUnit.getUId(), program.getUId(), startDate, endDate, maxEvents);
     }
 
     @Override
