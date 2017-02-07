@@ -47,4 +47,12 @@ public interface EventApiClient {
     ApiMessage postEvents(List<Event> events) throws ApiException;
 
     ApiMessage deleteEvent(Event event) throws ApiException;
+
+    List<Event> getEvents(Fields all, String organisationUnit, String program, int maxEvents);
+
+    List<Event> getEvents(Fields all, String organisationUnit, String program, String startDate,
+            int maxEvents);
+
+    List<Event> getEvents(Fields all, String organisationUnit, String program, String startDate,
+            String endDate, int maxEvents);
 }

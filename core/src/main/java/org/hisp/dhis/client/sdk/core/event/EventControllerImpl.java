@@ -166,6 +166,44 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
 
         List<Event> updatedEvents = eventApiClient.getEvents(
                 Fields.ALL, organisationUnit, program);
+        saveEvents(serverTime, updatedEvents);
+    }
+
+    @Override
+    public void pull(String organisationUnit, String program, int maxEvents)
+            throws ApiException {
+
+        DateTime serverTime = systemInfoController.getSystemInfo().getServerDate();
+
+        List<Event> updatedEvents = eventApiClient.getEvents(
+                Fields.ALL, organisationUnit, program, maxEvents);
+        saveEvents(serverTime, updatedEvents);
+    }
+
+    @Override
+    public void pull(String organisationUnit, String program, String startDate, int maxEvents)
+            throws ApiException {
+
+        DateTime serverTime = systemInfoController.getSystemInfo().getServerDate();
+
+        List<Event> updatedEvents = eventApiClient.getEvents(
+                Fields.ALL, organisationUnit, program, startDate, maxEvents);
+        saveEvents(serverTime, updatedEvents);
+    }
+
+    @Override
+    public void pull(String organisationUnit, String program, String startDate, String endDate,
+            int maxEvents) throws ApiException {
+
+        DateTime serverTime = systemInfoController.getSystemInfo().getServerDate();
+
+        List<Event> updatedEvents = eventApiClient.getEvents(
+                Fields.ALL, organisationUnit, program, startDate, endDate, maxEvents);
+
+        saveEvents(serverTime, updatedEvents);
+    }
+
+    private void saveEvents(DateTime serverTime, List<Event> updatedEvents) {
         for(Event updateEvent : updatedEvents){
             List<TrackedEntityDataValue> updatedDataValues = new ArrayList<>();
             for(TrackedEntityDataValue trackedEntityDataValue : updateEvent.getDataValues())

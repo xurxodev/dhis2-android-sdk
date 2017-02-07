@@ -1,8 +1,14 @@
 package org.hisp.dhis.client.sdk.android.event;
 
+import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.call;
+import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.unwrap;
+
+import android.support.annotation.NonNull;
+
 import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.core.common.network.ApiMessage;
+import org.hisp.dhis.client.sdk.models.event.EventWrapper;
 import org.hisp.dhis.client.sdk.core.common.utils.CollectionUtils;
 import org.hisp.dhis.client.sdk.core.event.EventApiClient;
 import org.hisp.dhis.client.sdk.models.event.Event;
@@ -14,9 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.call;
-import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.unwrap;
-
 public class EventApiClientImpl implements EventApiClient {
     private final EventApiClientRetrofit eventApiclientRetrofit;
 
@@ -25,33 +28,79 @@ public class EventApiClientImpl implements EventApiClient {
     }
 
     @Override
-    public List<Event> getEvents(Fields fields, String organisationUnit, String program) throws ApiException {
+    public List<Event> getEvents(Fields fields, String organisationUnit, String program)
+            throws ApiException {
+        Map<String, String> queryMap = new HashMap<>();
+
+        addBasicFilters(organisationUnit, program, 0, queryMap);
+
+        addCommonFields(fields, queryMap);
+
+        return callEvents(queryMap);
+    }
+
+
+    @Override
+    public List<Event> getEvents(Fields fields, String organisationUnit, String program,
+            int maxEvents) {
         Map<String, String> queryMap = new HashMap<>();
 
         //filter by org unit
-        queryMap.put("orgUnit",organisationUnit );
+        addBasicFilters(organisationUnit, program, maxEvents, queryMap);
+
+        addCommonFields(fields, queryMap);
+
+        return callEvents(queryMap);
+    }
+
+    @Override
+    public List<Event> getEvents(Fields fields, String organisationUnit, String program,
+            String startDate, int maxEvents) {
+        Map<String, String> queryMap = new HashMap<>();
+
+        //filter by org unit
+        addBasicFilters(organisationUnit, program, maxEvents, queryMap);
+
+        //filter by startDate
+        queryMap.put("startDate", startDate);
+
+        addCommonFields(fields, queryMap);
+
+        return callEvents(queryMap);
+    }
+
+    @Override
+    public List<Event> getEvents(Fields fields, String organisationUnit, String program,
+            String startDate, String endDate, int maxEvents) {
+        Map<String, String> queryMap = new HashMap<>();
+        addBasicFilters(organisationUnit, program, maxEvents, queryMap);
+
+
+        //filter by startDate
+        queryMap.put("startDate", startDate);
+
+        //filter by endDate
+        queryMap.put("endDate", endDate);
+
+        addCommonFields(fields, queryMap);
+
+        return callEvents(queryMap);
+    }
+
+    private void addBasicFilters(String organisationUnit, String program, int maxEvents,
+            Map<String, String> queryMap) {
+        //filter by org unit
+        queryMap.put("orgUnit", organisationUnit);
         //filter by program
-        queryMap.put("program",program);
-        /* disable paging */
-        queryMap.put("skipPaging", "true");
+        queryMap.put("program", program);
 
-        switch (fields) {
-            case BASIC: {
-                queryMap.put("fields", "event");
-                break;
-            }
-            case ALL: {
-                queryMap.put("fields", "event,name,displayName,created,lastUpdated,access," +
-                        "program,programStage,status,orgUnit,eventDate,dueDate," +
-                        "coordinate,dataValues");
-                break;
-            }
+        //filter the number of events
+        if (maxEvents > 0) {
+            queryMap.put("maxEvents", String.valueOf(maxEvents));
+        } else {
+            /* disable paging */
+            queryMap.put("skipPaging", "true");
         }
-
-        List<Event> allEvents = new ArrayList<>();
-        allEvents.addAll(unwrap(call(
-                eventApiclientRetrofit.getEvents(queryMap)), "events"));
-        return allEvents;
     }
 
     @Override
@@ -60,26 +109,16 @@ public class EventApiClientImpl implements EventApiClient {
 
         Map<String, String> queryMap = new HashMap<>();
 
-        /* disable paging */
-        queryMap.put("skipPaging", "true");
-
         /* filter programs by lastUpdated field */
         if (lastUpdated != null) {
             queryMap.put("lastUpdated", lastUpdated.toString());
         }
 
-        switch (fields) {
-            case BASIC: {
-                queryMap.put("fields", "event");
-                break;
-            }
-            case ALL: {
-                queryMap.put("fields", "event,name,displayName,created,lastUpdated,access," +
-                        "program,programStage,status,orgUnit,eventDate,dueDate," +
-                        "coordinate,dataValues");
-                break;
-            }
-        }
+
+        /* disable paging */
+        queryMap.put("skipPaging", "true");
+
+        addCommonFields(fields, queryMap);
 
         List<Event> allEvents = new ArrayList<>();
         if (uids != null && !uids.isEmpty()) {
@@ -127,5 +166,32 @@ public class EventApiClientImpl implements EventApiClient {
         }
 
         return idFilters;
+    }
+
+
+    private void addCommonFields(Fields fields, Map<String, String> queryMap) {
+
+        switch (fields) {
+            case BASIC: {
+                queryMap.put("fields", "event");
+                break;
+            }
+            case ALL: {
+                queryMap.put("fields", "event,name,displayName,created,lastUpdated,access," +
+                        "program,programStage,status,orgUnit,eventDate,dueDate," +
+                        "coordinate,dataValues");
+                break;
+            }
+        }
+    }
+
+
+    @NonNull
+    private List<Event> callEvents(Map<String, String> queryMap) {
+        EventWrapper response = call(
+                eventApiclientRetrofit.getEventsAndPager(queryMap));
+        List<Event> allEvents = new ArrayList<>();
+        allEvents.addAll(response.getEvents());
+        return allEvents;
     }
 }
