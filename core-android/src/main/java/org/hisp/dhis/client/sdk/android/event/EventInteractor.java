@@ -94,7 +94,7 @@ public interface EventInteractor {
 
     Observable<List<Event>> pull(OrganisationUnit organisationUnit, Program program, Date startDate, Date endDate, int maxEvents);
 
-    Observable<Map<Event,ImportSummary>> push(Set<String> uids);
+    Observable<Map<String,ImportSummary>> push(Set<String> uids);
 
     Observable<List<Event>> sync(Set<String> uids);
 

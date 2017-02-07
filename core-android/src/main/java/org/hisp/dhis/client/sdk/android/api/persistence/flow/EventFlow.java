@@ -38,7 +38,7 @@ import org.hisp.dhis.client.sdk.models.common.Coordinates;
 import org.hisp.dhis.client.sdk.models.event.Event;
 import org.hisp.dhis.client.sdk.models.event.Event.EventStatus;
 import org.joda.time.DateTime;
-
+import org.hisp.dhis.client.sdk.core.common.utils.CodeGenerator;
 @Table(database = DbDhis.class)
 public final class EventFlow extends BaseIdentifiableObjectFlow {
     public static final Mapper<Event, EventFlow> MAPPER = new EventMapper();
@@ -69,6 +69,11 @@ public final class EventFlow extends BaseIdentifiableObjectFlow {
 
     public EventFlow() {
         // explicit empty constructor
+    }
+
+    public String generateUId(){
+        uId=CodeGenerator.generateCode();
+        return uId;
     }
 
     public EventStatus getStatus() {

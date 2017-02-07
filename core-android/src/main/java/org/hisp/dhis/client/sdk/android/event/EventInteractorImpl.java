@@ -92,19 +92,16 @@ public class EventInteractorImpl implements EventInteractor {
     }
 
     @Override
-    public Observable<Map<Event, ImportSummary>> push(final Set<String> uids) {
-        return Observable.create(new DefaultOnSubscribe<Map<Event, ImportSummary>>() {
+    public Observable<Map<String,ImportSummary>> push(final Set<String> uids) {
+        return Observable.create(new DefaultOnSubscribe<Map<String,ImportSummary>>() {
             @Override
-            public Map<Event, ImportSummary> call() {
-                Map<Event, ImportSummary> importSumariesAndEventsMap = new HashMap<Event,
-                        ImportSummary>();
-
+            public Map<String,ImportSummary> call() {
+                Map<String,ImportSummary> importSumariesAndEventsMap = new HashMap<String, ImportSummary>();
                 List<ImportSummary> importSummaries = eventController.push(uids);
-                List<Event> events = eventService.list(uids);
-                for (ImportSummary importSummary : importSummaries) {
-                    for (Event event : events) {
-                        if (importSummary.getReference().equals(event.getUId())) {
-                            importSumariesAndEventsMap.put(event, importSummary);
+                for(ImportSummary importSummary:importSummaries){
+                    for(String event:uids){
+                        if(importSummary.getReference().equals(event)){
+                            importSumariesAndEventsMap.put(event,importSummary);
                         }
                     }
                 }
