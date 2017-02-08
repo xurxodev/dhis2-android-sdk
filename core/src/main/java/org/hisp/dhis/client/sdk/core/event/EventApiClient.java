@@ -38,8 +38,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface EventApiClient {
-    List<Event> getEvents(
-            Fields fields, String organisationUnit, String program) throws ApiException;
+    List<Event> getEvents(Fields fields, EventFilters eventFilters);
 
     List<Event> getEvents(
             Fields fields, DateTime lastUpdated, Set<String> uids) throws ApiException;
@@ -47,12 +46,4 @@ public interface EventApiClient {
     ApiMessage postEvents(List<Event> events) throws ApiException;
 
     ApiMessage deleteEvent(Event event) throws ApiException;
-
-    List<Event> getEvents(Fields all, String organisationUnit, String program, int maxEvents);
-
-    List<Event> getEvents(Fields all, String organisationUnit, String program, String startDate,
-            int maxEvents);
-
-    List<Event> getEvents(Fields all, String organisationUnit, String program, String startDate,
-            String endDate, int maxEvents);
 }

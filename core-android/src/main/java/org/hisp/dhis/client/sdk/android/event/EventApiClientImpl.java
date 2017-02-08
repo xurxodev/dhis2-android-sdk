@@ -8,10 +8,11 @@ import android.support.annotation.NonNull;
 import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.core.common.network.ApiMessage;
-import org.hisp.dhis.client.sdk.models.event.EventWrapper;
 import org.hisp.dhis.client.sdk.core.common.utils.CollectionUtils;
 import org.hisp.dhis.client.sdk.core.event.EventApiClient;
+import org.hisp.dhis.client.sdk.core.event.EventFilters;
 import org.hisp.dhis.client.sdk.models.event.Event;
+import org.hisp.dhis.client.sdk.models.event.EventWrapper;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -28,79 +29,16 @@ public class EventApiClientImpl implements EventApiClient {
     }
 
     @Override
-    public List<Event> getEvents(Fields fields, String organisationUnit, String program)
+    public List<Event> getEvents(Fields fields, EventFilters eventFilters)
             throws ApiException {
+
         Map<String, String> queryMap = new HashMap<>();
 
-        addBasicFilters(organisationUnit, program, 0, queryMap);
+        addBasicFilters(queryMap, eventFilters);
 
         addCommonFields(fields, queryMap);
 
         return callEvents(queryMap);
-    }
-
-
-    @Override
-    public List<Event> getEvents(Fields fields, String organisationUnit, String program,
-            int maxEvents) {
-        Map<String, String> queryMap = new HashMap<>();
-
-        //filter by org unit
-        addBasicFilters(organisationUnit, program, maxEvents, queryMap);
-
-        addCommonFields(fields, queryMap);
-
-        return callEvents(queryMap);
-    }
-
-    @Override
-    public List<Event> getEvents(Fields fields, String organisationUnit, String program,
-            String startDate, int maxEvents) {
-        Map<String, String> queryMap = new HashMap<>();
-
-        //filter by org unit
-        addBasicFilters(organisationUnit, program, maxEvents, queryMap);
-
-        //filter by startDate
-        queryMap.put("startDate", startDate);
-
-        addCommonFields(fields, queryMap);
-
-        return callEvents(queryMap);
-    }
-
-    @Override
-    public List<Event> getEvents(Fields fields, String organisationUnit, String program,
-            String startDate, String endDate, int maxEvents) {
-        Map<String, String> queryMap = new HashMap<>();
-        addBasicFilters(organisationUnit, program, maxEvents, queryMap);
-
-
-        //filter by startDate
-        queryMap.put("startDate", startDate);
-
-        //filter by endDate
-        queryMap.put("endDate", endDate);
-
-        addCommonFields(fields, queryMap);
-
-        return callEvents(queryMap);
-    }
-
-    private void addBasicFilters(String organisationUnit, String program, int maxEvents,
-            Map<String, String> queryMap) {
-        //filter by org unit
-        queryMap.put("orgUnit", organisationUnit);
-        //filter by program
-        queryMap.put("program", program);
-
-        //filter the number of events
-        if (maxEvents > 0) {
-            queryMap.put("maxEvents", String.valueOf(maxEvents));
-        } else {
-            /* disable paging */
-            queryMap.put("skipPaging", "true");
-        }
     }
 
     @Override
@@ -193,5 +131,44 @@ public class EventApiClientImpl implements EventApiClient {
         List<Event> allEvents = new ArrayList<>();
         allEvents.addAll(response.getEvents());
         return allEvents;
+    }
+
+    private void addBasicFilters(Map<String, String> queryMap, EventFilters eventFilters) {
+
+        if (eventFilters.getOrganisationUnitUId() != null
+                && !eventFilters.getOrganisationUnitUId().isEmpty()) {
+            queryMap.put("orgUnit", eventFilters.getOrganisationUnitUId());
+        }
+
+        if (eventFilters.getProgramUId() != null
+                && !eventFilters.getProgramUId().isEmpty()) {
+            queryMap.put("program", eventFilters.getProgramUId());
+        }
+
+        if (eventFilters.getStartDate() != null
+                && !eventFilters.getStartDate().isEmpty()) {
+            queryMap.put("startDate", eventFilters.getStartDate());
+        }
+
+        if (eventFilters.getStartDate() != null
+                && !eventFilters.getStartDate().isEmpty()) {
+            queryMap.put("endDate", eventFilters.getEndDate());
+        }
+
+        if (eventFilters.getCategoryCombinationAttribute() != null
+                && !eventFilters.getCategoryCombinationAttribute().isEmpty()) {
+            queryMap.put("attributeCc", eventFilters.getCategoryCombinationAttribute());
+        }
+
+        if (eventFilters.getCategoryOptionAttribute() != null
+                && !eventFilters.getCategoryOptionAttribute().isEmpty()) {
+            queryMap.put("attributeCos", eventFilters.getCategoryOptionAttribute());
+        }
+
+        if (eventFilters.getMaxEvents() > 0) {
+            queryMap.put("maxEvents", String.valueOf(eventFilters.getMaxEvents()));
+        } else {
+            queryMap.put("skipPaging", "true");
+        }
     }
 }

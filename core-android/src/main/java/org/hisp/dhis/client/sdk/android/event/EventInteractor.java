@@ -29,6 +29,7 @@
 package org.hisp.dhis.client.sdk.android.event;
 
 import org.hisp.dhis.client.sdk.core.common.controllers.SyncStrategy;
+import org.hisp.dhis.client.sdk.core.event.EventFilters;
 import org.hisp.dhis.client.sdk.models.common.importsummary.ImportSummary;
 import org.hisp.dhis.client.sdk.models.common.state.Action;
 import org.hisp.dhis.client.sdk.models.common.state.State;
@@ -71,28 +72,7 @@ public interface EventInteractor {
 
     Observable<List<Event>> pull(SyncStrategy strategy, Set<String> uids);
 
-    Observable<List<Event>> pull(String organisationUnit, String program);
-
-    Observable<List<Event>> pull(String organisationUnit,
-            String program, String startDate, int maxEvents);
-
-    Observable<List<Event>> pull(String organisationUnit,
-            String program, String startDate, String endDate,
-            int maxEvents);
-
-    Observable<List<Event>> pull(OrganisationUnit organisationUnit, Program program);
-
-    Observable<List<Event>> pull(String organisationUnit, String program, int maxEvents);
-
-    Observable<List<Event>> pull(OrganisationUnit organisationUnit, Program program, int maxEvents);
-
-    Observable<List<Event>> pull(String organisationUnit, String program, Date startDate, int maxEvents);
-
-    Observable<List<Event>> pull(OrganisationUnit organisationUnit, Program program, Date startDate, int maxEvents);
-
-    Observable<List<Event>> pull(String organisationUnit, String program, Date startDate, Date endDate, int maxEvents);
-
-    Observable<List<Event>> pull(OrganisationUnit organisationUnit, Program program, Date startDate, Date endDate, int maxEvents);
+    Observable<List<Event>> pull(final EventFilters eventFilters);
 
     Observable<Map<String,ImportSummary>> push(Set<String> uids);
 

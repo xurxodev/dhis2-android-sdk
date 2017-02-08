@@ -31,6 +31,7 @@ package org.hisp.dhis.client.sdk.android.event;
 import org.hisp.dhis.client.sdk.android.api.utils.DefaultOnSubscribe;
 import org.hisp.dhis.client.sdk.core.common.controllers.SyncStrategy;
 import org.hisp.dhis.client.sdk.core.event.EventController;
+import org.hisp.dhis.client.sdk.core.event.EventFilters;
 import org.hisp.dhis.client.sdk.core.event.EventService;
 import org.hisp.dhis.client.sdk.models.common.importsummary.ImportSummary;
 import org.hisp.dhis.client.sdk.models.common.state.Action;
@@ -87,6 +88,17 @@ public class EventInteractorImpl implements EventInteractor {
             public List<Event> call() {
                 eventController.pull(strategy, uids);
                 return eventService.list(uids);
+            }
+        });
+    }
+
+    @Override
+    public Observable<List<Event>> pull(final EventFilters eventFilters) {
+        return Observable.create(new DefaultOnSubscribe<List<Event>>() {
+            @Override
+            public List<Event> call() {
+                eventController.pull(eventFilters);
+                return eventService.list();
             }
         });
     }
@@ -187,73 +199,6 @@ public class EventInteractorImpl implements EventInteractor {
     }
 
     @Override
-    public Observable<List<Event>> pull(final OrganisationUnit organisationUnit,
-            final Program program) {
-        return pull(organisationUnit.getUId(), program.getUId());
-    }
-
-
-    @Override
-    public Observable<List<Event>> pull(final String organisationUnit,
-            final String program) {
-        return Observable.create(new DefaultOnSubscribe<List<Event>>() {
-            @Override
-            public List<Event> call() {
-                eventController.pull(organisationUnit, program);
-                return eventService.list();
-            }
-        });
-    }
-
-    @Override
-    public Observable<List<Event>> pull(final String organisationUnit,
-            final String program,
-            final int maxEvents) {
-        return Observable.create(new DefaultOnSubscribe<List<Event>>() {
-            @Override
-            public List<Event> call() {
-                eventController.pull(organisationUnit, program, maxEvents);
-                return eventService.list();
-            }
-        });
-    }
-
-    @Override
-    public Observable<List<Event>> pull(final String organisationUnit,
-            final String program, final String startDate, final int maxEvents) {
-        return Observable.create(new DefaultOnSubscribe<List<Event>>() {
-            @Override
-            public List<Event> call() {
-                eventController.pull(organisationUnit, program, startDate, maxEvents);
-                return eventService.list();
-            }
-        });
-    }
-
-    @Override
-    public Observable<List<Event>> pull(final String organisationUnit,
-            final String program, final String startDate, final String endDate,
-            final int maxEvents) {
-        return Observable.create(new DefaultOnSubscribe<List<Event>>() {
-            @Override
-            public List<Event> call() {
-                eventController.pull(organisationUnit, program, startDate, endDate, maxEvents);
-                return eventService.list();
-            }
-        });
-    }
-
-    @Override
-    public Observable<List<Event>> pull(final OrganisationUnit organisationUnit,
-            final Program program, final int maxEvents) {
-        if (maxEvents > 0) {
-            return pull(organisationUnit.getUId(), program.getUId(), maxEvents);
-        } else {
-            return pull(organisationUnit.getUId(), program.getUId());
-        }
-    }
-
-    @Override
     public Observable<List<Event>> list(final OrganisationUnit organisationUnit,
             final Program program) {
         return Observable.create(new DefaultOnSubscribe<List<Event>>() {
@@ -262,57 +207,6 @@ public class EventInteractorImpl implements EventInteractor {
                 return eventService.list(organisationUnit, program);
             }
         });
-    }
-
-    @Override
-    public Observable<List<Event>> pull(final OrganisationUnit organisationUnit,
-            final Program program, final Date startDate, final int maxEvents) {
-        return pull(organisationUnit.getUId(), program.getUId(), startDate, maxEvents);
-    }
-
-    @Override
-    public Observable<List<Event>> pull(final String organisationUnit, final String program,
-            final Date startDate,
-            final int maxEvents) {
-        if (startDate == null && maxEvents <= 0) {
-            return pull(organisationUnit, program);
-        } else {
-            SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(AMERICAN_DATE_FORMAT);
-            return pull(organisationUnit, program,
-                    DATE_FORMAT.format(startDate),
-                    maxEvents);
-        }
-    }
-
-    @Override
-    public Observable<List<Event>> pull(final String organisationUnit, final String program,
-            final Date startDate,
-            final Date endDate, final int maxEvents) {
-        if (endDate == null) {
-            return pull(organisationUnit, program,
-                    startDate,
-                    maxEvents);
-        } else if (startDate == null) {
-            return pull(organisationUnit, program, maxEvents);
-        } else {
-            return Observable.create(new DefaultOnSubscribe<List<Event>>() {
-                @Override
-                public List<Event> call() {
-                    SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(AMERICAN_DATE_FORMAT);
-                    pull(organisationUnit, program,
-                            DATE_FORMAT.format(startDate), DATE_FORMAT.format(endDate),
-                            maxEvents);
-                    return eventService.list();
-                }
-            });
-        }
-    }
-
-    @Override
-    public Observable<List<Event>> pull(final OrganisationUnit organisationUnit,
-            final Program program, final Date startDate, final Date endDate,
-            final int maxEvents) {
-        return pull(organisationUnit.getUId(), program.getUId(), startDate, endDate, maxEvents);
     }
 
     @Override
