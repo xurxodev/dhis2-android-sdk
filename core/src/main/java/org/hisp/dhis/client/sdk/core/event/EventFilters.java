@@ -43,7 +43,8 @@ public class EventFilters {
     }
 
     public void setStartDate(Date startDate) {
-        this.startDate = convertDateToString(startDate);
+        if (startDate != null)
+            this.startDate = convertDateToString(startDate);
     }
 
     public String getEndDate() {
@@ -51,7 +52,8 @@ public class EventFilters {
     }
 
     public void setEndDate(Date endDate) {
-        this.endDate = convertDateToString(endDate);
+        if (endDate != null)
+            this.endDate = convertDateToString(endDate);
     }
 
     public String getCategoryCombinationAttribute() {
@@ -73,7 +75,7 @@ public class EventFilters {
     private String convertDateToString (Date date){
         SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(AMERICAN_DATE_FORMAT);
 
-        return DATE_FORMAT.format(startDate);
+        return DATE_FORMAT.format(date);
     }
 
 }

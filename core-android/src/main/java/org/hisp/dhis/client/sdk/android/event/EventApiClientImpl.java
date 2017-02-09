@@ -150,8 +150,8 @@ public class EventApiClientImpl implements EventApiClient {
             queryMap.put("startDate", eventFilters.getStartDate());
         }
 
-        if (eventFilters.getStartDate() != null
-                && !eventFilters.getStartDate().isEmpty()) {
+        if (eventFilters.getEndDate() != null
+                && !eventFilters.getEndDate().isEmpty()) {
             queryMap.put("endDate", eventFilters.getEndDate());
         }
 
