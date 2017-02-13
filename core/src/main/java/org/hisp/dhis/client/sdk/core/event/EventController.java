@@ -33,8 +33,5 @@ import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.models.event.Event;
 
 public interface EventController extends IdentifiableDataController<Event> {
-    void pull(String organisationUnit, String program) throws ApiException;
-    void pull(String organisationUnit, String program, int maxEvents) throws ApiException;
-    void pull(String organisationUnit, String program, String startDate, int maxEvents) throws ApiException;
-    void pull(String organisationUnit, String program, String startDate, String endDate, int maxEvents) throws ApiException;
+    void pull(EventFilters eventFilters) throws ApiException;
 }

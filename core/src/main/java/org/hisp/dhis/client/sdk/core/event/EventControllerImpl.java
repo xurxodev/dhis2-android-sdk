@@ -160,46 +160,12 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
     }
 
     @Override
-    public void pull(String organisationUnit, String program) throws ApiException {
+    public void pull(EventFilters eventFilters) throws ApiException {
 
         DateTime serverTime = systemInfoController.getSystemInfo().getServerDate();
 
         List<Event> updatedEvents = eventApiClient.getEvents(
-                Fields.ALL, organisationUnit, program);
-        saveEvents(serverTime, updatedEvents);
-    }
-
-    @Override
-    public void pull(String organisationUnit, String program, int maxEvents)
-            throws ApiException {
-
-        DateTime serverTime = systemInfoController.getSystemInfo().getServerDate();
-
-        List<Event> updatedEvents = eventApiClient.getEvents(
-                Fields.ALL, organisationUnit, program, maxEvents);
-        saveEvents(serverTime, updatedEvents);
-    }
-
-    @Override
-    public void pull(String organisationUnit, String program, String startDate, int maxEvents)
-            throws ApiException {
-
-        DateTime serverTime = systemInfoController.getSystemInfo().getServerDate();
-
-        List<Event> updatedEvents = eventApiClient.getEvents(
-                Fields.ALL, organisationUnit, program, startDate, maxEvents);
-        saveEvents(serverTime, updatedEvents);
-    }
-
-    @Override
-    public void pull(String organisationUnit, String program, String startDate, String endDate,
-            int maxEvents) throws ApiException {
-
-        DateTime serverTime = systemInfoController.getSystemInfo().getServerDate();
-
-        List<Event> updatedEvents = eventApiClient.getEvents(
-                Fields.ALL, organisationUnit, program, startDate, endDate, maxEvents);
-
+                Fields.ALL, eventFilters);
         saveEvents(serverTime, updatedEvents);
     }
 
