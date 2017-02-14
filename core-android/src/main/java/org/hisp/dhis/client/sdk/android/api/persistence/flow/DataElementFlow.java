@@ -64,6 +64,9 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
     String formName;
 
     @Column
+    String description;
+
+    @Column
     String numberType;
 
     @Column
@@ -123,6 +126,14 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
 
     public void setFormName(String formName) {
         this.formName = formName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getNumberType() {
@@ -210,6 +221,7 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
             dataElementFlow.setZeroIsSignificant(dataElement.isZeroIsSignificant());
             dataElementFlow.setAggregationOperator(dataElement.getAggregationOperator());
             dataElementFlow.setFormName(dataElement.getFormName());
+            dataElementFlow.setDescription(dataElement.getDescription());
             dataElementFlow.setNumberType(dataElement.getNumberType());
             dataElementFlow.setDomainType(dataElement.getDomainType());
             dataElementFlow.setDimension(dataElement.getDimension());
@@ -247,6 +259,7 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
             dataElement.setAggregationOperator(dataElementFlow.getAggregationOperator());
             dataElement.setFormName(dataElementFlow.getFormName());
             dataElement.setNumberType(dataElementFlow.getNumberType());
+            dataElement.setDescription(dataElementFlow.getDescription());
             dataElement.setDomainType(dataElementFlow.getDomainType());
             dataElement.setDimension(dataElementFlow.getDimension());
             dataElement.setDisplayFormName(dataElementFlow.getDisplayFormName());
