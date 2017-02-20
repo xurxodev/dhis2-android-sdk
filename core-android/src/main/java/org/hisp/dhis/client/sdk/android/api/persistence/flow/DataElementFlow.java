@@ -33,12 +33,17 @@ import com.raizlabs.android.dbflow.annotation.ForeignKey;
 import com.raizlabs.android.dbflow.annotation.ForeignKeyAction;
 import com.raizlabs.android.dbflow.annotation.ForeignKeyReference;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
 import org.hisp.dhis.client.sdk.android.common.AbsMapper;
 import org.hisp.dhis.client.sdk.android.common.Mapper;
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.dataelement.ValueType;
 import org.hisp.dhis.client.sdk.models.dataelement.DataElement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(database = DbDhis.class)
 public final class DataElementFlow extends BaseIdentifiableObjectFlow {
@@ -59,6 +64,9 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
     String formName;
 
     @Column
+    String description;
+
+    @Column
     String numberType;
 
     @Column
@@ -71,6 +79,9 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
     String displayFormName;
 
     @Column
+    String code;
+
+    @Column
     @ForeignKey(
             references = {
                     @ForeignKeyReference(columnName = OPTION_SET_KEY, columnType = String.class,
@@ -79,6 +90,7 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
     )
     OptionSetFlow optionSet;
 
+    List<AttributeValueFlow> attributeValueFlow;
 
     public DataElementFlow() {
         // empty constructor
@@ -114,6 +126,14 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
 
     public void setFormName(String formName) {
         this.formName = formName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getNumberType() {
@@ -156,6 +176,31 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
         this.optionSet = optionSet;
     }
 
+    public List<AttributeValueFlow> getAttributeValueFlow() {
+        if(attributeValueFlow==null){
+            attributeValueFlow = new Select()
+                        .from(AttributeValueFlow.class)
+                        .where(AttributeValueFlow_Table.reference
+                                .is(getUId())).queryList();
+                if(attributeValueFlow==null) return null;
+                    return  attributeValueFlow;
+            }
+        return attributeValueFlow;
+    }
+
+    public void setAttributeValueFlow(
+            List<AttributeValueFlow> attributeValueFlow) {
+        this.attributeValueFlow = attributeValueFlow;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     private static class DataElementMapper extends AbsMapper<DataElement, DataElementFlow> {
 
         @Override
@@ -176,12 +221,22 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
             dataElementFlow.setZeroIsSignificant(dataElement.isZeroIsSignificant());
             dataElementFlow.setAggregationOperator(dataElement.getAggregationOperator());
             dataElementFlow.setFormName(dataElement.getFormName());
+            dataElementFlow.setDescription(dataElement.getDescription());
             dataElementFlow.setNumberType(dataElement.getNumberType());
             dataElementFlow.setDomainType(dataElement.getDomainType());
             dataElementFlow.setDimension(dataElement.getDimension());
             dataElementFlow.setDisplayFormName(dataElement.getDisplayFormName());
             dataElementFlow.setOptionSet(OptionSetFlow.MAPPER
                     .mapToDatabaseEntity(dataElement.getOptionSet()));
+            List<AttributeValueFlow> attributeValueFlows = new ArrayList<>();
+            if(dataElement.getAttributeValues()!=null) {
+                for (AttributeValue attributeValue : dataElement.getAttributeValues()) {
+                    attributeValueFlows.add(AttributeValueFlow.MAPPER
+                            .mapToDatabaseEntity(attributeValue));
+                }
+            dataElementFlow.setAttributeValueFlow(attributeValueFlows);
+            }
+            dataElementFlow.setCode(dataElement.getCode());
             return dataElementFlow;
         }
 
@@ -204,11 +259,24 @@ public final class DataElementFlow extends BaseIdentifiableObjectFlow {
             dataElement.setAggregationOperator(dataElementFlow.getAggregationOperator());
             dataElement.setFormName(dataElementFlow.getFormName());
             dataElement.setNumberType(dataElementFlow.getNumberType());
+            dataElement.setDescription(dataElementFlow.getDescription());
             dataElement.setDomainType(dataElementFlow.getDomainType());
             dataElement.setDimension(dataElementFlow.getDimension());
             dataElement.setDisplayFormName(dataElementFlow.getDisplayFormName());
             dataElement.setOptionSet(OptionSetFlow.MAPPER
                     .mapToModel(dataElementFlow.getOptionSet()));
+            List<AttributeValue> attributeValues = new ArrayList<>();
+            if(dataElement.getAttributeValues() != null) {
+                for (AttributeValueFlow attributeValueFlow : dataElementFlow.getAttributeValueFlow()) {
+
+                    AttributeValue attributeValue = AttributeValueFlow.MAPPER
+                            .mapToModel(attributeValueFlow);
+                    attributeValue.setReferenceUId(dataElementFlow.getUId());
+                    attributeValues.add(attributeValue);
+                }
+                dataElement.setAttributeValues(attributeValues);
+            }
+            dataElement.setCode(dataElementFlow.getCode());
             return dataElement;
         }
 

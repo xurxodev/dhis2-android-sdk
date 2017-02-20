@@ -33,12 +33,17 @@ import com.raizlabs.android.dbflow.annotation.ForeignKey;
 import com.raizlabs.android.dbflow.annotation.ForeignKeyAction;
 import com.raizlabs.android.dbflow.annotation.ForeignKeyReference;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
 import org.hisp.dhis.client.sdk.android.common.AbsMapper;
 import org.hisp.dhis.client.sdk.android.common.Mapper;
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.program.Program;
 import org.hisp.dhis.client.sdk.models.program.ProgramType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(database = DbDhis.class)
 public final class ProgramFlow extends BaseIdentifiableObjectFlow {
@@ -103,6 +108,8 @@ public final class ProgramFlow extends BaseIdentifiableObjectFlow {
 
     @Column
     boolean isAssignedToUser;
+
+    List<AttributeValueFlow> attributeValueFlow;
 
     public ProgramFlow() {
         // empty constructor
@@ -244,6 +251,23 @@ public final class ProgramFlow extends BaseIdentifiableObjectFlow {
         this.isAssignedToUser = isAssignedToUser;
     }
 
+    public List<AttributeValueFlow> getAttributeValueFlow() {
+        if (attributeValueFlow == null) {
+            attributeValueFlow = new Select()
+                    .from(AttributeValueFlow.class)
+                    .where(AttributeValueFlow_Table.reference
+                            .is(getUId())).queryList();
+            if (attributeValueFlow == null) return null;
+            return attributeValueFlow;
+        }
+        return attributeValueFlow;
+    }
+
+    public void setAttributeValueFlow(
+            List<AttributeValueFlow> attributeValueFlow) {
+        this.attributeValueFlow = attributeValueFlow;
+    }
+
     private static class ProgramMapper extends AbsMapper<Program, ProgramFlow> {
 
         @Override
@@ -278,6 +302,14 @@ public final class ProgramFlow extends BaseIdentifiableObjectFlow {
             programFlow.setRelationshipFromA(program.isRelationshipFromA());
             programFlow.setSelectIncidentDatesInFuture(program.isSelectIncidentDatesInFuture());
             programFlow.setIsAssignedToUser(program.isAssignedToUser());
+            List<AttributeValueFlow> attributeValueFlows = new ArrayList<>();
+            if (program.getAttributeValues() != null) {
+                for (AttributeValue attributeValue : program.getAttributeValues()) {
+                    attributeValueFlows.add(AttributeValueFlow.MAPPER
+                            .mapToDatabaseEntity(attributeValue));
+                }
+                programFlow.setAttributeValueFlow(attributeValueFlows);
+            }
             return programFlow;
         }
 
@@ -313,6 +345,17 @@ public final class ProgramFlow extends BaseIdentifiableObjectFlow {
             program.setRelationshipFromA(programFlow.isRelationshipFromA());
             program.setSelectIncidentDatesInFuture(programFlow.isSelectIncidentDatesInFuture());
             program.setIsAssignedToUser(programFlow.isAssignedToUser());
+            List<AttributeValue> attributeValues = new ArrayList<>();
+            if (program.getAttributeValues() != null) {
+                for (AttributeValueFlow attributeValueFlow : programFlow.getAttributeValueFlow()) {
+
+                    AttributeValue attributeValue = AttributeValueFlow.MAPPER
+                            .mapToModel(attributeValueFlow);
+                    attributeValue.setReferenceUId(programFlow.getUId());
+                    attributeValues.add(attributeValue);
+                }
+                program.setAttributeValues(attributeValues);
+            }
             return program;
         }
 

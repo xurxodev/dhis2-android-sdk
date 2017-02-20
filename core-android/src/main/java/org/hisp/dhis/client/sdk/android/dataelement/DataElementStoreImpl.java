@@ -31,6 +31,7 @@ package org.hisp.dhis.client.sdk.android.dataelement;
 import org.hisp.dhis.client.sdk.android.api.persistence.flow.DataElementFlow;
 import org.hisp.dhis.client.sdk.android.common.AbsIdentifiableObjectStore;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementStore;
+import org.hisp.dhis.client.sdk.core.trackedentity.TrackedEntityDataValueStore;
 import org.hisp.dhis.client.sdk.models.dataelement.DataElement;
 
 public final class DataElementStoreImpl extends AbsIdentifiableObjectStore<DataElement, DataElementFlow>

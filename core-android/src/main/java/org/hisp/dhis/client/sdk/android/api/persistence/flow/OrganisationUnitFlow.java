@@ -33,11 +33,16 @@ import com.raizlabs.android.dbflow.annotation.ForeignKey;
 import com.raizlabs.android.dbflow.annotation.ForeignKeyAction;
 import com.raizlabs.android.dbflow.annotation.ForeignKeyReference;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
 import org.hisp.dhis.client.sdk.android.common.AbsMapper;
 import org.hisp.dhis.client.sdk.android.common.Mapper;
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(database = DbDhis.class)
 public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
@@ -50,6 +55,9 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
     int level;
 
     @Column
+    String path;
+
+    @Column
     @ForeignKey(
             references = {
                     @ForeignKeyReference(columnName = ORGANISATION_UNIT_PARENT_KEY,
@@ -60,6 +68,8 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
 
     @Column
     boolean isAssignedToUser;
+
+    private List<AttributeValueFlow> attributeValues;
 
     public OrganisationUnitFlow() {
         // empty constructor
@@ -89,6 +99,31 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
         this.isAssignedToUser = isAssignedToUser;
     }
 
+
+    public List<AttributeValueFlow> getAttributeValueFlow() {
+        if(attributeValues==null) {
+            attributeValues = new Select()
+                    .from(AttributeValueFlow.class)
+                    .where(AttributeValueFlow_Table.reference
+                            .is(getUId())).queryList();
+            if (attributeValues == null) return null;
+        }
+        return attributeValues;
+    }
+
+    public void setAttributeValueFlow(
+            List<AttributeValueFlow> attributeValues) {
+        this.attributeValues = attributeValues;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     private static class OrganisationUnitMapper extends AbsMapper<OrganisationUnit,
             OrganisationUnitFlow> {
 
@@ -113,6 +148,15 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
             organisationUnitFlow.setLevel(organisationUnit.getLevel());
             organisationUnitFlow.setParent(mapToDatabaseEntity(organisationUnit.getParent()));
             organisationUnitFlow.setIsAssignedToUser(organisationUnit.isAssignedToUser());
+            List<AttributeValueFlow> attributeValueFlows = new ArrayList<>();
+            if (organisationUnit.getAttributeValues() != null) {
+                for (AttributeValue attributeValue : organisationUnit.getAttributeValues()) {
+                    attributeValueFlows.add(AttributeValueFlow.MAPPER
+                            .mapToDatabaseEntity(attributeValue));
+                }
+                organisationUnitFlow.setAttributeValueFlow(attributeValueFlows);
+            }
+            organisationUnitFlow.setPath(organisationUnit.getPath());
             return organisationUnitFlow;
         }
 
@@ -133,6 +177,19 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
             organisationUnit.setLevel(organisationUnitFlow.getLevel());
             organisationUnit.setParent(mapToModel(organisationUnitFlow.getParent()));
             organisationUnit.setIsAssignedToUser(organisationUnitFlow.isAssignedToUser());
+            List<AttributeValue> attributeValues = new ArrayList<>();
+            if (organisationUnit.getAttributeValues() != null) {
+                for (AttributeValueFlow attributeValueFlow : organisationUnitFlow
+                        .getAttributeValueFlow()) {
+
+                    AttributeValue attributeValue = AttributeValueFlow.MAPPER
+                            .mapToModel(attributeValueFlow);
+                    attributeValue.setReferenceUId(organisationUnitFlow.getUId());
+                    attributeValues.add(attributeValue);
+                }
+                organisationUnit.setAttributeValues(attributeValues);
+            }
+            organisationUnit.setPath(organisationUnitFlow.getPath());
             return organisationUnit;
         }
 

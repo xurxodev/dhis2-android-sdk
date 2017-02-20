@@ -29,6 +29,7 @@
 package org.hisp.dhis.client.sdk.android.event;
 
 import org.hisp.dhis.client.sdk.core.common.network.ApiMessage;
+import org.hisp.dhis.client.sdk.models.event.EventWrapper;
 import org.hisp.dhis.client.sdk.models.event.Event;
 
 import java.util.List;
@@ -52,4 +53,7 @@ public interface EventApiClientRetrofit {
 
     @GET("events")
     Call<Map<String, List<Event>>> getEvents(@QueryMap Map<String, String> queryMap);
+
+    @GET("events")
+    Call<EventWrapper> getEventsAndPager(@QueryMap Map<String, String> queryMap);
 }

@@ -28,12 +28,20 @@
 
 package org.hisp.dhis.client.sdk.core.user;
 
+import org.hisp.dhis.client.sdk.core.attribute.AttributeValueStore;
 import org.hisp.dhis.client.sdk.core.common.StateStore;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
+import org.hisp.dhis.client.sdk.core.common.persistence.DbOperation;
+import org.hisp.dhis.client.sdk.core.common.persistence.DbOperationImpl;
+import org.hisp.dhis.client.sdk.core.common.persistence.DbUtils;
+import org.hisp.dhis.client.sdk.core.common.persistence.TransactionManager;
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.common.state.Action;
+import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
 import org.hisp.dhis.client.sdk.models.user.UserAccount;
 import org.hisp.dhis.client.sdk.utils.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class UserAccountControllerImpl implements UserAccountController {
@@ -44,12 +52,19 @@ public final class UserAccountControllerImpl implements UserAccountController {
     private final StateStore stateStore;
     private final Logger logger;
 
+    private final AttributeValueStore attributeValueStore;
+    private final TransactionManager transactionManager;
+
     public UserAccountControllerImpl(UserApiClient userApiClient,
                                      UserAccountStore userAccountStore,
+                                     AttributeValueStore attributeValueStore,
+                                     TransactionManager transactionManager,
                                      StateStore stateStore, Logger logger) {
         this.userApiClient = userApiClient;
         this.userAccountStore = userAccountStore;
+        this.attributeValueStore = attributeValueStore;
         this.stateStore = stateStore;
+        this.transactionManager = transactionManager;
         this.logger = logger;
     }
 
@@ -59,6 +74,29 @@ public final class UserAccountControllerImpl implements UserAccountController {
 
         // update userAccount in database
         userAccountStore.save(userAccount);
+
+        saveAttributeValues(userAccount);
+    }
+
+    private void saveAttributeValues(UserAccount userAccount) {
+        ArrayList<AttributeValue> attributeValues = new ArrayList<>();
+
+        if (userAccount.getAttributeValues() != null) {
+            for (AttributeValue attributeValue : userAccount.getAttributeValues()) {
+                attributeValue.setReferenceUId(userAccount.getUId());
+                attributeValue.setItemType(userAccount.getClass().getName());
+                attributeValues.add(attributeValue);
+            }
+        }
+
+        // we will have to perform something similar to what happens in AbsController
+        List<DbOperation> dbOperations =  new ArrayList<>();
+
+        for (AttributeValue attributeValue : attributeValues) {
+            dbOperations.add(DbOperationImpl.with(attributeValueStore)
+                    .insert(attributeValue));
+        }
+        transactionManager.transact(dbOperations);
     }
 
     // it will first check if user was changed, if yes, then try to send

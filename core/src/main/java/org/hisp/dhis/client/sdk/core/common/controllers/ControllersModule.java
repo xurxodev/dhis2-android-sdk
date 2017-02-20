@@ -28,11 +28,13 @@
 
 package org.hisp.dhis.client.sdk.core.common.controllers;
 
+import org.hisp.dhis.client.sdk.core.attribute.AttributeController;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementController;
 import org.hisp.dhis.client.sdk.core.enrollment.EnrollmentController;
 import org.hisp.dhis.client.sdk.core.event.EventController;
 import org.hisp.dhis.client.sdk.core.optionset.OptionSetController;
 import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitController;
+import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitLevelController;
 import org.hisp.dhis.client.sdk.core.program.ProgramController;
 import org.hisp.dhis.client.sdk.core.program.ProgramIndicatorController;
 import org.hisp.dhis.client.sdk.core.program.ProgramRuleActionController;
@@ -47,11 +49,14 @@ import org.hisp.dhis.client.sdk.core.trackedentity.TrackedEntityInstanceControll
 import org.hisp.dhis.client.sdk.core.user.AssignedOrganisationUnitsController;
 import org.hisp.dhis.client.sdk.core.user.AssignedProgramsController;
 import org.hisp.dhis.client.sdk.core.user.UserAccountController;
+import org.hisp.dhis.client.sdk.models.attribute.Attribute;
 
 public interface ControllersModule {
     SystemInfoController getSystemInfoController();
 
     UserAccountController getUserAccountController();
+
+    AttributeController getAttributeController();
 
     ProgramController getProgramController();
 
@@ -60,6 +65,8 @@ public interface ControllersModule {
     ProgramStageSectionController getProgramStageSectionController();
 
     OrganisationUnitController getOrganisationUnitController();
+
+    OrganisationUnitLevelController getOrganisationUnitLevelController();
 
     AssignedProgramsController getAssignedProgramsController();
 

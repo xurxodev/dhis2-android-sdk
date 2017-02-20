@@ -32,6 +32,7 @@ public enum ResourceType {
     SYSTEM_INFO,
 
     ORGANISATION_UNITS,
+    ORGANISATION_UNIT_LEVEL,
     DATA_ELEMENTS,
     OPTION_SETS,
 
@@ -58,4 +59,6 @@ public enum ResourceType {
     TRACKED_ENTITY_INSTANCE,
     RELATIONSHIP_TYPES,
     ENROLLMENTS,
+
+    ATTRIBUTES,
 }

@@ -28,6 +28,8 @@
 
 package org.hisp.dhis.client.sdk.android.api;
 
+import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
+
 import android.content.Context;
 import android.support.annotation.NonNull;
 
@@ -36,6 +38,8 @@ import org.hisp.dhis.client.sdk.android.api.persistence.PersistenceModuleImpl;
 import org.hisp.dhis.client.sdk.android.api.preferences.PreferencesModuleImpl;
 import org.hisp.dhis.client.sdk.android.api.utils.DefaultOnSubscribe;
 import org.hisp.dhis.client.sdk.android.api.utils.LoggerImpl;
+import org.hisp.dhis.client.sdk.android.attributes.AttributeInteractor;
+import org.hisp.dhis.client.sdk.android.attributes.AttributeInteractorImpl;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementInteractor;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementInteractorImpl;
 import org.hisp.dhis.client.sdk.android.enrollment.EnrollmentInteractor;
@@ -46,6 +50,8 @@ import org.hisp.dhis.client.sdk.android.optionset.OptionSetInteractor;
 import org.hisp.dhis.client.sdk.android.optionset.OptionSetInteractorImpl;
 import org.hisp.dhis.client.sdk.android.organisationunit.OrganisationUnitInteractor;
 import org.hisp.dhis.client.sdk.android.organisationunit.OrganisationUnitInteractorImpl;
+import org.hisp.dhis.client.sdk.android.organisationunit.OrganisationUnitLevelInteractor;
+import org.hisp.dhis.client.sdk.android.organisationunit.OrganisationUnitLevelInteractorImpl;
 import org.hisp.dhis.client.sdk.android.organisationunit.UserOrganisationUnitInteractor;
 import org.hisp.dhis.client.sdk.android.organisationunit.UserOrganisationUnitInteractorImpl;
 import org.hisp.dhis.client.sdk.android.program.ProgramIndicatorInteractor;
@@ -93,8 +99,6 @@ import org.hisp.dhis.client.sdk.utils.Logger;
 import okhttp3.OkHttpClient;
 import rx.Observable;
 
-import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
-
 // TODO D2 fails on 500 errors (because of
 // TODO response conversion in NetworkModule)
 // TODO consider handling 403 errors in more general way
@@ -117,6 +121,8 @@ public class D2 {
 
     private final CurrentUserInteractor currentUserInteractor;
     private final OrganisationUnitInteractor organisationUnitInteractor;
+    private final AttributeInteractor attributeInteractor;
+    private final OrganisationUnitLevelInteractor organisationUnitLevelInteractor;
     private final ProgramInteractor programInteractor;
     private final ProgramStageInteractor programStageInteractor;
     private final ProgramStageSectionInteractor programStageSectionInteractor;
@@ -154,6 +160,8 @@ public class D2 {
         if (!isD2Configured) {
             currentUserInteractor = null;
             organisationUnitInteractor = null;
+            attributeInteractor = null;
+            organisationUnitLevelInteractor = null;
             programInteractor = null;
             programStageInteractor = null;
             programStageSectionInteractor = null;
@@ -194,6 +202,11 @@ public class D2 {
                         servicesModule.getOrganisationUnitService(),
                         controllersModule.getAssignedOrganisationUnitsController());
 
+        attributeInteractor = new AttributeInteractorImpl(
+                servicesModule.getAttributeService(),
+                controllersModule.getAttributeController());
+
+
         programInteractor = new ProgramInteractorImpl(
                 servicesModule.getProgramService(),
                 controllersModule.getProgramController());
@@ -229,6 +242,11 @@ public class D2 {
         organisationUnitInteractor = new OrganisationUnitInteractorImpl(
                 servicesModule.getOrganisationUnitService(),
                 controllersModule.getOrganisationUnitController());
+
+        organisationUnitLevelInteractor = new OrganisationUnitLevelInteractorImpl(
+                servicesModule.getOrganisationUnitLevelService(),
+                controllersModule.getOrganisationUnitLevelController()
+        );
 
         eventInteractor = new EventInteractorImpl(
                 servicesModule.getEventService(),
@@ -373,6 +391,10 @@ public class D2 {
         return configuredInstance().currentUserInteractor;
     }
 
+    public static AttributeInteractor attributes() {
+        return configuredInstance().attributeInteractor;
+    }
+
     public static ProgramInteractor programs() {
         return configuredInstance().programInteractor;
     }
@@ -389,6 +411,10 @@ public class D2 {
         return configuredInstance().organisationUnitInteractor;
     }
 
+
+    public static OrganisationUnitLevelInteractor organisationUnitLevels() {
+        return configuredInstance().organisationUnitLevelInteractor;
+    }
     public static ProgramStageDataElementInteractor programStageDataElements() {
         return configuredInstance().programStageDataElementInteractor;
     }

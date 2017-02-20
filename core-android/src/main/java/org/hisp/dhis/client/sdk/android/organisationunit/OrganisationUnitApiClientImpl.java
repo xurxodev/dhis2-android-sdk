@@ -64,13 +64,13 @@ public class OrganisationUnitApiClientImpl implements OrganisationUnitApiClient 
 
             @Override
             public String getBasicProperties() {
-                return "id";
+                return "id,attributeValues[*,attribute[name,displayName,created,lastUpdated,access,id,valueType,code]]";
             }
 
             @Override
             public String getAllProperties() {
-                return "id,name,displayName,created,lastUpdated,access," +
-                        "level,openingDate,programs[id],dataSets[id]";
+                return "id,name,displayName,created,lastUpdated,access,path," +
+                        "level,openingDate,programs[id],dataSets[id],attributeValues[*,attribute[name,displayName,created,lastUpdated,access,id,valueType,code]]";
             }
 
             @Override

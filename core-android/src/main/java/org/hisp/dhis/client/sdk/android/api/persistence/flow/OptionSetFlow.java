@@ -30,11 +30,14 @@ package org.hisp.dhis.client.sdk.android.api.persistence.flow;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
 import org.hisp.dhis.client.sdk.android.common.AbsMapper;
 import org.hisp.dhis.client.sdk.android.common.Mapper;
 import org.hisp.dhis.client.sdk.models.optionset.OptionSet;
+import org.hisp.dhis.client.sdk.android.api.persistence.flow.OptionFlow;
+import org.hisp.dhis.client.sdk.android.api.persistence.flow.OptionFlow_Table;
 
 import java.util.List;
 
@@ -60,11 +63,21 @@ public final class OptionSetFlow extends BaseIdentifiableObjectFlow {
     }
 
     public List<OptionFlow> getOptions() {
+        if(options==null){
+            options = new Select()
+                    .from(OptionFlow.class)
+                    .where(OptionFlow_Table.optionSet
+                            .is(getUid())).queryList();
+        }
         return options;
     }
 
     public void setOptions(List<OptionFlow> options) {
         this.options = options;
+    }
+
+    public String getUid() {
+        return getUId();
     }
 
     private static class OptionSetMapper extends AbsMapper<OptionSet, OptionSetFlow> {

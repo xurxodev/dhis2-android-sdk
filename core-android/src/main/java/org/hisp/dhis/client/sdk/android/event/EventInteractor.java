@@ -29,6 +29,7 @@
 package org.hisp.dhis.client.sdk.android.event;
 
 import org.hisp.dhis.client.sdk.core.common.controllers.SyncStrategy;
+import org.hisp.dhis.client.sdk.core.event.EventFilters;
 import org.hisp.dhis.client.sdk.models.common.importsummary.ImportSummary;
 import org.hisp.dhis.client.sdk.models.common.state.Action;
 import org.hisp.dhis.client.sdk.models.common.state.State;
@@ -37,6 +38,7 @@ import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
 import org.hisp.dhis.client.sdk.models.program.Program;
 import org.hisp.dhis.client.sdk.models.program.ProgramStage;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -70,7 +72,9 @@ public interface EventInteractor {
 
     Observable<List<Event>> pull(SyncStrategy strategy, Set<String> uids);
 
-    Observable<Map<Event,ImportSummary>> push(Set<String> uids);
+    Observable<List<Event>> pull(final EventFilters eventFilters);
+
+    Observable<Map<String,ImportSummary>> push(Set<String> uids);
 
     Observable<List<Event>> sync(Set<String> uids);
 

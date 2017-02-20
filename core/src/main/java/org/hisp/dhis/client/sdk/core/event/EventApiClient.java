@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.Set;
 
 public interface EventApiClient {
+    List<Event> getEvents(Fields fields, EventFilters eventFilters);
+
     List<Event> getEvents(
             Fields fields, DateTime lastUpdated, Set<String> uids) throws ApiException;
 

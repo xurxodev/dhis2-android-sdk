@@ -35,12 +35,15 @@ import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
 import org.hisp.dhis.client.sdk.android.api.persistence.flow.EventFlow;
+import org.hisp.dhis.client.sdk.android.attributes.AttributeStoreImpl;
+import org.hisp.dhis.client.sdk.android.attributes.AttributeValueStoreImpl;
 import org.hisp.dhis.client.sdk.android.common.StateStoreImpl;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementStoreImpl;
 import org.hisp.dhis.client.sdk.android.enrollment.EnrollmentStoreImpl;
 import org.hisp.dhis.client.sdk.android.event.EventStoreImpl;
 import org.hisp.dhis.client.sdk.android.optionset.OptionSetStoreImpl;
 import org.hisp.dhis.client.sdk.android.optionset.OptionStoreImpl;
+import org.hisp.dhis.client.sdk.android.organisationunit.OrganisationUnitLevelStoreImpl;
 import org.hisp.dhis.client.sdk.android.organisationunit.OrganisationUnitStoreImpl;
 import org.hisp.dhis.client.sdk.android.program.ProgramIndicatorStoreImpl;
 import org.hisp.dhis.client.sdk.android.program.ProgramRuleActionStoreImpl;
@@ -58,6 +61,8 @@ import org.hisp.dhis.client.sdk.android.trackedentity.TrackedEntityDataValueStor
 import org.hisp.dhis.client.sdk.android.trackedentity.TrackedEntityInstanceStoreImpl;
 import org.hisp.dhis.client.sdk.android.trackedentity.TrackedEntityStoreImpl;
 import org.hisp.dhis.client.sdk.android.user.UserAccountStoreImpl;
+import org.hisp.dhis.client.sdk.core.attribute.AttributeStore;
+import org.hisp.dhis.client.sdk.core.attribute.AttributeValueStore;
 import org.hisp.dhis.client.sdk.core.common.StateStore;
 import org.hisp.dhis.client.sdk.core.common.persistence.PersistenceModule;
 import org.hisp.dhis.client.sdk.core.common.persistence.TransactionManager;
@@ -66,6 +71,7 @@ import org.hisp.dhis.client.sdk.core.enrollment.EnrollmentStore;
 import org.hisp.dhis.client.sdk.core.event.EventStore;
 import org.hisp.dhis.client.sdk.core.optionset.OptionSetStore;
 import org.hisp.dhis.client.sdk.core.optionset.OptionStore;
+import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitLevelStore;
 import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitStore;
 import org.hisp.dhis.client.sdk.core.program.ProgramIndicatorStore;
 import org.hisp.dhis.client.sdk.core.program.ProgramRuleActionStore;
@@ -89,6 +95,8 @@ public class PersistenceModuleImpl implements PersistenceModule {
     private final StateStore stateStore;
     private final UserAccountStore userAccountStore;
     private final ProgramStore programStore;
+    private final AttributeStore attributeStore;
+    private final AttributeValueStore attributeValueStore;
     private final ProgramStageStore programStageStore;
     private final ProgramStageSectionStore programStageSectionStore;
     private final ProgramRuleStore programRuleStore;
@@ -98,6 +106,7 @@ public class PersistenceModuleImpl implements PersistenceModule {
     private final TrackedEntityAttributeStore trackedEntityAttributeStore;
     private final ProgramStageDataElementStore programStageDataElementStore;
     private final OrganisationUnitStore organisationUnitStore;
+    private final OrganisationUnitLevelStore organisationUnitLevelStore;
     private final EventStore eventStore;
     private final TrackedEntityDataValueStore trackedEntityDataValueStore;
     private final DataElementStore dataElementStore;
@@ -120,6 +129,8 @@ public class PersistenceModuleImpl implements PersistenceModule {
         transactionManager = new TransactionManagerImpl();
         stateStore = new StateStoreImpl(EventFlow.MAPPER);
         programStore = new ProgramStoreImpl(transactionManager);
+        attributeStore = new AttributeStoreImpl(transactionManager);
+        attributeValueStore = new AttributeValueStoreImpl(transactionManager);
         programStageStore = new ProgramStageStoreImpl(transactionManager);
         programStageSectionStore = new ProgramStageSectionStoreImpl(transactionManager);
         programRuleStore = new ProgramRuleStoreImpl(transactionManager);
@@ -132,6 +143,7 @@ public class PersistenceModuleImpl implements PersistenceModule {
 
         userAccountStore = new UserAccountStoreImpl(stateStore);
         organisationUnitStore = new OrganisationUnitStoreImpl(transactionManager);
+        organisationUnitLevelStore = new OrganisationUnitLevelStoreImpl(transactionManager);
 
         trackedEntityDataValueStore = new TrackedEntityDataValueStoreImpl();
         eventStore = new EventStoreImpl(stateStore, trackedEntityDataValueStore, transactionManager);
@@ -160,6 +172,16 @@ public class PersistenceModuleImpl implements PersistenceModule {
     @Override
     public UserAccountStore getUserAccountStore() {
         return userAccountStore;
+    }
+
+    @Override
+    public AttributeStore getAttributeStore() {
+        return attributeStore;
+    }
+
+    @Override
+    public AttributeValueStore getAttributeValueStore() {
+        return attributeValueStore;
     }
 
     @Override
@@ -210,6 +232,10 @@ public class PersistenceModuleImpl implements PersistenceModule {
     @Override
     public OrganisationUnitStore getOrganisationUnitStore() {
         return organisationUnitStore;
+    }
+    @Override
+    public OrganisationUnitLevelStore getOrganisationUnitLevelStore() {
+        return organisationUnitLevelStore;
     }
 
     @Override
@@ -281,6 +307,7 @@ public class PersistenceModuleImpl implements PersistenceModule {
                 trackedEntityAttributeStore.deleteAll() &&
                 programStageDataElementStore.deleteAll() &&
                 organisationUnitStore.deleteAll() &&
+                organisationUnitLevelStore.deleteAll() &&
                 eventStore.deleteAll() &&
                 trackedEntityDataValueStore.deleteAll() &&
                 dataElementStore.deleteAll() &&
@@ -290,6 +317,8 @@ public class PersistenceModuleImpl implements PersistenceModule {
                 enrollmentStore.deleteAll() &&
                 trackedEntityInstanceStore.deleteAll() &&
                 trackedEntityAttributeValueStore.deleteAll() &&
-                optionSetStore.deleteAll();
+                optionSetStore.deleteAll() &&
+                attributeStore.deleteAll() &&
+                attributeValueStore.deleteAll();
     }
 }

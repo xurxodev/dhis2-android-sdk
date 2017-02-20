@@ -28,10 +28,15 @@
 
 package org.hisp.dhis.client.sdk.models.dataelement;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.common.base.BaseNameableObject;
 import org.hisp.dhis.client.sdk.models.optionset.OptionSet;
+
+import java.util.List;
 
 public final class DataElement extends BaseNameableObject {
 
@@ -61,6 +66,17 @@ public final class DataElement extends BaseNameableObject {
 
     @JsonProperty("optionSet")
     private OptionSet optionSet;
+
+    @JsonIgnore
+    private String optionSetUId;
+
+
+    @JsonProperty("attributeValues")
+    //@JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private List<AttributeValue> attributeValues;
+
+    @JsonProperty("code")
+    private String code;
 
     public ValueType getValueType() {
         return valueType;
@@ -132,5 +148,22 @@ public final class DataElement extends BaseNameableObject {
 
     public void setOptionSet(OptionSet optionSet) {
         this.optionSet = optionSet;
+    }
+
+    public List<AttributeValue> getAttributeValues() {
+        return attributeValues;
+    }
+
+    public void setAttributeValues(
+            List<AttributeValue> attributeValues) {
+        this.attributeValues = attributeValues;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

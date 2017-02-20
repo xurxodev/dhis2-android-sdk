@@ -28,6 +28,10 @@
 
 package org.hisp.dhis.client.sdk.core.common.services;
 
+import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
+
+import org.hisp.dhis.client.sdk.core.attribute.AttributeService;
+import org.hisp.dhis.client.sdk.core.attribute.AttributeServiceImpl;
 import org.hisp.dhis.client.sdk.core.common.persistence.PersistenceModule;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementService;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementServiceImpl;
@@ -37,6 +41,8 @@ import org.hisp.dhis.client.sdk.core.event.EventService;
 import org.hisp.dhis.client.sdk.core.event.EventServiceImpl;
 import org.hisp.dhis.client.sdk.core.optionset.OptionSetService;
 import org.hisp.dhis.client.sdk.core.optionset.OptionSetServiceImpl;
+import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitLevelService;
+import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitLevelServiceImpl;
 import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitService;
 import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitServiceImpl;
 import org.hisp.dhis.client.sdk.core.program.ProgramIndicatorService;
@@ -68,14 +74,14 @@ import org.hisp.dhis.client.sdk.core.trackedentity.TrackedEntityInstanceServiceI
 import org.hisp.dhis.client.sdk.core.user.UserAccountService;
 import org.hisp.dhis.client.sdk.core.user.UserAccountServiceImpl;
 
-import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
-
 public final class ServicesModuleImpl implements ServicesModule {
     private final UserAccountService userAccountService;
     private final ProgramService programService;
+    private final AttributeService attributeService;
     private final ProgramStageService programStageService;
     private final ProgramStageSectionService programStageSectionService;
     private final OrganisationUnitService organisationUnitService;
+    private final OrganisationUnitLevelService organisationUnitLevelService;
     private final EventService eventService;
     private final ProgramStageDataElementService programStageDataElementService;
     private final DataElementService dataElementService;
@@ -97,6 +103,7 @@ public final class ServicesModuleImpl implements ServicesModule {
         userAccountService = new UserAccountServiceImpl(
                 persistenceModule.getUserAccountStore(),
                 persistenceModule.getStateStore());
+        attributeService = new AttributeServiceImpl(persistenceModule.getAttributeStore());
         programService = new ProgramServiceImpl(
                 persistenceModule.getProgramStore());
         programStageService = new ProgramStageServiceImpl(
@@ -123,6 +130,9 @@ public final class ServicesModuleImpl implements ServicesModule {
         organisationUnitService = new OrganisationUnitServiceImpl(
                 persistenceModule.getOrganisationUnitStore());
 
+        organisationUnitLevelService = new OrganisationUnitLevelServiceImpl(
+                persistenceModule.getOrganisationUnitLevelStore());
+
         eventService = new EventServiceImpl(
                 persistenceModule.getEventStore(),
                 persistenceModule.getStateStore());
@@ -143,7 +153,8 @@ public final class ServicesModuleImpl implements ServicesModule {
         enrollmentService = new EnrollmentServiceImpl(persistenceModule.getEnrollmentStore(),
                 persistenceModule.getStateStore(), eventService);
 
-        trackedEntityInstanceService = new TrackedEntityInstanceServiceImpl(persistenceModule.getTrackedEntityInstanceStore(),
+        trackedEntityInstanceService = new TrackedEntityInstanceServiceImpl(
+                persistenceModule.getTrackedEntityInstanceStore(),
                 persistenceModule.getRelationshipStore(),
                 persistenceModule.getStateStore());
 
@@ -161,6 +172,11 @@ public final class ServicesModuleImpl implements ServicesModule {
     }
 
     @Override
+    public AttributeService getAttributeService() {
+        return attributeService;
+    }
+
+    @Override
     public ProgramService getProgramService() {
         return programService;
     }
@@ -168,6 +184,11 @@ public final class ServicesModuleImpl implements ServicesModule {
     @Override
     public OrganisationUnitService getOrganisationUnitService() {
         return organisationUnitService;
+    }
+
+    @Override
+    public OrganisationUnitLevelService getOrganisationUnitLevelService() {
+        return organisationUnitLevelService;
     }
 
     @Override
