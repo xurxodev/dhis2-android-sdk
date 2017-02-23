@@ -61,4 +61,5 @@ public enum ResourceType {
     ENROLLMENTS,
 
     ATTRIBUTES,
+    CATEGORYOPTIONS
 }

@@ -28,13 +28,136 @@
 
 package org.hisp.dhis.client.sdk.android.api.persistence.flow;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.Table;
 
 import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
+import org.hisp.dhis.client.sdk.android.common.AbsMapper;
+import org.hisp.dhis.client.sdk.android.common.Mapper;
+import org.hisp.dhis.client.sdk.models.attribute.Attribute;
+import org.hisp.dhis.client.sdk.models.category.CategoryOption;
 
 @Table(database = DbDhis.class)
-public final class CategoryOptionFlow extends BaseIdentifiableObjectFlow {
+public final class CategoryOptionFlow extends BaseModelFlow {
+
+    public static final Mapper<CategoryOption, CategoryOptionFlow> MAPPER = new CategoryOptionMapper();
 
     public CategoryOptionFlow() {
+    }
+
+    @Column(name = "code")
+    String code;
+
+    @Column(name = "uId")
+    String UId;
+
+    @Column(name = "lastUpdated")
+    String lastUpdated;
+
+    @Column(name = "created")
+    String created;
+
+    @Column(name = "displayName")
+    String displayName;
+
+    @Column(name = "shortName")
+    String shortName;
+
+    public String getCode() {
+        //return code;
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getUId() {
+        return UId;
+    }
+
+    public void setUId(String UId) {
+        this.UId = UId;
+    }
+
+    public String getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(String lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
+
+
+    public static class CategoryOptionMapper  extends AbsMapper<CategoryOption, CategoryOptionFlow> {
+        @Override
+        public CategoryOptionFlow mapToDatabaseEntity(CategoryOption categoryOption) {
+            if (categoryOption == null) {
+                return null;
+            }
+
+            CategoryOptionFlow categoryOptionFlow = new CategoryOptionFlow();
+            categoryOptionFlow.setCode(categoryOption.getCode());
+            categoryOptionFlow.setUId(categoryOption.getUId());
+            categoryOptionFlow.setShortName(categoryOption.getShortName());
+            categoryOptionFlow.setDisplayName(categoryOption.getDisplayName());
+            categoryOptionFlow.setCreated(categoryOption.getCreated());
+            categoryOptionFlow.setLastUpdated(categoryOption.getLastUpdated());
+
+            return categoryOptionFlow;
+        }
+
+        @Override
+        public CategoryOption mapToModel(CategoryOptionFlow categoryOptionFlow) {
+            if (categoryOptionFlow == null) {
+                return null;
+            }
+
+            CategoryOption categoryOption = new CategoryOption();
+            categoryOption.setCode(categoryOptionFlow.getCode());
+            categoryOption.setId(categoryOptionFlow.getId());
+            categoryOption.setUId(categoryOptionFlow.getUId());
+            categoryOption.setShortName(categoryOptionFlow.getShortName());
+            categoryOption.setDisplayName(categoryOptionFlow.getDisplayName());
+            categoryOption.setCreated(categoryOptionFlow.getCreated());
+            categoryOption.setLastUpdated(categoryOptionFlow.getLastUpdated());
+
+            return categoryOption;
+        }
+
+        @Override
+        public Class<CategoryOption> getModelTypeClass() {
+            return CategoryOption.class;
+        }
+
+        @Override
+        public Class<CategoryOptionFlow> getDatabaseEntityTypeClass() {
+            return CategoryOptionFlow.class;
+        }
     }
 }

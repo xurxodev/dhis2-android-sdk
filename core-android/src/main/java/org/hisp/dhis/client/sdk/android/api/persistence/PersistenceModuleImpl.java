@@ -37,6 +37,7 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 import org.hisp.dhis.client.sdk.android.api.persistence.flow.EventFlow;
 import org.hisp.dhis.client.sdk.android.attributes.AttributeStoreImpl;
 import org.hisp.dhis.client.sdk.android.attributes.AttributeValueStoreImpl;
+import org.hisp.dhis.client.sdk.android.categoryoption.CategoryOptionStoreImpl;
 import org.hisp.dhis.client.sdk.android.common.StateStoreImpl;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementStoreImpl;
 import org.hisp.dhis.client.sdk.android.enrollment.EnrollmentStoreImpl;
@@ -63,6 +64,7 @@ import org.hisp.dhis.client.sdk.android.trackedentity.TrackedEntityStoreImpl;
 import org.hisp.dhis.client.sdk.android.user.UserAccountStoreImpl;
 import org.hisp.dhis.client.sdk.core.attribute.AttributeStore;
 import org.hisp.dhis.client.sdk.core.attribute.AttributeValueStore;
+import org.hisp.dhis.client.sdk.core.categoryoption.CategoryOptionStore;
 import org.hisp.dhis.client.sdk.core.common.StateStore;
 import org.hisp.dhis.client.sdk.core.common.persistence.PersistenceModule;
 import org.hisp.dhis.client.sdk.core.common.persistence.TransactionManager;
@@ -118,6 +120,7 @@ public class PersistenceModuleImpl implements PersistenceModule {
     private final TrackedEntityInstanceStore trackedEntityInstanceStore;
     private final RelationshipStore relationshipStore;
     private final TrackedEntityAttributeValueStore trackedEntityAttributeValueStore;
+    private final CategoryOptionStore categoryOptionStore;
 
     public PersistenceModuleImpl(Context context) {
         FlowConfig flowConfig = new FlowConfig
@@ -146,7 +149,8 @@ public class PersistenceModuleImpl implements PersistenceModule {
         organisationUnitLevelStore = new OrganisationUnitLevelStoreImpl(transactionManager);
 
         trackedEntityDataValueStore = new TrackedEntityDataValueStoreImpl();
-        eventStore = new EventStoreImpl(stateStore, trackedEntityDataValueStore, transactionManager);
+        eventStore = new EventStoreImpl(stateStore, trackedEntityDataValueStore,
+                transactionManager);
         trackedEntityStore = new TrackedEntityStoreImpl();
         programTrackedEntityAttributeStore = new ProgramTrackedEntityAttributeStoreImpl();
         enrollmentStore = new EnrollmentStoreImpl(stateStore);
@@ -157,6 +161,8 @@ public class PersistenceModuleImpl implements PersistenceModule {
         relationshipStore = new RelationshipStoreImpl(stateStore);
         trackedEntityAttributeValueStore = new TrackedEntityAttributeValueStoreImpl(stateStore,
                 programStore, programTrackedEntityAttributeStore);
+
+        categoryOptionStore = new CategoryOptionStoreImpl(transactionManager);
     }
 
     @Override
@@ -233,6 +239,7 @@ public class PersistenceModuleImpl implements PersistenceModule {
     public OrganisationUnitStore getOrganisationUnitStore() {
         return organisationUnitStore;
     }
+
     @Override
     public OrganisationUnitLevelStore getOrganisationUnitLevelStore() {
         return organisationUnitLevelStore;
@@ -320,5 +327,10 @@ public class PersistenceModuleImpl implements PersistenceModule {
                 optionSetStore.deleteAll() &&
                 attributeStore.deleteAll() &&
                 attributeValueStore.deleteAll();
+    }
+
+    @Override
+    public CategoryOptionStore getCategoryOptionStore() {
+        return categoryOptionStore;
     }
 }
