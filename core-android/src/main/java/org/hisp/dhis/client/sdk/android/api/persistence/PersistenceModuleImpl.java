@@ -326,7 +326,8 @@ public class PersistenceModuleImpl implements PersistenceModule {
                 trackedEntityAttributeValueStore.deleteAll() &&
                 optionSetStore.deleteAll() &&
                 attributeStore.deleteAll() &&
-                attributeValueStore.deleteAll();
+                attributeValueStore.deleteAll() &&
+                categoryOptionStore.deleteAll();
     }
 
     @Override
