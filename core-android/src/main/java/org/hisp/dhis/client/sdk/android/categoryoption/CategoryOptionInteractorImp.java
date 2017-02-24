@@ -29,4 +29,14 @@ public class CategoryOptionInteractorImp implements CategoryOptionInteractor {
             }
         });
     }
+
+    @Override
+    public Observable<List<CategoryOption>> list() {
+        return Observable.create(new DefaultOnSubscribe<List<CategoryOption>>() {
+            @Override
+            public List<CategoryOption> call() {
+                return categoryOptionService.list();
+            }
+        });
+    }
 }

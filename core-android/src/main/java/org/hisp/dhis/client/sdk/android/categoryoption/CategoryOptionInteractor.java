@@ -8,4 +8,6 @@ import rx.Observable;
 
 public interface CategoryOptionInteractor {
     Observable<List<CategoryOption>> pull();
+
+    Observable<List<CategoryOption>> list();
 }
