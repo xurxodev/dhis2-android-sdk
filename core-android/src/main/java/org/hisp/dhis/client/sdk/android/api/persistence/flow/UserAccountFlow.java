@@ -115,26 +115,8 @@ public final class UserAccountFlow extends BaseModel implements IdentifiableObje
     @Column(name = "apiSortOrder")
     int apiSortOrder;
 
-    List<AttributeValueFlow> attributeValueFlow;
-
     public UserAccountFlow() {
         action = org.hisp.dhis.client.sdk.models.common.state.Action.SYNCED;
-    }
-
-    public List<AttributeValueFlow> getAttributeValueFlow() {
-        if (attributeValueFlow == null) {
-            attributeValueFlow = new Select()
-                    .from(AttributeValueFlow.class)
-                    .where(AttributeValueFlow_Table.reference.is(getUId())).queryList();
-            if (attributeValueFlow == null) return null;
-            return attributeValueFlow;
-        }
-        return attributeValueFlow;
-
-    }
-
-    public void setAttributeValueFlow(List<AttributeValueFlow> attributeValueFlow) {
-        this.attributeValueFlow = attributeValueFlow;
     }
 
     @Override
@@ -352,22 +334,6 @@ public final class UserAccountFlow extends BaseModel implements IdentifiableObje
             flowAccount.setEmail(userAccount.getEmail());
             flowAccount.setPhoneNumber(userAccount.getPhoneNumber());
 
-            List<AttributeValueFlow> attributeValueFlows = new ArrayList<>();
-
-            List<AttributeValue> attributeValues = userAccount.getAttributeValues();
-
-            if (attributeValues != null) {
-                for (AttributeValue attributeValue :attributeValues) {
-                    AttributeValueFlow attributeValueFlow = AttributeValueFlow.MAPPER
-                                    .mapToDatabaseEntity(attributeValue);
-
-                    attributeValueFlow.itemType =  userAccount.getClass().getName();
-
-                    attributeValueFlows.add(attributeValueFlow);
-                }
-                flowAccount.setAttributeValueFlow(attributeValueFlows);
-            }
-
             return flowAccount;
         }
 
@@ -398,21 +364,6 @@ public final class UserAccountFlow extends BaseModel implements IdentifiableObje
             account.setLanguages(flowAccount.getLanguages());
             account.setEmail(flowAccount.getEmail());
             account.setPhoneNumber(flowAccount.getPhoneNumber());
-
-            List<AttributeValue> attributeValues = new ArrayList<>();
-
-            List<AttributeValueFlow> attributeValueFlows = flowAccount.getAttributeValueFlow();
-
-            if (attributeValueFlows != null) {
-                for (AttributeValueFlow attributeValueFlow : attributeValueFlows) {
-
-                    AttributeValue attributeValue = AttributeValueFlow.MAPPER
-                            .mapToModel(attributeValueFlow);
-                    attributeValue.setReferenceUId(flowAccount.getUId());
-                    attributeValues.add(attributeValue);
-                }
-                account.setAttributeValues(attributeValues);
-            }
 
             return account;
         }
