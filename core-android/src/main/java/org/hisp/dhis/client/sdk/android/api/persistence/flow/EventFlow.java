@@ -58,6 +58,9 @@ public final class EventFlow extends BaseIdentifiableObjectFlow {
     @Column(name = "programStage")
     String programStage;
 
+    @Column(name = "attributeCategoryOptions")
+    String attributeCategoryOptions;
+
     @Column(name = "orgUnit")
     String orgUnit;
 
@@ -116,6 +119,14 @@ public final class EventFlow extends BaseIdentifiableObjectFlow {
         this.programStage = programStage;
     }
 
+    public String getAttributeCategoryOptions() {
+        return attributeCategoryOptions;
+    }
+
+    public void setAttributeCategoryOptions(String attributeCategoryOptions) {
+        this.attributeCategoryOptions = attributeCategoryOptions;
+    }
+
     public String getOrgUnit() {
         return orgUnit;
     }
@@ -167,6 +178,7 @@ public final class EventFlow extends BaseIdentifiableObjectFlow {
 
             eventFlow.setProgram(event.getProgram());
             eventFlow.setProgramStage(event.getProgramStage());
+            eventFlow.setAttributeCategoryOptions(event.getAttributeCategoryOptions());
             eventFlow.setOrgUnit(event.getOrgUnit());
             eventFlow.setEventDate(event.getEventDate());
             eventFlow.setDueDate(event.getDueDate());
@@ -198,6 +210,7 @@ public final class EventFlow extends BaseIdentifiableObjectFlow {
 
             event.setProgram(eventFlow.getProgram());
             event.setProgramStage(eventFlow.getProgramStage());
+            event.setAttributeCategoryOptions(eventFlow.getAttributeCategoryOptions());
             event.setOrgUnit(eventFlow.getOrgUnit());
             event.setEventDate(eventFlow.getEventDate());
             event.setDueDate(eventFlow.getDueDate());

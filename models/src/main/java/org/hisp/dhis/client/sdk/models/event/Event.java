@@ -86,6 +86,9 @@ public final class Event extends BaseModel implements IdentifiableObject {
     @JsonProperty("programStage")
     private String programStage;
 
+    @JsonProperty("attributeCategoryOptions")
+    private String attributeCategoryOptions;
+
     @JsonProperty("orgUnit")
     private String orgUnit;
 
@@ -210,6 +213,14 @@ public final class Event extends BaseModel implements IdentifiableObject {
 
     public void setProgramStage(String programStage) {
         this.programStage = programStage;
+    }
+
+    public String getAttributeCategoryOptions() {
+        return attributeCategoryOptions;
+    }
+
+    public void setAttributeCategoryOptions(String attributeCategoryOptions) {
+        this.attributeCategoryOptions = attributeCategoryOptions;
     }
 
     public String getOrgUnit() {
