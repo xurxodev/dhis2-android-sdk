@@ -30,6 +30,7 @@ package org.hisp.dhis.client.sdk.core.common.persistence;
 
 import org.hisp.dhis.client.sdk.core.attribute.AttributeStore;
 import org.hisp.dhis.client.sdk.core.attribute.AttributeValueStore;
+import org.hisp.dhis.client.sdk.core.categoryoption.CategoryOptionStore;
 import org.hisp.dhis.client.sdk.core.common.StateStore;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementStore;
 import org.hisp.dhis.client.sdk.core.enrollment.EnrollmentStore;
@@ -112,4 +113,6 @@ public interface PersistenceModule {
     TrackedEntityAttributeValueStore getTrackedEntityAttributeValueStore();
 
     boolean deleteAllTables();
+
+    CategoryOptionStore getCategoryOptionStore();
 }

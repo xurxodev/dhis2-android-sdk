@@ -29,6 +29,7 @@
 package org.hisp.dhis.client.sdk.core.common.controllers;
 
 import org.hisp.dhis.client.sdk.core.attribute.AttributeController;
+import org.hisp.dhis.client.sdk.core.categoryoption.CategoryOptionController;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementController;
 import org.hisp.dhis.client.sdk.core.enrollment.EnrollmentController;
 import org.hisp.dhis.client.sdk.core.event.EventController;
@@ -93,4 +94,6 @@ public interface ControllersModule {
     TrackedEntityInstanceController getTrackedEntityInstanceController();
 
     EnrollmentController getEnrollmentController();
+
+    CategoryOptionController getCategoryOptionController();
 }

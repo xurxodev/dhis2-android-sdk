@@ -74,29 +74,6 @@ public final class UserAccountControllerImpl implements UserAccountController {
 
         // update userAccount in database
         userAccountStore.save(userAccount);
-
-        saveAttributeValues(userAccount);
-    }
-
-    private void saveAttributeValues(UserAccount userAccount) {
-        ArrayList<AttributeValue> attributeValues = new ArrayList<>();
-
-        if (userAccount.getAttributeValues() != null) {
-            for (AttributeValue attributeValue : userAccount.getAttributeValues()) {
-                attributeValue.setReferenceUId(userAccount.getUId());
-                attributeValue.setItemType(userAccount.getClass().getName());
-                attributeValues.add(attributeValue);
-            }
-        }
-
-        // we will have to perform something similar to what happens in AbsController
-        List<DbOperation> dbOperations =  new ArrayList<>();
-
-        for (AttributeValue attributeValue : attributeValues) {
-            dbOperations.add(DbOperationImpl.with(attributeValueStore)
-                    .insert(attributeValue));
-        }
-        transactionManager.transact(dbOperations);
     }
 
     // it will first check if user was changed, if yes, then try to send

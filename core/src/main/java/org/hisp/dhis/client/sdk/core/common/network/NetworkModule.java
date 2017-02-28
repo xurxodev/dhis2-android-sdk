@@ -29,6 +29,7 @@
 package org.hisp.dhis.client.sdk.core.common.network;
 
 import org.hisp.dhis.client.sdk.core.attribute.AttributeApiClient;
+import org.hisp.dhis.client.sdk.core.categoryoption.CategoryOptionApiClient;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementApiClient;
 import org.hisp.dhis.client.sdk.core.enrollment.EnrollmentApiClient;
 import org.hisp.dhis.client.sdk.core.event.EventApiClient;
@@ -89,4 +90,6 @@ public interface NetworkModule {
     ProgramTrackedEntityAttributeApiClient getProgramTrackedEntityAttributeApiClient();
 
     EnrollmentApiClient getEnrollmentApiClient();
+
+    CategoryOptionApiClient getCategoryOptionApiClient();
 }

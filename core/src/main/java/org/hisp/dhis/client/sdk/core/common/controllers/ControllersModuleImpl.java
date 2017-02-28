@@ -28,10 +28,12 @@
 
 package org.hisp.dhis.client.sdk.core.common.controllers;
 
-import org.hisp.dhis.client.sdk.core.attribute.AttributeController;  
 import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
+
 import org.hisp.dhis.client.sdk.core.attribute.AttributeController;
 import org.hisp.dhis.client.sdk.core.attribute.AttributeControllerImpl;
+import org.hisp.dhis.client.sdk.core.categoryoption.CategoryOptionController;
+import org.hisp.dhis.client.sdk.core.categoryoption.CategoryOptionControllerImpl;
 import org.hisp.dhis.client.sdk.core.common.network.NetworkModule;
 import org.hisp.dhis.client.sdk.core.common.persistence.PersistenceModule;
 import org.hisp.dhis.client.sdk.core.common.preferences.PreferencesModule;
@@ -79,7 +81,6 @@ import org.hisp.dhis.client.sdk.core.user.AssignedProgramsControllerImpl;
 import org.hisp.dhis.client.sdk.core.user.UserAccountController;
 import org.hisp.dhis.client.sdk.core.user.UserAccountControllerImpl;
 import org.hisp.dhis.client.sdk.utils.Logger;
-import org.omg.CORBA.PERSIST_STORE;
 
 public class ControllersModuleImpl implements ControllersModule {
     private final SystemInfoController systemInfoController;
@@ -104,6 +105,7 @@ public class ControllersModuleImpl implements ControllersModule {
     private final TrackedEntityController trackedEntityController;
     private final ProgramTrackedEntityAttributeController programTrackedEntityAttributeController;
     private final EnrollmentController enrollmentController;
+    private final CategoryOptionController categoryOptionController;
 
     public ControllersModuleImpl(NetworkModule networkModule,
             PersistenceModule persistenceModule,
@@ -125,7 +127,7 @@ public class ControllersModuleImpl implements ControllersModule {
                 networkModule.getProgramApiClient(), preferencesModule.getLastUpdatedPreferences(),
                 persistenceModule.getTransactionManager(), logger);
 
-        attributeController =  new AttributeControllerImpl(systemInfoController,
+        attributeController = new AttributeControllerImpl(systemInfoController,
                 persistenceModule.getAttributeStore(), networkModule.getUserApiClient(),
                 networkModule.getAttributeApiClient(),
                 preferencesModule.getLastUpdatedPreferences(),
@@ -189,7 +191,8 @@ public class ControllersModuleImpl implements ControllersModule {
                 preferencesModule.getLastUpdatedPreferences(),
                 persistenceModule.getTransactionManager());
 
-        organisationUnitLevelController = new OrganisationUnitLevelControllerImpl(systemInfoController,
+        organisationUnitLevelController = new OrganisationUnitLevelControllerImpl(
+                systemInfoController,
                 networkModule.getOrganisationUnitLevelApiClient(), networkModule.getUserApiClient(),
                 persistenceModule.getOrganisationUnitLevelStore(),
                 preferencesModule.getLastUpdatedPreferences(),
@@ -282,6 +285,13 @@ public class ControllersModuleImpl implements ControllersModule {
                 persistenceModule.getTransactionManager(),
                 eventController, persistenceModule.getEnrollmentStore(),
                 persistenceModule.getEventStore(), persistenceModule.getStateStore());
+
+        categoryOptionController = new CategoryOptionControllerImpl(systemInfoController,
+                persistenceModule.getCategoryOptionStore(),
+                networkModule.getCategoryOptionApiClient(),
+                preferencesModule.getLastUpdatedPreferences(),
+                persistenceModule.getTransactionManager());
+
     }
 
     @Override
@@ -388,6 +398,11 @@ public class ControllersModuleImpl implements ControllersModule {
     @Override
     public EnrollmentController getEnrollmentController() {
         return null;
+    }
+
+    @Override
+    public CategoryOptionController getCategoryOptionController() {
+        return categoryOptionController;
     }
 
     public TrackedEntityController getTrackedEntityController() {
