@@ -43,6 +43,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import okhttp3.RequestBody;
+import okio.Buffer;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -149,12 +151,31 @@ public class NetworkUtils {
         }
 
         if (!(response.code() >= 200 && response.code() < 300)) {
+
+            String body = bodyToString(response.raw().request().body());
+            System.out.println(body);
+
             throw ApiException.httpError(
                     response.raw().request().url().toString(),
                     ResponseMapper.fromRetrofitResponse(response));
         }
 
         return response.body();
+    }
+
+    private static String bodyToString(final RequestBody request) {
+        try {
+            final RequestBody copy = request;
+            final Buffer buffer = new Buffer();
+            if (copy != null) {
+                copy.writeTo(buffer);
+            } else {
+                return "";
+            }
+            return buffer.readUtf8();
+        } catch (final IOException e) {
+            return "did not work";
+        }
     }
 
     @NonNull
