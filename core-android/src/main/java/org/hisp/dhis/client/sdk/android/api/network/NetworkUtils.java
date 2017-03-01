@@ -154,7 +154,7 @@ public class NetworkUtils {
         if (!(response.code() >= 200 && response.code() < 300)) {
 
             String body = bodyToString(response.raw().request().body());
-            System.out.println("Error >= 200 && <300: " +call.request().url().toString());
+            System.out.println("Error !(>= 200 && <300): " +call.request().url().toString());
             System.out.println(body);
 
             throw ApiException.httpError(
