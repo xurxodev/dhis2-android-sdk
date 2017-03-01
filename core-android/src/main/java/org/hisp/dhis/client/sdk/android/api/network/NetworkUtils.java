@@ -140,6 +140,7 @@ public class NetworkUtils {
 
         try {
             System.out.println(call.request().url().toString());
+            System.out.println("Body" + bodyToString(call.request().body()));
             response = call.execute();
         } catch (IOException ioException) {
             System.out.println("Exception "+call.request().url().toString());
@@ -153,6 +154,7 @@ public class NetworkUtils {
         if (!(response.code() >= 200 && response.code() < 300)) {
 
             String body = bodyToString(response.raw().request().body());
+            System.out.println("Error >= 200 && <300: " +call.request().url().toString());
             System.out.println(body);
 
             throw ApiException.httpError(
