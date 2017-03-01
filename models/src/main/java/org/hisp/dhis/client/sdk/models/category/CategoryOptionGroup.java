@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.common.base.BaseIdentifiableObject;
-import org.hisp.dhis.client.sdk.models.user.User;
 
 import java.util.List;
 
 
 public class CategoryOptionGroup extends BaseIdentifiableObject {
+    @JsonProperty("code")
+    String code;
     @JsonProperty("shortName")
     String shortName;
     @JsonProperty("dataDimensionType")
@@ -30,6 +31,14 @@ public class CategoryOptionGroup extends BaseIdentifiableObject {
     List<AttributeValue> attributeValues;
 
     public CategoryOptionGroup() {
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getShortName() {

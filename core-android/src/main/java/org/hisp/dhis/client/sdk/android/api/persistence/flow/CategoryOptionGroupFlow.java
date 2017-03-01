@@ -13,7 +13,8 @@ public class CategoryOptionGroupFlow extends BaseIdentifiableObjectFlow {
 
     public static final Mapper<CategoryOptionGroup, CategoryOptionGroupFlow> MAPPER =
             new CategoryOptionGroupMapper();
-
+    @Column(name = "code")
+    String code;
     @Column(name = "shortName")
     String shortName;
     @Column(name = "dataDimensionType")
@@ -31,6 +32,14 @@ public class CategoryOptionGroupFlow extends BaseIdentifiableObjectFlow {
 
 
     public CategoryOptionGroupFlow() {
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getShortName() {
@@ -102,6 +111,7 @@ public class CategoryOptionGroupFlow extends BaseIdentifiableObjectFlow {
 
             CategoryOptionGroupFlow categoryOptionGroupFlow = new CategoryOptionGroupFlow();
             categoryOptionGroupFlow.setUId(categoryOptionGroup.getUId());
+            categoryOptionGroupFlow.setCode(categoryOptionGroup.getCode());
             categoryOptionGroupFlow.setName(categoryOptionGroup.getName());
             categoryOptionGroupFlow.setLastUpdated(categoryOptionGroup.getLastUpdated());
             categoryOptionGroupFlow.setShortName(categoryOptionGroup.getShortName());
@@ -127,6 +137,7 @@ public class CategoryOptionGroupFlow extends BaseIdentifiableObjectFlow {
             }
             CategoryOptionGroup categoryOptionGroup = new CategoryOptionGroup();
             categoryOptionGroup.setUId(categoryOptionGroupFlow.getUId());
+            categoryOptionGroup.setCode(categoryOptionGroupFlow.getCode());
             categoryOptionGroup.setName(categoryOptionGroupFlow.getName());
             categoryOptionGroup.setLastUpdated(categoryOptionGroupFlow.getLastUpdated());
             categoryOptionGroup.setShortName(categoryOptionGroupFlow.getShortName());

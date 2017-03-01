@@ -31,7 +31,8 @@ public class CategoryOptionGroupApiClientImpl implements CategoryOptionGroupApiC
 
         ApiResource<CategoryOptionGroup> apiResource = new ApiResource<CategoryOptionGroup>() {
             static final String IDENTIFIABLE_PROPERTIES =
-                    "id,name,displayName,created,lastUpdated,access,shortName,dataDimensionType,"
+                    "id,code,name,displayName,created,lastUpdated,access,shortName,"
+                            + "dataDimensionType,"
                             + "publicAccess,displayShortName,externalAccess,dimensionItem,"
                             + "dimensionItemType,categoryOptions,attributeValues";
 
