@@ -1,19 +1,18 @@
 package org.hisp.dhis.client.sdk.android.categoryoptiongroup;
 
-import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.getCollection;
+import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.call;
 
-import org.hisp.dhis.client.sdk.android.api.network.ApiResource;
 import org.hisp.dhis.client.sdk.core.categoryoptiongroup.CategoryOptionGroupApiClient;
+import org.hisp.dhis.client.sdk.core.categoryoptiongroup.CategoryOptionGroupFilters;
 import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.models.category.CategoryOptionGroup;
-import org.joda.time.DateTime;
+import org.hisp.dhis.client.sdk.models.category.CategoryOptionGroupWrapper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import retrofit2.Call;
 
 
 public class CategoryOptionGroupApiClientImpl implements CategoryOptionGroupApiClient {
@@ -26,47 +25,59 @@ public class CategoryOptionGroupApiClientImpl implements CategoryOptionGroupApiC
     }
 
     @Override
-    public List<CategoryOptionGroup> getCategoryOptionGroups(Fields fields, DateTime lastUpdate,
-            Set<String> uids) throws ApiException {
+    public List<CategoryOptionGroup> getCategoryOptionGroups(Fields fields,
+            CategoryOptionGroupFilters categoryOptionGroupFilters) throws ApiException {
 
-        ApiResource<CategoryOptionGroup> apiResource = new ApiResource<CategoryOptionGroup>() {
-            static final String IDENTIFIABLE_PROPERTIES =
-                    "id,code,name,displayName,created,lastUpdated,access,shortName,"
-                            + "dataDimensionType,"
-                            + "publicAccess,displayShortName,externalAccess,dimensionItem,"
-                            + "dimensionItemType,categoryOptions,attributeValues";
+        Map<String, String> queryMap = new HashMap<>();
+        addFilters(queryMap, categoryOptionGroupFilters);
+        addCommonFields(fields, queryMap);
+        return callCategoryOptionGroups(queryMap);
+    }
 
-            @Override
-            public String getResourceName() {
-                return "categoryOptionGroups";
+
+    private void addFilters(Map<String, String> queryMap,
+            CategoryOptionGroupFilters categoryOptionGroupFilters) {
+
+        if (categoryOptionGroupFilters != null) {
+            if (categoryOptionGroupFilters.getCategoryOptionGroupSetUid() != null
+                    && !categoryOptionGroupFilters.getCategoryOptionGroupSetUid().isEmpty()) {
+                queryMap.put("filter", "categoryOptionGroupSet.id:eq:"
+                        + categoryOptionGroupFilters.getCategoryOptionGroupSetUid());
             }
-
-            @Override
-            public String getBasicProperties() {
-                return "id";
+            if (categoryOptionGroupFilters.getCategoryOptionUid() != null
+                    && !categoryOptionGroupFilters.getCategoryOptionUid().isEmpty()) {
+                queryMap.put("filter", "categoryOptions.id:eq:"
+                        + categoryOptionGroupFilters.getCategoryOptionUid());
             }
+        }
+    }
 
-            @Override
-            public String getAllProperties() {
-                return IDENTIFIABLE_PROPERTIES;
+
+    private void addCommonFields(Fields fields, Map<String, String> queryMap) {
+        switch (fields) {
+            case BASIC: {
+                queryMap.put("fields", "id");
+                break;
             }
-
-            @Override
-            public String getDescendantProperties() {
-                return IDENTIFIABLE_PROPERTIES;
+            case ALL: {
+                queryMap.put("fields",
+                        "id,code,name,displayName,created,lastUpdated,access,shortName,"
+                                + "dataDimensionType,publicAccess,displayShortName,"
+                                + "externalAccess,dimensionItem,dimensionItemType,"
+                                + "categoryOptions,attributeValues");
+                break;
             }
+        }
+    }
 
-            @Override
-            public Call<Map<String, List<CategoryOptionGroup>>> getEntities(
-                    Map<String, String> queryMap,
-                    List<String> filters) throws ApiException {
-                return mCategoryOptionGroupApiClientRetrofit.getCategoryOtionGroups(queryMap);
-            }
-        };
-
-        List<CategoryOptionGroup> categoryOptionGroups = getCollection(apiResource, fields, null,
-                null);
-
+    private List<CategoryOptionGroup> callCategoryOptionGroups(Map<String, String> queryMap) {
+        CategoryOptionGroupWrapper response = call(
+                mCategoryOptionGroupApiClientRetrofit.getCategoryOptionGroups(queryMap));
+        List<CategoryOptionGroup> categoryOptionGroups = new ArrayList<>();
+        categoryOptionGroups.addAll(response.getCategoryOptionGroups());
         return categoryOptionGroups;
     }
+
+
+
 }

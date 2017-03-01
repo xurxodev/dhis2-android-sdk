@@ -39,12 +39,12 @@ public class CategoryOptionGroupControllerImpl implements CategoryOptionGroupCon
     }
 
     @Override
-    public void pull() throws ApiException {
+    public void pull(CategoryOptionGroupFilters categoryOptionGroupFilters) throws ApiException {
 
         DateTime serverTime = mSystemInfoController.getSystemInfo().getServerDate();
         List<CategoryOptionGroup> allCategoryOptionGroups =
                 mCategoryOptionGroupApiClient.getCategoryOptionGroups(
-                        Fields.ALL, null, null);
+                        Fields.ALL, categoryOptionGroupFilters);
 
         List<DbOperation> dbOperations = new ArrayList<>();
         for (CategoryOptionGroup categoryOptionGroup : allCategoryOptionGroups) {

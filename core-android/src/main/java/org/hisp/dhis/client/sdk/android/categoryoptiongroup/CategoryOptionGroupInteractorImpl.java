@@ -2,6 +2,7 @@ package org.hisp.dhis.client.sdk.android.categoryoptiongroup;
 
 import org.hisp.dhis.client.sdk.android.api.utils.DefaultOnSubscribe;
 import org.hisp.dhis.client.sdk.core.categoryoptiongroup.CategoryOptionGroupController;
+import org.hisp.dhis.client.sdk.core.categoryoptiongroup.CategoryOptionGroupFilters;
 import org.hisp.dhis.client.sdk.core.categoryoptiongroup.CategoryOptionGroupService;
 import org.hisp.dhis.client.sdk.models.category.CategoryOptionGroup;
 
@@ -21,11 +22,11 @@ public class CategoryOptionGroupInteractorImpl implements CategoryOptionGroupInt
     }
 
     @Override
-    public Observable<List<CategoryOptionGroup>> pull() {
+    public Observable<List<CategoryOptionGroup>> pull(final CategoryOptionGroupFilters categoryOptionGroupFilters) {
         return Observable.create(new DefaultOnSubscribe<List<CategoryOptionGroup>>() {
             @Override
             public List<CategoryOptionGroup> call() {
-                mCategoryOptionGroupController.pull();
+                mCategoryOptionGroupController.pull(categoryOptionGroupFilters);
                 return mCategoryOptionGroupService.list();
             }
         });

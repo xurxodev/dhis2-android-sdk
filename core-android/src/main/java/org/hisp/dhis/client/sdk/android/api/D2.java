@@ -490,7 +490,7 @@ public class D2 {
         return configuredInstance().categoryOptionInteractor;
     }
 
-    public CategoryOptionGroupInteractor categoryOptionGroups() {
+    public static CategoryOptionGroupInteractor categoryOptionGroups() {
         return configuredInstance().categoryOptionGroupInteractor;
     }
 
