@@ -7,11 +7,11 @@ import org.hisp.dhis.client.sdk.core.common.persistence.TransactionManager;
 import org.hisp.dhis.client.sdk.models.category.CategoryOptionGroup;
 
 
-public class CategoryOptionStoreImpl extends
+public class CategoryOptionGroupStoreImpl extends
         AbsStore<CategoryOptionGroup, CategoryOptionGroupFlow> implements CategoryOptionGroupStore {
     private final TransactionManager mTransactionManager;
 
-    public CategoryOptionStoreImpl(TransactionManager transactionManager) {
+    public CategoryOptionGroupStoreImpl(TransactionManager transactionManager) {
         super(CategoryOptionGroupFlow.MAPPER);
 
         mTransactionManager = transactionManager;

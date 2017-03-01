@@ -34,6 +34,8 @@ import org.hisp.dhis.client.sdk.core.attribute.AttributeController;
 import org.hisp.dhis.client.sdk.core.attribute.AttributeControllerImpl;
 import org.hisp.dhis.client.sdk.core.categoryoption.CategoryOptionController;
 import org.hisp.dhis.client.sdk.core.categoryoption.CategoryOptionControllerImpl;
+import org.hisp.dhis.client.sdk.core.categoryoptiongroup.CategoryOptionGroupController;
+import org.hisp.dhis.client.sdk.core.categoryoptiongroup.CategoryOptionGroupControllerImpl;
 import org.hisp.dhis.client.sdk.core.common.network.NetworkModule;
 import org.hisp.dhis.client.sdk.core.common.persistence.PersistenceModule;
 import org.hisp.dhis.client.sdk.core.common.preferences.PreferencesModule;
@@ -106,6 +108,7 @@ public class ControllersModuleImpl implements ControllersModule {
     private final ProgramTrackedEntityAttributeController programTrackedEntityAttributeController;
     private final EnrollmentController enrollmentController;
     private final CategoryOptionController categoryOptionController;
+    private final CategoryOptionGroupController categoryOptionGroupController;
 
     public ControllersModuleImpl(NetworkModule networkModule,
             PersistenceModule persistenceModule,
@@ -292,6 +295,12 @@ public class ControllersModuleImpl implements ControllersModule {
                 preferencesModule.getLastUpdatedPreferences(),
                 persistenceModule.getTransactionManager());
 
+        categoryOptionGroupController = new CategoryOptionGroupControllerImpl(systemInfoController,
+                networkModule.getCategoryOptionGroupApiClient(),
+                persistenceModule.getCategoryOptionGroupStore(),
+                preferencesModule.getLastUpdatedPreferences(),
+                persistenceModule.getTransactionManager());
+
     }
 
     @Override
@@ -403,6 +412,11 @@ public class ControllersModuleImpl implements ControllersModule {
     @Override
     public CategoryOptionController getCategoryOptionController() {
         return categoryOptionController;
+    }
+
+    @Override
+    public CategoryOptionGroupController getCategoryOptionGroupController() {
+        return categoryOptionGroupController;
     }
 
     public TrackedEntityController getTrackedEntityController() {

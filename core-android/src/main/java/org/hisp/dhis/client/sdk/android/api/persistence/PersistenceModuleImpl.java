@@ -38,6 +38,7 @@ import org.hisp.dhis.client.sdk.android.api.persistence.flow.EventFlow;
 import org.hisp.dhis.client.sdk.android.attributes.AttributeStoreImpl;
 import org.hisp.dhis.client.sdk.android.attributes.AttributeValueStoreImpl;
 import org.hisp.dhis.client.sdk.android.categoryoption.CategoryOptionStoreImpl;
+import org.hisp.dhis.client.sdk.android.categoryoptiongroup.CategoryOptionGroupStoreImpl;
 import org.hisp.dhis.client.sdk.android.common.StateStoreImpl;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementStoreImpl;
 import org.hisp.dhis.client.sdk.android.enrollment.EnrollmentStoreImpl;
@@ -65,6 +66,7 @@ import org.hisp.dhis.client.sdk.android.user.UserAccountStoreImpl;
 import org.hisp.dhis.client.sdk.core.attribute.AttributeStore;
 import org.hisp.dhis.client.sdk.core.attribute.AttributeValueStore;
 import org.hisp.dhis.client.sdk.core.categoryoption.CategoryOptionStore;
+import org.hisp.dhis.client.sdk.core.categoryoptiongroup.CategoryOptionGroupStore;
 import org.hisp.dhis.client.sdk.core.common.StateStore;
 import org.hisp.dhis.client.sdk.core.common.persistence.PersistenceModule;
 import org.hisp.dhis.client.sdk.core.common.persistence.TransactionManager;
@@ -121,6 +123,7 @@ public class PersistenceModuleImpl implements PersistenceModule {
     private final RelationshipStore relationshipStore;
     private final TrackedEntityAttributeValueStore trackedEntityAttributeValueStore;
     private final CategoryOptionStore categoryOptionStore;
+    private final CategoryOptionGroupStore categoryOptionGroupStore;
 
     public PersistenceModuleImpl(Context context) {
         FlowConfig flowConfig = new FlowConfig
@@ -163,6 +166,8 @@ public class PersistenceModuleImpl implements PersistenceModule {
                 programStore, programTrackedEntityAttributeStore);
 
         categoryOptionStore = new CategoryOptionStoreImpl(transactionManager);
+
+        categoryOptionGroupStore = new CategoryOptionGroupStoreImpl(transactionManager);
     }
 
     @Override
@@ -301,6 +306,11 @@ public class PersistenceModuleImpl implements PersistenceModule {
     }
 
     @Override
+    public CategoryOptionGroupStore getCategoryOptionGroupStore() {
+        return categoryOptionGroupStore;
+    }
+
+    @Override
     public boolean deleteAllTables() {
         return stateStore.deleteAll() &&
                 userAccountStore.deleteAll() &&
@@ -327,7 +337,8 @@ public class PersistenceModuleImpl implements PersistenceModule {
                 optionSetStore.deleteAll() &&
                 attributeStore.deleteAll() &&
                 attributeValueStore.deleteAll() &&
-                categoryOptionStore.deleteAll();
+                categoryOptionStore.deleteAll() &&
+                categoryOptionGroupStore.deleteAll();
     }
 
     @Override
