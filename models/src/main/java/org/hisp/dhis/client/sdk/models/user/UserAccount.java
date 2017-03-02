@@ -126,9 +126,6 @@ public class UserAccount implements IdentifiableObject {
     @JsonProperty("organisationUnits")
     List<OrganisationUnit> organisationUnits;
 
-
-    private List<AttributeValue> attributeValues;
-
     public UserAccount() {
         action = Action.SYNCED;
     }
@@ -337,14 +334,5 @@ public class UserAccount implements IdentifiableObject {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public List<AttributeValue> getAttributeValues() {
-        return attributeValues;
-    }
-
-    public void setAttributeValues(
-            List<AttributeValue> attributeValues) {
-        this.attributeValues = attributeValues;
     }
 }

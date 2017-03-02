@@ -38,6 +38,8 @@ import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 import org.hisp.dhis.client.sdk.android.attributes.AttributeApiClientImpl;
 import org.hisp.dhis.client.sdk.android.attributes.AttributeApiClientRetrofit;
+import org.hisp.dhis.client.sdk.android.categoryoption.CategoryOptionApiClientImpl;
+import org.hisp.dhis.client.sdk.android.categoryoption.CategoryOptionApiClientRetrofit;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementApiClientImpl;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementApiClientRetrofit;
 import org.hisp.dhis.client.sdk.android.enrollment.EnrollmentApiClientImpl;
@@ -77,6 +79,7 @@ import org.hisp.dhis.client.sdk.android.trackedentity.TrackedEntityAttributeApiC
 import org.hisp.dhis.client.sdk.android.user.UserAccountApiClientImpl;
 import org.hisp.dhis.client.sdk.android.user.UserApiClientRetrofit;
 import org.hisp.dhis.client.sdk.core.attribute.AttributeApiClient;
+import org.hisp.dhis.client.sdk.core.categoryoption.CategoryOptionApiClient;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.core.common.network.Configuration;
 import org.hisp.dhis.client.sdk.core.common.network.NetworkModule;
@@ -148,6 +151,7 @@ public class NetworkModuleImpl implements NetworkModule {
     private final TrackedEntityApiClient trackedEntityApiClient;
     private final ProgramTrackedEntityAttributeApiClient programTrackedEntityAttributeApiClient;
     private final EnrollmentApiClient enrollmentApiClient;
+    private final CategoryOptionApiClient categoryOptionApiClient;
 
     public NetworkModuleImpl(PreferencesModule preferencesModule, OkHttpClient okClient) {
         AuthInterceptor authInterceptor = new AuthInterceptor(
@@ -231,6 +235,9 @@ public class NetworkModuleImpl implements NetworkModule {
                 retrofit.create(ProgramTrackedEntityAttributeApiClientRetrofit.class));
         enrollmentApiClient = new EnrollmentApiClientImpl(
                 retrofit.create(EnrollmentApiClientRetrofit.class));
+
+        categoryOptionApiClient = new CategoryOptionApiClientImpl(retrofit.create(
+                CategoryOptionApiClientRetrofit.class));
 
     }
 
@@ -332,6 +339,11 @@ public class NetworkModuleImpl implements NetworkModule {
     @Override
     public EnrollmentApiClient getEnrollmentApiClient() {
         return null;
+    }
+
+    @Override
+    public CategoryOptionApiClient getCategoryOptionApiClient() {
+        return categoryOptionApiClient;
     }
 
     private static class AuthInterceptor implements Interceptor {

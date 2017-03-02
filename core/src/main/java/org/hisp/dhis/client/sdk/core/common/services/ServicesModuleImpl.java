@@ -32,6 +32,8 @@ import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
 
 import org.hisp.dhis.client.sdk.core.attribute.AttributeService;
 import org.hisp.dhis.client.sdk.core.attribute.AttributeServiceImpl;
+import org.hisp.dhis.client.sdk.core.categoryoption.CategoryOptionService;
+import org.hisp.dhis.client.sdk.core.categoryoption.CategoryOptionServiceImpl;
 import org.hisp.dhis.client.sdk.core.common.persistence.PersistenceModule;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementService;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementServiceImpl;
@@ -96,6 +98,7 @@ public final class ServicesModuleImpl implements ServicesModule {
     private final TrackedEntityInstanceService trackedEntityInstanceService;
     private final TrackedEntityAttributeValueService trackedEntityAttributeValueService;
     private final ProgramTrackedEntityAttributeService programTrackedEntityAttributeService;
+    private final CategoryOptionService categoryOptionService;
 
     public ServicesModuleImpl(PersistenceModule persistenceModule) {
         isNull(persistenceModule, "persistenceModule must not be null");
@@ -164,6 +167,9 @@ public final class ServicesModuleImpl implements ServicesModule {
 
         programTrackedEntityAttributeService = new ProgramTrackedEntityAttributeServiceImpl(
                 persistenceModule.getProgramTrackedEntityAttributeStore());
+
+        categoryOptionService = new CategoryOptionServiceImpl(
+                persistenceModule.getCategoryOptionStore());
     }
 
     @Override
@@ -268,5 +274,10 @@ public final class ServicesModuleImpl implements ServicesModule {
     @Override
     public ProgramTrackedEntityAttributeService getProgramTrackedEntityAttributeService() {
         return programTrackedEntityAttributeService;
+    }
+
+    @Override
+    public CategoryOptionService getCategoryOptionService() {
+        return categoryOptionService;
     }
 }

@@ -40,6 +40,8 @@ import org.hisp.dhis.client.sdk.android.api.utils.DefaultOnSubscribe;
 import org.hisp.dhis.client.sdk.android.api.utils.LoggerImpl;
 import org.hisp.dhis.client.sdk.android.attributes.AttributeInteractor;
 import org.hisp.dhis.client.sdk.android.attributes.AttributeInteractorImpl;
+import org.hisp.dhis.client.sdk.android.categoryoption.CategoryOptionInteractor;
+import org.hisp.dhis.client.sdk.android.categoryoption.CategoryOptionInteractorImp;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementInteractor;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementInteractorImpl;
 import org.hisp.dhis.client.sdk.android.enrollment.EnrollmentInteractor;
@@ -94,6 +96,7 @@ import org.hisp.dhis.client.sdk.core.common.persistence.PersistenceModule;
 import org.hisp.dhis.client.sdk.core.common.preferences.PreferencesModule;
 import org.hisp.dhis.client.sdk.core.common.services.ServicesModule;
 import org.hisp.dhis.client.sdk.core.common.services.ServicesModuleImpl;
+import org.hisp.dhis.client.sdk.models.category.CategoryOption;
 import org.hisp.dhis.client.sdk.utils.Logger;
 
 import okhttp3.OkHttpClient;
@@ -140,6 +143,7 @@ public class D2 {
     private final TrackedEntityInstanceInteractor trackedEntityInstanceInteractor;
     private final TrackedEntityAttributeValueInteractor trackedEntityAttributeValueInteractor;
     private final ProgramTrackedEntityAttributeInteractor programTrackedEntityAttributeInteractor;
+    private final CategoryOptionInteractor categoryOptionInteractor;
     //-----------------------------------------------------------------------------------------
     // Utilities
     //-----------------------------------------------------------------------------------------
@@ -180,6 +184,7 @@ public class D2 {
             trackedEntityAttributeValueInteractor = null;
             programTrackedEntityAttributeInteractor = null;
             logger = null;
+            categoryOptionInteractor = null;
             return;
         }
 
@@ -288,6 +293,9 @@ public class D2 {
 
         optionSetInteractor = new OptionSetInteractorImpl(
                 servicesModule.getOptionSetService());
+
+        categoryOptionInteractor = new CategoryOptionInteractorImp(servicesModule.getCategoryOptionService(),
+                controllersModule.getCategoryOptionController());
 
         logger = flavor.getLogger();
     }
@@ -469,6 +477,10 @@ public class D2 {
 
     public static ProgramTrackedEntityAttributeInteractor programTrackedEntityAttributes() {
         return configuredInstance().programTrackedEntityAttributeInteractor;
+    }
+
+    public static CategoryOptionInteractor categoryOptions() {
+        return configuredInstance().categoryOptionInteractor;
     }
 
     public static Logger logger() {
