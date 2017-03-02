@@ -10,9 +10,7 @@ import org.hisp.dhis.client.sdk.models.category.CategoryOptionGroup;
 import org.hisp.dhis.client.sdk.models.category.CategoryOptionGroupWrapper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class CategoryOptionGroupApiClientImpl implements CategoryOptionGroupApiClient {
@@ -28,51 +26,57 @@ public class CategoryOptionGroupApiClientImpl implements CategoryOptionGroupApiC
     public List<CategoryOptionGroup> getCategoryOptionGroups(Fields fields,
             CategoryOptionGroupFilters categoryOptionGroupFilters) throws ApiException {
 
-        Map<String, String> queryMap = new HashMap<>();
-        addFilters(queryMap, categoryOptionGroupFilters);
-        addCommonFields(fields, queryMap);
-        return callCategoryOptionGroups(queryMap);
+        String fieldsStr = addCommonFields(fields);
+        String categoryOptionGroupSetUid = gatCategoryOptionSetUid(categoryOptionGroupFilters);
+        String categoryOptionUid = gatCategoryOptionUid(categoryOptionGroupFilters);
+        return callCategoryOptionGroups(fieldsStr, categoryOptionGroupSetUid, categoryOptionUid);
     }
 
 
-    private void addFilters(Map<String, String> queryMap,
-            CategoryOptionGroupFilters categoryOptionGroupFilters) {
-
+    private String gatCategoryOptionSetUid(CategoryOptionGroupFilters categoryOptionGroupFilters) {
         if (categoryOptionGroupFilters != null) {
             if (categoryOptionGroupFilters.getCategoryOptionGroupSetUid() != null
                     && !categoryOptionGroupFilters.getCategoryOptionGroupSetUid().isEmpty()) {
-                queryMap.put("filter", "categoryOptionGroupSet.id:eq:"
-                        + categoryOptionGroupFilters.getCategoryOptionGroupSetUid());
+                return "categoryOptionGroupSet.id:eq:"
+                        + categoryOptionGroupFilters.getCategoryOptionGroupSetUid();
             }
+        }
+        return "";
+    }
+
+    private String gatCategoryOptionUid(CategoryOptionGroupFilters categoryOptionGroupFilters) {
+        if (categoryOptionGroupFilters != null) {
             if (categoryOptionGroupFilters.getCategoryOptionUid() != null
                     && !categoryOptionGroupFilters.getCategoryOptionUid().isEmpty()) {
-                queryMap.put("filter", "categoryOptions.id:eq:"
-                        + categoryOptionGroupFilters.getCategoryOptionUid());
+                return "categoryOptions.id:eq:"
+                        + categoryOptionGroupFilters.getCategoryOptionUid();
             }
         }
+        return "";
     }
 
 
-    private void addCommonFields(Fields fields, Map<String, String> queryMap) {
+    private String addCommonFields(Fields fields) {
         switch (fields) {
             case BASIC: {
-                queryMap.put("fields", "id");
-                break;
+                return "id";
             }
             case ALL: {
-                queryMap.put("fields",
-                        "id,code,name,displayName,created,lastUpdated,access,shortName,"
+                return "id,code,name,displayName,created,lastUpdated,access,shortName,"
                                 + "dataDimensionType,publicAccess,displayShortName,"
                                 + "externalAccess,dimensionItem,dimensionItemType,"
-                                + "categoryOptions,attributeValues");
-                break;
+                        + "categoryOptions,attributeValues";
             }
+            default:
+                return "id";
         }
     }
 
-    private List<CategoryOptionGroup> callCategoryOptionGroups(Map<String, String> queryMap) {
+    private List<CategoryOptionGroup> callCategoryOptionGroups(String fieldsStr,
+            String categoryOptionGroupSetUid, String categoryOptionUid) {
         CategoryOptionGroupWrapper response = call(
-                mCategoryOptionGroupApiClientRetrofit.getCategoryOptionGroups(queryMap));
+                mCategoryOptionGroupApiClientRetrofit.getCategoryOptionGroups(fieldsStr,
+                        categoryOptionGroupSetUid, categoryOptionUid));
         List<CategoryOptionGroup> categoryOptionGroups = new ArrayList<>();
         categoryOptionGroups.addAll(response.getCategoryOptionGroups());
         return categoryOptionGroups;
