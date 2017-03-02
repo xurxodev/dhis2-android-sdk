@@ -2,11 +2,14 @@ package org.hisp.dhis.client.sdk.android.api.persistence.flow;
 
 
 import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.Table;
 
+import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
 import org.hisp.dhis.client.sdk.android.common.AbsMapper;
 import org.hisp.dhis.client.sdk.android.common.Mapper;
 import org.hisp.dhis.client.sdk.models.category.CategoryOptionGroup;
 
+@Table(database = DbDhis.class)
 public class CategoryOptionGroupFlow extends BaseIdentifiableObjectFlow {
 
     private final String CATEGORY_OPTION_GROUP_SET_KEY = "categoryOptionGroupSet";
