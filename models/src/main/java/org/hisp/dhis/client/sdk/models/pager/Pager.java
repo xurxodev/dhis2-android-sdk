@@ -1,4 +1,4 @@
-package org.hisp.dhis.client.sdk.models.event;
+package org.hisp.dhis.client.sdk.models.pager;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

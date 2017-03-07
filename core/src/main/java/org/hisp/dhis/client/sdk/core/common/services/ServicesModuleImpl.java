@@ -34,6 +34,8 @@ import org.hisp.dhis.client.sdk.core.attribute.AttributeService;
 import org.hisp.dhis.client.sdk.core.attribute.AttributeServiceImpl;
 import org.hisp.dhis.client.sdk.core.categoryoption.CategoryOptionService;
 import org.hisp.dhis.client.sdk.core.categoryoption.CategoryOptionServiceImpl;
+import org.hisp.dhis.client.sdk.core.categoryoptiongroup.CategoryOptionGroupService;
+import org.hisp.dhis.client.sdk.core.categoryoptiongroup.CategoryOptionGroupServiceImpl;
 import org.hisp.dhis.client.sdk.core.common.persistence.PersistenceModule;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementService;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementServiceImpl;
@@ -99,6 +101,7 @@ public final class ServicesModuleImpl implements ServicesModule {
     private final TrackedEntityAttributeValueService trackedEntityAttributeValueService;
     private final ProgramTrackedEntityAttributeService programTrackedEntityAttributeService;
     private final CategoryOptionService categoryOptionService;
+    private final CategoryOptionGroupService categoryOptionGroupService;
 
     public ServicesModuleImpl(PersistenceModule persistenceModule) {
         isNull(persistenceModule, "persistenceModule must not be null");
@@ -170,6 +173,9 @@ public final class ServicesModuleImpl implements ServicesModule {
 
         categoryOptionService = new CategoryOptionServiceImpl(
                 persistenceModule.getCategoryOptionStore());
+
+        categoryOptionGroupService = new CategoryOptionGroupServiceImpl(
+                persistenceModule.getCategoryOptionGroupStore());
     }
 
     @Override
@@ -280,4 +286,10 @@ public final class ServicesModuleImpl implements ServicesModule {
     public CategoryOptionService getCategoryOptionService() {
         return categoryOptionService;
     }
+
+    @Override
+    public CategoryOptionGroupService getCategoryOptionGroupService() {
+        return categoryOptionGroupService;
+    }
+
 }
