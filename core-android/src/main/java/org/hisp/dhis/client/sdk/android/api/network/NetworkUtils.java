@@ -31,12 +31,17 @@ package org.hisp.dhis.client.sdk.android.api.network;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
+import org.hisp.dhis.client.sdk.core.common.network.ApiMessage;
 import org.hisp.dhis.client.sdk.core.common.utils.CollectionUtils;
 import org.joda.time.DateTime;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -140,6 +145,7 @@ public class NetworkUtils {
 
         try {
             System.out.println(call.request().url().toString());
+            System.out.println("Body" + bodyToString(call.request().body()));
             response = call.execute();
         } catch (IOException ioException) {
             System.out.println("Exception "+call.request().url().toString());
@@ -149,11 +155,26 @@ public class NetworkUtils {
         if (apiException != null) {
             throw apiException;
         }
-
+        if (response.code() == 409) {
+            System.out.println("Error Conflict: " + call.request().url().toString());
+            try {
+                String apiMessage = response.errorBody().string();
+                System.out.println("error 409" + apiMessage);
+                ObjectMapper mapper = new ObjectMapper();
+                return (T) mapper.readValue(apiMessage, ApiMessage.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return response.body();
+        }
         if (!(response.code() >= 200 && response.code() < 300)) {
-
-            String body = bodyToString(response.raw().request().body());
-            System.out.println(body);
+            System.out.println(
+                    "Error !(>= 200 && <300)" + call.request().url().toString());
+            try {
+                System.out.println(response.errorBody().string());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             throw ApiException.httpError(
                     response.raw().request().url().toString(),
@@ -184,6 +205,20 @@ public class NetworkUtils {
             return response.get(key);
         } else {
             return new ArrayList<>();
+        }
+    }
+
+    public byte[] getBytesFromInputStream(InputStream inputStream) throws IOException {
+        try {
+            byte[] buffer = new byte[8192];
+            int bytesRead;
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                output.write(buffer, 0, bytesRead);
+            }
+            return output.toByteArray();
+        } catch (OutOfMemoryError error) {
+            return null;
         }
     }
 }
