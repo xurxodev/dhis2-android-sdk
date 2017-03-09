@@ -110,11 +110,14 @@ public class EventInteractorImpl implements EventInteractor {
             public Map<String,ImportSummary> call() {
                 Map<String,ImportSummary> importSumariesAndEventsMap = new HashMap<String, ImportSummary>();
                 List<ImportSummary> importSummaries = eventController.push(uids);
-                for(ImportSummary importSummary:importSummaries){
-                    for(String event:uids){
-                        if(importSummary.getReference().equals(event)){
+                for(String event:uids){
+                    for(ImportSummary importSummary:importSummaries){
+                        if(importSummary.getReference()==null){
                             importSumariesAndEventsMap.put(event,importSummary);
-                        }
+                        }else if(importSummary.getReference().equals(event)){
+                                importSumariesAndEventsMap.put(event,importSummary);
+                                continue;
+                            }
                     }
                 }
                 return importSumariesAndEventsMap;
