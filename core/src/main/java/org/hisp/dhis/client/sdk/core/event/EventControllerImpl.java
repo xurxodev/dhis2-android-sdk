@@ -224,7 +224,9 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
                         ImportSummary.Status.OK.equals(importSummary.getStatus())) {
                     stateStore.saveActionForModel(event, Action.SYNCED);
                 } else {
-                    stateStore.saveActionForModel(event, Action.ERROR);
+                    if(event!=null) {
+                        stateStore.saveActionForModel(event, Action.ERROR);
+                    }
                 }
             }
             return importSummaries;
