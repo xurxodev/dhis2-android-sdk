@@ -28,7 +28,7 @@
 
 ext {
     configuration = [
-            buildToolsVersion: "23.0.2",
+            buildToolsVersion: "25.0.0",
             minSdkVersion    : 15,
             compileSdkVersion: 23,
             targetSdkVersion : 23,
@@ -69,7 +69,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:2.3.0'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
 }

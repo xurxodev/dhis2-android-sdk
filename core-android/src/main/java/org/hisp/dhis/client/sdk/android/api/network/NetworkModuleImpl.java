@@ -40,6 +40,8 @@ import org.hisp.dhis.client.sdk.android.attributes.AttributeApiClientImpl;
 import org.hisp.dhis.client.sdk.android.attributes.AttributeApiClientRetrofit;
 import org.hisp.dhis.client.sdk.android.categoryoption.CategoryOptionApiClientImpl;
 import org.hisp.dhis.client.sdk.android.categoryoption.CategoryOptionApiClientRetrofit;
+import org.hisp.dhis.client.sdk.android.categoryoptiongroup.CategoryOptionGroupApiClientImpl;
+import org.hisp.dhis.client.sdk.android.categoryoptiongroup.CategoryOptionGroupApiClientRetrofit;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementApiClientImpl;
 import org.hisp.dhis.client.sdk.android.dataelement.DataElementApiClientRetrofit;
 import org.hisp.dhis.client.sdk.android.enrollment.EnrollmentApiClientImpl;
@@ -80,6 +82,7 @@ import org.hisp.dhis.client.sdk.android.user.UserAccountApiClientImpl;
 import org.hisp.dhis.client.sdk.android.user.UserApiClientRetrofit;
 import org.hisp.dhis.client.sdk.core.attribute.AttributeApiClient;
 import org.hisp.dhis.client.sdk.core.categoryoption.CategoryOptionApiClient;
+import org.hisp.dhis.client.sdk.core.categoryoptiongroup.CategoryOptionGroupApiClient;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.core.common.network.Configuration;
 import org.hisp.dhis.client.sdk.core.common.network.NetworkModule;
@@ -152,6 +155,7 @@ public class NetworkModuleImpl implements NetworkModule {
     private final ProgramTrackedEntityAttributeApiClient programTrackedEntityAttributeApiClient;
     private final EnrollmentApiClient enrollmentApiClient;
     private final CategoryOptionApiClient categoryOptionApiClient;
+    private final CategoryOptionGroupApiClient categoryOptionGroupApiClient;
 
     public NetworkModuleImpl(PreferencesModule preferencesModule, OkHttpClient okClient) {
         AuthInterceptor authInterceptor = new AuthInterceptor(
@@ -238,6 +242,8 @@ public class NetworkModuleImpl implements NetworkModule {
 
         categoryOptionApiClient = new CategoryOptionApiClientImpl(retrofit.create(
                 CategoryOptionApiClientRetrofit.class));
+        categoryOptionGroupApiClient = new CategoryOptionGroupApiClientImpl(retrofit.create(
+                CategoryOptionGroupApiClientRetrofit.class));
 
     }
 
@@ -344,6 +350,11 @@ public class NetworkModuleImpl implements NetworkModule {
     @Override
     public CategoryOptionApiClient getCategoryOptionApiClient() {
         return categoryOptionApiClient;
+    }
+
+    @Override
+    public CategoryOptionGroupApiClient getCategoryOptionGroupApiClient() {
+        return categoryOptionGroupApiClient;
     }
 
     private static class AuthInterceptor implements Interceptor {

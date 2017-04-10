@@ -30,6 +30,7 @@ package org.hisp.dhis.client.sdk.core.common.services;
 
 import org.hisp.dhis.client.sdk.core.attribute.AttributeService;
 import org.hisp.dhis.client.sdk.core.categoryoption.CategoryOptionService;
+import org.hisp.dhis.client.sdk.core.categoryoptiongroup.CategoryOptionGroupService;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementService;
 import org.hisp.dhis.client.sdk.core.enrollment.EnrollmentService;
 import org.hisp.dhis.client.sdk.core.event.EventService;
@@ -95,4 +96,6 @@ public interface ServicesModule {
     ProgramTrackedEntityAttributeService getProgramTrackedEntityAttributeService();
 
     CategoryOptionService getCategoryOptionService();
+
+    CategoryOptionGroupService getCategoryOptionGroupService();
 }
