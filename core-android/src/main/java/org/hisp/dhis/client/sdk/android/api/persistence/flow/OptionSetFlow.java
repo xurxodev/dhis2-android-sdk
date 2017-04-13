@@ -30,6 +30,7 @@ package org.hisp.dhis.client.sdk.android.api.persistence.flow;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.OrderBy;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.hisp.dhis.client.sdk.android.api.persistence.DbDhis;
@@ -67,7 +68,9 @@ public final class OptionSetFlow extends BaseIdentifiableObjectFlow {
             options = new Select()
                     .from(OptionFlow.class)
                     .where(OptionFlow_Table.optionSet
-                            .is(getUid())).queryList();
+                            .is(getUid()))
+                    .orderBy(OptionFlow_Table.sortOrder,true)
+                    .queryList();
         }
         return options;
     }

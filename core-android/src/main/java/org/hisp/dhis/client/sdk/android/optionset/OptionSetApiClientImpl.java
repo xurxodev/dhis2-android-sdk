@@ -93,8 +93,11 @@ public class OptionSetApiClientImpl implements OptionSetApiClient {
                 continue;
             }
 
-            for (Option option : optionSet.getOptions()) {
+            List<Option> options = optionSet.getOptions();
+
+             for (Option option : options) {
                 option.setOptionSet(optionSet);
+                option.setSortOrder(options.indexOf(option));
             }
         }
 
