@@ -253,13 +253,13 @@ final class TrackerDataLoader extends ResourceController {
 
     private static String findLastEvent(DhisApi dhisApi, String organisationUnitUid, String programUid){
         final Map<String, String> map = new HashMap<>();
-        map.put("fields", "event,lastUpdated");
+        map.put("fields", "event,eventDate");
 
         Event lastEvent=null;
         JsonNode response = dhisApi.getMinimizedEvents(programUid, organisationUnitUid, map);
         List<Event> pageEvents = EventsWrapper.getEvents(response);
         for(Event event:pageEvents){
-            if(lastEvent==null || DateUtils.parseDate(lastEvent.getLastUpdated()).before(DateUtils.parseDate(event.getLastUpdated()))){
+            if(lastEvent==null || DateUtils.parseDate(lastEvent.getEventDate()).before(DateUtils.parseDate(event.getEventDate()))){
                 lastEvent = event;
             }
         }
