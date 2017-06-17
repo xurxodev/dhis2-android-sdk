@@ -99,11 +99,14 @@ final class TrackerDataLoader extends ResourceController {
         List<OrganisationUnit> assignedOrganisationUnits =
                 MetaDataController.getAssignedOrganisationUnits();
         Hashtable<String, List<Program>> programsForOrganisationUnits = new Hashtable<>();
-
-
+        List<TrackedEntityInstance> trackedEntityInstances = MetaDataController.getTrackedEntityInstancesFromServer();
+        if(syncStrategy.equals(SyncStrategy.DOWNLOAD_ALL)) {
+            TrackerController.updateTrackedEntityInstances(dhisApi, trackedEntityInstances,
+                    serverDateTime);
+        }
         //check if events is updated on server
-        List<Enrollment> activeEnrollments = TrackerController.getActiveEnrollments();
-//        updateEventsForEnrollments(context, dhisApi, activeEnrollments, serverDateTime);
+        //List<Enrollment> activeEnrollments = TrackerController.getActiveEnrollments();
+        //updateEventsForEnrollments(context, dhisApi, activeEnrollments, serverDateTime);
 
         if (LoadingController.isLoadFlagEnabled(context, ResourceType.EVENTS)) {
             for (OrganisationUnit organisationUnit : assignedOrganisationUnits) {
@@ -116,7 +119,7 @@ final class TrackerDataLoader extends ResourceController {
                 List<Program> programsForOrgUnitSEWoR =
                         MetaDataController.getProgramsForOrganisationUnit
                                 (organisationUnit.getId(),
-                                        ProgramType.WITHOUT_REGISTRATION);
+                                        ProgramType.WITHOUT_REGISTRATION, ProgramType.WITH_REGISTRATION);
                 if (programsForOrgUnitSEWoR != null) {
                     programsForOrgUnit.addAll(programsForOrgUnitSEWoR);
                 }
