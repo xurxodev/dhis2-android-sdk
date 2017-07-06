@@ -179,19 +179,22 @@ public final class EventCoordinatesRow extends Row {
                 double newValue = Double.parseDouble(s.toString());
                 if (newValue < -90 || newValue > 90) {
                     mEditText.setError(mCoordinateMessage);
-                    mErrorStringId = R.string.error_latitude;
                     if(newValue != value){
                         saveLatitude(null);
                     }
                 } else if(newValue != value)
                 {
-                    mErrorStringId = null;
                     saveLatitude(newValue);
                 }
             }
         }
 
         private void saveLatitude(Double newValue) {
+            if(newValue==null){
+                mErrorStringId = null;
+            }else{
+                mErrorStringId = R.string.error_latitude;
+            }
             mEvent.setLatitude(newValue);
             DataValue dataValue = new DataValue();
             dataValue.setValue("" + newValue);
@@ -214,19 +217,22 @@ public final class EventCoordinatesRow extends Row {
                 Double newValue = Double.parseDouble(s.toString());
                 if (newValue < -180 || newValue > 180) {
                     mEditText.setError(mCoordinateMessage);
-                    mErrorStringId = R.string.error_longitude;
                     if(newValue != value){
                         saveLongitude(null);
                     }
                 } else if(newValue != value)
                 {
-                    mErrorStringId = null;
                     saveLongitude(newValue);
                 }
             }
         }
 
         private void saveLongitude(Double newValue) {
+            if(newValue==null){
+                mErrorStringId = null;
+            }else{
+                mErrorStringId = R.string.error_longitude;
+            }
             mEvent.setLongitude(newValue);
             DataValue dataValue = new DataValue();
             dataValue.setValue("" + newValue);
