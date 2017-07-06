@@ -153,7 +153,7 @@ public final class StatusRow extends Row {
                 }
             } else {
                 if(context != null) {
-                    button.setText(context.getString(R.string.complete));
+                    button.setText(context.getString(R.string.un_enroll));
                 }
             }
         }
