@@ -101,7 +101,7 @@ public final class EventCoordinatesRow extends Row {
         return DataEntryRowTypes.EVENT_COORDINATES.ordinal();
     }
 
-    private static class CoordinateViewHolder {
+    private class CoordinateViewHolder {
         private final EditText latitude;
         private final EditText longitude;
         private final ImageButton captureCoords;
@@ -164,7 +164,7 @@ public final class EventCoordinatesRow extends Row {
         @Override
         public abstract void afterTextChanged(Editable s);
     }
-    private static class LatitudeWatcher extends CoordinateWatcher {
+    private class LatitudeWatcher extends CoordinateWatcher {
 
         public LatitudeWatcher(EditText mLatitude, String mLatitudeMessage) {
             super(mLatitude,mLatitudeMessage);
@@ -179,11 +179,13 @@ public final class EventCoordinatesRow extends Row {
                 double newValue = Double.parseDouble(s.toString());
                 if (newValue < -90 || newValue > 90) {
                     mEditText.setError(mCoordinateMessage);
+                    mErrorStringId = R.string.error_latitude;
                     if(newValue != value){
                         saveLatitude(null);
                     }
                 } else if(newValue != value)
                 {
+                    mErrorStringId = null;
                     saveLatitude(newValue);
                 }
             }
@@ -197,7 +199,7 @@ public final class EventCoordinatesRow extends Row {
         }
     }
 
-    private static class LongitudeWatcher extends CoordinateWatcher {
+    private class LongitudeWatcher extends CoordinateWatcher {
 
         public LongitudeWatcher(EditText mLongitude, String mLongitudeMessage) {
             super(mLongitude, mLongitudeMessage);
@@ -212,11 +214,13 @@ public final class EventCoordinatesRow extends Row {
                 Double newValue = Double.parseDouble(s.toString());
                 if (newValue < -180 || newValue > 180) {
                     mEditText.setError(mCoordinateMessage);
+                    mErrorStringId = R.string.error_longitude;
                     if(newValue != value){
                         saveLongitude(null);
                     }
                 } else if(newValue != value)
                 {
+                    mErrorStringId = null;
                     saveLongitude(newValue);
                 }
             }

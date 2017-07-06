@@ -66,6 +66,7 @@ import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.RulesEvaluatorThrea
 import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.UpdateSectionsEvent;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
@@ -235,7 +236,7 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
         }
     }
 
-    protected  void  showValidationErrorDialog(ArrayList<String> mandatoryFieldsMissingErrors, ArrayList<String> programRulesErrors){
+    protected  void  showValidationIdErrorDialog(ArrayList<String> mandatoryFieldsMissingErrors, ArrayList<String> programRulesErrors, ArrayList<Integer> stringIdValidationError){
         ArrayList<String> errors = new ArrayList<>();
         addMandatoryErrors(mandatoryFieldsMissingErrors, errors);
         addErrors(programRulesErrors, errors);

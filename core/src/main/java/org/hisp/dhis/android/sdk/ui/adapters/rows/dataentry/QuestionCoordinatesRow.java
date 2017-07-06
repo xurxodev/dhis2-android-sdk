@@ -139,7 +139,7 @@ public final class QuestionCoordinatesRow extends Row {
         return DataEntryRowTypes.QUESTION_COORDINATES.ordinal();
     }
 
-    private static class CoordinateViewHolder {
+    private class CoordinateViewHolder {
         private final TextView labelTextView;
         private final EditText latitude;
         private final EditText longitude;
@@ -207,7 +207,7 @@ public final class QuestionCoordinatesRow extends Row {
         public abstract void afterTextChanged(Editable s);
     }
 
-    private static class LatitudeWatcher extends CoordinateWatcher {
+    private class LatitudeWatcher extends CoordinateWatcher {
 
         public LatitudeWatcher(EditText mLatitude, EditText mLongitude, String mLatitudeMessage,
                 String mLongitudeMessage) {
@@ -224,17 +224,19 @@ public final class QuestionCoordinatesRow extends Row {
                     return;
                 }
                 String newValue = s.toString();
+                if (newValue != value && mBaseValue!=null) {
+                    mErrorStringId = null;
+                    saveCoordinates(mEditTextLatitude, mEditTextLongitude, mBaseValue);
+                }
                 if (isInvalidLatitude(newValue)) {
                     mEditTextLatitude.setError(mLatitudeMessage);
-                }
-                if (newValue != value && mBaseValue!=null) {
-                    saveCoordinates(mEditTextLatitude, mEditTextLongitude, mBaseValue);
+                    mErrorStringId = R.string.error_latitude;
                 }
             }
         }
     }
 
-    private static class LongitudeWatcher extends CoordinateWatcher {
+    private class LongitudeWatcher extends CoordinateWatcher {
 
         public LongitudeWatcher(EditText mLatitude, EditText mLongitude, String mLatitudeMessage,
                 String mLongitudeMessage) {
@@ -252,11 +254,13 @@ public final class QuestionCoordinatesRow extends Row {
                     return;
                 }
                 String newValue = s.toString();
+                if (!newValue.equals(value) && mBaseValue!=null) {
+                    mErrorStringId = null;
+                    saveCoordinates(mEditTextLatitude, mEditTextLongitude, mBaseValue);
+                }
                 if (isInvalidLongitude(newValue)) {
                     mEditTextLongitude.setError(mLongitudeMessage);
-                }
-                if (!newValue.equals(value) && mBaseValue!=null) {
-                    saveCoordinates(mEditTextLatitude, mEditTextLongitude, mBaseValue);
+                    mErrorStringId = R.string.error_longitude;
                 }
             }
         }

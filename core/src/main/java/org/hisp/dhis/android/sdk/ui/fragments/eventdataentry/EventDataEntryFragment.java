@@ -34,6 +34,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
@@ -57,6 +58,7 @@ import org.hisp.dhis.android.sdk.controllers.GpsController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;
+import org.hisp.dhis.android.sdk.persistence.models.DataElement;
 import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
@@ -109,7 +111,7 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
     private View spinnerContainer;
     private Spinner spinner;
     private SectionAdapter spinnerAdapter;
-    private EventDataEntryFragmentForm form;
+    private static EventDataEntryFragmentForm form;
     private DateTime scheduledDueDate;
 
     public EventDataEntryFragment() {
@@ -434,6 +436,14 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         Map<String, ProgramStageDataElement> dataElements = toMap(
                 form.getStage().getProgramStageDataElements()
         );
+
+        for (DataEntryFragmentSection dataEntryFragmentSection:form.getSections()) {
+            for (Row row : dataEntryFragmentSection.getRows()) {
+                if (row.getValidationError() != null) {
+                    return false;
+                }
+            }
+        }
         for (DataValue dataValue : form.getEvent().getDataValues()) {
             ProgramStageDataElement dataElement = dataElements.get(dataValue.getDataElement());
             if (dataElement == null) {
@@ -613,6 +623,21 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         return errors;
     }
 
+    private static ArrayList<String> getRowsErrors(Context context, EventDataEntryFragmentForm form) {
+        ArrayList<String> errors = new ArrayList<>();
+        for (DataEntryFragmentSection dataEntryFragmentSection:form.getSections()){
+            for(Row row: dataEntryFragmentSection.getRows()) {
+                if (row.getValidationError() != null) {
+                    Integer stringId = row.getValidationError();
+                    if(stringId!=null) {
+                        errors.add(context.getString(stringId));
+                    }
+                }
+            }
+        }
+        return errors;
+    }
+
     @Subscribe
     public void onHideLoadingDialog(HideLoadingDialogEvent event) {
         super.onHideLoadingDialog(event);
@@ -732,7 +757,7 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
                 Dhis2Application.getEventBus().post(new RowValueChangedEvent(null, null));
             }
         } else {
-            showValidationErrorDialog(getValidationErrors(), getProgramRuleFragmentHelper().getProgramRuleValidationErrors());
+            showValidationErrorDialog(getValidationErrors(), getProgramRuleFragmentHelper().getProgramRuleValidationErrors(), getRowsErrors(getContext(), form));
         }
     }
 

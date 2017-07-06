@@ -111,6 +111,8 @@
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="coordinates">Coordonnées</string>
+    <string name="error_latitude">Entrez une valeur de latitude valide</string>
+    <string name="error_longitude">Entrez une valeur de longitude valide</string>
 
 
     <!-- Data fetching -->
