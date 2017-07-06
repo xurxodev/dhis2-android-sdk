@@ -34,7 +34,6 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
@@ -58,7 +57,6 @@ import org.hisp.dhis.android.sdk.controllers.GpsController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;
-import org.hisp.dhis.android.sdk.persistence.models.DataElement;
 import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
@@ -913,5 +911,56 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         eventsForEnrollment.add(event);
         form.getEnrollment().setEvents(eventsForEnrollment);
         form.getEnrollment().save();
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }else
+        return super.onOptionsItemSelected(menuItem);
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        List<String> errors = getRowsErrors(getContext(), form);
+        if (errors.size() > 0) {
+            showErrorAndGoBack(this);
+            return false;
+        } else {
+            return super.onBackPressed();
+        }
+    }
+
+    public void goBack() {
+        super.onBackPressed();
+    }
+
+    private void showErrorAndGoBack(final EventDataEntryFragment eventDataEntryFragment) {
+
+        String title = getContext().getString(R.string.validation_field_title);
+        String message = getContext().getString(R.string.validation_field_exit);
+        UiUtils.showConfirmDialog(getActivity(),
+                title, message,
+                getString(R.string.ok_option),
+                getString(org.hisp.dhis.android.sdk.R.string.cancel),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //discard
+                        eventDataEntryFragment.removeInvalidFields();
+                        eventDataEntryFragment.goBack();
+                    }
+                });
+    }
+
+    private void removeInvalidFields() {
+        for (DataEntryFragmentSection dataEntryFragmentSection : form.getSections()) {
+            for (Row row : dataEntryFragmentSection.getRows()) {
+                if (row.getValidationError() != null && row.getValue() != null) {
+                    row.getValue().delete();
+                }
+            }
+        }
     }
 }

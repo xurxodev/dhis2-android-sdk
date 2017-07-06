@@ -53,6 +53,8 @@ public final class EventCoordinatesRow extends Row {
     private static final String EMPTY_FIELD = "";
     private final Event mEvent;
     private final int MAX_INPUT_LENGTH = 9; // max input length = 9 for accepting 6 decimals in coordinates
+    protected boolean longitudeError;
+    protected boolean latitudeError;
 
     public EventCoordinatesRow(Event event) {
         mEvent = event;
@@ -179,11 +181,8 @@ public final class EventCoordinatesRow extends Row {
                 double newValue = Double.parseDouble(s.toString());
                 if (newValue < -90 || newValue > 90) {
                     mEditText.setError(mCoordinateMessage);
-                    if(newValue != value){
-                        saveLatitude(null);
-                    }
-                } else if(newValue != value)
-                {
+                    saveLatitude(null);
+                } else {
                     saveLatitude(newValue);
                 }
             }
@@ -191,9 +190,13 @@ public final class EventCoordinatesRow extends Row {
 
         private void saveLatitude(Double newValue) {
             if(newValue==null){
-                mErrorStringId = null;
+                latitudeError=true;
+                mErrorStringId = R.string.error_location_values;
             }else{
-                mErrorStringId = R.string.error_latitude;
+                latitudeError=false;
+                if(!longitudeError) {
+                    mErrorStringId = null;
+                }
             }
             mEvent.setLatitude(newValue);
             DataValue dataValue = new DataValue();
@@ -217,10 +220,8 @@ public final class EventCoordinatesRow extends Row {
                 Double newValue = Double.parseDouble(s.toString());
                 if (newValue < -180 || newValue > 180) {
                     mEditText.setError(mCoordinateMessage);
-                    if(newValue != value){
-                        saveLongitude(null);
-                    }
-                } else if(newValue != value)
+                    saveLongitude(null);
+                } else
                 {
                     saveLongitude(newValue);
                 }
@@ -229,9 +230,13 @@ public final class EventCoordinatesRow extends Row {
 
         private void saveLongitude(Double newValue) {
             if(newValue==null){
-                mErrorStringId = null;
+                longitudeError=true;
+                mErrorStringId = R.string.error_location_values;
             }else{
-                mErrorStringId = R.string.error_longitude;
+                longitudeError=false;
+                if(!latitudeError) {
+                    mErrorStringId = null;
+                }
             }
             mEvent.setLongitude(newValue);
             DataValue dataValue = new DataValue();
