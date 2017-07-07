@@ -879,7 +879,10 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
             List<Event> eventsForEnrollment = new ArrayList<>();
             eventsForEnrollment.addAll(enrollment.getEvents());
             Collections.sort(eventsForEnrollment, new EventDateComparator());
-            Event lastKnownEvent = eventsForEnrollment.get(eventsForEnrollment.size() - 1);
+            Event lastKnownEvent = null;
+            if (!eventsForEnrollment.isEmpty()) {
+                lastKnownEvent = eventsForEnrollment.get(eventsForEnrollment.size() - 1);
+            }
 
             if (lastKnownEvent != null) {
                 return new DateTime(lastKnownEvent.getEventDate());
