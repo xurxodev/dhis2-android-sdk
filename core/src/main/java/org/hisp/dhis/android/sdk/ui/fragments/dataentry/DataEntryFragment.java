@@ -274,7 +274,7 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
         }
     }
 
-    protected void showValidationErrorDialog(ArrayList<String> mandatoryFieldsMissingErrors, ArrayList<String> programRulesErrors) {
+    protected void showValidationErrorDialog(ArrayList<String> mandatoryFieldsMissingErrors, ArrayList<String> programRulesErrors, ArrayList<String> fieldValidationErrors) {
         ArrayList<String> errors = new ArrayList<>();
         if(mandatoryFieldsMissingErrors != null) {
             for(String mandatoryFieldsError : mandatoryFieldsMissingErrors) {
@@ -284,6 +284,11 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
         if(programRulesErrors != null) {
             for(String programRulesError : programRulesErrors) {
                 errors.add(getActivity().getString(R.string.error_message) + ": " + programRulesError);
+            }
+        }
+        if (fieldValidationErrors != null) {
+            for (String fieldValidationError : fieldValidationErrors) {
+                errors.add(getActivity().getString(R.string.error_message) + ": " + fieldValidationError);
             }
         }
         validationErrorDialog = ValidationErrorDialog

@@ -50,6 +50,7 @@ public abstract class Row implements DataEntryRow {
     protected String mLabel;
     protected String mWarning;
     protected String mError;
+    protected Integer mErrorStringId;
     protected BaseValue mValue;
     protected String mDescription;
     protected DataEntryRowTypes mRowType;
@@ -143,6 +144,11 @@ public abstract class Row implements DataEntryRow {
 
     public void setError(String mError) {
         this.mError = mError;
+    }
+
+    @Override
+    public Integer getValidationError(){
+        return mErrorStringId;
     }
 
     public Event getEvent() {

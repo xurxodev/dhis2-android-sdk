@@ -40,4 +40,5 @@ import org.hisp.dhis.android.sdk.persistence.models.BaseValue;
 public interface DataEntryRow {
     View getView(FragmentManager fragmentManager, LayoutInflater inflater, View convertView, ViewGroup container);
     int getViewType();
+    Integer getValidationError();
 }

@@ -65,8 +65,10 @@ import org.hisp.dhis.android.sdk.persistence.models.ProgramRule;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStageDataElement;
 import org.hisp.dhis.android.sdk.ui.adapters.SectionAdapter;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRowTypes;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.IndicatorRow;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.Row;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.OnCompleteEventClick;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.OnDetailedInfoButtonClick;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.DataEntryFragment;
@@ -403,6 +405,34 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         return errors;
     }
 
+
+    public ArrayList<String> getFieldValidationErrors() {
+        ArrayList<String> errors = new ArrayList<>();
+        if (form.getEvent() == null || form.getStage() == null) {
+            return errors;
+        }
+        List<Row> rows = form.getCurrentSection().getRows();
+        if(form.getSections().size()>0){
+            for(DataEntryFragmentSection section : form.getSections()){
+                rows.addAll(section.getRows());
+            }
+        }
+        for(DataEntryRow dataEntryRow : rows){
+            if(dataEntryRow.getValidationError()!=null)
+                errors.add(getContext().getString(dataEntryRow.getValidationError()));
+        }
+
+        Map<String, ProgramStageDataElement> dataElements = toMap(
+                form.getStage().getProgramStageDataElements()
+        );
+        for (DataValue dataValue : form.getEvent().getDataValues()) {
+            ProgramStageDataElement dataElement = dataElements.get(dataValue.getDataElement());
+            if (dataElement.getCompulsory() && isEmpty(dataValue.getValue())) {
+                errors.add(MetaDataController.getDataElement(dataElement.getDataelement()).getDisplayName());
+            }
+        }
+        return errors;
+    }
     private void evaluateRulesAndIndicators(String dataElement) {
         if (dataElement == null || form == null || form.getIndicatorRows() == null) {
             return;
@@ -618,7 +648,7 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
                 Dhis2Application.getEventBus().post(new RowValueChangedEvent(null, null));
             }
         } else {
-            showValidationErrorDialog(getValidationErrors(), getProgramRuleFragmentHelper().getProgramRuleValidationErrors());
+            showValidationErrorDialog(getValidationErrors(), getProgramRuleFragmentHelper().getProgramRuleValidationErrors(), getFieldValidationErrors());
         }
     }
 
