@@ -260,26 +260,22 @@ public final class QuestionCoordinatesRow extends Row {
 
         @Override
         public void afterTextChanged(Editable s) {
-            String
-                    value = getLatitudeFromValue(mBaseValue);
+            String value = getLatitudeFromValue(mBaseValue);
 
             if (s.length() > 1) {
-                if (s.toString().equals(getLongitudeFromValue(mBaseValue))) {
+                if (s.toString().equals(getLatitudeFromValue(mBaseValue))) {
                     //ignore
                     return;
                 }
                 String newValue = s.toString();
                 saveCoordinates(mEditTextLatitude, mEditTextLongitude, mBaseValue);
-                if (isInvalidLongitude(newValue)) {
-                    mEditTextLongitude.setError(mLongitudeMessage);
-                }
                 setValidationError(newValue);
             }
         }
 
         private void setValidationError(String newValue) {
-            if (isInvalidLatitude(newValue)) {
-                mEditTextLongitude.setError(mLatitudeMessage);
+            if (isInvalidLongitude(newValue)) {
+                mEditTextLongitude.setError(mLongitudeMessage);
             }
             mErrorStringId = null;
             if (mEditTextLatitude.getText().length() > 0) {

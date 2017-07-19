@@ -368,9 +368,16 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         Map<String, ProgramStageDataElement> dataElements = toMap(
                 form.getStage() .getProgramStageDataElements()
         );
+
         for (DataValue dataValue : form.getEvent().getDataValues()) {
             ProgramStageDataElement dataElement = dataElements.get(dataValue.getDataElement());
             if (dataElement.getCompulsory() && isEmpty(dataValue.getValue())) {
+                return false;
+            }
+        }
+
+        for(DataEntryRow dataEntryRow : form.getDataEntryRows()){
+            if(dataEntryRow.getValidationError()!=null) {
                 return false;
             }
         }
@@ -418,13 +425,7 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         if (form.getEvent() == null || form.getStage() == null) {
             return errors;
         }
-        List<Row> rows = form.getCurrentSection().getRows();
-        if(form.getSections().size()>0){
-            for(DataEntryFragmentSection section : form.getSections()){
-                rows.addAll(section.getRows());
-            }
-        }
-        for(DataEntryRow dataEntryRow : rows){
+        for(DataEntryRow dataEntryRow : form.getDataEntryRows()){
             if(dataEntryRow.getValidationError()!=null)
                 errors.add(getContext().getString(dataEntryRow.getValidationError()));
         }
