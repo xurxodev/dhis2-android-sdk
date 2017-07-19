@@ -99,6 +99,7 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
     public EventDataEntryFragmentForm query(Context context) {
         final ProgramStage stage = MetaDataController.getProgramStage(programStageId);
         final EventDataEntryFragmentForm form = new EventDataEntryFragmentForm();
+        List<Row> dataEntryRows = new ArrayList<>();
 
         if (stage == null || stage.getProgramStageSections() == null) {
             return form;
@@ -136,6 +137,7 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
             populateDataEntryRows(form, stage.getProgramStageDataElements(), rows, username, event);
             populateIndicatorRows(form, stage.getProgramIndicators(), rows);
             form.getSections().add(new DataEntryFragmentSection(DEFAULT_SECTION, null, rows));
+            dataEntryRows.addAll(rows);
         } else {
             for (int i = 0; i < stage.getProgramStageSections().size(); i++) {
                 ProgramStageSection section = stage.getProgramStageSections().get(i);
@@ -156,8 +158,10 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
                         event);
                 populateIndicatorRows(form, section.getProgramIndicators(), rows);
                 form.getSections().add(new DataEntryFragmentSection(section.getName(), section.getUid(), rows));
+                dataEntryRows.addAll(rows);
             }
         }
+        form.setDataEntryRows(dataEntryRows);
         return form;
     }
 

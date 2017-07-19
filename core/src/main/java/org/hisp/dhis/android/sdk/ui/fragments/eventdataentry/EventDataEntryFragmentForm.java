@@ -31,10 +31,12 @@ package org.hisp.dhis.android.sdk.ui.fragments.eventdataentry;
 
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.IndicatorRow;
 import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.Row;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.StatusRow;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.DataEntryFragmentSection;
 
@@ -53,7 +55,15 @@ class EventDataEntryFragmentForm {
     private List<IndicatorRow> indicatorRows;
     private StatusRow statusRow;
     private Map<String, IndicatorRow> indicatorToIndicatorRowMap;
+    private List<Row> mDataEntryRowList;
 
+    public void setDataEntryRows(List<Row> dataEntryRows) {
+        this.mDataEntryRowList = dataEntryRows;
+    }
+
+    public List<Row> getDataEntryRows() {
+        return mDataEntryRowList;
+    }
     public Enrollment getEnrollment() {
         return enrollment;
     }

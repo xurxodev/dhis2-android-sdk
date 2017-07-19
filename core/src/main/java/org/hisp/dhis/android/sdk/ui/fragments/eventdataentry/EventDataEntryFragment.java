@@ -77,6 +77,7 @@ import org.hisp.dhis.android.sdk.ui.fragments.dataentry.HideLoadingDialogEvent;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.RefreshListViewEvent;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.RowValueChangedEvent;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
+import org.hisp.dhis.android.sdk.utils.api.ValueType;
 import org.hisp.dhis.android.sdk.utils.services.ProgramIndicatorService;
 import org.hisp.dhis.android.sdk.utils.services.VariableService;
 import org.joda.time.DateTime;
@@ -261,6 +262,12 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
 
             if (form.getStatusRow() != null) {
                 form.getStatusRow().setFragmentActivity(getActivity());
+            }
+            for(Row row : data.getDataEntryRows()){
+                System.out.println(row.getViewType());
+                if(row.getViewType()==(DataEntryRowTypes.QUESTION_COORDINATES.ordinal())){
+                    GpsController.activateGps(getActivity().getBaseContext());
+                }
             }
             if (data.getStage() != null &&
                     data.getStage().getCaptureCoordinates()) {
