@@ -54,6 +54,7 @@ import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.models.BaseValue;
 import org.hisp.dhis.android.sdk.ui.activities.INavigationHandler;
+import org.hisp.dhis.android.sdk.ui.activities.OnBackPressedListener;
 import org.hisp.dhis.android.sdk.ui.adapters.DataValueAdapter;
 import org.hisp.dhis.android.sdk.ui.adapters.SectionAdapter;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EventCoordinatesRow;
@@ -69,7 +70,8 @@ import org.hisp.dhis.android.sdk.utils.UiUtils;
 import java.util.ArrayList;
 
 public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
-        implements LoaderManager.LoaderCallbacks<D>, AdapterView.OnItemSelectedListener {
+        implements LoaderManager.LoaderCallbacks<D>, AdapterView.OnItemSelectedListener,
+        OnBackPressedListener {
     public static final String TAG = DataEntryFragment.class.getSimpleName();
 
     protected static final int LOADER_ID = 17;
@@ -186,7 +188,7 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (menuItem.getItemId() == android.R.id.home) {
-            navigationHandler.onBackPressed();
+            doBack();
             return true;
         } else if (menuItem.getItemId() == R.id.action_new_event) {
             proceed();
@@ -402,4 +404,12 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
 
     @Override
     public abstract void onLoadFinished(Loader<D> loader, D data);
+
+    @Override
+    public boolean doBack() {
+        if (getActivity() != null) {
+            getActivity().finish();
+        }
+        return false;
+    }
 }

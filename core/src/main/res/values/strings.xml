@@ -279,4 +279,7 @@
     <string name="synchronizing">Synchronizing...</string>
     <string name="error_delete_mandatory_value">"You can't remove a required value for a completed event"</string>
     <string name="unsupported_value_type">"Unsupported value type"</string>
+
+    <string name="validation_field_exit">Warning: There are invalid values and you\'re about to exit. If you proceed, invalid values will be deleted. Do you want to continue?</string>
+    <string name="validation_field_title">Warning: There are invalid values</string>
 </resources>

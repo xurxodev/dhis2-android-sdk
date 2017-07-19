@@ -391,6 +391,29 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         }
     }
 
+    private static ArrayList<String> getRowsErrors(Context context, EventDataEntryFragmentForm form) {
+        ArrayList<String> errors = new ArrayList<>();
+        for(Row row: form.getDataEntryRows()) {
+            if (row.getValidationError() != null) {
+                Integer stringId = row.getValidationError();
+                if(stringId!=null) {
+                    errors.add(context.getString(stringId));
+                }
+            }
+        }
+        return errors;
+    }
+
+    @Override
+    public boolean doBack() {
+        List<String> errors = getRowsErrors(getContext(), form);
+        if (errors.size() > 0) {
+            showErrorAndGoBack();
+            return false;
+        } else {
+            return true;
+        }
+    }
     @Override
     protected void proceed() {
 
@@ -792,5 +815,30 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         eventsForEnrollment.add(event);
         form.getEnrollment().setEvents(eventsForEnrollment);
         form.getEnrollment().save();
+    }
+
+    private void showErrorAndGoBack() {
+
+        String title = getContext().getString(R.string.validation_field_title);
+        String message = getContext().getString(R.string.validation_field_exit);
+        UiUtils.showConfirmDialog(getActivity(),
+                title, message,
+                getString(R.string.ok_option),
+                getString(org.hisp.dhis.android.sdk.R.string.cancel),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        removeInvalidFields();
+                        goBackToPreviousFragment();
+                    }
+                });
+    }
+
+    private void removeInvalidFields() {
+        for (Row row : form.getDataEntryRows()) {
+            if (row.getValidationError() != null && row.getValue() != null) {
+                row.getValue().delete();
+            }
+        }
     }
 }
