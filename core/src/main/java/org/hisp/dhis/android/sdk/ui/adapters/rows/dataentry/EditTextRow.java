@@ -141,23 +141,31 @@ public class EditTextRow extends Row {
                 editText.setSingleLine(true);
             }
 
+
+            holder = new ValueEntryHolder(label, mandatoryIndicator, warningLabel, errorLabel,
+                    editText, detailedInfoButton);
+            root.setTag(holder);
+            view = root;
+        }
             final Context context = inflater.getContext();
             OnTextChangeListener listener = new OnTextChangeListener(new ValueCallback(){
                 @Override
                 public void saveValue(String newValue, BaseValue value) {
-                        if(!isMandatory() || (!isEventComplete() || (newValue!=null && !newValue.equals("")))) {
-                            value.setValue(newValue);
-                            Dhis2Application.getEventBus()
-                                    .post(new RowValueChangedEvent(value, rowTypeTemp));
-                        }else{
-                            //restore last value
-                            editText.setText(mValue.getValue());
-                            Toast.makeText(context, context.getString(R.string.error_delete_mandatory_value), Toast.LENGTH_SHORT).show();
-                        }
+                    if (!isMandatory() || (!isEventComplete() || (newValue != null
+                            && !newValue.equals("")))) {
+                        value.setValue(newValue);
+                        Dhis2Application.getEventBus()
+                                .post(new RowValueChangedEvent(value, rowTypeTemp));
+                    } else {
+                        //restore last value
+                        holder.editText.setText(mValue.getValue());
+                        Toast.makeText(context,
+                                context.getString(R.string.error_delete_mandatory_value),
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
             listener.setBaseValue(mValue);
-            holder = new ValueEntryHolder(label, mandatoryIndicator, warningLabel, errorLabel, editText, detailedInfoButton, listener );
             holder.editText.addTextChangedListener(listener);
 
             if(!isEditable()) {
@@ -167,9 +175,7 @@ public class EditTextRow extends Row {
             }
 
             rowTypeTemp = mRowType.toString();
-            root.setTag(holder);
-            view = root;
-        }
+
         if(mRowType.equals(DataEntryRowTypes.NOT_SUPPORTED)){
             holder.editText.setHint(R.string.unsupported_value_type);
             holder.editText.setEnabled(false);
@@ -225,20 +231,17 @@ public class EditTextRow extends Row {
         final TextView errorLabel;
         final EditText editText;
         final View detailedInfoButton;
-        final OnTextChangeListener listener;
 
         public ValueEntryHolder(TextView textLabel,
                                 TextView mandatoryIndicator, TextView warningLabel,
                                 TextView errorLabel, EditText editText,
-                                View detailedInfoButton,
-                                OnTextChangeListener listener) {
+                View detailedInfoButton) {
             this.textLabel = textLabel;
             this.mandatoryIndicator = mandatoryIndicator;
             this.warningLabel = warningLabel;
             this.errorLabel = errorLabel;
             this.editText = editText;
             this.detailedInfoButton = detailedInfoButton;
-            this.listener = listener;
         }
     }
 
