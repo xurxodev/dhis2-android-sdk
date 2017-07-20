@@ -411,6 +411,7 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
             showErrorAndGoBack();
             return false;
         } else {
+            goBackToPreviousFragment();
             return true;
         }
     }
