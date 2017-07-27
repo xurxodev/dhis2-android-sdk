@@ -62,11 +62,16 @@ public final class DhisController {
     private final static String CREDENTIALS = "credentials";
 
     /**
-     * Variable hasUnSynchronizedDatavalues
-     * Is set to true when submitting changes in DataEntryFragment, TrackedEntityInstanceProfileFragment (in Tracker Capture) and when no network is available
-     * Is set to false when DataValueSender.onFinishSending(true)
+     * Variable hasSynchronizedActiveProcess
+     * Is set to true when a sync process is active
      */
-    public static boolean hasUnSynchronizedDatavalues;
+    public static boolean hasSynchronizedActiveProcess;
+    /**
+     * Variable hasLogoutDialogActive
+     * Is set to true when a the logout dialog is active
+     * Is used to prevent new syncs process.
+     */
+    public static boolean hasLogoutDialogActive;
 
     private ObjectMapper objectMapper;
     private DhisApi dhisApi;

@@ -226,7 +226,7 @@
     <string name="select_all">Select all</string>
     <string name="deselect_all">Deselect all</string>
     <string name="query_tracked_entity_instances">Online Query Tracked Entity Instances</string>
-    <string name="unsynchronized_data_values">You need to synchronize your changes with the server before logging out. Please check your Internet connection and press the synchronization button</string>
+    <string name="synchronizing_data">You must wait for the synchronization process with the server before logging off. Please wait for the current synchronization run to finish.</string>
 
     <string name="status_sent_description">This item has been successfully synchronized with the server.</string>
     <string name="status_offline_description">This item has not yet been synchronized with the server.</string>

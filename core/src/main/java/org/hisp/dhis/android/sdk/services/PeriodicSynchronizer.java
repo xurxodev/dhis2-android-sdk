@@ -70,6 +70,10 @@ public class PeriodicSynchronizer extends BroadcastReceiver {
             cancelPeriodicSynchronizer(context);
             return;
         }
+        if(DhisController.hasLogoutDialogActive){
+            Log.d(this.getClass().getName(), "haslogoutdialogactive: "+DhisController.hasLogoutDialogActive);
+            return;
+        }
         DhisService.synchronize(context, SyncStrategy.DOWNLOAD_ONLY_NEW);
 	}
 

@@ -117,28 +117,39 @@ public class SettingsFragment extends Fragment
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.settings_logout_button) {
-            UiUtils.showConfirmDialog(getActivity(), getString(R.string.logout_title), getString(R.string.logout_message),
-                    getString(R.string.logout_option), getString(R.string.cancel_option), new DialogInterface.OnClickListener() {
+            DhisController.hasLogoutDialogActive = true;
+            UiUtils.showConfirmDialog(getActivity(), getString(R.string.logout_title),
+                    getString(R.string.logout_message),
+                    getString(R.string.logout_option), getString(R.string.cancel_option),
+                    new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
-                            if (DhisController.hasUnSynchronizedDatavalues) {
+                            DhisController.hasLogoutDialogActive = false;
+                            if (DhisController.hasSynchronizedActiveProcess) {
                                 //show error dialog
-                                UiUtils.showErrorDialog(getActivity(), getString(R.string.error_message),
-                                        getString(R.string.unsynchronized_data_values),
+                                UiUtils.showErrorDialog(getActivity(),
+                                        getString(R.string.error_message),
+                                        getString(R.string.synchronizing_data),
                                         new DialogInterface.OnClickListener() {
-
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 dialog.dismiss();
                                             }
                                         });
                             } else {
+
                                 DhisService.logOutUser(getActivity());
-                                Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
+                                Intent intent = new Intent(getActivity().getApplicationContext(),
+                                        LoginActivity.class);
                                 startActivity(intent);
                                 getActivity().finish();
                             }
+                        }
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DhisController.hasLogoutDialogActive = false;
+                            dialog.dismiss();
                         }
                     });
         } else if (view.getId() == R.id.settings_sync_button) {
@@ -236,6 +247,7 @@ public class SettingsFragment extends Fragment
     }
 
     private void startSync() {
+        DhisController.hasSynchronizedActiveProcess = true;
         changeUiVisibility(false);
         setText(getProgressMessage());
     }
@@ -245,6 +257,7 @@ public class SettingsFragment extends Fragment
         syncTextView.setText("");
         synchronizeButton.setText(R.string.synchronize_with_server);
         synchronizeRemovedEventsButton.setText(R.string.synchronize_deleted_events);
+        DhisController.hasSynchronizedActiveProcess = false;
     }
 
     private void changeUiVisibility(boolean enabled) {
