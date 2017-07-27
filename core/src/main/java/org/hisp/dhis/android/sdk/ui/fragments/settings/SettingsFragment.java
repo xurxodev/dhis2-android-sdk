@@ -125,7 +125,7 @@ public class SettingsFragment extends Fragment
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             DhisController.hasLogoutDialogActive = false;
-                            if (DhisController.hasSynchronizedActiveProcess) {
+                            if (DhisController.hasSynchronizationActiveProcess) {
                                 //show error dialog
                                 UiUtils.showErrorDialog(getActivity(),
                                         getString(R.string.error_message),
@@ -247,7 +247,7 @@ public class SettingsFragment extends Fragment
     }
 
     private void startSync() {
-        DhisController.hasSynchronizedActiveProcess = true;
+        DhisController.hasSynchronizationActiveProcess = true;
         changeUiVisibility(false);
         setText(getProgressMessage());
     }
@@ -257,7 +257,7 @@ public class SettingsFragment extends Fragment
         syncTextView.setText("");
         synchronizeButton.setText(R.string.synchronize_with_server);
         synchronizeRemovedEventsButton.setText(R.string.synchronize_deleted_events);
-        DhisController.hasSynchronizedActiveProcess = false;
+        DhisController.hasSynchronizationActiveProcess = false;
     }
 
     private void changeUiVisibility(boolean enabled) {

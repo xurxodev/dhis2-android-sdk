@@ -71,6 +71,7 @@ public class PeriodicSynchronizer extends BroadcastReceiver {
             return;
         }
         if(DhisController.hasLogoutDialogActive){
+            //When the logout dialog is active the sync can't be launch to prevent logout crashes.
             Log.d(this.getClass().getName(), "haslogoutdialogactive: "+DhisController.hasLogoutDialogActive);
             return;
         }

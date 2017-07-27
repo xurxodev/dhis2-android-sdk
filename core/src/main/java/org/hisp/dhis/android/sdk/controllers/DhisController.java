@@ -62,10 +62,10 @@ public final class DhisController {
     private final static String CREDENTIALS = "credentials";
 
     /**
-     * Variable hasSynchronizedActiveProcess
+     * Variable hasSynchronizationActiveProcess
      * Is set to true when a sync process is active
      */
-    public static boolean hasSynchronizedActiveProcess;
+    public static boolean hasSynchronizationActiveProcess;
     /**
      * Variable hasLogoutDialogActive
      * Is set to true when a the logout dialog is active
