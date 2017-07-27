@@ -57,6 +57,7 @@ import org.hisp.dhis.android.sdk.events.LoadingMessageEvent;
 import org.hisp.dhis.android.sdk.events.UiEvent;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.ui.activities.LoginActivity;
+import org.hisp.dhis.android.sdk.ui.dialogs.CustomDialogFragment;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
 
 /**
@@ -120,20 +121,33 @@ public class SettingsFragment extends Fragment
             DhisController.hasLogoutDialogActive = true;
             UiUtils.showConfirmDialog(getActivity(), getString(R.string.logout_title),
                     getString(R.string.logout_message),
-                    getString(R.string.logout_option), getString(R.string.cancel_option),
+                    getString(R.string.logout_option),
+                    null,
+                    getString(R.string.cancel_option),
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            DhisController.hasLogoutDialogActive = false;
                             if (DhisController.hasSynchronizationActiveProcess) {
                                 //show error dialog
                                 UiUtils.showErrorDialog(getActivity(),
                                         getString(R.string.error_message),
                                         getString(R.string.synchronizing_data),
+                                        getString(R.string.ok_option),
+                                        null,
+                                        null,
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 dialog.dismiss();
+                                                DhisController.hasLogoutDialogActive = false;
+                                            }
+                                        },
+                                        null,
+                                        null,
+                                        new CustomDialogFragment.Callback() {
+                                            @Override
+                                            public void cancel() {
+                                                DhisController.hasLogoutDialogActive = false;
                                             }
                                         });
                             } else {
@@ -143,6 +157,7 @@ public class SettingsFragment extends Fragment
                                         LoginActivity.class);
                                 startActivity(intent);
                                 getActivity().finish();
+                                DhisController.hasLogoutDialogActive = false;
                             }
                         }
                     }, new DialogInterface.OnClickListener() {
@@ -150,6 +165,13 @@ public class SettingsFragment extends Fragment
                         public void onClick(DialogInterface dialog, int which) {
                             DhisController.hasLogoutDialogActive = false;
                             dialog.dismiss();
+                        }
+                    },
+                    null,
+                    new CustomDialogFragment.Callback() {
+                        @Override
+                        public void cancel() {
+                            DhisController.hasLogoutDialogActive = false;
                         }
                     });
         } else if (view.getId() == R.id.settings_sync_button) {

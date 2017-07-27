@@ -101,6 +101,22 @@ public final class UiUtils {
         });
     }
 
+    public static void showErrorDialog(final Activity activity, final String title, final String message,
+            final String confirmOption, final String cancelOption, final String neutralOption,
+            final DialogInterface.OnClickListener onConfirmListener,
+            final DialogInterface.OnClickListener onNegativeListener,
+            final DialogInterface.OnClickListener onNeutralListener,
+            final CustomDialogFragment.Callback callback) {
+        if (activity == null) return;
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new CustomDialogFragment(title, message, confirmOption, cancelOption, neutralOption, onConfirmListener, onNegativeListener,
+                        onNeutralListener, callback).show(activity.getFragmentManager(), title);
+            }
+        });
+    }
+
     public static void showConfirmDialog(final Activity activity, final String title, final String message,
                                          final String confirmOption, final String cancelOption,
                                          DialogInterface.OnClickListener onClickListener) {
@@ -131,12 +147,23 @@ public final class UiUtils {
     }
 
     public static void showConfirmDialog(final Activity activity, final String title, final String message,
+            final String confirmOption, final String cancelOption, final String neutralOption,
+            DialogInterface.OnClickListener onConfirmListener,
+            DialogInterface.OnClickListener onNegativeListener,
+            DialogInterface.OnClickListener onNeutralListener,
+            CustomDialogFragment.Callback callback) {
+        new CustomDialogFragment(title, message, confirmOption, cancelOption, neutralOption, onConfirmListener, onNegativeListener,
+                onNeutralListener, callback).
+                show(activity.getFragmentManager(), title);
+    }
+
+    public static void showConfirmDialog(final Activity activity, final String title, final String message,
                                          final String firstOption, final String secondOption, final String thirdOption,
                                          DialogInterface.OnClickListener firstOptionListener,
                                          DialogInterface.OnClickListener secondOptionListener,
                                          DialogInterface.OnClickListener thirdOptionListener) {
         new CustomDialogFragment(title, message, firstOption, secondOption, thirdOption,
-                firstOptionListener, secondOptionListener, thirdOptionListener).
+                firstOptionListener, secondOptionListener, thirdOptionListener, null).
                 show(activity.getFragmentManager(), title);
     }
 

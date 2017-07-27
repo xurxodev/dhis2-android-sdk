@@ -47,8 +47,10 @@ public class CustomDialogFragment
     OnClickListener firstOptionListener;
     OnClickListener secondOptionListener;
     OnClickListener thirdOptionListener;
+    Callback mCallback;
+
     int iconId = -1;
-    
+
     public CustomDialogFragment(String title, String message, String firstOption, OnClickListener firstOptionListener) {
     	this.title = title;
         this.message = message;
@@ -66,7 +68,7 @@ public class CustomDialogFragment
         this.firstOptionListener = firstOptionListener;
         this.secondOption = null;
     }
-    
+
     public CustomDialogFragment(String title, String message, String firstOption)
     {
         this.title = title;
@@ -75,7 +77,7 @@ public class CustomDialogFragment
         this.secondOption = null;
         this.firstOptionListener = null;
     }
-    
+
     public CustomDialogFragment(String title, String message, String firstOption, String secondOption, OnClickListener firstOptionListener)
     {
         this.title = title;
@@ -94,7 +96,7 @@ public class CustomDialogFragment
         this.iconId = iconId;
         this.firstOptionListener = firstOptionListener;
     }
-    
+
     public CustomDialogFragment(String title, String message, String firstOption, String secondOption, OnClickListener firstOptionListener,
     		OnClickListener secondOptionListener)
     {
@@ -123,7 +125,8 @@ public class CustomDialogFragment
                                 String secondOption, String thirdOption,
                                 OnClickListener firstOptionListener,
                                 OnClickListener secondOptionListener,
-                                OnClickListener thirdOptionListener) {
+                                OnClickListener thirdOptionListener,
+            Callback mCallback) {
         this.title = title;
         this.message = message;
         this.firstOption = firstOption;
@@ -132,6 +135,7 @@ public class CustomDialogFragment
         this.firstOptionListener = firstOptionListener;
         this.secondOptionListener = secondOptionListener;
         this.thirdOptionListener = thirdOptionListener;
+        this.mCallback = mCallback;
     }
 
     @Override
@@ -154,15 +158,26 @@ public class CustomDialogFragment
                 {
                     dialog.dismiss();
                 }
-            }; 
+            };
         if(secondOption !=null) {
             alertDialogBuilder.setNegativeButton(secondOption, secondOptionListener);
         }
         if(thirdOption!=null) {
             alertDialogBuilder.setNeutralButton(thirdOption, thirdOptionListener);
         }
-
-
         return alertDialogBuilder.create();
+    }
+
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        if(mCallback!=null){
+            mCallback.cancel();
+        }
+    }
+
+    public interface Callback {
+        public void cancel();
     }
 }
