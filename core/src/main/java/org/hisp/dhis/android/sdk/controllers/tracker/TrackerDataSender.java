@@ -340,9 +340,7 @@ final class TrackerDataSender {
                 return;
             }
         }
-        if (enrollments.size() <= 1) {
-            sendEnrollmentChanges(dhisApi, enrollments, sendEvents);
-        }
+        sendEnrollmentChanges(dhisApi, enrollments, sendEvents);
     }
 
     static void sendEnrollmentChanges(DhisApi dhisApi, List<Enrollment> enrollments, boolean sendEvents) throws APIException {
