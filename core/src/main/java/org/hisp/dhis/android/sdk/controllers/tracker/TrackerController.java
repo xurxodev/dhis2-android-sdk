@@ -76,7 +76,6 @@ import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -617,6 +616,7 @@ public final class TrackerController extends ResourceController {
         TrackerDataSender.sendTrackedEntityInstanceChanges(dhisApi, trackedEntityInstance, sendEnrollments);
     }
 
+
     public static List<Enrollment> getActiveEnrollments() {
         List<Enrollment> activeEnrollments = new Select().from(Enrollment.class)
                 .where(Condition.column(Enrollment$Table.STATUS).eq(Enrollment.ACTIVE))
@@ -696,5 +696,21 @@ public final class TrackerController extends ResourceController {
                     dhisApi, trackedEntityInstance.getUid(), true, true,
                     serverDateTime);
         }
+    }
+
+
+    /**
+     * Returns the number of the given value by given trackedentityattribute
+     *
+     * @param value
+     * @return
+     */
+    public static int countTrackedEntityAttributeValue(String value, String trackedEntityAttribute) {
+        return (int) new Select().count().from(TrackedEntityAttributeValue.class).where(
+                Condition.column(TrackedEntityAttributeValue$Table.
+                        VALUE).eq(value))
+                .and(
+                Condition.column(TrackedEntityAttributeValue$Table.
+                        TRACKEDENTITYATTRIBUTEID).eq(trackedEntityAttribute)).count();
     }
 }
