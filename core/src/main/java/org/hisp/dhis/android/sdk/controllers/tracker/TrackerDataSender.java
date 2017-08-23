@@ -364,9 +364,9 @@ final class TrackerDataSender {
                 continue;
             }
             if(enrollment.getCreated()==null && enrollment.getStatus().equals(Enrollment.CANCELLED)) {
-                sendEnrollmentChanges(dhisApi, enrollment, sendEvents);
+                sendEnrollmentChanges(dhisApi, enrollment, false);
             }
-            sendEnrollmentChanges(dhisApi, enrollment, false);
+            sendEnrollmentChanges(dhisApi, enrollment, sendEvents);
         }
     }
 
