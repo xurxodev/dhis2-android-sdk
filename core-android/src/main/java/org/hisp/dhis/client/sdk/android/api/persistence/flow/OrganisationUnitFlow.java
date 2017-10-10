@@ -69,6 +69,9 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
     @Column
     boolean isAssignedToUser;
 
+    @Column
+    String coordinates;
+
     private List<AttributeValueFlow> attributeValues;
 
     public OrganisationUnitFlow() {
@@ -99,6 +102,13 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
         this.isAssignedToUser = isAssignedToUser;
     }
 
+    public String getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(String coordinates) {
+        this.coordinates = coordinates;
+    }
 
     public List<AttributeValueFlow> getAttributeValueFlow() {
         if(attributeValues==null) {
@@ -148,6 +158,7 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
             organisationUnitFlow.setLevel(organisationUnit.getLevel());
             organisationUnitFlow.setParent(mapToDatabaseEntity(organisationUnit.getParent()));
             organisationUnitFlow.setIsAssignedToUser(organisationUnit.isAssignedToUser());
+            organisationUnitFlow.setCoordinates(organisationUnit.getCoordinates());
             List<AttributeValueFlow> attributeValueFlows = new ArrayList<>();
             if (organisationUnit.getAttributeValues() != null) {
                 for (AttributeValue attributeValue : organisationUnit.getAttributeValues()) {
@@ -177,6 +188,7 @@ public final class OrganisationUnitFlow extends BaseIdentifiableObjectFlow {
             organisationUnit.setLevel(organisationUnitFlow.getLevel());
             organisationUnit.setParent(mapToModel(organisationUnitFlow.getParent()));
             organisationUnit.setIsAssignedToUser(organisationUnitFlow.isAssignedToUser());
+            organisationUnit.setCoordinates(organisationUnitFlow.getCoordinates());
             List<AttributeValue> attributeValues = new ArrayList<>();
             if (organisationUnit.getAttributeValues() != null) {
                 for (AttributeValueFlow attributeValueFlow : organisationUnitFlow

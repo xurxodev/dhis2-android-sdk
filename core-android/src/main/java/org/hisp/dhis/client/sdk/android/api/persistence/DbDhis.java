@@ -35,5 +35,5 @@ import com.raizlabs.android.dbflow.annotation.Database;
 )
 public final class DbDhis {
     public static final String NAME = "dhis";
-    public static final int VERSION = 3;
+    public static final int VERSION = 4;
 }

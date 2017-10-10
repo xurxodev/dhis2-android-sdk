@@ -28,6 +28,8 @@
 
 package org.hisp.dhis.client.sdk.android.organisationunit;
 
+import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.getCollection;
+
 import org.hisp.dhis.client.sdk.android.api.network.ApiResource;
 import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
@@ -40,8 +42,6 @@ import java.util.Map;
 import java.util.Set;
 
 import retrofit2.Call;
-
-import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.getCollection;
 
 // TODO add parent organisation unit support
 public class OrganisationUnitApiClientImpl implements OrganisationUnitApiClient {
@@ -69,7 +69,7 @@ public class OrganisationUnitApiClientImpl implements OrganisationUnitApiClient 
 
             @Override
             public String getAllProperties() {
-                return "id,name,displayName,created,lastUpdated,access,path," +
+                return "id,name,coordinates,displayName,created,lastUpdated,access,path," +
                         "level,openingDate,programs[id],dataSets[id],attributeValues[*,attribute[name,displayName,created,lastUpdated,access,id,valueType,code]]";
             }
 
