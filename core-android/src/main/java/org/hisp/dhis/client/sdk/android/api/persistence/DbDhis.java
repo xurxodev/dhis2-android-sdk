@@ -42,10 +42,10 @@ import org.hisp.dhis.client.sdk.android.api.persistence.flow.AttributeFlow;
 )
 public final class DbDhis {
     public static final String NAME = "dhis";
-    public static final int VERSION = 3;
+    public static final int VERSION = 4;
 
-    @Migration(version = 3, database = DbDhis.class)
-    public static class Migration3 extends BaseMigration {
+    @Migration(version = 4, database = DbDhis.class)
+    public static class Migration4 extends BaseMigration {
 
         @Override
         public void migrate(DatabaseWrapper database) {
