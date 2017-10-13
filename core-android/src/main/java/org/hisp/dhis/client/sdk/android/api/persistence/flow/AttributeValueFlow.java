@@ -72,7 +72,7 @@ public class AttributeValueFlow extends BaseModelFlow {
         if(attribute==null) {
             AttributeFlow attributeFlow = new Select()
                     .from(AttributeFlow.class)
-                    .where(AttributeFlow_Table.uId
+                    .where(AttributeFlow_Table.attributeUId
                             .is(getAttributeUId())).querySingle();
             if(attributeFlow==null) return null;
             setAttribute(AttributeFlow.MAPPER.mapToModel(attributeFlow));
