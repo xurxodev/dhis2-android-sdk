@@ -22,8 +22,8 @@ public class AttributeFlow extends BaseModelFlow {
     @Column(name = "valueType")
     String valueType;
 
-    @Column(name = "uId")
-    String UId;
+    @Column(name = "attributeUId")
+    String attributeUId;
 
     @Column(name = "lastUpdated")
     String lastUpdated;
@@ -50,12 +50,12 @@ public class AttributeFlow extends BaseModelFlow {
         this.valueType = valueType;
     }
 
-    public String getUId() {
-        return UId;
+    public String getAttributeUId() {
+        return attributeUId;
     }
 
-    public void setUId(String UId) {
-        this.UId = UId;
+    public void setAttributeUId(String attributeUId) {
+        this.attributeUId = attributeUId;
     }
 
     public String getLastUpdated() {
@@ -105,7 +105,7 @@ public class AttributeFlow extends BaseModelFlow {
 
             AttributeFlow attributeFlow = new AttributeFlow();
             attributeFlow.setCode(attribute.getCode());
-            attributeFlow.setUId(attribute.getUId());
+            attributeFlow.setAttributeUId(attribute.getUId());
             attributeFlow.setName(attribute.getName());
             attributeFlow.setDisplayName(attribute.getDisplayName());
             attributeFlow.setCreated(attribute.getCreated());
@@ -124,7 +124,7 @@ public class AttributeFlow extends BaseModelFlow {
             Attribute attribute = new Attribute();
             attribute.setCode(attributeFlow.getCode());
             attribute.setId(attributeFlow.getId());
-            attribute.setUId(attributeFlow.getUId());
+            attribute.setUId(attributeFlow.getAttributeUId());
             attribute.setName(attributeFlow.getName());
             attribute.setDisplayName(attributeFlow.getDisplayName());
             attribute.setCreated(attributeFlow.getCreated());

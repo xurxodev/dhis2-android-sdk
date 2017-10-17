@@ -29,6 +29,13 @@
 package org.hisp.dhis.client.sdk.android.api.persistence;
 
 import com.raizlabs.android.dbflow.annotation.Database;
+import com.raizlabs.android.dbflow.annotation.Migration;
+import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.sql.migration.BaseMigration;
+import com.raizlabs.android.dbflow.structure.ModelAdapter;
+import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
+
+import org.hisp.dhis.client.sdk.android.api.persistence.flow.AttributeFlow;
 
 @Database(
         name = DbDhis.NAME, version = DbDhis.VERSION
@@ -36,4 +43,26 @@ import com.raizlabs.android.dbflow.annotation.Database;
 public final class DbDhis {
     public static final String NAME = "dhis";
     public static final int VERSION = 4;
+
+    @Migration(version = 4, database = DbDhis.class)
+    public static class Migration4 extends BaseMigration {
+
+        @Override
+        public void migrate(DatabaseWrapper database) {
+            ModelAdapter myAdapter = FlowManager.getModelAdapter(AttributeFlow.class);
+
+            //Create temporal table
+            String sql=myAdapter.getCreationQuery();
+            sql=sql.replace("AttributeFlow", "AttributeFlow_temp");
+            database.execSQL(sql);
+
+            //Insert the data in temporal table
+            String sqlCopy="INSERT INTO AttributeFlow_temp (id, code, valueType, attributeUId, lastUpdated, created, displayName, name) SELECT id, code, valueType, uId, lastUpdated, created, displayName, name FROM AttributeFlow";
+            database.execSQL(sqlCopy);
+
+            //Replace old table by new table with the new column name.
+            database.execSQL("DROP TABLE IF EXISTS AttributeFlow");
+            database.execSQL("ALTER TABLE AttributeFlow_temp RENAME TO AttributeFlow");
+        }
+    }
 }
