@@ -83,7 +83,7 @@ public class ImportSummary {
     }
 
     public enum Status {
-        SUCCESS, OK, ERROR
+        SUCCESS, OK, ERROR, WARNING
     }
 
     @Override
