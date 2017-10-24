@@ -113,7 +113,7 @@ public class OrganisationUnitApiClientImpl implements OrganisationUnitApiClient 
 
                 @Override
                 public String getDescendantProperties() {
-                    throw new UnsupportedOperationException();
+                    return "";
                 }
 
                 @Override
