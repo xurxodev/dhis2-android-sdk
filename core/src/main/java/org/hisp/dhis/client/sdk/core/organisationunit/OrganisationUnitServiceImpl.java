@@ -63,6 +63,11 @@ public class OrganisationUnitServiceImpl implements OrganisationUnitService {
     }
 
     @Override
+    public List<OrganisationUnit> listAllDescendants(String uid) {
+        return organisationUnitStore.queryAllDescendants(uid);
+    }
+
+    @Override
     public List<OrganisationUnit> listByPrograms(List<Program> programs) {
         return organisationUnitStore.queryByPrograms(programs);
     }
