@@ -32,6 +32,7 @@ import org.hisp.dhis.client.sdk.core.attribute.AttributeValueStore;
 import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.controllers.AbsSyncStrategyController;
 import org.hisp.dhis.client.sdk.core.common.controllers.SyncStrategy;
+import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.core.common.persistence.DbOperation;
 import org.hisp.dhis.client.sdk.core.common.persistence.DbOperationImpl;
 import org.hisp.dhis.client.sdk.core.common.persistence.DbUtils;
@@ -150,5 +151,68 @@ public class OrganisationUnitControllerImpl extends AbsSyncStrategyController<Or
         transactionManager.transact(dbOperations);
 
         lastUpdatedPreferences.save(ResourceType.ORGANISATION_UNITS, DateType.SERVER, serverTime);
+    }
+
+    @Override
+    public List<OrganisationUnit> pullAllDescendants(SyncStrategy strategy, String uid)
+            throws ApiException {
+        DateTime serverTime = systemInfoController.getSystemInfo().getServerDate();
+        DateTime lastUpdated = lastUpdatedPreferences.get(
+                ResourceType.ORGANISATION_UNITS, DateType.SERVER);
+
+        List<OrganisationUnit> persistedOrganisationUnits = identifiableObjectStore.queryAll();
+
+        List<OrganisationUnit> organisationUnitsDescendants = new ArrayList<>();
+        // we have to download all ids from server in order to
+        // find out what was removed on the server side
+        List<OrganisationUnit> allExistingOrganisationUnits = new ArrayList<>();
+        if (strategy.equals(SyncStrategy.NO_STORE)) {
+            return organisationUnitApiClient.getOrganisationUnitDescendants(Fields.DESCENDANTS,
+                    null, uid);
+        } else if (strategy != SyncStrategy.NO_DELETE) {
+            organisationUnitsDescendants = organisationUnitApiClient.getOrganisationUnitDescendants(
+                    Fields.DESCENDANTS, null,
+                    uid);
+        }
+
+        List<OrganisationUnit> updatedOrganisationUnits = new ArrayList<>();
+        if (uid != null && !uid.equals("")) {
+            updatedOrganisationUnits.addAll(organisationUnitApiClient
+                    .getOrganisationUnits(Fields.ALL, lastUpdated, null));
+        }
+
+        // we need to mark assigned organisation units as "assigned" before storing them
+        Map<String, OrganisationUnit> assignedOrganisationUnits = ModelUtils
+                .toMap(userApiClient.getUserAccount().getOrganisationUnits());
+
+        for (OrganisationUnit updatedOrganisationUnit : updatedOrganisationUnits) {
+            OrganisationUnit assignedOrganisationUnit = assignedOrganisationUnits
+                    .get(updatedOrganisationUnit.getUId());
+            updatedOrganisationUnit.setIsAssignedToUser(assignedOrganisationUnit != null);
+        }
+
+        ArrayList<AttributeValue> attributeValues = new ArrayList<>();
+        for (OrganisationUnit organisationUnit : updatedOrganisationUnits) {
+            if (organisationUnit.getAttributeValues() != null) {
+                for (AttributeValue attributeValue : organisationUnit.getAttributeValues()) {
+                    attributeValue.setReferenceUId(organisationUnit.getUId());
+                    attributeValue.setItemType(organisationUnit.getClass().getName());
+                    attributeValues.add(attributeValue);
+                }
+            }
+        }
+        // we will have to perform something similar to what happens in AbsController
+        List<DbOperation> dbOperations = DbUtils.createOperations(allExistingOrganisationUnits,
+                updatedOrganisationUnits, persistedOrganisationUnits, identifiableObjectStore);
+
+        for (AttributeValue attributeValue : attributeValues) {
+            dbOperations.add(DbOperationImpl.with(attributeValueStore)
+                    .insert(attributeValue));
+        }
+        transactionManager.transact(dbOperations);
+
+        lastUpdatedPreferences.save(ResourceType.ORGANISATION_UNITS, DateType.SERVER,
+                serverTime);
+        return organisationUnitsDescendants;
     }
 }
