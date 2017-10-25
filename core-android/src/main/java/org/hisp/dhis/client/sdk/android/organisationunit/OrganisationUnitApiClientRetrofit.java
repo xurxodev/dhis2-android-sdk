@@ -35,6 +35,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
@@ -44,4 +45,7 @@ public interface OrganisationUnitApiClientRetrofit {
     @GET("organisationUnits")
     Call<Map<String, List<OrganisationUnit>>> getOrganisationUnits(
             @QueryMap Map<String, String> queryMap, @Query("filter") List<String> filters);
+
+    @GET("organisationUnits/{uid}?includeDescendants=true")
+    Call<Map<String,List<OrganisationUnit>>> getOrganisationUnitsDescendants(@Path("uid") String Uid);
 }

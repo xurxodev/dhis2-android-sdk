@@ -92,6 +92,15 @@ public class OrganisationUnitInteractorImpl implements OrganisationUnitInteracto
     }
 
     @Override
+    public Observable<List<OrganisationUnit>> pullAllDescendants(final SyncStrategy strategy, final String uid) {
+        return Observable.create(new DefaultOnSubscribe<List<OrganisationUnit>>() {
+            @Override
+            public List<OrganisationUnit> call() {
+                return organisationUnitController.pullAllDescendants(strategy, uid);
+            }
+        });
+    }
+    @Override
     public Observable<List<OrganisationUnit>> pull(final Set<String> uids) {
         return Observable.create(new DefaultOnSubscribe<List<OrganisationUnit>>() {
             @Override

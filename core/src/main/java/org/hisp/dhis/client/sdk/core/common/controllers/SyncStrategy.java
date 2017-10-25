@@ -29,5 +29,5 @@
 package org.hisp.dhis.client.sdk.core.common.controllers;
 
 public enum SyncStrategy {
-    DEFAULT, FORCE_UPDATE, NO_DELETE
+    DEFAULT, FORCE_UPDATE, NO_DELETE, NO_STORE
 }

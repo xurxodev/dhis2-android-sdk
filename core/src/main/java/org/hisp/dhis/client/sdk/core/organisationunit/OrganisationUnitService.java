@@ -47,4 +47,6 @@ public interface OrganisationUnitService extends Service, Get<OrganisationUnit>,
     List<OrganisationUnit> listByPrograms(List<Program> programs);
 
     List<OrganisationUnit> listByDataSets(List<DataSet> dataSets);
+
+    List<OrganisationUnit> listAllDescendants(String uid);
 }

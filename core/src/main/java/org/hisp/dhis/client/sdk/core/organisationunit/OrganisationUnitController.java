@@ -29,7 +29,14 @@
 package org.hisp.dhis.client.sdk.core.organisationunit;
 
 import org.hisp.dhis.client.sdk.core.common.controllers.IdentifiableController;
+import org.hisp.dhis.client.sdk.core.common.controllers.SyncStrategy;
+import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
 
+import java.util.List;
+
 public interface OrganisationUnitController extends IdentifiableController<OrganisationUnit> {
+
+    List<OrganisationUnit> pullAllDescendants(SyncStrategy syncStrategy, String uid) throws ApiException;
+
 }

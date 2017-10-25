@@ -39,4 +39,6 @@ import java.util.Set;
 public interface OrganisationUnitApiClient {
     List<OrganisationUnit> getOrganisationUnits(
             Fields fields, DateTime lastUpdated, Set<String> uids) throws ApiException;
+    List<OrganisationUnit>  getOrganisationUnitDescendants(
+            Fields fields, DateTime lastUpdated, String uid) throws ApiException;
 }

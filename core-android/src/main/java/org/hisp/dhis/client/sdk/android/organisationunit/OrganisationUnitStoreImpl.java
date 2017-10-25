@@ -77,6 +77,22 @@ public final class OrganisationUnitStoreImpl extends AbsIdentifiableObjectStore<
     }
 
     @Override
+    public List<OrganisationUnit> queryAllDescendants(String uid) {
+        OrganisationUnit organisationUnitParent = queryByUid(uid);
+        List<OrganisationUnitFlow> organisationUnitFlows = new Select()
+                .from(OrganisationUnitFlow.class)
+                .where(OrganisationUnitFlow_Table
+                        .path.like(organisationUnitParent.getPath() + "%"))
+                .queryList();
+
+        List<OrganisationUnit> orgUnits = null;
+        if(organisationUnitFlows!=null) {
+            orgUnits = getMapper().mapToModels(organisationUnitFlows);
+        }
+        return queryUnitRelationships(orgUnits);
+    }
+
+    @Override
     public List<OrganisationUnit> queryByPrograms(List<Program> programs) {
         List<OrganisationUnitFlow> orgUnitFlows = ModelLinkFlow.queryRelatedModels(
                 OrganisationUnitFlow.class, UNITS_TO_PROGRAMS, programs);

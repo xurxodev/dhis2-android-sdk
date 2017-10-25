@@ -37,6 +37,7 @@ import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitApiClient;
 import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
 import org.joda.time.DateTime;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -86,5 +87,43 @@ public class OrganisationUnitApiClientImpl implements OrganisationUnitApiClient 
         };
 
         return getCollection(apiResource, fields, lastUpdated, uids);
+    }
+
+    @Override
+    public List<OrganisationUnit> getOrganisationUnitDescendants(Fields fields,
+            DateTime lastUpdated, final String uid) throws ApiException {
+
+            ApiResource<OrganisationUnit> apiResource = new ApiResource<OrganisationUnit>() {
+
+                @Override
+                public String getResourceName() {
+                    return "organisationUnits";
+                }
+
+                @Override
+                public String getBasicProperties() {
+                    return "id,attributeValues[*,attribute[name,displayName,created,lastUpdated,access,id,valueType,code]]";
+                }
+
+                @Override
+                public String getAllProperties() {
+                    return "id,name,coordinates,displayName,created,lastUpdated,access,path," +
+                            "level,openingDate,programs[id],dataSets[id],attributeValues[*,attribute[name,displayName,created,lastUpdated,access,id,valueType,code]]";
+                }
+
+                @Override
+                public String getDescendantProperties() {
+                    return "";
+                }
+
+                @Override
+                public Call<Map<String, List<OrganisationUnit>>> getEntities(
+                        Map<String, String> queryMap, List<String> filters) throws ApiException {
+                    return unitApiClientRetrofit.getOrganisationUnitsDescendants(uid);
+                }
+            };
+            Set uids = new HashSet<String>();
+            uids.add(uid);
+            return getCollection(apiResource, fields, lastUpdated, uids);
     }
 }

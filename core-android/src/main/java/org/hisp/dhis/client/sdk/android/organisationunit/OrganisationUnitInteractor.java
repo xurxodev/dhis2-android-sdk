@@ -60,4 +60,6 @@ public interface OrganisationUnitInteractor {
     Observable<List<OrganisationUnit>> pull(SyncStrategy syncStrategy);
 
     Observable<List<OrganisationUnit>> pull(SyncStrategy syncStrategy, Set<String> uids);
+
+    Observable<List<OrganisationUnit>> pullAllDescendants(SyncStrategy syncStrategy, String orgUnit);
 }

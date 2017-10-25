@@ -38,6 +38,8 @@ import java.util.List;
 public interface OrganisationUnitStore extends IdentifiableObjectStore<OrganisationUnit> {
     List<OrganisationUnit> query(boolean assignedToCurrentUser);
 
+    List<OrganisationUnit> queryAllDescendants(String Uid);
+
     List<OrganisationUnit> queryByPrograms(List<Program> programs);
 
     List<OrganisationUnit> queryByDataSets(List<DataSet> dataSets);
