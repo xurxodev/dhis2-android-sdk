@@ -34,6 +34,7 @@ import static org.hisp.dhis.android.sdk.utils.NetworkUtils.unwrapResponse;
 import android.content.Context;
 import android.util.Log;
 
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
@@ -50,6 +51,7 @@ import org.hisp.dhis.android.sdk.controllers.wrappers.ProgramWrapper;
 import org.hisp.dhis.android.sdk.events.LoadingMessageEvent;
 import org.hisp.dhis.android.sdk.network.APIException;
 import org.hisp.dhis.android.sdk.network.DhisApi;
+import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 import org.hisp.dhis.android.sdk.persistence.models.Attribute;
 import org.hisp.dhis.android.sdk.persistence.models.Attribute$Table;
 import org.hisp.dhis.android.sdk.persistence.models.AttributeValue;
@@ -575,50 +577,9 @@ public final class MetaDataController extends ResourceController {
     /**
      * Deletes all meta data from local database
      */
-    public static void wipe() {
-        Delete.tables(
-                Attribute.class,
-                AttributeValue.class,
-                Conflict.class,
-                Constant.class,
-                Dashboard.class,
-                DashboardElement.class,
-                DashboardItem.class,
-                DashboardItemContent.class,
-                DataElement.class,
-                DataValue.class,
-                Enrollment.class,
-                Event.class,
-                FailedItem.class,
-                ImportCount.class,
-                ImportSummary.class,
-                Interpretation.class,
-                InterpretationComment.class,
-                InterpretationElement.class,
-                Option.class,
-                OptionSet.class,
-                OrganisationUnit.class,
-                OrganisationUnitProgramRelationship.class,
-                Program.class,
-                ProgramIndicator.class,
-                ProgramIndicatorToSectionRelationship.class,
-                ProgramRule.class,
-                ProgramRuleAction.class,
-                ProgramRuleVariable.class,
-                ProgramStage.class,
-                ProgramStageDataElement.class,
-                ProgramStageSection.class,
-                ProgramTrackedEntityAttribute.class,
-                Relationship.class,
-                RelationshipType.class,
-                SystemInfo.class,
-                TrackedEntityAttributeGeneratedValue.class,
-                TrackedEntityAttributeValue.class,
-                TrackedEntityAttribute.class,
-                TrackedEntityInstance.class,
-                TrackedEntity.class,
-                User.class,
-                UserAccount.class);
+    public static void wipe(Context context) {
+        FlowManager.getDatabase(Dhis2Database.NAME).reset(context);
+        FlowManager.init(context);
     }
 
     /**
