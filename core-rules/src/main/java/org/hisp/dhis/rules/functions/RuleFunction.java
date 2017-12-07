@@ -28,6 +28,8 @@ public abstract class RuleFunction {
                 return RuleFunctionFloor.create();
             case RuleFunctionCeil.D2_CEIL:
                 return RuleFunctionCeil.create();
+            case RuleFunctionAddControlDigits.D2_ADD_CONTROL_DIGITS:
+                return RuleFunctionAddControlDigits.create();
             default:
                 return null;
         }
