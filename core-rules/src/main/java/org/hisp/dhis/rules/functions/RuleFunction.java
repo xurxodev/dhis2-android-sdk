@@ -30,6 +30,8 @@ public abstract class RuleFunction {
                 return RuleFunctionCeil.create();
             case RuleFunctionAddControlDigits.D2_ADD_CONTROL_DIGITS:
                 return RuleFunctionAddControlDigits.create();
+            case RuleFunctionCheckControlDigits.D2_CHECK_CONTROL_DIGITS:
+                return RuleFunctionCheckControlDigits.create();
             default:
                 return null;
         }
