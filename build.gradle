@@ -1,38 +1,30 @@
-/*
- * Copyright (c) 2015, University of Oslo
- *
- * All rights reserved.
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.
- *
- * Redistributions in binary form must reproduce the above copyright notice,
- * this list of conditions and the following disclaimer in the documentation
- * and/or other materials provided with the distribution.
- * Neither the name of the HISP project nor the names of its contributors may
- * be used to endorse or promote products derived from this software without
- * specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+apply plugin: "com.gradle.build-scan"
 
 buildscript {
     repositories {
         jcenter()
+
+        // Required by build-scan and error-prone plugins.
+        maven {
+            url("https://plugins.gradle.org/m2/")
+        }
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.3.0'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+        // android gradle plugin
+        classpath "com.android.tools.build:gradle:2.3.3"
+
+        // method count plugin
+        classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.1"
+
+        // semantic, static analysis of the source code
+        classpath "net.ltgt.gradle:gradle-errorprone-plugin:0.0.8"
+
+        // apt plugin for java
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
+
+        // enables cloud features of gradle plugin
+        classpath "com.gradle:build-scan-plugin:1.3"
     }
 }
 
@@ -42,14 +34,54 @@ allprojects {
     }
 }
 
-ext {
-    // SDK version.
-    versionCode = 1
-    versionName = "1.0"
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
 
-    // Compilation configuration.
-    minSdkVersion = 15
-    compileSdkVersion = 22
-    targetSdkVersion = 22
-    buildToolsVersion = "22.0.1"
+buildScan {
+    licenseAgreementUrl = "https://gradle.com/terms-of-service"
+    licenseAgree = "yes"
+}
+
+subprojects { project ->
+    group = GROUP
+    version = VERSION_NAME
+}
+
+ext {
+    configuration = [
+            buildToolsVersion: "25.0.2",
+            minSdkVersion    : 15,
+            targetSdkVersion : 25,
+            versionCode      : 31,
+            versionName      : "0.3.1-SNAPSHOT"
+    ]
+
+    libraries = [
+            // android
+            support         : "25.1.1",
+
+            // java
+            jackson         : "2.8.5",
+            autovalue       : "1.3",
+            autovaluecursor : "1.0.1",
+            retrofit        : "2.1.0",
+            okhttp          : "3.5.0",
+            duktape         : "1.1.0",
+
+            // @NonNull, @Nullable
+            // annotations for java modules
+            jsr305          : "3.0.1",
+
+            // test dependencies
+            junit           : "4.12",
+            assertj         : "3.5.2",
+            mockito         : "1.10.19",
+            truth           : "0.31",
+            testrunner      : "0.5",
+            equalsverifier  : "2.1.8",
+
+            // plugins
+            errorpronecore  : "2.0.15"
+    ]
 }
