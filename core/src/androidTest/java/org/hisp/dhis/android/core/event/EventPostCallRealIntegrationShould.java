@@ -2,6 +2,8 @@ package org.hisp.dhis.android.core.event;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import android.support.test.filters.LargeTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hisp.dhis.android.core.D2;
@@ -88,7 +90,8 @@ public class EventPostCallRealIntegrationShould extends AbsStoreTestCase {
     }
 
     // commented out since it is a flaky test that works against a real server.
-    //@Test
+    @Test
+    @LargeTest
     public void successful_response_after_sync_events() throws Exception {
         retrofit2.Response response = null;
         response = d2.logIn("android", "Android123").call();
@@ -108,6 +111,7 @@ public class EventPostCallRealIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
+    @SmallTest
     public void stub() throws Exception {
 
     }

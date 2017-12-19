@@ -31,6 +31,7 @@ package org.hisp.dhis.android.core.option;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
+import android.support.test.filters.MediumTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
@@ -81,6 +82,7 @@ public class OptionStoreShould extends AbsStoreTestCase {
     }
 
     @Test
+    @MediumTest
     public void insert_in_data_base_option_when_insert() {
         // INSERT TABLE SETS
         ContentValues optionSet =

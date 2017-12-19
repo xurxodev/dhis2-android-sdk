@@ -28,6 +28,7 @@
 
 package org.hisp.dhis.android.core.data.database;
 
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
@@ -40,6 +41,7 @@ public class DbOpenHelperShould {
     private static final int DATABASE_TESTS_VERSION = 1;
 
     @Test
+    @SmallTest
     public void have_tests_on_database_versions() {
         // ToDo: tests for schema migration (requires some research to be done)
         // make sure that whenever database version is bumped,

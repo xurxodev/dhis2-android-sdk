@@ -29,6 +29,7 @@
 package org.hisp.dhis.android.core.option;
 
 import android.database.Cursor;
+import android.support.test.filters.MediumTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -220,6 +221,7 @@ public class OptionSetCallShould extends AbsStoreTestCase {
 
 
     @Test
+    @MediumTest
     public void persist_option_set_with_options_in_data_base_when_call() throws Exception {
         optionSetCall.call();
 
@@ -294,6 +296,7 @@ public class OptionSetCallShould extends AbsStoreTestCase {
     }
 
     @Test
+    @MediumTest
     public void return_option_set_model_after_call() throws Exception {
         Response<Payload<OptionSet>> response = optionSetCall.call();
 

@@ -2,6 +2,8 @@ package org.hisp.dhis.android.core;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import android.support.test.filters.LargeTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hisp.dhis.android.core.configuration.ConfigurationModel;
@@ -58,10 +60,8 @@ public class MetadataCallRealIntegrationShould extends AbsStoreTestCase {
     pragma foreign_keys = on;
     pragma foreign_key_check;*/
 
-    //This test is uncommented because technically it is flaky.
-    //It depends on a live server to operate and the login is hardcoded here.
-    //Uncomment in order to quickly test changes vs a real server, but keep it uncommented after.
-    //@Test
+    @Test
+    @LargeTest
     public void response_successful_on_sync_meta_data_two_times() throws Exception {
         retrofit2.Response response = null;
         response = d2.logIn("android", "Android123").call();
@@ -83,6 +83,7 @@ public class MetadataCallRealIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
+    @SmallTest
     public void stub() {
     }
 }

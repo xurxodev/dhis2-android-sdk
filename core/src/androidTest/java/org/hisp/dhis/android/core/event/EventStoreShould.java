@@ -31,6 +31,7 @@ package org.hisp.dhis.android.core.event;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
+import android.support.test.filters.MediumTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
@@ -147,6 +148,7 @@ public class EventStoreShould extends AbsStoreTestCase {
     }
 
     @Test
+    @MediumTest
     public void persist_event_in_data_base_after_insert() {
         long rowId = eventStore.insert(
                 EVENT_UID,
@@ -190,6 +192,7 @@ public class EventStoreShould extends AbsStoreTestCase {
     }
 
     @Test
+    @MediumTest
     public void persist_deferrable_event_in_data_base_after_insert() {
         final String deferredProgram = "deferredProgram";
         final String deferredProgramStage = "deferredProgramStage";
@@ -249,6 +252,7 @@ public class EventStoreShould extends AbsStoreTestCase {
     }
 
     @Test
+    @MediumTest
     public void persist_event_nullable_in_data_base_after_insert() {
 
         long rowId = eventStore.insert(EVENT_UID, ENROLLMENT_UID, null, null, null, null, null, null, null, PROGRAM,
@@ -260,6 +264,7 @@ public class EventStoreShould extends AbsStoreTestCase {
     }
 
     @Test
+    @MediumTest
     public void delete_event_in_data_base_after_delete_program_foreign_key() {
         eventStore.insert(
                 EVENT_UID,
@@ -286,6 +291,7 @@ public class EventStoreShould extends AbsStoreTestCase {
     }
 
     @Test
+    @MediumTest
     public void delete_event_in_data_base_after_delete_program_stage_foreign_key() {
         eventStore.insert(
                 EVENT_UID,
@@ -312,6 +318,7 @@ public class EventStoreShould extends AbsStoreTestCase {
     }
 
     @Test
+    @MediumTest
     public void delete_event_in_data_base_after_delete_organisation_unit_foreign_key() {
         eventStore.insert(
                 EVENT_UID,
@@ -340,6 +347,7 @@ public class EventStoreShould extends AbsStoreTestCase {
     }
 
     @Test
+    @MediumTest
     public void update_event_in_data_base_after_update() throws Exception {
         ContentValues event = new ContentValues();
         event.put(Columns.UID, EVENT_UID);
