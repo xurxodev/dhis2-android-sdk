@@ -1,14 +1,5 @@
 #!/bin/bash
 set -xe
-size='small'
-
-while getopts ":s:" opt; do
-    case $opt in
-    s) size="${OPTARG}"
-    ;;
-    esac
-done
-
 
 # You can run it from any directory.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -19,7 +10,7 @@ PROJECT_DIR=$DIR/
 "$PROJECT_DIR"/gradlew --no-daemon build -Dscan
 "$PROJECT_DIR"/gradlew --no-daemon test
 "$PROJECT_DIR"/gradlew --no-daemon connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=small
-if [ "$size" == "medium" ] || [ "$size" == "large" ];
+if [ "$TRAVIS_BRANCH" == "development" ] || [ "$TRAVIS_BRANCH" == "master" ];
 then "$PROJECT_DIR"/gradlew --no-daemon connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=medium; fi
-if [ "$size" == "large" ];
+if [ "$TRAVIS_BRANCH" == "master" ];
 then "$PROJECT_DIR"/gradlew --no-daemon connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=large; fi
