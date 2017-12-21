@@ -71,7 +71,28 @@ public class MetadataCallRealIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @SmallTest
-    public void stub() {
+    @LargeTest
+    public void response_successful_on_login_wipe_db_and_login() throws Exception {
+        retrofit2.Response response = null;
+        response = d2.logIn("android", "Android123").call();
+        assertThat(response.isSuccessful()).isTrue();
+
+        d2.wipeDB().call();
+
+        response = d2.logIn("android", "Android123").call();
+        assertThat(response.isSuccessful()).isTrue();
+    }
+
+    @Test
+    @LargeTest
+    public void response_successful_on_login_logout_and_login() throws Exception {
+        retrofit2.Response response = null;
+        response = d2.logIn("android", "Android123").call();
+        assertThat(response.isSuccessful()).isTrue();
+
+        d2.logout().call();
+
+        response = d2.logIn("android", "Android123").call();
+        assertThat(response.isSuccessful()).isTrue();
     }
 }
