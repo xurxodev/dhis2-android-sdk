@@ -12,10 +12,8 @@ then
 "$PROJECT_DIR"/gradlew --no-daemon build -Dscan
 "$PROJECT_DIR"/gradlew --no-daemon test
 "$PROJECT_DIR"/gradlew --no-daemon connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=small; fi
-if [ "$TEST_SUITE" == "integration" ];
-then
-if [ "$TRAVIS_BRANCH" == "development" ] || [ "$TRAVIS_BRANCH" == "master" ];
+
+if  [ "$TEST_SUITE" == "integration" ] && [[ "$TRAVIS_BRANCH" == "development" ] || [ "$TRAVIS_BRANCH" == "master" ]];
 then "$PROJECT_DIR"/gradlew --no-daemon connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=medium; fi
 if [ "$TRAVIS_BRANCH" == "master" ];
-then "$PROJECT_DIR"/gradlew --no-daemon connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=large; fi;
-fi
+then "$PROJECT_DIR"/gradlew --no-daemon connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=large; fi
