@@ -21,8 +21,7 @@ env:
   - TEST_SUITE=units
   - TEST_SUITE=integration
 script:
-- ./build.sh units
-- travis_wait 30 ./build.sh integration
+- travis_wait 30 ./build.sh $TEST_SUITE
 before_script:
 - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
 - emulator -avd test -no-audio -no-window &
