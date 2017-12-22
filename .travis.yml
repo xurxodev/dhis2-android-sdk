@@ -21,6 +21,7 @@ env:
   matrix:
   - TEST_SUITE=units
   - TEST_SUITE=integration
+  - TEST_SUITE=integration_large
 script:
 - travis_wait 30 ./build.sh $TEST_SUITE
 before_script:

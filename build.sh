@@ -17,7 +17,7 @@ then
     if [ "$TRAVIS_BRANCH" == "development" ] || [ "$TRAVIS_BRANCH" == "master" ]
     then "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=medium
     fi
-    if [ "$TRAVIS_BRANCH" == "master" ]
-    then "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=large
-    fi
+fi
+if [ "$TEST_SUITE" == "integration_large" ] && [ "$TRAVIS_BRANCH" == "master" ]
+then "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=large
 fi
