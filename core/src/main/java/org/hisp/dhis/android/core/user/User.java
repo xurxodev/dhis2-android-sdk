@@ -108,8 +108,6 @@ public abstract class User extends BaseIdentifiableObject {
             = Field.create(PHONE_NUMBER);
     public static final Field<User, String> nationality
             = Field.create(NATIONALITY);
-    public static final Field<User, Boolean> deleted
-            = Field.create(DELETED);
     public static final NestedField<User, UserCredentials> userCredentials
             = NestedField.create(USER_CREDENTIALS);
     public static final NestedField<User, OrganisationUnit> organisationUnits
@@ -210,12 +208,11 @@ public abstract class User extends BaseIdentifiableObject {
             @JsonProperty(USER_CREDENTIALS) UserCredentials userCredentials,
             @JsonProperty(ORGANISATION_UNITS) List<OrganisationUnit> orgUnits,
             @JsonProperty(TEI_SEARCH_ORGANISATION_UNITS) List<OrganisationUnit> searchOrgUnits,
-            @JsonProperty(DATA_VIEW_ORGANISATION_UNITS) List<OrganisationUnit> dataViewOrgUnits,
-            @JsonProperty(DELETED) Boolean deleted) {
+            @JsonProperty(DATA_VIEW_ORGANISATION_UNITS) List<OrganisationUnit> dataViewOrgUnits) {
         // ToDo: change from jackson to gson and implement autovalue-gson extension
 
         return new AutoValue_User(
-                uid, code, name, displayName, created, lastUpdated, deleted, birthday, education, gender,
+                uid, code, name, displayName, created, lastUpdated, birthday, education, gender,
                 jobTitle, surname, firstName, introduction, employer, interests, languages, email,
                 phoneNumber, nationality, userCredentials,
                 safeUnmodifiableList(orgUnits),

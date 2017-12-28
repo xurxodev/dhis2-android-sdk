@@ -57,7 +57,6 @@ public abstract class CategoryOptionCombo extends BaseNameableObject {
     public static final Field<CategoryOptionCombo, String> displayName = Field.create(DISPLAY_NAME);
     public static final Field<CategoryOptionCombo, String> created = Field.create(CREATED);
     public static final Field<CategoryOptionCombo, String> lastUpdated = Field.create(LAST_UPDATED);
-    public static final Field<CategoryOptionCombo, Boolean> deleted = Field.create(DELETED);
     public static final NestedField<CategoryOptionCombo, CategoryOption> categoryOptions =
             NestedField.create(CATEGORY_OPTIONS);
 

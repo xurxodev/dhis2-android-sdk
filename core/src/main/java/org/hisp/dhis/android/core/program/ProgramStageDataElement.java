@@ -77,8 +77,6 @@ public abstract class ProgramStageDataElement extends BaseIdentifiableObject {
             = NestedField.create(DATA_ELEMENT);
     public static final NestedField<ProgramStageDataElement, ProgramStage> programStage
             = NestedField.create(PROGRAM_STAGE);
-    public static final Field<ProgramStageDataElement, Boolean> deleted
-            = Field.create(DELETED);
 
     @Nullable
     @JsonProperty(DISPLAY_IN_REPORTS)
@@ -122,7 +120,6 @@ public abstract class ProgramStageDataElement extends BaseIdentifiableObject {
             @JsonProperty(SORT_ORDER) Integer sortOrder,
             @JsonProperty(ALLOW_FUTURE_DATE) Boolean allowFutureDate,
             @JsonProperty(DATA_ELEMENT) DataElement dataElement,
-            @JsonProperty(DELETED) Boolean deleted,
             @JsonProperty(PROGRAM_STAGE) ProgramStage programStage
     ) {
 
@@ -133,7 +130,6 @@ public abstract class ProgramStageDataElement extends BaseIdentifiableObject {
                 displayName,
                 created,
                 lastUpdated,
-                deleted,
                 displayInReports,
                 compulsory,
                 allowProvidedElsewhere,

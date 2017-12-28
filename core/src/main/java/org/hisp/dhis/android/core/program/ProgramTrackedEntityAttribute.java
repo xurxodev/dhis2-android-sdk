@@ -80,8 +80,6 @@ public abstract class ProgramTrackedEntityAttribute extends BaseNameableObject {
             = Field.create(ALLOW_FUTURE_DATE);
     public static final Field<ProgramTrackedEntityAttribute, Boolean> displayInList
             = Field.create(DISPLAY_IN_LIST);
-    public static final Field<ProgramTrackedEntityAttribute, Boolean> deleted
-            = Field.create(DELETED);
     public static final Field<ProgramTrackedEntityAttribute, Integer> sortOrder
             = Field.create(SORT_ORDER);
 
@@ -126,11 +124,10 @@ public abstract class ProgramTrackedEntityAttribute extends BaseNameableObject {
             @JsonProperty(ALLOW_FUTURE_DATE) Boolean allowFutureDate,
             @JsonProperty(DISPLAY_IN_LIST) Boolean displayInList,
             @JsonProperty(PROGRAM) Program program,
-            @JsonProperty(SORT_ORDER) Integer sortOrder,
-            @JsonProperty(DELETED) Boolean deleted
+            @JsonProperty(SORT_ORDER) Integer sortOrder
     ) {
         return new AutoValue_ProgramTrackedEntityAttribute(
-                uid, code, name, displayName, created, lastUpdated, deleted,
+                uid, code, name, displayName, created, lastUpdated,
                 shortName, displayShortName, description, displayDescription,
                 mandatory, trackedEntityAttribute, allowFutureDate, displayInList, program,
                 sortOrder);

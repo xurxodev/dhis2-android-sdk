@@ -58,6 +58,7 @@ public abstract class TrackedEntityAttribute extends BaseNameableObject {
     private static final String ORG_UNIT_SCOPE = "orgunitScope";
     private static final String UNIQUE = "unique";
     private static final String INHERIT = "inherit";
+    private static final String DELETED = "deleted";
 
     public static final Field<TrackedEntityAttribute, String> uid
             = Field.create(UID);
@@ -182,11 +183,10 @@ public abstract class TrackedEntityAttribute extends BaseNameableObject {
             @JsonProperty(DISPLAY_ON_VISIT_SCHEDULE) boolean displayOnVisitSchedule,
             @JsonProperty(ORG_UNIT_SCOPE) boolean orgUnitScope,
             @JsonProperty(UNIQUE) boolean unique,
-            @JsonProperty(INHERIT) boolean inherit,
-            @JsonProperty(DELETED) Boolean deleted
+            @JsonProperty(INHERIT) boolean inherit
     ) {
         return new AutoValue_TrackedEntityAttribute(
-                uid, code, name, displayName, created, lastUpdated, deleted,
+                uid, code, name, displayName, created, lastUpdated,
                 shortName, displayShortName, description, displayDescription,
                 pattern, sortOrderInListNoProgram, optionSet, valueType, expression, searchScope,
                 programScope, displayInListNoProgram, generated, displayOnVisitSchedule,

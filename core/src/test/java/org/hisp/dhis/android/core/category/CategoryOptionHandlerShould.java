@@ -69,7 +69,6 @@ public class CategoryOptionHandlerShould {
                 .uid("TNYQzTHdoxL")
                 .code("MCH_AIDES")
                 .created(today)
-                .deleted(true)
                 .name("MCH Aides")
                 .shortName("MCH Aides")
                 .displayName("MCH Aides")

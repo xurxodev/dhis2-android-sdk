@@ -64,7 +64,6 @@ public abstract class ProgramRuleAction extends BaseIdentifiableObject {
     public static final Field<ProgramRuleAction, String> data = Field.create(DATA);
     public static final Field<ProgramRuleAction, String> content = Field.create(CONTENT);
     public static final Field<ProgramRuleAction, String> location = Field.create(LOCATION);
-    public static final Field<ProgramRuleAction, Boolean> deleted = Field.create(DELETED);
 
 
     public static final NestedField<ProgramRuleAction, ProgramRule> programRule = NestedField.create(PROGRAM_RULE);
@@ -144,10 +143,9 @@ public abstract class ProgramRuleAction extends BaseIdentifiableObject {
             @JsonProperty(PROGRAM_RULE_ACTION_TYPE) ProgramRuleActionType programRuleActionType,
             @JsonProperty(PROGRAM_STAGE) ProgramStage programStage,
             @JsonProperty(DATA_ELEMENT) DataElement dataElement,
-            @JsonProperty(PROGRAM_RULE) ProgramRule programRule,
-            @JsonProperty(DELETED) Boolean deleted) {
+            @JsonProperty(PROGRAM_RULE) ProgramRule programRule) {
         return new AutoValue_ProgramRuleAction(
-                uid, code, name, displayName, created, lastUpdated, deleted, data, content, location,
+                uid, code, name, displayName, created, lastUpdated, data, content, location,
                 trackedEntityAttribute, programIndicator, programStageSection, programRuleActionType,
                 programStage, dataElement, programRule
         );

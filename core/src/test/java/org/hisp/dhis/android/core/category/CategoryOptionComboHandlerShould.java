@@ -81,7 +81,6 @@ public class CategoryOptionComboHandlerShould {
         return CategoryOptionCombo.builder()
                 .uid("NZAKyj67WW2")
                 .code(null)
-                .deleted(true)
                 .created(today)
                 .name("MCH Aides")
                 .shortName("SECHN, Male")

@@ -71,8 +71,6 @@ public abstract class ProgramRule extends BaseIdentifiableObject {
             = NestedField.create(PROGRAM_STAGE);
     public static final NestedField<ProgramRule, ProgramRuleAction> programRuleActions
             = NestedField.create(PROGRAM_RULE_ACTIONS);
-    public static final Field<ProgramRule, Boolean> deleted
-            = Field.create(DELETED);
 
 
     @Nullable
@@ -106,11 +104,10 @@ public abstract class ProgramRule extends BaseIdentifiableObject {
                                      @JsonProperty(CONDITION) String condition,
                                      @JsonProperty(PROGRAM) Program program,
                                      @JsonProperty(PROGRAM_STAGE) ProgramStage programStage,
-                                     @JsonProperty(PROGRAM_RULE_ACTIONS) List<ProgramRuleAction> programRuleActions,
-                                     @JsonProperty(DELETED) Boolean deleted) {
+                                     @JsonProperty(PROGRAM_RULE_ACTIONS) List<ProgramRuleAction> programRuleActions) {
         return new AutoValue_ProgramRule(
                 uid, code, name, displayName,
-                created, lastUpdated, deleted, priority, condition,
+                created, lastUpdated, priority, condition,
                 program, programStage, programRuleActions);
     }
 }

@@ -55,7 +55,6 @@ public abstract class ProgramIndicator extends BaseNameableObject {
     public static final Field<ProgramIndicator, String> displayName = Field.create(DISPLAY_NAME);
     public static final Field<ProgramIndicator, String> created = Field.create(CREATED);
     public static final Field<ProgramIndicator, String> lastUpdated = Field.create(LAST_UPDATED);
-    public static final Field<ProgramIndicator, Boolean> deleted = Field.create(DELETED);
     public static final Field<ProgramIndicator, String> shortName = Field.create(SHORT_NAME);
     public static final Field<ProgramIndicator, String> displayShortName = Field.create(DISPLAY_SHORT_NAME);
     public static final Field<ProgramIndicator, String> description = Field.create(DESCRIPTION);
@@ -108,11 +107,10 @@ public abstract class ProgramIndicator extends BaseNameableObject {
             @JsonProperty(DIMENSION_ITEM) String dimensionItem,
             @JsonProperty(FILTER) String filter,
             @JsonProperty(DECIMALS) Integer decimals,
-            @JsonProperty(DELETED) Boolean deleted,
             @JsonProperty(PROGRAM) Program program
     ) {
         return new AutoValue_ProgramIndicator(
-                uid, code, name, displayName, created, lastUpdated, deleted,
+                uid, code, name, displayName, created, lastUpdated,
                 shortName, displayShortName, description, displayDescription,
                 displayInForm, expression, dimensionItem, filter, decimals, program);
     }

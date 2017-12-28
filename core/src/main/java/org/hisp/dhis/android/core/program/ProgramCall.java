@@ -178,7 +178,7 @@ public class ProgramCall implements Call<Response<Payload<Program>>> {
                 Program.uid, Program.code, Program.name, Program.displayName, Program.created,
                 Program.lastUpdated, Program.shortName, Program.displayShortName, Program.description,
                 Program.displayDescription, Program.version, Program.captureCoordinates, Program.dataEntryMethod,
-                Program.deleted, Program.displayFrontPageList, Program.displayIncidentDate,
+                Program.displayFrontPageList, Program.displayIncidentDate,
                 Program.enrollmentDateLabel, Program.ignoreOverdueEvents, Program.incidentDateLabel,
                 Program.onlyEnrollOnce, Program.programType, Program.registration,
                 Program.relationshipFromA, Program.relationshipText,
@@ -189,7 +189,7 @@ public class ProgramCall implements Call<Response<Payload<Program>>> {
                         ProgramStage.uid, ProgramStage.code, ProgramStage.name, ProgramStage.displayName,
                         ProgramStage.created, ProgramStage.lastUpdated, ProgramStage.allowGenerateNextVisit,
                         ProgramStage.autoGenerateEvent, ProgramStage.blockEntryForm, ProgramStage.captureCoordinates,
-                        ProgramStage.deleted, ProgramStage.displayGenerateEventBox, ProgramStage.executionDateLabel,
+                        ProgramStage.displayGenerateEventBox, ProgramStage.executionDateLabel,
                         ProgramStage.formType, ProgramStage.generatedByEnrollmentDate, ProgramStage.hideDueDate,
                         ProgramStage.minDaysFromStart, ProgramStage.openAfterEnrollment, ProgramStage.repeatable,
                         ProgramStage.reportDateToUse, ProgramStage.sortOrder, ProgramStage.standardInterval,
@@ -198,7 +198,7 @@ public class ProgramCall implements Call<Response<Payload<Program>>> {
                                 ProgramStageDataElement.created, ProgramStageDataElement.lastUpdated,
                                 ProgramStageDataElement.allowFutureDate,
                                 ProgramStageDataElement.allowProvidedElsewhere, ProgramStageDataElement.compulsory,
-                                ProgramStageDataElement.deleted, ProgramStageDataElement.displayInReports,
+                                 ProgramStageDataElement.displayInReports,
                                 ProgramStageDataElement.sortOrder,
                                 ProgramStageDataElement.programStage.with(ProgramStage.uid),
                                 ProgramStageDataElement.dataElement.with(
@@ -206,7 +206,7 @@ public class ProgramCall implements Call<Response<Payload<Program>>> {
                                         DataElement.created, DataElement.lastUpdated, DataElement.shortName,
                                         DataElement.displayShortName, DataElement.description,
                                         DataElement.displayDescription, DataElement.aggregationType,
-                                        DataElement.deleted, DataElement.dimension, DataElement.displayFormName,
+                                        DataElement.dimension, DataElement.displayFormName,
                                         DataElement.domainType, DataElement.formName, DataElement.numberType,
                                         DataElement.valueType, DataElement.zeroIsSignificant,
                                         DataElement.optionSet.with(OptionSet.uid, OptionSet.version),
@@ -217,7 +217,6 @@ public class ProgramCall implements Call<Response<Payload<Program>>> {
                                 ProgramStageSection.uid, ProgramStageSection.code, ProgramStageSection.name,
                                 ProgramStageSection.displayName, ProgramStageSection.created,
                                 ProgramStageSection.lastUpdated, ProgramStageSection.sortOrder,
-                                ProgramStageSection.deleted,
                                 ProgramStageSection.dataElements.with(DataElement.uid),
                                 ProgramStageSection.programIndicators.with(ProgramIndicator.uid,
                                         ProgramIndicator.program.with(Program.uid)
@@ -226,7 +225,7 @@ public class ProgramCall implements Call<Response<Payload<Program>>> {
                 ),
                 Program.programRules.with(
                         ProgramRule.uid, ProgramRule.code, ProgramRule.name, ProgramRule.displayName,
-                        ProgramRule.created, ProgramRule.lastUpdated, ProgramRule.deleted,
+                        ProgramRule.created, ProgramRule.lastUpdated,
                         ProgramRule.priority, ProgramRule.condition,
                         ProgramRule.program.with(Program.uid),
                         ProgramRule.programStage.with(ProgramStage.uid),
@@ -234,7 +233,7 @@ public class ProgramCall implements Call<Response<Payload<Program>>> {
                                 ProgramRuleAction.uid, ProgramRuleAction.code, ProgramRuleAction.name,
                                 ProgramRuleAction.displayName, ProgramRuleAction.created,
                                 ProgramRuleAction.lastUpdated, ProgramRuleAction.content, ProgramRuleAction.data,
-                                ProgramRuleAction.deleted, ProgramRuleAction.location,
+                                ProgramRuleAction.location,
                                 ProgramRuleAction.programRuleActionType,
                                 ProgramRuleAction.programRule.with(ProgramRule.uid),
                                 ProgramRuleAction.dataElement.with(DataElement.uid),
@@ -247,7 +246,7 @@ public class ProgramCall implements Call<Response<Payload<Program>>> {
                 Program.programRuleVariables.with(
                         ProgramRuleVariable.uid, ProgramRuleVariable.code, ProgramRuleVariable.name,
                         ProgramRuleVariable.displayName, ProgramRuleVariable.created, ProgramRuleVariable.lastUpdated,
-                        ProgramRuleVariable.deleted, ProgramRuleVariable.programRuleVariableSourceType,
+                        ProgramRuleVariable.programRuleVariableSourceType,
                         ProgramRuleVariable.useCodeForOptionSet,
                         ProgramRuleVariable.program.with(Program.uid),
                         ProgramRuleVariable.dataElement.with(DataElement.uid),
@@ -260,7 +259,7 @@ public class ProgramCall implements Call<Response<Payload<Program>>> {
                         ProgramIndicator.lastUpdated, ProgramIndicator.shortName,
                         ProgramIndicator.displayShortName, ProgramIndicator.description,
                         ProgramIndicator.displayDescription, ProgramIndicator.decimals,
-                        ProgramIndicator.deleted, ProgramIndicator.dimensionItem,
+                        ProgramIndicator.dimensionItem,
                         ProgramIndicator.displayInForm,
                         ProgramIndicator.expression, ProgramIndicator.filter, ProgramIndicator.program.with(Program.uid)
                 ),
@@ -270,7 +269,7 @@ public class ProgramCall implements Call<Response<Payload<Program>>> {
                         ProgramTrackedEntityAttribute.created, ProgramTrackedEntityAttribute.lastUpdated,
                         ProgramTrackedEntityAttribute.shortName, ProgramTrackedEntityAttribute.displayShortName,
                         ProgramTrackedEntityAttribute.description, ProgramTrackedEntityAttribute.displayDescription,
-                        ProgramTrackedEntityAttribute.allowFutureDate, ProgramTrackedEntityAttribute.deleted,
+                        ProgramTrackedEntityAttribute.allowFutureDate,
                         ProgramTrackedEntityAttribute.displayInList, ProgramTrackedEntityAttribute.mandatory,
                         ProgramTrackedEntityAttribute.program.with(Program.uid),
                         ProgramTrackedEntityAttribute.trackedEntityAttribute.with(
@@ -295,7 +294,7 @@ public class ProgramCall implements Call<Response<Payload<Program>>> {
                 Program.relationshipType.with(
                         RelationshipType.uid, RelationshipType.code, RelationshipType.name,
                         RelationshipType.displayName, RelationshipType.created, RelationshipType.lastUpdated,
-                        RelationshipType.aIsToB, RelationshipType.bIsToA, RelationshipType.deleted
+                        RelationshipType.aIsToB, RelationshipType.bIsToA
                 )
         ).build();
     }

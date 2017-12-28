@@ -82,7 +82,6 @@ public class CategoryComboHandlerShould {
 
         return CategoryCombo.builder()
                 .uid("m2jTvAj5kkm")
-                .deleted(true)
                 .code("BIRTHS")
                 .created(today)
                 .name("Births")

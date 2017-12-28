@@ -97,7 +97,7 @@ public class CategoryComboEndpointCall implements Call<Response<Payload<Category
 
         return Fields.<CategoryCombo>builder().fields(CategoryCombo.uid, CategoryCombo.code,
                 CategoryCombo.name, CategoryCombo.displayName,
-                CategoryCombo.created, CategoryCombo.lastUpdated, CategoryCombo.deleted,
+                CategoryCombo.created, CategoryCombo.lastUpdated,
                 CategoryCombo.displayName, CategoryCombo.isDefault, CategoryCombo.categories,
                 CategoryCombo.categoryOptionCombos.with(CategoryOptionCombo.uid,
                         CategoryOptionCombo.code,
@@ -105,7 +105,6 @@ public class CategoryComboEndpointCall implements Call<Response<Payload<Category
                         CategoryOptionCombo.displayName,
                         CategoryOptionCombo.created,
                         CategoryOptionCombo.lastUpdated,
-                        CategoryOptionCombo.deleted,
                         CategoryOptionCombo.categoryCombo.with(CategoryCombo.uid),
                         CategoryOptionCombo.displayName,
                         CategoryOptionCombo.categoryOptions.with(

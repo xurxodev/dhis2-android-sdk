@@ -95,12 +95,12 @@ public class CategoryEndpointCall implements Call<Response<Payload<Category>>> {
     private Fields<Category> getFields() {
         return Fields.<Category>builder().fields(Category.uid,
                 Category.code, Category.name, Category.displayName,
-                Category.created, Category.lastUpdated, Category.deleted,
+                Category.created, Category.lastUpdated,
                 Category.shortName, Category.displayName,
                 Category.dataDimensionType,
                 Category.categoryOptions.with(CategoryOption.uid, CategoryOption.code,
                         CategoryOption.name, CategoryOption.displayName,
-                        CategoryOption.created, CategoryOption.lastUpdated, CategoryOption.deleted,
+                        CategoryOption.created, CategoryOption.lastUpdated,
                         CategoryOption.shortName, CategoryOption.displayName))
                 .build();
 

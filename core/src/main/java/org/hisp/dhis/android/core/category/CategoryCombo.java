@@ -57,7 +57,6 @@ public abstract class CategoryCombo extends BaseIdentifiableObject {
     public static final Field<CategoryCombo, String> displayName = Field.create(DISPLAY_NAME);
     public static final Field<CategoryCombo, String> created = Field.create(CREATED);
     public static final Field<CategoryCombo, String> lastUpdated = Field.create(LAST_UPDATED);
-    public static final Field<CategoryCombo, Boolean> deleted = Field.create(DELETED);
     public static final Field<CategoryCombo, Boolean> isDefault = Field.create(
             IS_DEFAULT);
     public static final Field<CategoryCombo, List<Category>> categories = Field.create(

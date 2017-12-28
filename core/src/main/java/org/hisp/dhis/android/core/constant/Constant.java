@@ -50,7 +50,6 @@ public abstract class Constant extends BaseIdentifiableObject {
     public static final Field<Constant, String> created = Field.create(CREATED);
     public static final Field<Constant, String> lastUpdated = Field.create(LAST_UPDATED);
     public static final Field<Constant, String> value = Field.create(VALUE);
-    public static final Field<Constant, Boolean> deleted = Field.create(DELETED);
 
     @Nullable
     @JsonProperty(VALUE)
@@ -64,8 +63,7 @@ public abstract class Constant extends BaseIdentifiableObject {
             @JsonProperty(DISPLAY_NAME) String displayName,
             @JsonProperty(CREATED) Date created,
             @JsonProperty(LAST_UPDATED) Date lastUpdated,
-            @JsonProperty(VALUE) Double value,
-            @JsonProperty(DELETED) Boolean deleted) {
-        return new AutoValue_Constant(uid, code, name, displayName, created, lastUpdated, deleted, value);
+            @JsonProperty(VALUE) Double value) {
+        return new AutoValue_Constant(uid, code, name, displayName, created, lastUpdated, value);
     }
 }

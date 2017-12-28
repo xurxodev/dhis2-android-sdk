@@ -45,7 +45,6 @@ public abstract class TrackedEntity extends BaseNameableObject {
     public static final Field<TrackedEntity, String> displayName = Field.create(DISPLAY_NAME);
     public static final Field<TrackedEntity, String> created = Field.create(CREATED);
     public static final Field<TrackedEntity, String> lastUpdated = Field.create(LAST_UPDATED);
-    public static final Field<TrackedEntity, Boolean> deleted = Field.create(DELETED);
     public static final Field<TrackedEntity, String> shortName = Field.create(SHORT_NAME);
     public static final Field<TrackedEntity, String> displayShortName = Field.create(DISPLAY_SHORT_NAME);
     public static final Field<TrackedEntity, String> description = Field.create(DESCRIPTION);
@@ -62,11 +61,10 @@ public abstract class TrackedEntity extends BaseNameableObject {
             @JsonProperty(SHORT_NAME) String shortName,
             @JsonProperty(DISPLAY_SHORT_NAME) String displayShortName,
             @JsonProperty(DESCRIPTION) String description,
-            @JsonProperty(DISPLAY_DESCRIPTION) String displayDescription,
-            @JsonProperty(DELETED) Boolean deleted) {
+            @JsonProperty(DISPLAY_DESCRIPTION) String displayDescription) {
 
         return new AutoValue_TrackedEntity(
-                uid, code, name, displayName, created, lastUpdated, deleted,
+                uid, code, name, displayName, created, lastUpdated,
                 shortName, displayShortName, description, displayDescription);
     }
 }

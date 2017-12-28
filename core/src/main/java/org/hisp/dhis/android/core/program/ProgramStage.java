@@ -72,7 +72,6 @@ public abstract class ProgramStage extends BaseIdentifiableObject {
     public static final Field<ProgramStage, String> created = Field.create(CREATED);
     public static final Field<ProgramStage, String> lastUpdated = Field.create(LAST_UPDATED);
     public static final Field<ProgramStage, Integer> sortOrder = Field.create(SORT_ORDER);
-    public static final Field<ProgramStage, Boolean> deleted = Field.create(DELETED);
     public static final Field<ProgramStage, String> executionDateLabel = Field.create(EXECUTION_DATE_LABEL);
     public static final Field<ProgramStage, Boolean> allowGenerateNextVisit = Field.create(ALLOW_GENERATE_NEXT_VISIT);
     public static final Field<ProgramStage, Boolean> validCompleteOnly = Field.create(VALID_COMPLETE_ONLY);
@@ -192,8 +191,7 @@ public abstract class ProgramStage extends BaseIdentifiableObject {
             @JsonProperty(MIN_DAYS_FROM_START) Integer minDaysFromStart,
             @JsonProperty(STANDARD_INTERVAL) Integer standardInterval,
             @JsonProperty(PROGRAM_STAGE_SECTIONS) List<ProgramStageSection> programStageSections,
-            @JsonProperty(PROGRAM_STAGE_DATA_ELEMENTS) List<ProgramStageDataElement> programStageDataElements,
-            @JsonProperty(DELETED) Boolean deleted
+            @JsonProperty(PROGRAM_STAGE_DATA_ELEMENTS) List<ProgramStageDataElement> programStageDataElements
     ) {
 
         return new AutoValue_ProgramStage(
@@ -203,7 +201,6 @@ public abstract class ProgramStage extends BaseIdentifiableObject {
                 displayName,
                 created,
                 lastUpdated,
-                deleted,
                 executionDateLabel,
                 allowGenerateNextVisit,
                 validCompleteOnly,

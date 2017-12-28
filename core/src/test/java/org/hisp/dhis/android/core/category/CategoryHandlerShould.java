@@ -80,7 +80,6 @@ public class CategoryHandlerShould {
                 .uid("KfdsGBcoiCa")
                 .code("BIRTHS_ATTENDED")
                 .created(today)
-                .deleted(true)
                 .name("Births attended by")
                 .shortName("Births attended by")
                 .displayName("Births attended by")

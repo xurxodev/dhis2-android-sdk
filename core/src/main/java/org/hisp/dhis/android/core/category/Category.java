@@ -53,7 +53,6 @@ public abstract class Category extends BaseNameableObject {
     public static final Field<Category, String> displayName = Field.create(DISPLAY_NAME);
     public static final Field<Category, String> created = Field.create(CREATED);
     public static final Field<Category, String> lastUpdated = Field.create(LAST_UPDATED);
-    public static final Field<Category, Boolean> deleted = Field.create(DELETED);
     public static final Field<Category, String> shortName = Field.create(SHORT_NAME);
     public static final Field<Category, String> displayShortName = Field.create(DISPLAY_SHORT_NAME);
     public static final Field<Category, String> dataDimensionType = Field.create(
