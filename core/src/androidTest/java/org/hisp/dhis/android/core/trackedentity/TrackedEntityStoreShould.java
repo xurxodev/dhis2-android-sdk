@@ -31,7 +31,6 @@ package org.hisp.dhis.android.core.trackedentity;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.test.filters.MediumTest;
-import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
@@ -119,7 +118,7 @@ public class TrackedEntityStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @SmallTest
+    @MediumTest
     public void update_shouldUpdateRowInDatabase() {
         ContentValues trackedEntity = CreateTrackedEntityUtils.create(1L, UID);
 
