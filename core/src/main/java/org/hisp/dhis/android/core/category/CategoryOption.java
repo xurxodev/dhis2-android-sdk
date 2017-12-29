@@ -58,7 +58,8 @@ public abstract class CategoryOption extends BaseNameableObject {
     public static final Field<CategoryOption, String> lastUpdated = Field.create(LAST_UPDATED);
     public static final Field<CategoryOption, Boolean> deleted = Field.create(DELETED);
     public static final Field<CategoryOption, String> shortName = Field.create(SHORT_NAME);
-    public static final Field<CategoryOption, String> displayShortName = Field.create(DISPLAY_SHORT_NAME);
+    public static final Field<CategoryOption, String> displayShortName = Field.create(
+            DISPLAY_SHORT_NAME);
 
 
     @Nullable

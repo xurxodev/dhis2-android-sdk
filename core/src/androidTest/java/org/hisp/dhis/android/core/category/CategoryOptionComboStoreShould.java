@@ -76,11 +76,11 @@ public class CategoryOptionComboStoreShould extends AbsStoreTestCase {
         lastInsertedID = store.insert(newCategoryOptionCombo);
     }
 
-    private void whenDeleteCategoryOptionComboInserted(){
+    private void whenDeleteCategoryOptionComboInserted() {
         wasDeleted = store.delete(newCategoryOptionCombo);
     }
 
-    private void thenAssertLastInsertedIDIsOne(){
+    private void thenAssertLastInsertedIDIsOne() {
         assertEquals(lastInsertedID, 1);
     }
 

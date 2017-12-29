@@ -77,7 +77,8 @@ public abstract class DataElement extends BaseNameableObject {
     public static final Field<DataElement, String> dimension = Field.create(DIMENSION);
     public static final Field<DataElement, String> displayFormName = Field.create(DISPLAY_FORM_NAME);
     public static final NestedField<DataElement, OptionSet> optionSet = NestedField.create(OPTION_SET);
-    public static final NestedField<DataElement, CategoryCombo> categoryCombo = NestedField.create(CATEGORY_COMBO);
+    public static final NestedField<DataElement, CategoryCombo> categoryCombo = NestedField.create(
+            CATEGORY_COMBO);
 
     @Nullable
     @JsonProperty(VALUE_TYPE)

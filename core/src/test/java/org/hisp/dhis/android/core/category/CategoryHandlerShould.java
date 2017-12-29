@@ -105,8 +105,9 @@ public class CategoryHandlerShould {
     private List<CategoryOption> givenAListOfCategoryOptions() {
         List<CategoryOption> list = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++) {
             list.add(givenAOption());
+        }
 
         return list;
     }

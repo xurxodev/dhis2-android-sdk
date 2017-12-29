@@ -89,7 +89,7 @@ public class CategoryStoreShould extends AbsStoreTestCase {
                 .dataDimensionType("DISAGGREGATION").build();
     }
 
-    private void givenThatCategoryButModified(){
+    private void givenThatCategoryButModified() {
         newCategoryModified = Category.builder()
                 .uid("KfdsGBcoiCa")
                 .code("BIRTHS_ATTENDED_MODIFIED")

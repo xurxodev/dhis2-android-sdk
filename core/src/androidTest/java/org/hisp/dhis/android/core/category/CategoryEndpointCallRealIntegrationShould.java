@@ -38,7 +38,8 @@ public class CategoryEndpointCallRealIntegrationShould extends AbsStoreTestCase 
         Response responseLogIn = d2.logIn(RealServerMother.user, RealServerMother.password).call();
         Truth.assertThat(responseLogIn.isSuccessful()).isTrue();
 
-        CategoryEndpointCall categoryEndpointCall = CategoryCallFactory.create(d2.retrofit(), databaseAdapter());
+        CategoryEndpointCall categoryEndpointCall = CategoryCallFactory.create(d2.retrofit(),
+                databaseAdapter());
         Response<Payload<Category>> responseCategory = categoryEndpointCall.call();
 
         assertTrue(responseCategory.isSuccessful());

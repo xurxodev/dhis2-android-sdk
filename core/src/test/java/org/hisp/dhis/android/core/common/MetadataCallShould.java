@@ -304,7 +304,7 @@ public class MetadataCallShould {
 
     private Response errorResponse;
 
-    Dhis2MockServer  dhis2MockServer;
+    Dhis2MockServer dhis2MockServer;
 
     @Before
     @SuppressWarnings("unchecked")
@@ -355,7 +355,6 @@ public class MetadataCallShould {
                 .build();
 
 
-
         categoryService = retrofit.create(CategoryService.class);
         comboService = retrofit.create(CategoryComboService.class);
 
@@ -376,8 +375,8 @@ public class MetadataCallShould {
                 programStageSectionProgramIndicatorLinkStore, programRuleActionStore, programRuleStore,
                 optionStore, optionSetStore, dataElementStore, programStageDataElementStore,
                 programStageSectionStore, programStageStore, relationshipStore, trackedEntityStore,
-                organisationUnitProgramLinkStore,categoryQuery, categoryService, categoryHandler,
-                CategoryComboQuery.defaultQuery(), comboService,mockCategoryComboHandler);
+                organisationUnitProgramLinkStore, categoryQuery, categoryService, categoryHandler,
+                CategoryComboQuery.defaultQuery(), comboService, mockCategoryComboHandler);
 
         when(databaseAdapter.beginNewTransaction()).thenReturn(transaction);
 

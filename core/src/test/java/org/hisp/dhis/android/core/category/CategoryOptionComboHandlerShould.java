@@ -29,7 +29,8 @@ public class CategoryOptionComboHandlerShould {
     public void handle_a_new_combo_option() {
         CategoryOptionCombo newOptionCombo = givenAOptionCombo();
 
-        when(mockStore.update(any(CategoryOptionCombo.class), any(CategoryOptionCombo.class))).thenReturn(false);
+        when(mockStore.update(any(CategoryOptionCombo.class),
+                any(CategoryOptionCombo.class))).thenReturn(false);
 
         handler.handle(newOptionCombo);
 
@@ -50,7 +51,8 @@ public class CategoryOptionComboHandlerShould {
     public void handle_an_updated_combo_option() {
         CategoryOptionCombo updatedOptionCombo = givenAOptionCombo();
 
-        when(mockStore.update(any(CategoryOptionCombo.class), any(CategoryOptionCombo.class))).thenReturn(true);
+        when(mockStore.update(any(CategoryOptionCombo.class),
+                any(CategoryOptionCombo.class))).thenReturn(true);
 
         handler.handle(updatedOptionCombo);
 

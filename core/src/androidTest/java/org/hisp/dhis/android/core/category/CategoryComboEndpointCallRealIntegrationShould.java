@@ -80,8 +80,10 @@ public class CategoryComboEndpointCallRealIntegrationShould extends AbsStoreTest
 
     private void assertThereAreNotCategoryCombosLinkInDB() {
         CategoryCategoryComboLinkStore
-                categoryCategoryComboLinkStore = new CategoryCategoryComboLinkStoreImpl(databaseAdapter());
-        List<CategoryCategoryComboLink> categoryCategoryComboLinks = categoryCategoryComboLinkStore.queryAll();
+                categoryCategoryComboLinkStore = new CategoryCategoryComboLinkStoreImpl(
+                databaseAdapter());
+        List<CategoryCategoryComboLink> categoryCategoryComboLinks =
+                categoryCategoryComboLinkStore.queryAll();
         assertTrue(categoryCategoryComboLinks.isEmpty());
     }
 
@@ -93,13 +95,16 @@ public class CategoryComboEndpointCallRealIntegrationShould extends AbsStoreTest
 
     private void assertThereAreCategoryCombosLinkInDB() {
         CategoryCategoryComboLinkStore
-                categoryCategoryComboLinkStore = new CategoryCategoryComboLinkStoreImpl(databaseAdapter());
-        List<CategoryCategoryComboLink> categoryCategoryComboLinks = categoryCategoryComboLinkStore.queryAll();
+                categoryCategoryComboLinkStore = new CategoryCategoryComboLinkStoreImpl(
+                databaseAdapter());
+        List<CategoryCategoryComboLink> categoryCategoryComboLinks =
+                categoryCategoryComboLinkStore.queryAll();
         assertTrue(categoryCategoryComboLinks.size() > 0);
     }
 
     private void assertThereAreCategoryOptionCombosInDB() {
-        CategoryOptionComboStore categoryOptionComboStore = new CategoryOptionComboStoreImpl(databaseAdapter());
+        CategoryOptionComboStore categoryOptionComboStore = new CategoryOptionComboStoreImpl(
+                databaseAdapter());
         List<CategoryOptionCombo> categoryOptionCombos = categoryOptionComboStore.queryAll();
         assertTrue(categoryOptionCombos.size() > 0);
     }

@@ -93,7 +93,7 @@ public class CategoryCategoryOptionLinkStoreShould extends AbsStoreTestCase {
         optionStore.insert(newCategoryOption);
     }
 
-    private void thenAssertLastInsertedIDIsOne(){
+    private void thenAssertLastInsertedIDIsOne() {
         assertEquals(lastInsertedID, 1);
     }
 }

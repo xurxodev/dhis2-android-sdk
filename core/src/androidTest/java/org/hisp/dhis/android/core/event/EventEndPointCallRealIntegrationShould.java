@@ -75,8 +75,8 @@ public class EventEndPointCallRealIntegrationShould extends AbsStoreTestCase {
         EventStoreImpl eventStore = new EventStoreImpl(databaseAdapter());
 
         List<Event> downloadedEvents = eventStore.querySingleEvents();
-        for(Event event : downloadedEvents){
-            if(event.attributeCategoryOptions()!=null && event.attributeOptionCombo()!=null){
+        for (Event event : downloadedEvents) {
+            if (event.attributeCategoryOptions() != null && event.attributeOptionCombo() != null) {
                 return true;
             }
         }

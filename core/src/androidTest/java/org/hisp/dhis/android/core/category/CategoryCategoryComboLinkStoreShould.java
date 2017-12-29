@@ -50,7 +50,7 @@ public class CategoryCategoryComboLinkStoreShould extends AbsStoreTestCase {
         newCategory = generateCategory();
     }
 
-    private Category generateCategory(){
+    private Category generateCategory() {
         Date today = new Date();
         return Category.builder()
                 .uid("KfdsGBcoiCa")
@@ -75,7 +75,7 @@ public class CategoryCategoryComboLinkStoreShould extends AbsStoreTestCase {
                 .build();
     }
 
-    private void givenACategoryComboLinkModel(){
+    private void givenACategoryComboLinkModel() {
         newCategoryCategoryComboLinkModel = CategoryCategoryComboLinkModel.builder()
                 .category("KfdsGBcoiCa")
                 .combo("m2jTvAj5kkm")

@@ -11,8 +11,8 @@ import retrofit2.http.Query;
 
 public interface CategoryService {
 
-  @GET("categories")
-  Call<Payload<Category>> getCategory(@Query("fields") @Which Fields<Category> fields,
-          @Query("paging") Boolean paging, @Query("page") int page,
-          @Query("pageSize") int pageSize);
+    @GET("categories")
+    Call<Payload<Category>> getCategory(@Query("fields") @Which Fields<Category> fields,
+            @Query("paging") Boolean paging, @Query("page") int page,
+            @Query("pageSize") int pageSize);
 }

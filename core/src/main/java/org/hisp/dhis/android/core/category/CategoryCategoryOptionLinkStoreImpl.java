@@ -42,7 +42,8 @@ public class CategoryCategoryOptionLinkStoreImpl implements CategoryCategoryOpti
         isNull(link.option());
     }
 
-    private void bind(@NonNull SQLiteStatement sqLiteStatement, @NonNull CategoryCategoryOptionLinkModel link) {
+    private void bind(@NonNull SQLiteStatement sqLiteStatement,
+            @NonNull CategoryCategoryOptionLinkModel link) {
         sqLiteBind(sqLiteStatement, 1, link.category());
         sqLiteBind(sqLiteStatement, 2, link.option());
     }

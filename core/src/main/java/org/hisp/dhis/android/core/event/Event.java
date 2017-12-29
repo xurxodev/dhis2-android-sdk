@@ -81,9 +81,12 @@ public abstract class Event {
     public static final Field<Event, String> completeDate = Field.create(COMPLETE_DATE);
     public static final Field<Event, Boolean> deleted = Field.create(DELETED);
     public static final Field<Event, String> dueDate = Field.create(DUE_DATE);
-    public static final Field<Event, String> attributeCategoryOptions = Field.create(ATTRIBUTE_CATEGORY_OPTIONS);
-    public static final Field<Event, String> attributeOptionCombo = Field.create(ATTRIBUTE_OPTION_COMBO);
-    public static final Field<Event, String> trackedEntityInstance = Field.create(TRACKED_ENTITY_INSTANCE);
+    public static final Field<Event, String> attributeCategoryOptions = Field.create(
+            ATTRIBUTE_CATEGORY_OPTIONS);
+    public static final Field<Event, String> attributeOptionCombo = Field.create(
+            ATTRIBUTE_OPTION_COMBO);
+    public static final Field<Event, String> trackedEntityInstance = Field.create(
+            TRACKED_ENTITY_INSTANCE);
 
     public static final NestedField<Event, TrackedEntityDataValue> trackedEntityDataValues
             = NestedField.create(TRACKED_ENTITY_DATA_VALUES);
@@ -187,7 +190,8 @@ public abstract class Event {
             @JsonProperty(TRACKED_ENTITY_INSTANCE) String trackedEntityInstance) {
         return new AutoValue_Event(uid, enrollmentUid, created, lastUpdated, createdAtClient, lastUpdatedAtClient,
                 program, programStage, organisationUnit, eventDate, eventStatus, coordinates,
-                completedDate, dueDate, deleted, safeUnmodifiableList(dataValues), attributeCategoryOptions,
+                completedDate, dueDate, deleted, safeUnmodifiableList(dataValues),
+                attributeCategoryOptions,
                 attributeOptionCombo, trackedEntityInstance);
     }
 

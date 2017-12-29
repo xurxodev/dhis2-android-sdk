@@ -123,7 +123,8 @@ public class CategoryOptionComboStoreImpl implements CategoryOptionComboStore {
         sqLiteBind(updateStatement, whereUidIndex, oldOptionCombo.uid());
     }
 
-    private void bind(SQLiteStatement sqLiteStatement, @NonNull CategoryOptionCombo newOptionCombo) {
+    private void bind(SQLiteStatement sqLiteStatement,
+            @NonNull CategoryOptionCombo newOptionCombo) {
         sqLiteBind(sqLiteStatement, 1, newOptionCombo.uid());
         sqLiteBind(sqLiteStatement, 2, newOptionCombo.code());
         sqLiteBind(sqLiteStatement, 3, newOptionCombo.name());
@@ -145,14 +146,16 @@ public class CategoryOptionComboStoreImpl implements CategoryOptionComboStore {
     }
 
     private boolean execute(SQLiteStatement statement) {
-        int rowsAffected = databaseAdapter.executeUpdateDelete(CategoryOptionComboModel.TABLE, statement);
+        int rowsAffected = databaseAdapter.executeUpdateDelete(CategoryOptionComboModel.TABLE,
+                statement);
         statement.clearBindings();
 
         return wasExecuted(rowsAffected);
     }
 
     private long executeInsert() {
-        long lastId = databaseAdapter.executeInsert(CategoryOptionComboModel.TABLE, insertStatement);
+        long lastId = databaseAdapter.executeInsert(CategoryOptionComboModel.TABLE,
+                insertStatement);
         insertStatement.clearBindings();
 
         return lastId;
@@ -179,7 +182,8 @@ public class CategoryOptionComboStoreImpl implements CategoryOptionComboStore {
                 cursor.moveToFirst();
 
                 do {
-                    CategoryOptionCombo categoryOptionCombo = mapCategoryOptionComboFromCursor(cursor);
+                    CategoryOptionCombo categoryOptionCombo = mapCategoryOptionComboFromCursor(
+                            cursor);
 
                     categoryOptionCombos.add(categoryOptionCombo);
                 }

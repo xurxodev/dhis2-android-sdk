@@ -17,7 +17,7 @@ import retrofit2.Retrofit;
 
 public class CategoryCallFactory {
     @NonNull
-    public static CategoryEndpointCall create(Retrofit retrofit, DatabaseAdapter databaseAdapter){
+    public static CategoryEndpointCall create(Retrofit retrofit, DatabaseAdapter databaseAdapter) {
         CategoryService categoryService = retrofit.create(CategoryService.class);
 
         ResponseValidator<Category> categoryResponseValidator = new ResponseValidator<>();

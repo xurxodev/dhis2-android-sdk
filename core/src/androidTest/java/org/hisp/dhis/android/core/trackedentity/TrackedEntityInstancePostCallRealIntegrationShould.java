@@ -1,6 +1,7 @@
 package org.hisp.dhis.android.core.trackedentity;
 
 import android.support.test.filters.LargeTest;
+
 import static com.google.common.truth.Truth.assertThat;
 
 import android.support.test.runner.AndroidJUnit4;
@@ -72,7 +73,7 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
     public void setUp() throws IOException {
         super.setUp();
 
-        d2= D2Factory.create("https://play.dhis2.org/android-current/api/", databaseAdapter());
+        d2 = D2Factory.create("https://play.dhis2.org/android-current/api/", databaseAdapter());
 
         trackedEntityInstanceStore = new TrackedEntityInstanceStoreImpl(databaseAdapter());
         enrollmentStore = new EnrollmentStoreImpl(databaseAdapter());
@@ -130,7 +131,8 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
 
     /*
     * If you want run this test you need config the correct uids in the server side.
-    * At this moment is necessary add into the "child programme" program the category combo : Implementing Partner
+    * At this moment is necessary add into the "child programme" program the category combo :
+    * Implementing Partner
     * */
 
     //@Test
@@ -147,8 +149,10 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
 
         postTrackedEntityInstances();
 
-        TrackedEntityInstance pushedTrackedEntityInstance = getTrackedEntityInstanceFromDB(trackedEntityInstanceUid);
-        Enrollment pushedEnrollment = getEnrollmentsByTrackedEntityInstanceFromDb(trackedEntityInstanceUid);
+        TrackedEntityInstance pushedTrackedEntityInstance = getTrackedEntityInstanceFromDB(
+                trackedEntityInstanceUid);
+        Enrollment pushedEnrollment = getEnrollmentsByTrackedEntityInstanceFromDb(
+                trackedEntityInstanceUid);
         Event pushedEvent = getEventsFromDb(eventUid);
 
         d2.wipeDB().call();
@@ -162,8 +166,10 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
 
         trackedEntityInstanceEndPointCall.call();
 
-        TrackedEntityInstance downloadedTrackedEntityInstance = getTrackedEntityInstanceFromDB(trackedEntityInstanceUid);
-        Enrollment downloadedEnrollment = getEnrollmentsByTrackedEntityInstanceFromDb(trackedEntityInstanceUid);
+        TrackedEntityInstance downloadedTrackedEntityInstance = getTrackedEntityInstanceFromDB(
+                trackedEntityInstanceUid);
+        Enrollment downloadedEnrollment = getEnrollmentsByTrackedEntityInstanceFromDb(
+                trackedEntityInstanceUid);
         Event downloadedEvent = getEventsFromDb(eventUid);
 
         assertPushAndDownloadTrackedEntityInstances(pushedTrackedEntityInstance, pushedEnrollment,
@@ -188,7 +194,8 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         eventStore.insert(
                 eventUid, enrollmentUid, new Date(), new Date(), null, null,
                 EventStatus.ACTIVE, "13.21", "12.21", programUid, programStageUid, orgUnitUid,
-                new Date(), new Date(), new Date(), State.TO_POST, categoryOptionUid, categoryComboOptionUid, trackedEntityInstanceUid
+                new Date(), new Date(), new Date(), State.TO_POST, categoryOptionUid,
+                categoryComboOptionUid, trackedEntityInstanceUid
         );
 
         trackedEntityDataValueStore.insert(
@@ -205,8 +212,10 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
             TrackedEntityInstance pushedTrackedEntityInstance, Enrollment pushedEnrollment,
             Event pushedEvent, TrackedEntityInstance downloadedTrackedEntityInstance,
             Enrollment downloadedEnrollment, Event downloadedEvent) {
-        assertThat(pushedTrackedEntityInstance.uid().equals(downloadedTrackedEntityInstance.uid())).isTrue();
-        assertThat(pushedTrackedEntityInstance.uid().equals(downloadedTrackedEntityInstance.uid())).isTrue();
+        assertThat(pushedTrackedEntityInstance.uid().equals(
+                downloadedTrackedEntityInstance.uid())).isTrue();
+        assertThat(pushedTrackedEntityInstance.uid().equals(
+                downloadedTrackedEntityInstance.uid())).isTrue();
         assertThat(pushedEnrollment.uid().equals(downloadedEnrollment.uid())).isTrue();
         assertThat(pushedEvent.uid().equals(downloadedEvent.uid())).isTrue();
         assertThat(pushedEvent.uid().equals(downloadedEvent.uid())).isTrue();
@@ -214,22 +223,28 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
     }
 
     private TrackedEntityInstance getTrackedEntityInstanceFromDB(String trackedEntityInstanceUid) {
-        TrackedEntityInstanceStore trackedEntityInstanceStore = new TrackedEntityInstanceStoreImpl(databaseAdapter());
+        TrackedEntityInstanceStore trackedEntityInstanceStore = new TrackedEntityInstanceStoreImpl(
+                databaseAdapter());
         TrackedEntityInstance trackedEntityInstance = null;
-        Map<String, TrackedEntityInstance> storedTrackedEntityInstances = trackedEntityInstanceStore.queryAll();
-        TrackedEntityInstance storedTrackedEntityInstance = storedTrackedEntityInstances.get(trackedEntityInstanceUid);
-        if(storedTrackedEntityInstance.uid().equals(trackedEntityInstanceUid)) {
+        Map<String, TrackedEntityInstance> storedTrackedEntityInstances =
+                trackedEntityInstanceStore.queryAll();
+        TrackedEntityInstance storedTrackedEntityInstance = storedTrackedEntityInstances.get(
+                trackedEntityInstanceUid);
+        if (storedTrackedEntityInstance.uid().equals(trackedEntityInstanceUid)) {
             trackedEntityInstance = storedTrackedEntityInstance;
         }
         return trackedEntityInstance;
     }
 
-    private Enrollment getEnrollmentsByTrackedEntityInstanceFromDb(String trackedEntityInstanceUid) {
+    private Enrollment getEnrollmentsByTrackedEntityInstanceFromDb(
+            String trackedEntityInstanceUid) {
         EnrollmentStoreImpl enrollmentStore = new EnrollmentStoreImpl(databaseAdapter());
         Enrollment enrollment = null;
-        Map<String, List<Enrollment>> storedEnrollmentsByTrackedEntityInstance = enrollmentStore.queryAll();
-        for(Enrollment storedEnrollment : storedEnrollmentsByTrackedEntityInstance.get(trackedEntityInstanceUid)) {
-            if(storedEnrollment.uid().equals(enrollmentUid)) {
+        Map<String, List<Enrollment>> storedEnrollmentsByTrackedEntityInstance =
+                enrollmentStore.queryAll();
+        for (Enrollment storedEnrollment : storedEnrollmentsByTrackedEntityInstance.get(
+                trackedEntityInstanceUid)) {
+            if (storedEnrollment.uid().equals(enrollmentUid)) {
                 enrollment = storedEnrollment;
             }
         }
@@ -240,8 +255,8 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         EventStoreImpl eventStore = new EventStoreImpl(databaseAdapter());
         Event event = null;
         List<Event> storedEvents = eventStore.queryAll();
-        for(Event storedEvent : storedEvents) {
-            if(storedEvent.uid().equals(eventUid)) {
+        for (Event storedEvent : storedEvents) {
+            if (storedEvent.uid().equals(eventUid)) {
                 event = storedEvent;
             }
         }
@@ -249,7 +264,8 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
     }
 
     private void postTrackedEntityInstances() throws Exception {
-        Response response;Call<Response<WebResponse>> call = d2.syncTrackedEntityInstances();
+        Response response;
+        Call<Response<WebResponse>> call = d2.syncTrackedEntityInstances();
         response = call.call();
 
         assertThat(response.isSuccessful()).isTrue();
@@ -265,9 +281,11 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
     }
 
     private boolean verifyEventCategoryAttributes(Event event, Event downloadedEvent) {
-            if(event.uid().equals(downloadedEvent.uid()) && event.attributeOptionCombo().equals(downloadedEvent.attributeOptionCombo()) && event.attributeCategoryOptions().equals(downloadedEvent.attributeCategoryOptions())){
-                return true;
-            }
+        if (event.uid().equals(downloadedEvent.uid()) && event.attributeOptionCombo().equals(
+                downloadedEvent.attributeOptionCombo()) && event.attributeCategoryOptions().equals(
+                downloadedEvent.attributeCategoryOptions())) {
+            return true;
+        }
         return false;
     }
 }

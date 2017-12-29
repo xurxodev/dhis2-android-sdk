@@ -60,7 +60,7 @@ public class CategoryComboStoreShould extends AbsStoreTestCase {
         newCategoryCombo = generateCategoryCombo();
     }
 
-    private CategoryCombo generateCategoryCombo(){
+    private CategoryCombo generateCategoryCombo() {
         Date today = new Date();
 
         return CategoryCombo.builder()

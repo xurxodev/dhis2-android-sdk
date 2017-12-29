@@ -187,7 +187,8 @@ public class DataElementStoreShould extends AbsStoreTestCase {
         ContentValues optionSet = CreateOptionSetUtils.create(2L, deferredOptionSetUid);
         database().insert(OptionSetModel.TABLE, null, optionSet);
 
-        ContentValues categoryOption = CreateCategoryComboUtils.create(2L, deferredCategoryComboUid);
+        ContentValues categoryOption = CreateCategoryComboUtils.create(2L,
+                deferredCategoryComboUid);
         database().insert(CategoryComboModel.TABLE, null, categoryOption);
         database().beginTransaction();
         long rowId = store.insert(UID, CODE, NAME, DISPLAY_NAME, date, date, SHORT_NAME,
@@ -267,7 +268,8 @@ public class DataElementStoreShould extends AbsStoreTestCase {
 
     @Test(expected = SQLiteConstraintException.class)
     @MediumTest
-    public void throw_sqlite_constraint_exception_when_persist_a_data_element_with_invalid_option_set_foreign_key() {
+    public void
+    throw_sqlite_constraint_exception_when_persist_a_data_element_with_invalid_option_set_foreign_key() {
         String fakeOptionSetUid = "fake_option_set_uid";
         store.insert(
                 UID,
@@ -290,7 +292,7 @@ public class DataElementStoreShould extends AbsStoreTestCase {
                 DISPLAY_FORM_NAME,
                 fakeOptionSetUid,
                 null
-                );
+        );
     }
 
     @Test

@@ -3,6 +3,7 @@ package org.hisp.dhis.android.core.event;
 import static com.google.common.truth.Truth.assertThat;
 
 import android.support.test.filters.LargeTest;
+
 import static junit.framework.Assert.assertTrue;
 
 import android.support.test.runner.AndroidJUnit4;
@@ -83,7 +84,8 @@ public class EventPostCallRealIntegrationShould extends AbsStoreTestCase {
         response = d2.syncMetaData().call();
         assertThat(response.isSuccessful()).isTrue();
 
-        createDummyDataToPost(orgUnitUid, programUid, programStageUid, eventUid, dataElementUid, attributeCategoryOption, attributeOptionCombo, null);
+        createDummyDataToPost(orgUnitUid, programUid, programStageUid, eventUid, dataElementUid,
+                attributeCategoryOption, attributeOptionCombo, null);
 
         Call<Response<WebResponse>> call = d2.syncSingleEvents();
         response = call.call();
@@ -99,7 +101,8 @@ public class EventPostCallRealIntegrationShould extends AbsStoreTestCase {
 
         downloadMetadata();
 
-        createDummyDataToPost(orgUnitUid, programUid, programStageUid, eventUid, dataElementUid, attributeCategoryOption, attributeOptionCombo, null);
+        createDummyDataToPost(orgUnitUid, programUid, programStageUid, eventUid, dataElementUid,
+                attributeCategoryOption, attributeOptionCombo, null);
 
         pushDummyEvent();
 
@@ -109,18 +112,20 @@ public class EventPostCallRealIntegrationShould extends AbsStoreTestCase {
 
         downloadMetadata();
 
-        downloadEventsBy(categoryComboUID,attributeCategoryOption);
+        downloadEventsBy(categoryComboUID, attributeCategoryOption);
 
         assertThatEventPushedIsDownloaded(pushedEvent);
     }
 
     private void createDummyDataToPost(String orgUnitUid, String programUid,
             String programStageUid, String eventUid,
-            String dataElementUid, String attributeCategoryOption, String attributeOptionCombo, String trackedEntityInstance) {
+            String dataElementUid, String attributeCategoryOption, String attributeOptionCombo,
+            String trackedEntityInstance) {
         eventStore.insert(
                 eventUid, null, new Date(), new Date(), null, null,
                 EventStatus.ACTIVE, "13.21", "12.21", programUid, programStageUid, orgUnitUid,
-                new Date(), new Date(), new Date(), State.TO_POST, attributeCategoryOption, attributeOptionCombo, trackedEntityInstance
+                new Date(), new Date(), new Date(), State.TO_POST, attributeCategoryOption,
+                attributeOptionCombo, trackedEntityInstance
         );
 
         trackedEntityDataValueStore.insert(
@@ -136,11 +141,13 @@ public class EventPostCallRealIntegrationShould extends AbsStoreTestCase {
         assertTrue(verifyPushedEventIsInPullList(pushedEvent, downloadedEvents));
     }
 
-    private void downloadEventsBy(String categoryComboUID,String categoryOptionUID) throws Exception {
+    private void downloadEventsBy(String categoryComboUID, String categoryOptionUID)
+            throws Exception {
         Response response;
 
         EventEndPointCall eventEndPointCall = EventCallFactory.create(
-                d2.retrofit(), databaseAdapter(), orgUnitUid, 0,categoryComboUID, categoryOptionUID);
+                d2.retrofit(), databaseAdapter(), orgUnitUid, 0, categoryComboUID,
+                categoryOptionUID);
 
         response = eventEndPointCall.call();
 
@@ -151,8 +158,8 @@ public class EventPostCallRealIntegrationShould extends AbsStoreTestCase {
         EventStoreImpl eventStore = new EventStoreImpl(databaseAdapter());
         Event event = null;
         List<Event> storedEvents = eventStore.queryAll();
-        for(Event storedEvent : storedEvents) {
-            if(storedEvent.uid().equals(eventUid)) {
+        for (Event storedEvent : storedEvents) {
+            if (storedEvent.uid().equals(eventUid)) {
                 event = storedEvent;
             }
         }
@@ -160,7 +167,8 @@ public class EventPostCallRealIntegrationShould extends AbsStoreTestCase {
     }
 
     private void pushDummyEvent() throws Exception {
-        Response response;Call<Response<WebResponse>> call = d2.syncSingleEvents();
+        Response response;
+        Call<Response<WebResponse>> call = d2.syncSingleEvents();
         response = call.call();
         assertThat(response.isSuccessful()).isTrue();
     }
@@ -175,8 +183,10 @@ public class EventPostCallRealIntegrationShould extends AbsStoreTestCase {
     }
 
     private boolean verifyPushedEventIsInPullList(Event event, List<Event> eventList) {
-        for(Event pullEvent : eventList){
-            if(event.uid().equals(pullEvent.uid()) && event.attributeOptionCombo().equals(pullEvent.attributeOptionCombo()) && event.attributeCategoryOptions().equals(pullEvent.attributeCategoryOptions())){
+        for (Event pullEvent : eventList) {
+            if (event.uid().equals(pullEvent.uid()) && event.attributeOptionCombo().equals(
+                    pullEvent.attributeOptionCombo()) && event.attributeCategoryOptions().equals(
+                    pullEvent.attributeCategoryOptions())) {
                 return true;
             }
         }

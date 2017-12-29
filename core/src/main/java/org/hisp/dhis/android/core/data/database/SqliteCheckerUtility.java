@@ -49,7 +49,7 @@ final public class SqliteCheckerUtility {
         return isExist;
     }
 
-    public static boolean isFieldExist(String tableName, String fieldName,  DatabaseAdapter db) {
+    public static boolean isFieldExist(String tableName, String fieldName, DatabaseAdapter db) {
         boolean isExist = false;
         Cursor res = db.query("PRAGMA table_info(" + tableName + ")", null);
         int value = res.getColumnIndex("name");

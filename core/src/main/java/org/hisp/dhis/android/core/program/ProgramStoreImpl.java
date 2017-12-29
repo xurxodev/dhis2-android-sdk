@@ -208,7 +208,7 @@ public class ProgramStoreImpl implements ProgramStore {
                       @Nullable String relationshipText,
                       @Nullable String relatedProgram,
                       @Nullable String trackedEntity,
-                      @Nullable String categoryCombo,
+            @Nullable String categoryCombo,
                       @NonNull String whereProgramUid) {
         isNull(uid);
         isNull(whereProgramUid);
@@ -272,8 +272,8 @@ public class ProgramStoreImpl implements ProgramStore {
                                @Nullable String relationshipType,
                                @Nullable String relationshipText,
                                @Nullable String relatedProgram,
-                               @Nullable String trackedEntity,
-                               @Nullable String categoryCombo) {
+            @Nullable String trackedEntity,
+            @Nullable String categoryCombo) {
         sqLiteBind(sqLiteStatement, 1, uid);
         sqLiteBind(sqLiteStatement, 2, code);
         sqLiteBind(sqLiteStatement, 3, name);

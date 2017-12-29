@@ -49,18 +49,18 @@ public class DataBaseMigrationShould {
     public static final String exampleMigrationsDir = "migrations/example_migrations";
     public static final String databaseSqlVersion1 = "db_version_1.sql";
     public static final String databaseSqlVersion2 = "db_version_2.sql";
-    static String dbName= null;
+    static String dbName = null;
     private SQLiteDatabase databaseInMemory;
 
     @Before
-    public void deleteDB(){
+    public void deleteDB() {
         mockWebServer = new MockWebServer();
         try {
             mockWebServer.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(dbName!=null) {
+        if (dbName != null) {
             InstrumentationRegistry.getContext().deleteDatabase(dbName);
         }
         dbOpenHelper = null;
@@ -69,7 +69,7 @@ public class DataBaseMigrationShould {
 
     @After
     public void tearDown() throws Exception {
-        if(dbName!=null) {
+        if (dbName != null) {
             InstrumentationRegistry.getContext().deleteDatabase(dbName);
         }
     }
@@ -95,8 +95,10 @@ public class DataBaseMigrationShould {
     public void have_categoryCombo_columns_after_first_migration() throws IOException {
         initCoreDataBase(dbName, 1, realMigrationDir, databaseSqlVersion1);
         initCoreDataBase(dbName, 2, realMigrationDir, "");
-        assertThat(isFieldExist(DataElementModel.TABLE, DataElementModel.Columns.CATEGORY_COMBO, databaseAdapter), is(true));
-        assertThat(isFieldExist(ProgramModel.TABLE, ProgramModel.Columns.CATEGORY_COMBO, databaseAdapter), is(true));
+        assertThat(isFieldExist(DataElementModel.TABLE, DataElementModel.Columns.CATEGORY_COMBO,
+                databaseAdapter), is(true));
+        assertThat(isFieldExist(ProgramModel.TABLE, ProgramModel.Columns.CATEGORY_COMBO,
+                databaseAdapter), is(true));
     }
 
     @Test
@@ -110,8 +112,10 @@ public class DataBaseMigrationShould {
     @MediumTest
     public void have_categoryCombo_columns_after_create_last_version() throws IOException {
         buildD2(initCoreDataBase(dbName, 2, realMigrationDir, ""));
-        assertThat(isFieldExist(DataElementModel.TABLE, DataElementModel.Columns.CATEGORY_COMBO, d2.databaseAdapter()), is(true));
-        assertThat(isFieldExist(ProgramModel.TABLE, ProgramModel.Columns.CATEGORY_COMBO, d2.databaseAdapter()), is(true));
+        assertThat(isFieldExist(DataElementModel.TABLE, DataElementModel.Columns.CATEGORY_COMBO,
+                d2.databaseAdapter()), is(true));
+        assertThat(isFieldExist(ProgramModel.TABLE, ProgramModel.Columns.CATEGORY_COMBO,
+                d2.databaseAdapter()), is(true));
     }
 
     @Test
@@ -129,12 +133,13 @@ public class DataBaseMigrationShould {
         initCoreDataBase(dbName, 3, exampleMigrationsDir, "");
         assertThat(isFieldExist(UserModel.TABLE, "testColumn", databaseAdapter), is(true));
         assertThat(ifTableExist("TestTable", databaseAdapter), is(true));
-        assertThat(ifValueExist("TestTable", "testColumn","1", databaseAdapter), is(true));
+        assertThat(ifValueExist("TestTable", "testColumn", "1", databaseAdapter), is(true));
     }
 
     @Test
     @MediumTest
-    public void not_have_category_table_after_downgrade_with_database_version_2() throws IOException {
+    public void not_have_category_table_after_downgrade_with_database_version_2()
+            throws IOException {
         initCoreDataBase(dbName, 2, realMigrationDir, databaseSqlVersion2);
         initCoreDataBase(dbName, 1, realMigrationDir, "");
         //TODO  remove this tables in 2.yaml drop
@@ -148,7 +153,8 @@ public class DataBaseMigrationShould {
 
     @Test
     @MediumTest
-    public void not_have_category_table_after_downgrade_with_real_sql_database() throws IOException {
+    public void not_have_category_table_after_downgrade_with_real_sql_database()
+            throws IOException {
         initCoreDataBase(dbName, 2, realMigrationDir, "");
         initCoreDataBase(dbName, 1, realMigrationDir, "");
         //TODO remove Category and CategoryOption tables in 2.yaml drop migration
@@ -211,10 +217,15 @@ public class DataBaseMigrationShould {
         assertThat(ifTableExist(CategoryOptionModel.TABLE, databaseAdapter), is(true));
         assertThat(ifTableExist(CategoryCategoryComboLinkModel.TABLE, databaseAdapter), is(true));
         assertThat(ifTableExist(CategoryCategoryOptionLinkModel.TABLE, databaseAdapter), is(true));
-        assertThat(isFieldExist(ProgramModel.TABLE, ProgramModel.Columns.CATEGORY_COMBO, databaseAdapter), is(true));
-        assertThat(isFieldExist(DataElementModel.TABLE, DataElementModel.Columns.CATEGORY_COMBO, databaseAdapter), is(true));
-        assertThat(isFieldExist(EventModel.TABLE, EventModel.Columns.ATTRIBUTE_CATEGORY_OPTIONS, databaseAdapter), is(true));
-        assertThat(isFieldExist(EventModel.TABLE, EventModel.Columns.ATTRIBUTE_OPTION_COMBO, databaseAdapter), is(true));
-        assertThat(isFieldExist(EventModel.TABLE, EventModel.Columns.TRACKED_ENTITY_INSTANCE, databaseAdapter), is(true));
+        assertThat(isFieldExist(ProgramModel.TABLE, ProgramModel.Columns.CATEGORY_COMBO,
+                databaseAdapter), is(true));
+        assertThat(isFieldExist(DataElementModel.TABLE, DataElementModel.Columns.CATEGORY_COMBO,
+                databaseAdapter), is(true));
+        assertThat(isFieldExist(EventModel.TABLE, EventModel.Columns.ATTRIBUTE_CATEGORY_OPTIONS,
+                databaseAdapter), is(true));
+        assertThat(isFieldExist(EventModel.TABLE, EventModel.Columns.ATTRIBUTE_OPTION_COMBO,
+                databaseAdapter), is(true));
+        assertThat(isFieldExist(EventModel.TABLE, EventModel.Columns.TRACKED_ENTITY_INSTANCE,
+                databaseAdapter), is(true));
     }
 }

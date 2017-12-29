@@ -26,7 +26,7 @@ public class ResponseValidatorShould {
     private Payload<Category> mockPayload;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
 
@@ -39,26 +39,26 @@ public class ResponseValidatorShould {
 
         ResponseValidator<Category> validator = new ResponseValidator<>();
 
-        boolean isValidResponse = validator.isValid(response) ;
+        boolean isValidResponse = validator.isValid(response);
 
         assertTrue(isValidResponse);
 
     }
 
     @Test
-    public void return_false_on_un_successful_response(){
+    public void return_false_on_un_successful_response() {
 
         mockingResponseForA404Error();
 
         ResponseValidator<Category> validator = new ResponseValidator<>();
 
-        boolean isValidResponse = validator.isValid(response) ;
+        boolean isValidResponse = validator.isValid(response);
 
         assertFalse(isValidResponse);
     }
 
     @Test
-    public void return_false_on_a_body_with_null_items(){
+    public void return_false_on_a_body_with_null_items() {
 
         stubbingPayloadWith(null);
 
@@ -66,7 +66,7 @@ public class ResponseValidatorShould {
 
         ResponseValidator<Category> validator = new ResponseValidator<>();
 
-        boolean isValidResponse = validator.isValid(response) ;
+        boolean isValidResponse = validator.isValid(response);
 
         assertFalse(isValidResponse);
     }
@@ -75,12 +75,13 @@ public class ResponseValidatorShould {
         response = Response.success(mockPayload);
     }
 
-    private  void stubbingPayloadWith(List<Category> items) {
+    private void stubbingPayloadWith(List<Category> items) {
         when(mockPayload.items()).thenReturn(items);
     }
 
     private void mockingResponseForA404Error() {
-        response = Response.error(404, ResponseBody.create(MediaType.parse("application/json"),"{}"));
+        response = Response.error(404,
+                ResponseBody.create(MediaType.parse("application/json"), "{}"));
     }
 
 

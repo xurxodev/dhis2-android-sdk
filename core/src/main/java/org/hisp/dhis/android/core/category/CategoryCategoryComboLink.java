@@ -17,7 +17,8 @@ public abstract class CategoryCategoryComboLink {
     public static final String CATEGORY_COMBO = "categoryCombo";
 
     public static final Field<CategoryCategoryComboLink, String> category = Field.create(CATEGORY);
-    public static final Field<CategoryCategoryComboLink, String> categoryCombo = Field.create(CATEGORY_COMBO);
+    public static final Field<CategoryCategoryComboLink, String> categoryCombo = Field.create(
+            CATEGORY_COMBO);
 
     public static Builder builder() {
         return new AutoValue_CategoryCategoryComboLink.Builder();

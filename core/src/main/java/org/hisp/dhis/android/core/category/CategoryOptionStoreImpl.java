@@ -46,12 +46,14 @@ public class CategoryOptionStoreImpl implements CategoryOptionStore {
             CategoryModel.Columns.LAST_UPDATED + " " + EQUAL_QUESTION_MARK + " WHERE " +
             CategoryModel.Columns.UID + " " + EQUAL_QUESTION_MARK + ";";
 
-    private static final String FIELDS = CategoryOptionModel.TABLE +"."+ CategoryOptionModel.Columns.UID + "," +
-            CategoryOptionModel.TABLE +"."+ CategoryOptionModel.Columns.CODE + "," +
-            CategoryOptionModel.TABLE +"."+ CategoryOptionModel.Columns.NAME + "," +
-            CategoryOptionModel.TABLE +"."+ CategoryOptionModel.Columns.DISPLAY_NAME + "," +
-            CategoryOptionModel.TABLE +"."+ CategoryOptionModel.Columns.CREATED + "," +
-            CategoryOptionModel.TABLE +"."+ CategoryOptionModel.Columns.LAST_UPDATED;
+    private static final String FIELDS =
+            CategoryOptionModel.TABLE + "." + CategoryOptionModel.Columns.UID + "," +
+                    CategoryOptionModel.TABLE + "." + CategoryOptionModel.Columns.CODE + "," +
+                    CategoryOptionModel.TABLE + "." + CategoryOptionModel.Columns.NAME + "," +
+                    CategoryOptionModel.TABLE + "." + CategoryOptionModel.Columns.DISPLAY_NAME + ","
+                    +
+                    CategoryOptionModel.TABLE + "." + CategoryOptionModel.Columns.CREATED + "," +
+                    CategoryOptionModel.TABLE + "." + CategoryOptionModel.Columns.LAST_UPDATED;
 
     private static final String QUERY_ALL_CATEGORY_OPTIONS = "SELECT " +
             FIELDS + " FROM " + CategoryOptionModel.TABLE;

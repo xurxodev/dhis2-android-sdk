@@ -92,7 +92,6 @@ public class CustomSQLBriteOpenHelper extends SQLBriteOpenHelper {
 //     * {@link com.squareup.sqlbrite2.BriteDatabase#getReadableDatabase} is called.
 //     *
 //     * @see com.github.lykmapipo.sqlbrite.migrations.SQLBriteOpenHelper
-
     public CustomSQLBriteOpenHelper(Context context, String name, int version) {
         super(context, name, null, version);
         this.context = context;
@@ -123,7 +122,7 @@ public class CustomSQLBriteOpenHelper extends SQLBriteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         try {
             int version = db.getVersion();
-            if(version == this.version || version == 0){
+            if (version == this.version || version == 0) {
                 return;
             }
             //run all migrations from begin to current requested database version
@@ -153,6 +152,7 @@ public class CustomSQLBriteOpenHelper extends SQLBriteOpenHelper {
     }
 
     //{@link com.squareup.sqlbrite2.BriteDatabase}
+
     /**
      * Create a  instance.N
      * This method always returns very quickly.  The database is not actually
@@ -164,11 +164,11 @@ public class CustomSQLBriteOpenHelper extends SQLBriteOpenHelper {
 //     * @see com.github.lykmapipo.sqlbrite.migrations.SQLBriteOpenHelper
 //     * @see com.squareup.sqlbrite2.BriteDatabase
 //     */
-
     @SuppressWarnings("PMD")
     public synchronized static BriteDatabase get(Context context, String name, int version) {
         if (briteDatabase == null) {
-            SQLBriteOpenHelper sqlBriteOpenHelper = new SQLBriteOpenHelper(context, name, null, version);
+            SQLBriteOpenHelper sqlBriteOpenHelper = new SQLBriteOpenHelper(context, name, null,
+                    version);
             SqlBrite sqlBrite = new SqlBrite.Builder().build();
             briteDatabase = sqlBrite.wrapDatabaseHelper(sqlBriteOpenHelper, Schedulers.io());
         }
@@ -180,7 +180,9 @@ public class CustomSQLBriteOpenHelper extends SQLBriteOpenHelper {
      * Create a
      */
 //    {@link com.squareup.sqlbrite2.BriteDatabase}
-    /** instance.
+
+    /**
+     * instance.
      * This method always returns very quickly.  The database is not actually
      * created or opened until one of
      */
@@ -190,12 +192,12 @@ public class CustomSQLBriteOpenHelper extends SQLBriteOpenHelper {
 //     * @see com.github.lykmapipo.sqlbrite.migrations.SQLBriteOpenHelper
 //     * @see com.squareup.sqlbrite2.BriteDatabase
 //     */
-
     @SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
     public synchronized static BriteDatabase get(Context context, String name,
             SQLiteDatabase.CursorFactory factory, int version, String migrationDir) {
         if (briteDatabase == null) {
-            CustomSQLBriteOpenHelper sqlBriteOpenHelper = new CustomSQLBriteOpenHelper(context, name, factory,
+            CustomSQLBriteOpenHelper sqlBriteOpenHelper = new CustomSQLBriteOpenHelper(context,
+                    name, factory,
                     version, migrationDir);
             SqlBrite sqlBrite = new SqlBrite.Builder().build();
             briteDatabase = sqlBrite.wrapDatabaseHelper(sqlBriteOpenHelper, Schedulers.io());
@@ -208,7 +210,9 @@ public class CustomSQLBriteOpenHelper extends SQLBriteOpenHelper {
      * Create a
      */
 //    {@link com.squareup.sqlbrite2.BriteDatabase}
-     /** instance.
+
+    /**
+     * instance.
      * This method always returns very quickly.  The database is not actually
      * created or opened until one of
      */
@@ -218,13 +222,13 @@ public class CustomSQLBriteOpenHelper extends SQLBriteOpenHelper {
 //     * @see com.github.lykmapipo.sqlbrite.migrations.SQLBriteOpenHelper
 //     * @see com.squareup.sqlbrite2.BriteDatabase
 //     */
-
     @SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
     public synchronized static BriteDatabase get(Context context, String name,
             SQLiteDatabase.CursorFactory factory, int version, String migrationDir,
             DatabaseErrorHandler errorHandler) {
         if (briteDatabase == null) {
-            CustomSQLBriteOpenHelper sqlBriteOpenHelper = new CustomSQLBriteOpenHelper(context, name, factory,
+            CustomSQLBriteOpenHelper sqlBriteOpenHelper = new CustomSQLBriteOpenHelper(context,
+                    name, factory,
                     version, migrationDir, errorHandler);
             SqlBrite sqlBrite = new SqlBrite.Builder().build();
             briteDatabase = sqlBrite.wrapDatabaseHelper(sqlBriteOpenHelper, Schedulers.io());
@@ -234,7 +238,9 @@ public class CustomSQLBriteOpenHelper extends SQLBriteOpenHelper {
 
 //    /**
 //     * Create a {@link com.squareup.sqlbrite2.BriteDatabase} instance for testing.
-     /** This method always returns very quickly.  The database is not actually
+
+    /**
+     * This method always returns very quickly.  The database is not actually
      * created or opened until one of
      */
 //     * {@link com.squareup.sqlbrite2.BriteDatabase#getWritableDatabase} or
@@ -243,12 +249,13 @@ public class CustomSQLBriteOpenHelper extends SQLBriteOpenHelper {
 //     * @see com.github.lykmapipo.sqlbrite.migrations.SQLBriteOpenHelper
 //     * @see com.squareup.sqlbrite2.BriteDatabase
 //     */
-
     @SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
-    public synchronized static BriteDatabase get(Context context, String name, int version, boolean testing,
+    public synchronized static BriteDatabase get(Context context, String name, int version,
+            boolean testing,
             String migrationTestDir) {
         //always return new instance on test mode
-        CustomSQLBriteOpenHelper sqlBriteOpenHelper = new CustomSQLBriteOpenHelper(context, name, version,
+        CustomSQLBriteOpenHelper sqlBriteOpenHelper = new CustomSQLBriteOpenHelper(context, name,
+                version,
                 testing, migrationTestDir);
         SqlBrite sqlBrite = new SqlBrite.Builder().build();
         briteDatabase = sqlBrite.wrapDatabaseHelper(sqlBriteOpenHelper, Schedulers.trampoline());

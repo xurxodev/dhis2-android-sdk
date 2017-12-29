@@ -77,15 +77,15 @@ public class CategoryOptionStoreShould extends AbsStoreTestCase {
         wasDeleted = store.delete(newCategoryOption);
     }
 
-    private void thenAssertLastInsertedIDIsOne(){
+    private void thenAssertLastInsertedIDIsOne() {
         assertEquals(lastInsertedID, 1);
     }
 
-    private void thenAssertStoreReturnsDeleted(){
+    private void thenAssertStoreReturnsDeleted() {
         assertTrue(wasDeleted);
     }
 
-    private void thenAssertStoreReturnsNotDeleted(){
+    private void thenAssertStoreReturnsNotDeleted() {
         assertFalse(wasDeleted);
     }
 }

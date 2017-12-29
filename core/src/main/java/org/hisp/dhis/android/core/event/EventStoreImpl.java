@@ -126,10 +126,10 @@ public class EventStoreImpl implements EventStore {
             "  Event.enrollment, " +
             "  Event.eventDate, " +
             "  Event.completedDate, " +
-            "  Event.dueDate, "  +
-            "  Event.attributeCategoryOptions, "  +
-            "  Event.attributeOptionCombo, "  +
-            "  Event.trackedEntityInstance ";
+                    "  Event.dueDate, " +
+                    "  Event.attributeCategoryOptions, " +
+                    "  Event.attributeOptionCombo, " +
+                    "  Event.trackedEntityInstance ";
 
     private static final String QUERY_EVENTS_ATTACHED_TO_ENROLLMENTS = "SELECT " +
             FIELDS +
@@ -171,9 +171,9 @@ public class EventStoreImpl implements EventStore {
                        @Nullable String longitude, @NonNull String program,
                        @NonNull String programStage, @NonNull String organisationUnit,
                        @Nullable Date eventDate, @Nullable Date completedDate,
-                       @Nullable Date dueDate, @Nullable State state,
-                       @Nullable String attributeCategoryOptions, @Nullable String attributeOptionCombo,
-                       @Nullable String trackedEntityInstance) {
+            @Nullable Date dueDate, @Nullable State state,
+            @Nullable String attributeCategoryOptions, @Nullable String attributeOptionCombo,
+            @Nullable String trackedEntityInstance) {
         sqLiteBind(insertStatement, 1, uid);
         sqLiteBind(insertStatement, 2, enrollmentUid);
         sqLiteBind(insertStatement, 3, created);
@@ -209,8 +209,8 @@ public class EventStoreImpl implements EventStore {
                       @NonNull String programStage, @NonNull String organisationUnit,
                       @NonNull Date eventDate, @Nullable Date completedDate,
                       @Nullable Date dueDate, @NonNull State state,
-                      @Nullable String attributeCategoryOptions, @Nullable String attributeOptionCombo,
-                      @Nullable String trackedEntityInstance, @NonNull String whereEventUid) {
+            @Nullable String attributeCategoryOptions, @Nullable String attributeOptionCombo,
+            @Nullable String trackedEntityInstance, @NonNull String whereEventUid) {
 
         sqLiteBind(updateStatement, 1, uid);
         sqLiteBind(updateStatement, 2, enrollmentUid);

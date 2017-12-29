@@ -115,8 +115,8 @@ public class DataElementStoreImpl implements DataElementStore {
                        @Nullable Boolean zeroIsSignificant, @Nullable String aggregationOperator,
                        @Nullable String formName, @Nullable String numberType,
                        @Nullable String domainType, @Nullable String dimension,
-                       @Nullable String displayFormName, @Nullable String optionSet,
-                       @Nullable String categoryCombo) {
+            @Nullable String displayFormName, @Nullable String optionSet,
+            @Nullable String categoryCombo) {
         isNull(uid);
         bindArguments(insertStatement, uid, code, name, displayName, created, lastUpdated, shortName, displayShortName,
                 description, displayDescription, valueType, zeroIsSignificant, aggregationOperator, formName,
@@ -148,13 +148,14 @@ public class DataElementStoreImpl implements DataElementStore {
                       @Nullable Boolean zeroIsSignificant, @Nullable String aggregationOperator,
                       @Nullable String formName, @Nullable String numberType, @Nullable String domainType,
                       @Nullable String dimension, @Nullable String displayFormName, @Nullable String optionSet,
-                      @Nullable String categoryCombo,
+            @Nullable String categoryCombo,
                       @NonNull String whereDataElementUid) {
         isNull(uid);
         isNull(whereDataElementUid);
         bindArguments(updateStatement, uid, code, name, displayName, created, lastUpdated, shortName,
                 displayShortName, description, displayDescription, valueType, zeroIsSignificant, aggregationOperator,
-                formName, numberType, domainType, dimension, displayFormName, optionSet, categoryCombo);
+                formName, numberType, domainType, dimension, displayFormName, optionSet,
+                categoryCombo);
 
         // bind the where argument
         sqLiteBind(updateStatement, 21, whereDataElementUid);
@@ -173,8 +174,8 @@ public class DataElementStoreImpl implements DataElementStore {
                                @Nullable Boolean zeroIsSignificant, @Nullable String aggregationOperator,
                                @Nullable String formName, @Nullable String numberType,
                                @Nullable String domainType, @Nullable String dimension,
-                               @Nullable String displayFormName, @Nullable String optionSet,
-                               @Nullable String categoryCombo) {
+            @Nullable String displayFormName, @Nullable String optionSet,
+            @Nullable String categoryCombo) {
         sqLiteBind(sqLiteStatement, 1, uid);
         sqLiteBind(sqLiteStatement, 2, code);
         sqLiteBind(sqLiteStatement, 3, name);

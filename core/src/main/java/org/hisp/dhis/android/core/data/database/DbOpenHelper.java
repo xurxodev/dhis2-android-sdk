@@ -185,7 +185,8 @@ public class DbOpenHelper extends CustomSQLBriteOpenHelper {
             +
             CategoryOptionComboCategoryLinkModel.Columns.CATEGORY_OPTION_COMBO + " TEXT NOT NULL," +
             CategoryOptionComboCategoryLinkModel.Columns.CATEGORY + " TEXT NOT NULL, " +
-            " FOREIGN KEY (" + CategoryOptionComboCategoryLinkModel.Columns.CATEGORY_OPTION_COMBO + ") " +
+            " FOREIGN KEY (" + CategoryOptionComboCategoryLinkModel.Columns.CATEGORY_OPTION_COMBO
+            + ") " +
             " REFERENCES " + CategoryOptionComboModel.TABLE + " ("
             + CategoryOptionComboModel.Columns.UID + ") " +
             " ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED," +
@@ -787,13 +788,16 @@ public class DbOpenHelper extends CustomSQLBriteOpenHelper {
             " (" + OrganisationUnitModel.Columns.UID + ")" +
             " ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED," +
             " FOREIGN KEY (" + EventModel.Columns.TRACKED_ENTITY_INSTANCE + ")" +
-            " REFERENCES " + TrackedEntityInstanceModel.TABLE + " (" + TrackedEntityInstanceModel.Columns.UID + ")" +
+            " REFERENCES " + TrackedEntityInstanceModel.TABLE + " ("
+            + TrackedEntityInstanceModel.Columns.UID + ")" +
             " ON DELETE CASCADE," +
             " FOREIGN KEY (" + EventModel.Columns.ATTRIBUTE_CATEGORY_OPTIONS + ")" +
-            " REFERENCES " + CategoryOptionModel.TABLE + " (" + CategoryOptionModel.Columns.UID + ")"+
+            " REFERENCES " + CategoryOptionModel.TABLE + " (" + CategoryOptionModel.Columns.UID
+            + ")" +
             " ON DELETE CASCADE," +
             " FOREIGN KEY (" + EventModel.Columns.ATTRIBUTE_OPTION_COMBO + ")" +
-            " REFERENCES " + CategoryOptionComboModel.TABLE + " (" + CategoryOptionComboModel.Columns.UID + ")"
+            " REFERENCES " + CategoryOptionComboModel.TABLE + " ("
+            + CategoryOptionComboModel.Columns.UID + ")"
             +
             " ON DELETE CASCADE" +
             ");";

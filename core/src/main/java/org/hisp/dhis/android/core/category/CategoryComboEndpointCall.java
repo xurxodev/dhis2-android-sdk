@@ -55,7 +55,8 @@ public class CategoryComboEndpointCall implements Call<Response<Payload<Category
 
         validateIsNotTryingToExecuteAgain();
 
-        Response<Payload<CategoryCombo>> response = categoryComboService.getCategoryCombos(getFields(),
+        Response<Payload<CategoryCombo>> response = categoryComboService.getCategoryCombos(
+                getFields(),
                 query.paging(),
                 query.page(), query.pageSize())
                 .execute();

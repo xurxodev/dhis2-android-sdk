@@ -79,8 +79,8 @@ public class EventEndPointCall implements Call<Response<Payload<Event>>> {
                     Event.lastUpdated.gt(lastSyncedEvents), Event.uid.in(eventQuery.getUIds()),
                     Boolean.TRUE, eventQuery.getPage(), eventQuery.getPageSize()).execute();
         } else {
-            CategoryCombo categoryCombo =  eventQuery.getCategoryCombo();
-            CategoryOption categoryOption =  eventQuery.getCategoryOption();
+            CategoryCombo categoryCombo = eventQuery.getCategoryCombo();
+            CategoryOption categoryOption = eventQuery.getCategoryOption();
 
             eventsByLastUpdated = eventService.getEvents(
                     eventQuery.getOrgUnit(), eventQuery.getProgram(),

@@ -43,7 +43,8 @@ public class DbOpenHelperShould {
     @Test
     @SmallTest
     public void have_tests_on_database_versions() {
-        DbOpenHelper dbOpenHelper = new DbOpenHelper(InstrumentationRegistry.getTargetContext().getApplicationContext()
+        DbOpenHelper dbOpenHelper = new DbOpenHelper(
+                InstrumentationRegistry.getTargetContext().getApplicationContext()
                 , null);
         assertThat(dbOpenHelper.getWritableDatabase().getVersion()).isEqualTo(DbOpenHelper.VERSION);
     }

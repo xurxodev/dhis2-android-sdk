@@ -48,13 +48,14 @@ public class CategoryComboStoreImpl implements CategoryComboStore {
             CategoryComboModel.Columns.IS_DEFAULT + " =? WHERE " +
             CategoryComboModel.Columns.UID + " =?;";
 
-    private static final String FIELDS = CategoryComboModel.TABLE +"."+ CategoryComboModel.Columns.UID + "," +
-            CategoryComboModel.TABLE +"."+ CategoryComboModel.Columns.CODE + "," +
-            CategoryComboModel.TABLE +"."+ CategoryComboModel.Columns.NAME + "," +
-            CategoryComboModel.TABLE +"."+ CategoryComboModel.Columns.DISPLAY_NAME + "," +
-            CategoryComboModel.TABLE +"."+ CategoryComboModel.Columns.CREATED + "," +
-            CategoryComboModel.TABLE +"."+ CategoryComboModel.Columns.LAST_UPDATED + "," +
-            CategoryComboModel.TABLE +"."+ CategoryComboModel.Columns.IS_DEFAULT;
+    private static final String FIELDS =
+            CategoryComboModel.TABLE + "." + CategoryComboModel.Columns.UID + "," +
+                    CategoryComboModel.TABLE + "." + CategoryComboModel.Columns.CODE + "," +
+                    CategoryComboModel.TABLE + "." + CategoryComboModel.Columns.NAME + "," +
+                    CategoryComboModel.TABLE + "." + CategoryComboModel.Columns.DISPLAY_NAME + "," +
+                    CategoryComboModel.TABLE + "." + CategoryComboModel.Columns.CREATED + "," +
+                    CategoryComboModel.TABLE + "." + CategoryComboModel.Columns.LAST_UPDATED + "," +
+                    CategoryComboModel.TABLE + "." + CategoryComboModel.Columns.IS_DEFAULT;
 
     private static final String QUERY_ALL_CATEGORY_COMBOS = "SELECT " +
             FIELDS + " FROM " + CategoryComboModel.TABLE;

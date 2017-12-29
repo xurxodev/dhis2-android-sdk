@@ -144,7 +144,8 @@ public class EventStoreShould extends AbsStoreTestCase {
 
         ContentValues organisationUnit = CreateOrganisationUnitUtils.createOrgUnit(1L, ORGANISATION_UNIT);
         ContentValues programStage = CreateProgramStageUtils.create(1L, PROGRAM_STAGE, PROGRAM);
-        ContentValues trackedEntityInstance = CreateTrackedEntityInstanceUtils.create(TRACKED_ENTITY_INSTANCE,
+        ContentValues trackedEntityInstance = CreateTrackedEntityInstanceUtils.create(
+                TRACKED_ENTITY_INSTANCE,
                 ORGANISATION_UNIT, TRACKED_ENTITY_UID);
         ContentValues enrollment = CreateEnrollmentUtils.create(
                 ENROLLMENT_UID, PROGRAM, ORGANISATION_UNIT, TRACKED_ENTITY_INSTANCE
@@ -223,8 +224,10 @@ public class EventStoreShould extends AbsStoreTestCase {
 
         ContentValues program = CreateProgramUtils.create(11L, deferredProgram,
                 RELATIONSHIP_TYPE_UID, null, TRACKED_ENTITY_UID);
-        ContentValues organisationUnit = CreateOrganisationUnitUtils.createOrgUnit(11L, deferredOrganisationUnit);
-        ContentValues programStage = CreateProgramStageUtils.create(11L, deferredProgramStage, PROGRAM);
+        ContentValues organisationUnit = CreateOrganisationUnitUtils.createOrgUnit(11L,
+                deferredOrganisationUnit);
+        ContentValues programStage = CreateProgramStageUtils.create(11L, deferredProgramStage,
+                PROGRAM);
         database().beginTransaction();
         long rowId = eventStore.insert(
                 EVENT_UID,
@@ -284,14 +287,16 @@ public class EventStoreShould extends AbsStoreTestCase {
     @MediumTest
     public void persist_event_nullable_in_data_base_after_insert() {
 
-        long rowId = eventStore.insert(EVENT_UID, ENROLLMENT_UID, null, null, null, null, null, null, null, PROGRAM,
+        long rowId = eventStore.insert(EVENT_UID, ENROLLMENT_UID, null, null, null, null, null,
+                null, null, PROGRAM,
                 PROGRAM_STAGE, ORGANISATION_UNIT, null, null, null, null,
                 ATTRIBUTE_CATEGORY_OPTION_UID,
                 ATTRIBUTE_OPTION_COMBO_UID,
                 TRACKED_ENTITY_INSTANCE);
         Cursor cursor = database().query(EventModel.TABLE, EVENT_PROJECTION, null, null, null, null, null);
         assertThat(rowId).isEqualTo(1L);
-        assertThatCursor(cursor).hasRow(EVENT_UID, ENROLLMENT_UID, null, null, null, null, null, null, null, PROGRAM,
+        assertThatCursor(cursor).hasRow(EVENT_UID, ENROLLMENT_UID, null, null, null, null, null,
+                null, null, PROGRAM,
                 PROGRAM_STAGE, ORGANISATION_UNIT, null, null, null, null,
                 ATTRIBUTE_CATEGORY_OPTION_UID,
                 ATTRIBUTE_OPTION_COMBO_UID,
@@ -415,7 +420,7 @@ public class EventStoreShould extends AbsStoreTestCase {
                 ATTRIBUTE_OPTION_COMBO_UID, TRACKED_ENTITY_INSTANCE,
                 EVENT_UID);
 
-        assertTrue(updated==1);
+        assertTrue(updated == 1);
 
         cursor = database().query(EventModel.TABLE, projection, null, null, null, null, null);
 
