@@ -13,6 +13,11 @@ then
 "$PROJECT_DIR"/gradlew test; fi
 if [ "$TEST_SUITE" == "integration" ]
 then
+ android-wait-for-emulator
+ sleep 180
+ adb devices
+ adb shell input keyevent 82 &
+
 "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=small;
     if [ "$TRAVIS_BRANCH" == "development" ] || [ "$TRAVIS_BRANCH" == "master" ]
     then "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=medium
@@ -22,6 +27,10 @@ if [ "$TEST_SUITE" == "integration_large" ]
 then
     if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "development" ] || [ "$TRAVIS_BRANCH" == "master" ]
     then
+     android-wait-for-emulator
+     sleep 180
+     adb devices
+     adb shell input keyevent 82 &
     "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=large
     fi
 fi
