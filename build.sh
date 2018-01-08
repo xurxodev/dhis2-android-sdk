@@ -10,14 +10,18 @@ if [ "$TEST_SUITE" == "units" ];
 then
 "$PROJECT_DIR"/gradlew clean
 "$PROJECT_DIR"/gradlew build -Dscan
-"$PROJECT_DIR"/gradlew test
-"$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=small; fi
+"$PROJECT_DIR"/gradlew test; fi
 if [ "$TEST_SUITE" == "integration" ]
 then
+"$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=small;
     if [ "$TRAVIS_BRANCH" == "development" ] || [ "$TRAVIS_BRANCH" == "master" ]
     then "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=medium
     fi
 fi
-if [ "$TEST_SUITE" == "integration_large" ] && [ "$TRAVIS_BRANCH" == "master" ]
-then "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=large
+if [ "$TEST_SUITE" == "integration_large" ]
+then
+    if [ "$TRAVIS_BRANCH" == "development" ] || [ "$TRAVIS_BRANCH" == "master" ]
+    then
+    "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=large
+    fi
 fi
