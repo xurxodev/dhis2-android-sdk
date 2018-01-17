@@ -49,5 +49,6 @@
     <dimen name="left_navigation_drawer_margin">72dp</dimen>
 
     <dimen name="abc_dialog_list_padding_vertical_material">4dp</dimen>
+    <dimen name="login_title_text">20dp</dimen>
 
 </resources>

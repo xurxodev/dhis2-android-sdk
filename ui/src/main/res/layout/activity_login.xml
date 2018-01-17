@@ -74,11 +74,24 @@
 
         </FrameLayout>
 
+
+        <org.hisp.dhis.client.sdk.ui.views.FontTextView
+            android:id="@+id/title"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/two"
+            android:textColor="@android:color/white"
+            android:layout_below="@id/layout_dhis_logo"
+            android:textSize="@dimen/login_title_text"
+            app:font="@string/font_name_regular"/>
+
         <android.support.v7.widget.CardView
             android:id="@+id/layout_login_views"
             android:layout_width="384dp"
             android:layout_height="384dp"
-            android:layout_below="@id/layout_dhis_logo"
+            android:layout_below="@id/title"
             android:layout_centerHorizontal="true"
             app:cardBackgroundColor="@android:color/white"
             app:cardCornerRadius="4dp"
