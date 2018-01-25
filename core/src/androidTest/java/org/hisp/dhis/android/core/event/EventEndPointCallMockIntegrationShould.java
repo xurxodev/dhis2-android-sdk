@@ -121,12 +121,14 @@ public class EventEndPointCallMockIntegrationShould extends AbsStoreTestCase {
         EventEndPointCall eventEndPointCall = EventCallFactory.create(
                 d2.retrofit(), databaseAdapter(), "DiszpKrYNg8", 0);
 
-        dhis2MockServer.enqueueMockResponse("event_1_with_invalid_foreign_key_on_data_values.json");
+        dhis2MockServer.enqueueMockResponse(
+                "two_events_first_good_second_wrong_foreign_key.json");
 
         eventEndPointCall.call();
 
-        verifyNumberOfDownloadedEvents(0);
-        verifyNumberOfDownloadedTrackedEntityDataValue(0);
+        verifyNumberOfDownloadedEvents(1);
+        verifyNumberOfDownloadedTrackedEntityDataValue(6);
+        verifyDownloadedEvents("event_1_with_all_data_values.json");
     }
 
     private void givenAMetadataInDatabase() throws Exception {
