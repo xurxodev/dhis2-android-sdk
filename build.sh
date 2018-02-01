@@ -10,10 +10,8 @@ if [ "$TEST_SUITE" == "units" ];
 then
 "$PROJECT_DIR"/gradlew clean
 "$PROJECT_DIR"/gradlew build -Dscan; fi
-if [ "$TEST_SUITE" == "integration" ] || [ "$TEST_SUITE" == "integration_large" ]
+if [ "$EXECUTE_INTEGRATION" == "true" ]
 then
-    if [ "$TRAVIS_BRANCH" == "development" ] || [ "$TRAVIS_PULL_REQUEST" == "true" ]
-    then
     android-wait-for-emulator
     sleep 180
     adb devices
@@ -28,4 +26,3 @@ then
         "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=large
         fi
     fi
-fi
