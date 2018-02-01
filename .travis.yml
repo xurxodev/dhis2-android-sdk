@@ -26,6 +26,7 @@ env:
 script:
 - travis_wait 30 ./build.sh $TEST_SUITE
 before_script:
+- ./has_to_execute_integration.sh
 - ./before_script.sh $TEST_SUITE
 #after_success:
 #- ".buildscript/deploy.sh"
