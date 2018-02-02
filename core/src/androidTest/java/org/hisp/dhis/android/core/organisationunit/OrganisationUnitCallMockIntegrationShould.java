@@ -27,21 +27,22 @@
  */
 package org.hisp.dhis.android.core.organisationunit;
 
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
+
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
 import org.hisp.dhis.android.core.calls.Call;
+import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
 import org.hisp.dhis.android.core.common.Payload;
 import org.hisp.dhis.android.core.data.api.FieldsConverterFactory;
 import org.hisp.dhis.android.core.data.database.AbsStoreTestCase;
 import org.hisp.dhis.android.core.program.ProgramModel;
-import org.hisp.dhis.android.core.resource.ResourceModel;
 import org.hisp.dhis.android.core.resource.ResourceStore;
 import org.hisp.dhis.android.core.resource.ResourceStoreImpl;
 import org.hisp.dhis.android.core.user.User;
@@ -66,8 +67,6 @@ import okhttp3.mockwebserver.MockWebServer;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
-
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 @RunWith(AndroidJUnit4.class)
 public class OrganisationUnitCallMockIntegrationShould extends AbsStoreTestCase {
@@ -331,7 +330,7 @@ public class OrganisationUnitCallMockIntegrationShould extends AbsStoreTestCase 
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_organisation_unit_tree_in_data_base_after_call() throws Exception {
         //Insert User in the User tables, such that UserOrganisationUnitLink's foreign key is satisfied:
         ContentValues userContentValues = new ContentValues();

@@ -27,16 +27,18 @@
  */
 package org.hisp.dhis.android.core.systeminfo;
 
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
+
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
 import org.hisp.dhis.android.core.calls.Call;
+import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
 import org.hisp.dhis.android.core.data.api.FieldsConverterFactory;
 import org.hisp.dhis.android.core.data.database.AbsStoreTestCase;
 import org.hisp.dhis.android.core.resource.ResourceStore;
@@ -53,8 +55,6 @@ import okhttp3.mockwebserver.MockWebServer;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
-
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 @RunWith(AndroidJUnit4.class)
 public class SystemInfoCallMockIntegrationShould extends AbsStoreTestCase {
@@ -128,7 +128,7 @@ public class SystemInfoCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_system_info_when_call() throws Exception {
         // fake call to api to retrieve response
         systeminfoCall.call();
@@ -145,7 +145,7 @@ public class SystemInfoCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void update_system_info_when_call() throws Exception {
         ContentValues systemInfo = new ContentValues();
         systemInfo.put(SystemInfoModel.Columns.SERVER_DATE, "2017-02-27T15:00:46.332");

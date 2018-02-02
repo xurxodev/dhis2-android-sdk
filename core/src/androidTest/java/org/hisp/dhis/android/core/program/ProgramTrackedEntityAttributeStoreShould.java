@@ -28,10 +28,15 @@
 
 package org.hisp.dhis.android.core.program;
 
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.hisp.dhis.android.core.AndroidTestUtils.toInteger;
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
@@ -47,10 +52,6 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.Date;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.hisp.dhis.android.core.AndroidTestUtils.toInteger;
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 @RunWith(AndroidJUnit4.class)
 public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
@@ -116,7 +117,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void insert_row_in_data_base_after_insert() {
         long rowId = store.insert(
                 UID,
@@ -161,7 +162,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void insert_deferrable_row_in_data_base_when_insert() {
         final String deferredTrackedEntityAttribute = "deferredTrackedEntityAttribute";
         final String deferredProgram = "deferredProgram";
@@ -194,7 +195,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = SQLiteConstraintException.class)
-    @MediumTest
+    @SmallTest
     public void throw_sqlite_constraint_exception_when_insert_without_tracked_entity_attribute_foreign_key() {
         store.insert(UID, CODE, NAME, DISPLAY_NAME, date, date, SHORT_NAME,
                 DISPLAY_SHORT_NAME, DESCRIPTION, DISPLAY_DESCRIPTION, MANDATORY,
@@ -204,7 +205,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = SQLiteConstraintException.class)
-    @MediumTest
+    @SmallTest
     public void throw_sqlite_constraint_exception_when_insert_without_program_foreign_key() {
         store.insert(UID, CODE, NAME, DISPLAY_NAME, date, date, SHORT_NAME,
                 DISPLAY_SHORT_NAME, DESCRIPTION, DISPLAY_DESCRIPTION, MANDATORY, TRACKED_ENTITY_ATTRIBUTE,
@@ -214,7 +215,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_program_tracked_entity_attribute_when_delete_program() {
         ContentValues programTrackedEntityAttribute = new ContentValues();
         programTrackedEntityAttribute.put(Columns.ID, ID);
@@ -233,7 +234,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_program_tracked_entity_attribute_when_delete_tracked_entity_attribute() {
         ContentValues programTrackedEntityAttribute = new ContentValues();
         programTrackedEntityAttribute.put(Columns.ID, ID);
@@ -254,7 +255,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_program_tracked_entity_attribute_when_delete_option_set_nested_foreign_key() {
         ContentValues programTrackedEntityAttribute = new ContentValues();
         programTrackedEntityAttribute.put(Columns.ID, ID);
@@ -277,7 +278,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void update_program_tracked_entity_attribute_in_data_base_when_update() throws Exception {
         ContentValues programTrackedEntityAttribute = new ContentValues();
         programTrackedEntityAttribute.put(Columns.UID, UID);
@@ -310,7 +311,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_program_tracked_entity_attribute_when_delete() throws Exception {
         ContentValues programTrackedEntityAttribute = new ContentValues();
         programTrackedEntityAttribute.put(Columns.UID, UID);
@@ -341,7 +342,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     // ToDo: consider introducing conflict resolution strategy
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_uid() {
         store.insert(null, CODE, NAME, DISPLAY_NAME, date, date, SHORT_NAME, DISPLAY_SHORT_NAME, DESCRIPTION,
                 DISPLAY_DESCRIPTION, MANDATORY, TRACKED_ENTITY_ATTRIBUTE, ALLOW_FUTURE_DATES, DISPLAY_IN_LIST,
@@ -349,7 +350,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_trackedEnityAttribute() {
         store.insert(UID, CODE, NAME, DISPLAY_NAME, date, date, SHORT_NAME, DISPLAY_SHORT_NAME, DESCRIPTION,
                 DISPLAY_DESCRIPTION, MANDATORY, null, ALLOW_FUTURE_DATES, DISPLAY_IN_LIST,
@@ -357,7 +358,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_program() {
         store.insert(UID, CODE, NAME, DISPLAY_NAME, date, date, SHORT_NAME, DISPLAY_SHORT_NAME, DESCRIPTION,
                 DISPLAY_DESCRIPTION, MANDATORY, TRACKED_ENTITY_ATTRIBUTE, ALLOW_FUTURE_DATES, DISPLAY_IN_LIST,
@@ -365,7 +366,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void update_null_uid() {
         store.update(null, CODE, NAME, DISPLAY_NAME, date, date, SHORT_NAME, DISPLAY_SHORT_NAME, DESCRIPTION,
                 DISPLAY_DESCRIPTION, MANDATORY, TRACKED_ENTITY_ATTRIBUTE, ALLOW_FUTURE_DATES, DISPLAY_IN_LIST,
@@ -373,7 +374,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_trackedEntity() {
         store.update(UID, CODE, NAME, DISPLAY_NAME, date, date, SHORT_NAME, DISPLAY_SHORT_NAME, DESCRIPTION,
                 DISPLAY_DESCRIPTION, MANDATORY, null, ALLOW_FUTURE_DATES, DISPLAY_IN_LIST,
@@ -381,7 +382,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_program() {
         store.update(UID, CODE, NAME, DISPLAY_NAME, date, date, SHORT_NAME, DISPLAY_SHORT_NAME, DESCRIPTION,
                 DISPLAY_DESCRIPTION, MANDATORY, TRACKED_ENTITY_ATTRIBUTE, ALLOW_FUTURE_DATES, DISPLAY_IN_LIST,
@@ -389,7 +390,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void update_null_whereUid() {
         store.update(UID, CODE, NAME, DISPLAY_NAME, date, date, SHORT_NAME, DISPLAY_SHORT_NAME, DESCRIPTION,
                 DISPLAY_DESCRIPTION, MANDATORY, TRACKED_ENTITY_ATTRIBUTE, ALLOW_FUTURE_DATES, DISPLAY_IN_LIST,
@@ -397,7 +398,7 @@ public class ProgramTrackedEntityAttributeStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_delete_null_uid() {
         store.delete(null);
     }

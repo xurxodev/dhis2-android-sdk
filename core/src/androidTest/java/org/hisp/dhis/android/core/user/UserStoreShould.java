@@ -34,7 +34,7 @@ import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCu
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
@@ -112,7 +112,7 @@ public class UserStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void insert_in_data_base_when_insert() {
         Date date = new Date();
 
@@ -167,7 +167,7 @@ public class UserStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void update_in_data_base_when_update() throws Exception {
         Date date = new Date();
         ContentValues user = new ContentValues();
@@ -224,7 +224,7 @@ public class UserStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_in_data_base_when_delete() throws Exception {
         ContentValues user = new ContentValues();
         user.put(UserModel.Columns.ID, ID);
@@ -254,7 +254,7 @@ public class UserStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_all_rows_in_data_base_when_delete_without_params() {
         ContentValues user = create(1L, "test_user_id");
         database().insert(UserModel.TABLE, null, user);
@@ -268,7 +268,7 @@ public class UserStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_uid() {
         store.insert(
                 null,
@@ -293,7 +293,7 @@ public class UserStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_uid() {
         store.update(null,
                 CODE, "newName", "newDisplayName",
@@ -316,7 +316,7 @@ public class UserStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_where_uid() {
         store.update(UID,
                 CODE, "newName", "newDisplayName",
@@ -339,7 +339,7 @@ public class UserStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_delete_null_uid() {
         store.delete(null);
     }

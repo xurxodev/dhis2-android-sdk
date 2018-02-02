@@ -3,7 +3,6 @@ package org.hisp.dhis.android.core.category;
 
 import static junit.framework.Assert.assertTrue;
 
-import android.support.test.filters.LargeTest;
 import android.support.test.filters.MediumTest;
 
 import com.google.common.truth.Truth;
@@ -33,7 +32,7 @@ public class CategoryEndpointCallRealIntegrationShould extends AbsStoreTestCase 
     }
 
     @Test
-    @LargeTest
+    @MediumTest
     public void call_categories_endpoint() throws Exception {
         Response responseLogIn = d2.logIn(RealServerMother.user, RealServerMother.password).call();
         Truth.assertThat(responseLogIn.isSuccessful()).isTrue();

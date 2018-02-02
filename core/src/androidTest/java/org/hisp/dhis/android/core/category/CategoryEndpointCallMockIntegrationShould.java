@@ -2,7 +2,7 @@ package org.hisp.dhis.android.core.category;
 
 import static junit.framework.Assert.assertTrue;
 
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -56,7 +56,7 @@ public class CategoryEndpointCallMockIntegrationShould extends AbsStoreTestCase 
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void parse_category_successful() throws Exception {
 
         CategoryEndpointCall callEndpoint = provideCategoryEndpointCall();

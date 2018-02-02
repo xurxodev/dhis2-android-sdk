@@ -5,7 +5,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-import android.support.test.filters.LargeTest;
+import android.support.test.filters.MediumTest;
 
 import com.google.common.truth.Truth;
 
@@ -34,7 +34,7 @@ public class EventEndPointCallRealIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @LargeTest
+    @MediumTest
     public void download_number_of_events_according_to_default_limit() throws Exception {
         retrofit2.Response response = null;
         response = d2.logIn(RealServerMother.user, RealServerMother.password).call();
@@ -57,7 +57,7 @@ public class EventEndPointCallRealIntegrationShould extends AbsStoreTestCase {
 
 
     @Test
-    @LargeTest
+    @MediumTest
     public void download_event_with_category_combo_option() throws Exception {
         retrofit2.Response response = null;
         response = d2.logIn(RealServerMother.user, RealServerMother.password).call();

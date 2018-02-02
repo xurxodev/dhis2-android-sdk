@@ -28,8 +28,12 @@
 
 package org.hisp.dhis.android.core.option;
 
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
+
 import android.database.Cursor;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -58,9 +62,6 @@ import okhttp3.mockwebserver.MockWebServer;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 @RunWith(AndroidJUnit4.class)
 public class OptionSetCallMockIntegrationShould extends AbsStoreTestCase {
@@ -221,7 +222,7 @@ public class OptionSetCallMockIntegrationShould extends AbsStoreTestCase {
 
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_option_set_with_options_in_data_base_when_call() throws Exception {
         optionSetCall.call();
 
@@ -296,7 +297,7 @@ public class OptionSetCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void return_option_set_model_after_call() throws Exception {
         Response<Payload<OptionSet>> response = optionSetCall.call();
 

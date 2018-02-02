@@ -27,9 +27,11 @@
  */
 package org.hisp.dhis.android.core.user;
 
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
+
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -61,8 +63,6 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
-
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 @RunWith(AndroidJUnit4.class)
 public class UserCallMockIntegrationShould extends AbsStoreTestCase {
@@ -254,7 +254,7 @@ public class UserCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_user_in_data_base_when_call() throws Exception {
         userCall.call();
 
@@ -285,7 +285,7 @@ public class UserCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_user_credentials_in_data_base_when_call() throws Exception {
         userCall.call();
 
@@ -317,7 +317,7 @@ public class UserCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_user_roles_in_data_base_when_call() throws Exception {
         userCall.call();
 

@@ -3,7 +3,7 @@ package org.hisp.dhis.android.core;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 
 import org.hisp.dhis.android.core.category.CategoryCategoryComboLinkModel;
 import org.hisp.dhis.android.core.category.CategoryComboModel;
@@ -59,7 +59,7 @@ public class LogoutCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void have_empty_database_when_wipe_db_after_sync_meta_data() throws Exception {
         givenALoginInDatabase();
 
@@ -73,7 +73,7 @@ public class LogoutCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void have_empty_database_when_wipe_db_after_sync_data() throws Exception {
         givenALoginInDatabase();
 
@@ -89,7 +89,7 @@ public class LogoutCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_authenticate_user_table_only_when_log_out_after_sync_metadata()
             throws Exception {
 
@@ -123,7 +123,7 @@ public class LogoutCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void have_organisation_units_descendants_after_login_wipe_and_login()
             throws Exception {
         givenALoginWithSierraLeonaOUInDatabase();
@@ -142,7 +142,7 @@ public class LogoutCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void complete_login_and_sync_metadata_successfully_after_logout()
             throws Exception {
         givenALoginInDatabase();

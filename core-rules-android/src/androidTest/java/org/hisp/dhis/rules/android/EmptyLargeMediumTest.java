@@ -1,7 +1,7 @@
 package org.hisp.dhis.rules.android;
 
-import android.support.test.filters.LargeTest;
 import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
@@ -14,13 +14,13 @@ import org.junit.runner.RunWith;
 public class EmptyLargeMediumTest {
 
     @Test
-    @MediumTest
+    @SmallTest
     public void emptyMediumTest() {
 
     }
 
     @Test
-    @LargeTest
+    @MediumTest
     public void emptyLargeTest() {
 
     }

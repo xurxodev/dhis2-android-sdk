@@ -28,9 +28,13 @@
 
 package org.hisp.dhis.android.core.option;
 
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
+
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
 import org.hisp.dhis.android.core.common.ValueType;
@@ -42,9 +46,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 public class OptionSetStoreShould extends AbsStoreTestCase {
 
@@ -79,7 +80,7 @@ public class OptionSetStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void should_persist_option_set_in_data_base_when_persist() throws ParseException {
         long rowId = store.insert(
                 UID, CODE, NAME, DISPLAY_NAME, date, date, VERSION, VALUE_TYPE);
@@ -98,7 +99,7 @@ public class OptionSetStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void update_option_set_in_data_base_when_update() throws Exception {
         ContentValues optionSet = new ContentValues();
         optionSet.put(Columns.ID, 1L);
@@ -130,7 +131,7 @@ public class OptionSetStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_option_set_in_data_base_when_delete() throws Exception {
         ContentValues optionSet = new ContentValues();
         optionSet.put(Columns.ID, 1L);
@@ -156,7 +157,7 @@ public class OptionSetStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_an_updated_option_set_in_data_base_when_delete() throws Exception {
         ContentValues optionSet = new ContentValues();
         optionSet.put(Columns.ID, 1L);
@@ -193,25 +194,25 @@ public class OptionSetStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_after_insert_null_uid() {
         store.insert(null, CODE, NAME, DISPLAY_NAME, date, date, VERSION, VALUE_TYPE);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_after_update_null_uid() {
         store.update(null, CODE, NAME, DISPLAY_NAME, date, date, VERSION, VALUE_TYPE, UID);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_after_update_null_whereUid() {
         store.update(UID, CODE, NAME, DISPLAY_NAME, date, date, VERSION, VALUE_TYPE, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_after_delete_null_uid() {
         store.delete(null);
     }

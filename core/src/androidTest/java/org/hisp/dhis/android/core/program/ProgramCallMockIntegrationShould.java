@@ -27,19 +27,21 @@
  */
 package org.hisp.dhis.android.core.program;
 
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
+
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.hisp.dhis.android.core.D2;
+import org.hisp.dhis.android.core.calls.Call;
 import org.hisp.dhis.android.core.category.CategoryComboModel;
 import org.hisp.dhis.android.core.category.CreateCategoryComboUtils;
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
-import org.hisp.dhis.android.core.calls.Call;
 import org.hisp.dhis.android.core.common.D2Factory;
 import org.hisp.dhis.android.core.common.Payload;
 import org.hisp.dhis.android.core.data.database.AbsStoreTestCase;
@@ -80,8 +82,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import retrofit2.Response;
-
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 @RunWith(AndroidJUnit4.class)
 public class ProgramCallMockIntegrationShould extends AbsStoreTestCase {
@@ -239,7 +239,7 @@ public class ProgramCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_program_when_call() throws Exception {
         // Fake call to api
         programCall.call();
@@ -281,7 +281,7 @@ public class ProgramCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_program_stage_when_call() throws Exception {
         programCall.call();
         String[] projection = {
@@ -346,7 +346,7 @@ public class ProgramCallMockIntegrationShould extends AbsStoreTestCase {
      * @throws Exception
      */
     @Test
-    @MediumTest
+    @SmallTest
     public void not_persist_program_stage_sections_when_call() throws Exception {
         programCall.call();
         String[] projection = {
@@ -366,7 +366,7 @@ public class ProgramCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_program_stage_data_element_when_call() throws Exception {
         programCall.call();
 
@@ -412,7 +412,7 @@ public class ProgramCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_data_element_when_call() throws Exception {
         programCall.call();
 
@@ -467,7 +467,7 @@ public class ProgramCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_option_set_when_call() throws Exception {
         programCall.call();
 
@@ -486,7 +486,7 @@ public class ProgramCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_program_rule_variables_on_call() throws Exception {
         programCall.call();
         String[] projection = {
@@ -524,7 +524,7 @@ public class ProgramCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_program_tracker_entity_attributes_when_call() throws Exception {
         programCall.call();
         String[] projection = {
@@ -573,7 +573,7 @@ public class ProgramCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_tracked_entity_attribute_when_call() throws Exception {
         programCall.call();
         String[] projection = {
@@ -633,7 +633,7 @@ public class ProgramCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_program_indicators_when_call() throws Exception {
         programCall.call();
 
@@ -682,7 +682,7 @@ public class ProgramCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_program_rules_when_call() throws Exception {
         programCall.call();
         String[] projection = {
@@ -716,7 +716,7 @@ public class ProgramCallMockIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_program_rule_actions_when_call() throws Exception {
         programCall.call();
 
@@ -769,7 +769,7 @@ public class ProgramCallMockIntegrationShould extends AbsStoreTestCase {
      * @throws Exception
      */
     @Test
-    @MediumTest
+    @SmallTest
     public void not_persist_relationship_type_when_call() throws Exception {
         programCall.call();
 

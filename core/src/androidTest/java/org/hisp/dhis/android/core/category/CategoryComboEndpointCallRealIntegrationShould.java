@@ -3,7 +3,7 @@ package org.hisp.dhis.android.core.category;
 
 import static junit.framework.Assert.assertTrue;
 
-import android.support.test.filters.LargeTest;
+import android.support.test.filters.MediumTest;
 
 import com.google.common.truth.Truth;
 
@@ -34,7 +34,7 @@ public class CategoryComboEndpointCallRealIntegrationShould extends AbsStoreTest
     }
 
     @Test
-    @LargeTest
+    @MediumTest
     public void download_categories_combos_and_relatives() throws Exception {
 
         Response responseLogIn = d2.logIn(RealServerMother.user, RealServerMother.password).call();

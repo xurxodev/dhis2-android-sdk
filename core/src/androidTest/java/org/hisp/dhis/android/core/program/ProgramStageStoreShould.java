@@ -28,10 +28,13 @@
 
 package org.hisp.dhis.android.core.program;
 
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
+
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteConstraintException;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
@@ -48,9 +51,6 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.Date;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 @RunWith(AndroidJUnit4.class)
 public class ProgramStageStoreShould extends AbsStoreTestCase {
@@ -138,7 +138,7 @@ public class ProgramStageStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void insert_in_data_base_when_insert() {
 
         long rowId = store.insert(
@@ -184,7 +184,7 @@ public class ProgramStageStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void insert_deferrable_row_in_data_base_when_insert() {
         final String deferredProgram = "deferredProgram";
         database().beginTransaction();
@@ -212,7 +212,7 @@ public class ProgramStageStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_program_stage_in_data_base_when_delete_program() {
 
         ContentValues programStage = new ContentValues();
@@ -236,7 +236,7 @@ public class ProgramStageStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void update_program_stage_in_data_base_when_update() throws Exception {
 
         // insertion of foreign key happens in the setUp method
@@ -270,7 +270,7 @@ public class ProgramStageStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_program_stage_in_data_base_when_delete_program_stage() throws Exception {
         // insertion of foreign key happens in the setUp method
         ContentValues programStage = new ContentValues();
@@ -300,7 +300,7 @@ public class ProgramStageStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_uid() {
         store.insert(null, CODE, NAME, DISPLAY_NAME,
                 date, date, EXECUTION_DATE_LABEL, ALLOW_GENERATE_NEXT_VISIT,
@@ -312,7 +312,7 @@ public class ProgramStageStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_program() {
         store.insert(UID, CODE, NAME, DISPLAY_NAME,
                 date, date, EXECUTION_DATE_LABEL, ALLOW_GENERATE_NEXT_VISIT,
@@ -324,7 +324,7 @@ public class ProgramStageStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_uid() {
         store.update(null, CODE, NAME, DISPLAY_NAME,
                 date, date, EXECUTION_DATE_LABEL, ALLOW_GENERATE_NEXT_VISIT,
@@ -336,7 +336,7 @@ public class ProgramStageStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_program() {
         store.update(UID, CODE, NAME, DISPLAY_NAME,
                 date, date, EXECUTION_DATE_LABEL, ALLOW_GENERATE_NEXT_VISIT,
@@ -348,7 +348,7 @@ public class ProgramStageStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_whereUid() {
         store.update(UID, CODE, NAME, DISPLAY_NAME,
                 date, date, EXECUTION_DATE_LABEL, ALLOW_GENERATE_NEXT_VISIT,
@@ -360,7 +360,7 @@ public class ProgramStageStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_delete_null_uid() {
         store.delete(null);
     }

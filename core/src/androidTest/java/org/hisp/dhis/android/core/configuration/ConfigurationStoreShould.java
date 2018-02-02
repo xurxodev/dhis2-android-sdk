@@ -28,18 +28,19 @@
 
 package org.hisp.dhis.android.core.configuration;
 
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
+
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 
 import org.hisp.dhis.android.core.data.database.AbsStoreTestCase;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 public class ConfigurationStoreShould extends AbsStoreTestCase {
     private static final String[] PROJECTION = {ConfigurationModel.Columns.ID, ConfigurationModel.Columns.SERVER_URL};
@@ -54,7 +55,7 @@ public class ConfigurationStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_row_in_database_when_save() {
         long rowId = store.save("http://testserver.org/");
 
@@ -68,7 +69,7 @@ public class ConfigurationStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void not_thrown_on_save_conflict() {
         ContentValues contentValues = new ContentValues();
         contentValues.put(ConfigurationModel.Columns.SERVER_URL, "http://testserver.org/");
@@ -87,7 +88,7 @@ public class ConfigurationStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void not_persist_more_than_one_url_on_save() {
         ContentValues contentValues = new ContentValues();
         contentValues.put(ConfigurationModel.Columns.SERVER_URL, "http://testserver.org/");
@@ -105,7 +106,7 @@ public class ConfigurationStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_persisted_rows_on_delete() {
         ContentValues contentValues = new ContentValues();
         contentValues.put(ConfigurationModel.Columns.SERVER_URL, "http://testserver.org/");
@@ -121,14 +122,14 @@ public class ConfigurationStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void not_fail_if_no_rows_persisted_on_delete() {
         long deleted = store.delete();
         assertThat(deleted).isEqualTo(0);
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void return_persisted_row_when_query() {
         ContentValues contentValues = new ContentValues();
         contentValues.put(ConfigurationModel.Columns.SERVER_URL, "http://testserver.org/");
@@ -141,14 +142,14 @@ public class ConfigurationStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void return_null_if_no_rows_are_persisted() {
         ConfigurationModel persistedConfiguration = store.query();
         assertThat(persistedConfiguration).isNull();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_uid() {
         store.save(null);
     }

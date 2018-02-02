@@ -21,11 +21,10 @@ adb shell input keyevent 82 &
     if [ "$TEST_SUITE" == "integration" ]
     then
     "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=small
-    "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=medium
     fi
     if [ "$TEST_SUITE" == "integration_large" ]
     then
-    "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=large
+    "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=medium
     fi
 fi
 

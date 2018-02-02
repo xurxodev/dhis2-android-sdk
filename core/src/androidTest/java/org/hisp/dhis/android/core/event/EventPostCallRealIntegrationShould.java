@@ -2,10 +2,9 @@ package org.hisp.dhis.android.core.event;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import android.support.test.filters.LargeTest;
-
 import static junit.framework.Assert.assertTrue;
 
+import android.support.test.filters.MediumTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hisp.dhis.android.core.D2;
@@ -75,7 +74,7 @@ public class EventPostCallRealIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @LargeTest
+    @MediumTest
     public void successful_response_after_sync_events() throws Exception {
         retrofit2.Response response = null;
         response = d2.logIn(user, password).call();
@@ -95,7 +94,7 @@ public class EventPostCallRealIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @LargeTest
+    @MediumTest
     public void pull_event_with_correct_category_combo_after_be_pushed() throws Exception {
         retrofit2.Response response = null;
 

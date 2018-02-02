@@ -28,8 +28,12 @@
 
 package org.hisp.dhis.android.core.constant;
 
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
+
 import android.database.Cursor;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
 import org.hisp.dhis.android.core.data.database.AbsStoreTestCase;
@@ -38,9 +42,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Date;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 public class ConstantStoreShould extends AbsStoreTestCase {
 
@@ -67,7 +68,7 @@ public class ConstantStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_row_in_database_when_insert() {
         long rowId = store.insert(UID, CODE, NAME, DISPLAY_NAME, CREATED, LAST_UPDATED, VALUE);
         Cursor cursor = database().query(ConstantModel.TABLE, CONSTANT_PROJECTION, null, null, null, null, null);
@@ -79,7 +80,7 @@ public class ConstantStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_uid() {
         store.insert(null, CODE, NAME, DISPLAY_NAME, CREATED, LAST_UPDATED, VALUE);
     }

@@ -35,7 +35,7 @@ import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCu
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
@@ -98,7 +98,7 @@ public class UserCredentialsStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void insert_in_data_base_when_insert() {
         long rowId = store.insert(
                 UID,
@@ -126,7 +126,7 @@ public class UserCredentialsStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void insert_in_data_base_when_insert_deferred_row() {
         final String deferredUid = "deferredForeignKeyUid";
 
@@ -163,7 +163,7 @@ public class UserCredentialsStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void insert_in_data_base_when_insert_nullable_row() {
         long rowId = store.insert(
                 UID,
@@ -190,7 +190,7 @@ public class UserCredentialsStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_in_data_base_when_delete_user_foreign_key() {
         store.insert(
                 UID,
@@ -209,7 +209,7 @@ public class UserCredentialsStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void update_in_data_base_when_update() throws Exception {
         ContentValues user = new ContentValues();
         user.put(UserModel.Columns.ID, ID);
@@ -246,7 +246,7 @@ public class UserCredentialsStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_in_data_base_when_delete_user_credentials() throws Exception {
 
         // inserting foreign key
@@ -280,7 +280,7 @@ public class UserCredentialsStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = SQLiteConstraintException.class)
-    @MediumTest
+    @SmallTest
     public void throw_sqlite_constraint_exception_when_insert_invalid_user_foreign_key() {
         store.insert(
                 UID,
@@ -293,7 +293,7 @@ public class UserCredentialsStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_all_rows_when_delete_without_params() {
         ContentValues userCredentials = CreateUserCredentialsUtils.create(ID, UID, USER_UID);
         database().insert(UserCredentialsModel.TABLE, null, userCredentials);
@@ -306,39 +306,39 @@ public class UserCredentialsStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_uid_arg() {
         store.insert(null, USER_CREDENTIALS_CODE, USER_CREDENTIALS_NAME, USER_CREDENTIALS_DISPLAY_NAME,
                 date, date, USER_CREDENTIALS_USERNAME, USER_UID);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_user_uid_arg() {
         store.insert(UID, USER_CREDENTIALS_CODE, USER_CREDENTIALS_NAME, USER_CREDENTIALS_DISPLAY_NAME,
                 date, date, USER_CREDENTIALS_USERNAME, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_uid_arg() {
         store.update(null, CODE, "new name", DISPLAY_NAME, date, date, USER_CREDENTIALS_USERNAME, USER_UID, UID);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_User_uid_arg() {
         store.update(UID, CODE, "new name", DISPLAY_NAME, date, date, USER_CREDENTIALS_USERNAME, null, UID);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_where_arg() {
         store.update(UID, CODE, "new name", DISPLAY_NAME, date, date, USER_CREDENTIALS_USERNAME, USER_UID, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_delete_null_uid_arg() {
         store.delete(null);
     }

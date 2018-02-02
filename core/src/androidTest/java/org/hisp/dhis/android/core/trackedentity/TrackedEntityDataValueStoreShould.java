@@ -38,7 +38,7 @@ import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCu
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
@@ -155,7 +155,7 @@ public class TrackedEntityDataValueStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void insert_tracked_entity_data_value_in_data_base_when_insert() {
         long rowId = trackedEntityDataValueStore.insert(
                 EVENT_1,
@@ -181,7 +181,7 @@ public class TrackedEntityDataValueStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void insert_nullable_tracked_entity_data_value_in_data_base_when_insert_null_fields() {
         long rowId = trackedEntityDataValueStore.insert(EVENT_1, null, null, DATA_ELEMENT_1, null, null, null);
 
@@ -194,7 +194,7 @@ public class TrackedEntityDataValueStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_tracked_entity_data_value_when_delete_event_foreign_key() {
         trackedEntityDataValueStore.insert(
                 EVENT_1,
@@ -213,7 +213,7 @@ public class TrackedEntityDataValueStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_tracked_entity_data_value_when_delete_data_element_foreign_key() {
         trackedEntityDataValueStore.insert(
                 EVENT_1,
@@ -233,7 +233,7 @@ public class TrackedEntityDataValueStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void return_list_of_tracked_entity_data_value_when_query_tracked_entity_data_value() throws Exception {
         ContentValues dataValue = new ContentValues();
         dataValue.put(Columns.CREATED, dateString);
@@ -272,7 +272,7 @@ public class TrackedEntityDataValueStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = SQLiteConstraintException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_tracked_entity_data_value_with_invalid_event() {
         trackedEntityDataValueStore.insert(
                 "wrong",
@@ -286,7 +286,7 @@ public class TrackedEntityDataValueStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = SQLiteConstraintException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_wheninsert_tracked_entity_data_value_with_invalid_data_element() {
         trackedEntityDataValueStore.insert(
                 EVENT_1,
@@ -302,7 +302,7 @@ public class TrackedEntityDataValueStoreShould extends AbsStoreTestCase {
     // ToDo: consider introducing conflict resolution strategy
 
     @Test
-    @MediumTest
+    @SmallTest
     public void update_tracked_entity_data_value() {
         database().insert(TrackedEntityDataValueModel.TABLE, null,
                 CreateTrackedEntityDataValueUtils.create(1L, EVENT_1, DATA_ELEMENT_1));
@@ -330,7 +330,7 @@ public class TrackedEntityDataValueStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_tracked_entity_data_value_by_event_and_data_element_uids() {
         database().insert(TrackedEntityDataValueModel.TABLE, null,
                 CreateTrackedEntityDataValueUtils.create(1L, EVENT_1, DATA_ELEMENT_1));
@@ -359,13 +359,13 @@ public class TrackedEntityDataValueStoreShould extends AbsStoreTestCase {
 
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_uid() {
         trackedEntityDataValueStore.insert(null, date, date, DATA_ELEMENT_1, STORED_BY, VALUE, PROVIDED_ELSEWHERE);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_data_element() {
         trackedEntityDataValueStore.insert(EVENT_1, date, date, null, STORED_BY, VALUE, PROVIDED_ELSEWHERE);
     }

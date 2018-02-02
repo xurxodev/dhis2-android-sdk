@@ -28,10 +28,14 @@
 
 package org.hisp.dhis.android.core.relationship;
 
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hisp.dhis.android.core.data.database.AbsStoreTestCase;
@@ -45,9 +49,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 @RunWith(AndroidJUnit4.class)
 public class RelationshipStoreShould extends AbsStoreTestCase {
@@ -96,7 +97,7 @@ public class RelationshipStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void insert_relationship_in_data_base_when_insert() {
         long rowId = store.insert(
                 TRACKED_ENTITY_INSTANCE_A,
@@ -116,7 +117,7 @@ public class RelationshipStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void insert_deferrable_relationship_in_data_base_when_insert() {
         final String deferredRelationshipType = "deferredRelationshipType";
 
@@ -147,7 +148,7 @@ public class RelationshipStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = SQLiteConstraintException.class)
-    @MediumTest
+    @SmallTest
     public void not_insert_relationship_in_data_base_when_insert_null() {
         //Insert foreign keys in their respective tables:
         ContentValues relationshipType = CreateRelationshipTypeUtils.create(
@@ -165,7 +166,7 @@ public class RelationshipStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_relationship_when_delete() {
         store.insert(
                 TRACKED_ENTITY_INSTANCE_A,
@@ -182,7 +183,7 @@ public class RelationshipStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_relationship_in_data_base_when_delete_teia() {
         store.insert(
                 TRACKED_ENTITY_INSTANCE_A,
@@ -199,7 +200,7 @@ public class RelationshipStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_relationship_in_data_base_when_delete_teib() {
         store.insert(
                 TRACKED_ENTITY_INSTANCE_A,
@@ -216,7 +217,7 @@ public class RelationshipStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = SQLiteConstraintException.class)
-    @MediumTest
+    @SmallTest
     public void throw_sqlite_constraint_exception_when_insert_invalid_relationship_type_foreign_key() {
         store.insert(
                 TRACKED_ENTITY_INSTANCE_A,
@@ -226,7 +227,7 @@ public class RelationshipStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_relationship_type() {
         store.insert(TRACKED_ENTITY_INSTANCE_A, TRACKED_ENTITY_INSTANCE_B, null);
     }

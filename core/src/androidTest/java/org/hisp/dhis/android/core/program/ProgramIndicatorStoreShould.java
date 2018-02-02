@@ -28,9 +28,14 @@
 
 package org.hisp.dhis.android.core.program;
 
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.hisp.dhis.android.core.AndroidTestUtils.toInteger;
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
+
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
@@ -43,10 +48,6 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.hisp.dhis.android.core.AndroidTestUtils.toInteger;
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 @RunWith(AndroidJUnit4.class)
 public class ProgramIndicatorStoreShould extends AbsStoreTestCase {
@@ -97,7 +98,7 @@ public class ProgramIndicatorStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_row_in_data_base_when_insert() throws ParseException {
         ContentValues program = CreateProgramUtils.create(1L, PROGRAM, null, null, null);
         database().insert(ProgramModel.TABLE, null, program);
@@ -149,7 +150,7 @@ public class ProgramIndicatorStoreShould extends AbsStoreTestCase {
     // ToDo: consider introducing conflict resolution strategy
 
     @Test
-    @MediumTest
+    @SmallTest
     public void update_program_indicator_in_data_base_when_update() throws Exception {
         ContentValues program = CreateProgramUtils.create(1L, PROGRAM, null, null, null);
         database().insert(ProgramModel.TABLE, null, program);
@@ -182,7 +183,7 @@ public class ProgramIndicatorStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_program_indicator_in_data_base_when_delete() throws Exception {
         ContentValues program = CreateProgramUtils.create(1L, PROGRAM, null, null, null);
         database().insert(ProgramModel.TABLE, null, program);
@@ -212,7 +213,7 @@ public class ProgramIndicatorStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_program_indicator_when_delete_program() throws Exception {
 
         ContentValues program = CreateProgramUtils.create(1L, PROGRAM, null, null, null);
@@ -239,7 +240,7 @@ public class ProgramIndicatorStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_uid() {
         store.insert(null, CODE, NAME, DISPLAY_NAME, CREATED, LAST_UPDATED, SHORT_NAME, DISPLAY_SHORT_NAME,
                 DESCRIPTION, DISPLAY_DESCRIPTION, DISPLAY_IN_FORM, EXPRESSION, DIMENSION_ITEM, FILTER, DECIMALS,
@@ -247,7 +248,7 @@ public class ProgramIndicatorStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_program() {
         store.insert(UID, CODE, NAME, DISPLAY_NAME, CREATED, LAST_UPDATED, SHORT_NAME, DISPLAY_SHORT_NAME,
                 DESCRIPTION, DISPLAY_DESCRIPTION, DISPLAY_IN_FORM, EXPRESSION, DIMENSION_ITEM, FILTER, DECIMALS,
@@ -255,7 +256,7 @@ public class ProgramIndicatorStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_uid() {
         store.update(null, CODE, NAME, DISPLAY_NAME, CREATED, LAST_UPDATED, SHORT_NAME, DISPLAY_SHORT_NAME,
                 DESCRIPTION, DISPLAY_DESCRIPTION, DISPLAY_IN_FORM, EXPRESSION, DIMENSION_ITEM, FILTER, DECIMALS,
@@ -263,7 +264,7 @@ public class ProgramIndicatorStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_program() {
         store.update(UID, CODE, NAME, DISPLAY_NAME, CREATED, LAST_UPDATED, SHORT_NAME, DISPLAY_SHORT_NAME,
                 DESCRIPTION, DISPLAY_DESCRIPTION, DISPLAY_IN_FORM, EXPRESSION, DIMENSION_ITEM, FILTER, DECIMALS,
@@ -271,7 +272,7 @@ public class ProgramIndicatorStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_with_null_in_where_program_indicator_uid_field() {
         store.update(UID, CODE, NAME, DISPLAY_NAME, CREATED, LAST_UPDATED, SHORT_NAME, DISPLAY_SHORT_NAME,
                 DESCRIPTION, DISPLAY_DESCRIPTION, DISPLAY_IN_FORM, EXPRESSION, DIMENSION_ITEM, FILTER, DECIMALS,
@@ -279,7 +280,7 @@ public class ProgramIndicatorStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void  throw_illegal_argument_exception_when_delete_null_uid() {
         store.delete(null);
     }

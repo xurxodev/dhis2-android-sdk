@@ -28,10 +28,14 @@
 
 package org.hisp.dhis.android.core.organisationunit;
 
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hisp.dhis.android.core.data.database.AbsStoreTestCase;
@@ -43,9 +47,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 @RunWith(AndroidJUnit4.class)
 public class OrganisationUnitProgramLinkStoreShould extends AbsStoreTestCase {
@@ -64,7 +65,7 @@ public class OrganisationUnitProgramLinkStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_in_data_base_after_insert() throws Exception {
         // inserting mandatory foreign keys
         ContentValues organisationUnit = CreateOrganisationUnitUtils.createOrgUnit(ID, ORGANISATION_UNIT_UID);
@@ -85,7 +86,7 @@ public class OrganisationUnitProgramLinkStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = SQLiteConstraintException.class)
-    @MediumTest
+    @SmallTest
     public void throw_sqlite_constraint_exception_after_persist_in_database_with_missing_organisation_unit_foreign_key() throws Exception {
         ContentValues program = CreateProgramUtils.create(ID, PROGRAM_UID, null, null, null);
         database().insert(ProgramModel.TABLE, null, program);
@@ -94,7 +95,7 @@ public class OrganisationUnitProgramLinkStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = SQLiteConstraintException.class)
-    @MediumTest
+    @SmallTest
     public void throw_sqlite_constraint_exception_after_persist_in_database_with_missing_program_foreign_key() throws Exception {
         ContentValues organisationUnit = CreateOrganisationUnitUtils.createOrgUnit(ID, ORGANISATION_UNIT_UID);
         database().insert(OrganisationUnitModel.TABLE, null, organisationUnit);
@@ -103,7 +104,7 @@ public class OrganisationUnitProgramLinkStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_link_when_delete_organisation_unit() throws Exception {
         // inserting mandatory foreign keys
         ContentValues organisationUnit = CreateOrganisationUnitUtils.createOrgUnit(ID, ORGANISATION_UNIT_UID);
@@ -138,7 +139,7 @@ public class OrganisationUnitProgramLinkStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_link_when_delete_program() throws Exception {
         // inserting mandatory foreign keys
         ContentValues organisationUnit = CreateOrganisationUnitUtils.createOrgUnit(ID, ORGANISATION_UNIT_UID);
@@ -164,13 +165,13 @@ public class OrganisationUnitProgramLinkStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_organisationUnit() {
         store.insert(null, PROGRAM_UID);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_program() {
         store.insert(ORGANISATION_UNIT_UID, null);
     }

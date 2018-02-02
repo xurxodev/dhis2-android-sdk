@@ -27,9 +27,13 @@
  */
 package org.hisp.dhis.android.core.user;
 
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
+
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
@@ -41,9 +45,6 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.Date;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 @RunWith(AndroidJUnit4.class)
 public class UserRoleStoreShould extends AbsStoreTestCase {
@@ -82,7 +83,7 @@ public class UserRoleStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void insert_in_data_base_when_insert() {
         long rowId = userRoleStore.insert(UID, CODE, NAME, DISPLAY_NAME, date, date);
         Cursor cursor = database().query(UserRoleModel.TABLE, PROJECTION, null, null, null, null, null, null);
@@ -92,7 +93,7 @@ public class UserRoleStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void update_in_data_base_when_update() throws Exception {
         ContentValues userRole = new ContentValues();
         userRole.put(Columns.ID, ID);
@@ -115,7 +116,7 @@ public class UserRoleStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_in_data_base_when_delete() throws Exception {
         ContentValues userRole = new ContentValues();
         userRole.put(Columns.ID, ID);
@@ -139,25 +140,25 @@ public class UserRoleStoreShould extends AbsStoreTestCase {
     }
 
     @Test (expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_uid() {
         userRoleStore.insert(null, CODE, NAME, DISPLAY_NAME, date, date);
     }
 
     @Test (expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_uid() {
         userRoleStore.update(null, CODE, NAME, DISPLAY_NAME, date, date, UID);
     }
 
     @Test (expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_where() {
         userRoleStore.update(UID, CODE, NAME, DISPLAY_NAME, date, date, null);
     }
 
     @Test (expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_delete_null_arg() {
         userRoleStore.delete(null);
     }

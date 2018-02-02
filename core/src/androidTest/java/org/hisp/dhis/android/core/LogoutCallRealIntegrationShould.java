@@ -5,7 +5,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.hisp.dhis.android.core.data.database.SqliteCheckerUtility.isDatabaseEmpty;
 import static org.hisp.dhis.android.core.data.database.SqliteCheckerUtility.isTableEmpty;
 
-import android.support.test.filters.LargeTest;
+import android.support.test.filters.MediumTest;
 
 import org.hisp.dhis.android.core.common.D2Factory;
 import org.hisp.dhis.android.core.common.EventCallFactory;
@@ -36,7 +36,7 @@ public class LogoutCallRealIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @LargeTest
+    @MediumTest
     public void have_empty_database_when_wipe_db_after_sync_metadata() throws Exception {
         retrofit2.Response response = null;
 
@@ -54,7 +54,7 @@ public class LogoutCallRealIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @LargeTest
+    @MediumTest
     public void have_empty_database_when_wipe_db_after_sync_data() throws Exception {
         retrofit2.Response response = null;
         response = d2.logIn("android", "Android123").call();
@@ -76,7 +76,7 @@ public class LogoutCallRealIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @LargeTest
+    @MediumTest
     public void delete_autenticate_user_table_only_when_log_out_after_sync_data() throws Exception {
         retrofit2.Response response = null;
         response = d2.logIn("android", "Android123").call();
@@ -101,7 +101,7 @@ public class LogoutCallRealIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @LargeTest
+    @MediumTest
     public void delete_autenticate_user_table_only_when_log_out_after_sync_metadata()
             throws Exception {
         retrofit2.Response response = null;
@@ -131,7 +131,7 @@ public class LogoutCallRealIntegrationShould extends AbsStoreTestCase {
     }
 
     @Test
-    @LargeTest
+    @MediumTest
     public void response_successful_on_login_logout_and_login() throws Exception {
         retrofit2.Response response = null;
         response = d2.logIn("android", "Android123").call();

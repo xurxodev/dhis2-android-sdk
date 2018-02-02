@@ -1,6 +1,6 @@
 package org.hisp.dhis.android.core.trackedentity;
 
-import android.support.test.filters.LargeTest;
+import android.support.test.filters.MediumTest;
 
 import com.google.common.truth.Truth;
 
@@ -27,7 +27,7 @@ public class TrackedEntityInstanceCallRealIntegrationShould extends AbsStoreTest
     }
 
     @Test
-    @LargeTest
+    @MediumTest
     public void download_tei_enrollments_and_events() throws Exception {
         retrofit2.Response response = null;
         response = d2.logIn(RealServerMother.user, RealServerMother.password).call();

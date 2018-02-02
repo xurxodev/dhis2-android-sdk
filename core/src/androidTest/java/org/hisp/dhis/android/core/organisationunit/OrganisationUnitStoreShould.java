@@ -28,9 +28,13 @@
 
 package org.hisp.dhis.android.core.organisationunit;
 
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
+
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
 import org.hisp.dhis.android.core.data.database.AbsStoreTestCase;
@@ -39,9 +43,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Date;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 public class OrganisationUnitStoreShould extends AbsStoreTestCase {
     public static final String[] PROJECTION = {
@@ -91,7 +92,7 @@ public class OrganisationUnitStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void insert_in_data_base_when_insert() {
         long rowId = store.insert(
                 UID,
@@ -129,7 +130,7 @@ public class OrganisationUnitStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void update_row_in_data_base_when_update() {
         database().insert(OrganisationUnitModel.TABLE, null, CreateOrganisationUnitUtils.createOrgUnit(1L,UID));
         int updateReturn = store.update("updated", CODE, NAME, DISPLAY_NAME, date, date, SHORT_NAME,
@@ -147,7 +148,7 @@ public class OrganisationUnitStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void update_row_in_data_base_when_update_not_existing_organisation_unit() {
         int updateReturn = store.update(UID, CODE, NAME, DISPLAY_NAME, date, date, SHORT_NAME, DISPLAY_SHORT_NAME,
                 DESCRIPTION,
@@ -156,7 +157,7 @@ public class OrganisationUnitStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_organisation_unit_in_data_base_when_delete() {
         database().insert(OrganisationUnitModel.TABLE, null, CreateOrganisationUnitUtils.createOrgUnit(2L, UID));
         int returnValue = store.delete(UID);
@@ -168,7 +169,7 @@ public class OrganisationUnitStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_two_organisation_units_in_database_when_delete_all() {
         ContentValues organisationUnitOne = CreateOrganisationUnitUtils.createOrgUnit(1L, "organisation_unit_one");
         ContentValues organisationUnitTwo = CreateOrganisationUnitUtils.createOrgUnit(2L, "organisation_unit_two");
@@ -184,7 +185,7 @@ public class OrganisationUnitStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_uid() {
         store.insert(null, CODE, NAME, DISPLAY_NAME, date, date, SHORT_NAME, DISPLAY_SHORT_NAME, DESCRIPTION,
                 DISPLAY_DESCRIPTION, PATH, date, date, null, LEVEL
@@ -192,7 +193,7 @@ public class OrganisationUnitStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_uid() {
         store.update(null, CODE, NAME, DISPLAY_NAME, date, date, SHORT_NAME, DISPLAY_SHORT_NAME, DESCRIPTION,
                 DISPLAY_DESCRIPTION, PATH, date, date, null, LEVEL, UID
@@ -200,7 +201,7 @@ public class OrganisationUnitStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_with_null_where_uid_field() {
         store.update(UID, CODE, NAME, DISPLAY_NAME, date, date, SHORT_NAME, DISPLAY_SHORT_NAME, DESCRIPTION,
                 DISPLAY_DESCRIPTION, PATH, date, date, null, LEVEL, null
@@ -208,7 +209,7 @@ public class OrganisationUnitStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_delete_null_uid() {
         store.delete(null);
     }

@@ -28,10 +28,14 @@
 
 package org.hisp.dhis.android.core.program;
 
+import static com.google.common.truth.Truth.assertThat;
+
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
@@ -50,9 +54,6 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.Date;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 @RunWith(AndroidJUnit4.class)
 public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
@@ -146,7 +147,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_row_in_data_base_when_insert() {
         long rowId = store.insert(
                 UID,
@@ -190,7 +191,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_deferrable_row_in_data_base_when_insert() {
         final String deferredProgramRule = "deferredProgramRule";
         final String deferredTrackedEntityAttribute = "deferredTrackedEntityAttribute";
@@ -237,7 +238,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void persist_nullable_row_in_data_base_when_insert() {
         long rowId = store.insert(UID, CODE, NAME, DISPLAY_NAME, date, date, DATA, CONTENT, LOCATION,
                 null,
@@ -263,7 +264,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = SQLiteConstraintException.class)
-    @MediumTest
+    @SmallTest
     public void throw_sqlite_constraint_exception_when_wrong_mandatory_foreign_key() {
         store.insert(UID, CODE, NAME, DISPLAY_NAME, date, date, DATA, CONTENT, LOCATION,
                 TRACKED_ENTITY_ATTRIBUTE, PROGRAM_INDICATOR, PROGRAM_STAGE_SECTION, PROGRAM_RULE_ACTION_TYPE,
@@ -272,7 +273,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = SQLiteConstraintException.class)
-    @MediumTest
+    @SmallTest
     public void throw_sqlite_constraint_exception_when_wrong_tracked_entity_attribute_foreign_key() {
         store.insert(UID, CODE, NAME, DISPLAY_NAME, date, date, DATA, CONTENT, LOCATION,
                 "wrong", PROGRAM_INDICATOR, PROGRAM_STAGE_SECTION, PROGRAM_RULE_ACTION_TYPE,
@@ -281,7 +282,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = SQLiteConstraintException.class)
-    @MediumTest
+    @SmallTest
     public void throw_sqlite_constraint_exception_when_wrong_program_stage_section_foreign_key() {
         store.insert(UID, CODE, NAME, DISPLAY_NAME, date, date, DATA, CONTENT, LOCATION,
                 TRACKED_ENTITY_ATTRIBUTE, PROGRAM_INDICATOR, "wrong", PROGRAM_RULE_ACTION_TYPE,
@@ -290,7 +291,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = SQLiteConstraintException.class)
-    @MediumTest
+    @SmallTest
     public void throw_sqlite_constraint_exception_when_wrong_program_stage_foreign_key() {
         store.insert(UID, CODE, NAME, DISPLAY_NAME, date, date, DATA, CONTENT, LOCATION,
                 TRACKED_ENTITY_ATTRIBUTE, PROGRAM_INDICATOR, PROGRAM_STAGE_SECTION, PROGRAM_RULE_ACTION_TYPE,
@@ -299,7 +300,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = SQLiteConstraintException.class)
-    @MediumTest
+    @SmallTest
     public void throw_sqlite_constraint_exception_when_wrong_data_element_foreign_key() {
         store.insert(UID, CODE, NAME, DISPLAY_NAME, date, date, DATA, CONTENT, LOCATION,
                 TRACKED_ENTITY_ATTRIBUTE, PROGRAM_INDICATOR, PROGRAM_STAGE_SECTION, PROGRAM_RULE_ACTION_TYPE,
@@ -308,7 +309,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_program_rule_action_when_delete_program_rule() throws Exception {
         ContentValues trackedEntity = CreateTrackedEntityUtils.create(TRACKED_ENTITY_ID, TRACKED_ENTITY_UID);
         database().insert(TrackedEntityModel.TABLE, null, trackedEntity);
@@ -344,7 +345,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void update_program_rule_action_in_data_base_when_update() throws Exception {
         ContentValues program = CreateProgramUtils.create(ID, PROGRAM, null, null, null);
         database().insert(ProgramModel.TABLE, null, program);
@@ -379,7 +380,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void delete_program_rule_action_in_data_base_when_delete() throws Exception {
         ContentValues program = CreateProgramUtils.create(ID, PROGRAM, null, null, null);
         database().insert(ProgramModel.TABLE, null, program);
@@ -413,7 +414,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     // ToDo: consider introducing conflict resolution strategy
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_uid() {
         store.insert(null, CODE, NAME, DISPLAY_NAME, date, date, DATA, CONTENT, LOCATION, TRACKED_ENTITY_ATTRIBUTE,
                 PROGRAM_INDICATOR, PROGRAM_STAGE_SECTION, PROGRAM_RULE_ACTION_TYPE, PROGRAM_STAGE, DATA_ELEMENT,
@@ -421,7 +422,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_insert_null_programRule() {
         store.insert(UID, CODE, NAME, DISPLAY_NAME, date, date, DATA, CONTENT, LOCATION, TRACKED_ENTITY_ATTRIBUTE,
                 PROGRAM_INDICATOR, PROGRAM_STAGE_SECTION, PROGRAM_RULE_ACTION_TYPE, PROGRAM_STAGE, DATA_ELEMENT,
@@ -429,7 +430,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_uid() {
         store.update(null, CODE, NAME, DISPLAY_NAME, date, date, DATA, CONTENT, LOCATION, TRACKED_ENTITY_ATTRIBUTE,
                 PROGRAM_INDICATOR, PROGRAM_STAGE_SECTION, PROGRAM_RULE_ACTION_TYPE, PROGRAM_STAGE, DATA_ELEMENT,
@@ -437,7 +438,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_program_rule() {
         store.update(UID, CODE, NAME, DISPLAY_NAME, date, date, DATA, CONTENT, LOCATION, TRACKED_ENTITY_ATTRIBUTE,
                 PROGRAM_INDICATOR, PROGRAM_STAGE_SECTION, PROGRAM_RULE_ACTION_TYPE, PROGRAM_STAGE, DATA_ELEMENT,
@@ -445,7 +446,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_update_null_where_uid() {
         store.update(UID, CODE, NAME, DISPLAY_NAME, date, date, DATA, CONTENT, LOCATION, TRACKED_ENTITY_ATTRIBUTE,
                 PROGRAM_INDICATOR, PROGRAM_STAGE_SECTION, PROGRAM_RULE_ACTION_TYPE, PROGRAM_STAGE, DATA_ELEMENT,
@@ -453,7 +454,7 @@ public class ProgramRuleActionStoreShould extends AbsStoreTestCase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @MediumTest
+    @SmallTest
     public void throw_illegal_argument_exception_when_delete_null_uid() {
         store.delete(null);
     }
