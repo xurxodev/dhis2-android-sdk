@@ -11,6 +11,7 @@ import org.hisp.dhis.android.core.event.EventStore;
 import org.hisp.dhis.android.core.imports.WebResponse;
 import org.hisp.dhis.android.core.imports.WebResponseHandler;
 import org.hisp.dhis.android.core.relationship.Relationship;
+import org.hisp.dhis.android.core.relationship.RelationshipStore;
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityAttributeValueStore;
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityDataValue;
@@ -32,6 +33,8 @@ public class TrackedEntityInstancePostCall implements Call<Response<WebResponse>
     private final TrackedEntityInstanceService trackedEntityInstanceService;
 
     // stores
+
+    private final RelationshipStore relationshipStore;
     private final TrackedEntityInstanceStore trackedEntityInstanceStore;
     private final EnrollmentStore enrollmentStore;
     private final EventStore eventStore;
@@ -40,12 +43,14 @@ public class TrackedEntityInstancePostCall implements Call<Response<WebResponse>
 
     private boolean isExecuted;
 
-    public TrackedEntityInstancePostCall(@NonNull TrackedEntityInstanceService trackedEntityInstanceService,
+    public TrackedEntityInstancePostCall(@NonNull RelationshipStore relationshipStore,
+                                         @NonNull TrackedEntityInstanceService trackedEntityInstanceService,
                                          @NonNull TrackedEntityInstanceStore trackedEntityInstanceStore,
                                          @NonNull EnrollmentStore enrollmentStore,
                                          @NonNull EventStore eventStore,
                                          @NonNull TrackedEntityDataValueStore trackedEntityDataValueStore,
                                          @NonNull TrackedEntityAttributeValueStore trackedEntityAttributeValueStore) {
+        this.relationshipStore = relationshipStore;
         this.trackedEntityInstanceService = trackedEntityInstanceService;
         this.trackedEntityInstanceStore = trackedEntityInstanceStore;
         this.enrollmentStore = enrollmentStore;
@@ -171,7 +176,7 @@ public class TrackedEntityInstancePostCall implements Call<Response<WebResponse>
                 attributeValues = emptyAttributeValueList;
             }
             TrackedEntityInstance trackedEntityInstance = trackedEntityInstances.get(teiUid.getKey());
-
+            relationshipRecreated = relationshipStore.queryByAtoBTrackedEntityInstanceUid(trackedEntityInstance.uid());
             trackedEntityInstancesRecreated.add(TrackedEntityInstance.builder()
             .uid(trackedEntityInstance.uid())
                     .created(trackedEntityInstance.created())

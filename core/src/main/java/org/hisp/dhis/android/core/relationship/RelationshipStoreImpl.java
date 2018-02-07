@@ -59,12 +59,7 @@ public class RelationshipStoreImpl extends Store implements RelationshipStore {
 
     private static final String QUERY_BY_UID = "SELECT " + FIELDS + " FROM " +
             RelationshipModel.TABLE + " WHERE " +
-            RelationshipModel.Columns.TRACKED_ENTITY_INSTANCE_A + "=?"
-            +" OR "+
-            RelationshipModel.Columns.TRACKED_ENTITY_INSTANCE_B + "=?"
-            + " GROUP BY "+ RelationshipModel.Columns.TRACKED_ENTITY_INSTANCE_A
-            +"," +
-            RelationshipModel.Columns.TRACKED_ENTITY_INSTANCE_B +";";
+            RelationshipModel.Columns.TRACKED_ENTITY_INSTANCE_A + "=?;";
 
     private final SQLiteStatement insertStatement;
     private final SQLiteStatement deleteStatement;
@@ -104,8 +99,8 @@ public class RelationshipStoreImpl extends Store implements RelationshipStore {
     }
 
     @Override
-    public List<Relationship> queryByTrackedEntityInstanceUid(String uid) {
-        Cursor cursor = databaseAdapter.query(QUERY_BY_UID, uid, uid);
+    public List<Relationship> queryByAtoBTrackedEntityInstanceUid(String uid) {
+        Cursor cursor = databaseAdapter.query(QUERY_BY_UID, uid);
 
         List<Relationship> relationships = mapFromCursor(cursor);
 

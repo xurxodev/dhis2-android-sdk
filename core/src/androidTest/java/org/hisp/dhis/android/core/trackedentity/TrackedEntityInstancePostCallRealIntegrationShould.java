@@ -12,6 +12,7 @@ import org.hisp.dhis.android.core.common.D2Factory;
 import org.hisp.dhis.android.core.common.State;
 import org.hisp.dhis.android.core.common.TrackedEntityInstanceCallFactory;
 import org.hisp.dhis.android.core.data.database.AbsStoreTestCase;
+import org.hisp.dhis.android.core.data.server.RealServerMother;
 import org.hisp.dhis.android.core.enrollment.Enrollment;
 import org.hisp.dhis.android.core.enrollment.EnrollmentStatus;
 import org.hisp.dhis.android.core.enrollment.EnrollmentStore;
@@ -48,6 +49,8 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
     Exception e;
     CodeGenerator codeGenerator;
 
+    private RelationshipStore relationshipStore;
+    private RelationshipTypeStore relationshipTypeStore;
     private TrackedEntityInstanceStore trackedEntityInstanceStore;
     private EnrollmentStore enrollmentStore;
     private EventStore eventStore;
@@ -77,8 +80,10 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
     public void setUp() throws IOException {
         super.setUp();
 
-        d2= D2Factory.create("https://play.dhis2.org/android-current/api/", databaseAdapter());
+        d2= D2Factory.create(RealServerMother.url, databaseAdapter());
 
+        relationshipStore = new RelationshipStoreImpl(databaseAdapter());
+        relationshipTypeStore = new RelationshipTypeStoreImpl(databaseAdapter());
         trackedEntityInstanceStore = new TrackedEntityInstanceStoreImpl(databaseAdapter());
         enrollmentStore = new EnrollmentStoreImpl(databaseAdapter());
         eventStore = new EventStoreImpl(databaseAdapter());
@@ -103,6 +108,8 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         event1Uid = codeGenerator.generate();
         enrollment1Uid = codeGenerator.generate();
         trackedEntityInstance1Uid = codeGenerator.generate();
+
+        relationshipTypeStore.insert("V2kkHafqs8G", null, "Mother-Child", "Mother-Child", null, null,"Mother", "Child");
     }
 
     @Test
@@ -119,12 +126,38 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
                 dataElementUid
         );
 
+
         createDummyDataToPost(
                 orgUnitUid, programUid, programStageUid, trackedEntityUid,
                 event1Uid, enrollment1Uid, trackedEntityInstance1Uid, trackedEntityAttributeUid,
                 dataElementUid
         );
 
+        Call<Response<WebResponse>> call = d2.syncTrackedEntityInstances();
+        response = call.call();
+
+        assertThat(response.isSuccessful()).isTrue();
+    }
+
+    @Test
+    @LargeTest
+    public void response_true_when_data_with_relationship_sync() throws Exception {
+        Response response = null;
+        downloadMetadata();
+
+        createDummyDataToPost(
+                orgUnitUid, programUid, programStageUid, trackedEntityUid,
+                eventUid, enrollmentUid, trackedEntityInstanceUid, trackedEntityAttributeUid,
+                dataElementUid
+        );
+
+        createDummyDataToPost(
+                orgUnitUid, programUid, programStageUid, trackedEntityUid,
+                event1Uid, enrollment1Uid, trackedEntityInstance1Uid, trackedEntityAttributeUid,
+                dataElementUid
+        );
+
+        createDummyRelationship(trackedEntityInstanceUid, trackedEntityInstance1Uid);
 
         Call<Response<WebResponse>> call = d2.syncTrackedEntityInstances();
         response = call.call();
@@ -174,6 +207,11 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         assertPushAndDownloadTrackedEntityInstances(pushedTrackedEntityInstance, pushedEnrollment,
                 pushedEvent, downloadedTrackedEntityInstance, downloadedEnrollment,
                 downloadedEvent);
+    }
+    
+    private void createDummyRelationship(String trackedEntityInstanceUid,
+            String trackedEntityInstance1Uid) {
+        relationshipStore.insert(trackedEntityInstanceUid, trackedEntityInstance1Uid, "V2kkHafqs8G");
     }
 
     private void createDummyDataToPost(String orgUnitUid, String programUid, String programStageUid,

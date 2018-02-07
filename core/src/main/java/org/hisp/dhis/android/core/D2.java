@@ -521,10 +521,9 @@ public final class D2 {
 
     @NonNull
     public Call<Response<WebResponse>> syncTrackedEntityInstances() {
-        return new TrackedEntityInstancePostCall(trackedEntityInstanceService,
-                trackedEntityInstanceStore, enrollmentStore, eventStore,
-                trackedEntityDataValueStore,
-                trackedEntityAttributeValueStore);
+        return new TrackedEntityInstancePostCall(new RelationshipStoreImpl(databaseAdapter),
+                trackedEntityInstanceService, trackedEntityInstanceStore, enrollmentStore, eventStore,
+                trackedEntityDataValueStore, trackedEntityAttributeValueStore);
     }
 
     public Call<Response<WebResponse>> syncSingleEvents() {
