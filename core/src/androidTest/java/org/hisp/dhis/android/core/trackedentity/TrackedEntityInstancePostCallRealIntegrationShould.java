@@ -208,7 +208,7 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
                 pushedEvent, downloadedTrackedEntityInstance, downloadedEnrollment,
                 downloadedEvent);
     }
-    
+
     private void createDummyRelationship(String trackedEntityInstanceUid,
             String trackedEntityInstance1Uid) {
         relationshipStore.insert(trackedEntityInstanceUid, trackedEntityInstance1Uid, "V2kkHafqs8G");

@@ -112,7 +112,7 @@ public class TrackedEntityInstancePostCall implements Call<Response<WebResponse>
 
 
 
-        List<Relationship> relationshipRecreated = new ArrayList<>();
+        List<Relationship> relationshipRecreated;
 
         // EMPTY LISTS TO REPLACE NULL VALUES SO THAT API DOESN'T BREAK.
         List<TrackedEntityAttributeValue> emptyAttributeValueList = new ArrayList<>();
