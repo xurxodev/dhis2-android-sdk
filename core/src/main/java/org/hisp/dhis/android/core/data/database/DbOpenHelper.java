@@ -785,7 +785,7 @@ public class DbOpenHelper extends CustomSQLBriteOpenHelper {
             " FOREIGN KEY (" + EventModel.Columns.ORGANISATION_UNIT + ")" +
             " REFERENCES " + OrganisationUnitModel.TABLE +
             " (" + OrganisationUnitModel.Columns.UID + ")" +
-            " ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED," +
+            " ON DELETE CASCADE," +
             " FOREIGN KEY (" + EventModel.Columns.TRACKED_ENTITY_INSTANCE + ")" +
             " REFERENCES " + TrackedEntityInstanceModel.TABLE + " (" + TrackedEntityInstanceModel.Columns.UID + ")" +
             " ON DELETE CASCADE," +
