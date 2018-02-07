@@ -29,7 +29,7 @@ public class EventCallFactory {
                 .withPageLimit(pageLimit)
                 .build();
 
-        EventEndPointCall eventEndPointCall = new EventEndPointCall(eventService, databaseAdapter,
+        EventEndPointCall eventEndPointCall = new EventEndPointCall(eventService,
                 resourceHandler,
                 eventHandler, new Date(), eventQuery);
 
@@ -63,7 +63,7 @@ public class EventCallFactory {
                 .withCategoryComboAndCategoryOption(categoryCombo, categoryOption)
                 .build();
 
-        EventEndPointCall eventEndPointCall = new EventEndPointCall(eventService, databaseAdapter,
+        EventEndPointCall eventEndPointCall = new EventEndPointCall(eventService,
                 resourceHandler,
                 eventHandler, new Date(), eventQuery);
 

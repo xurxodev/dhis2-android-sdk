@@ -24,7 +24,7 @@ public class TrackedEntityInstanceCallFactory {
 
         TrackedEntityInstanceEndPointCall trackedEntityInstanceEndPointCall =
                 new TrackedEntityInstanceEndPointCall(
-                        trackedEntityInstanceService, databaseAdapter, trackedEntityInstanceHandler,
+                        trackedEntityInstanceService, trackedEntityInstanceHandler,
                         resourceHandler, new Date(), trackedEntityInstanceUid);
 
         return trackedEntityInstanceEndPointCall;

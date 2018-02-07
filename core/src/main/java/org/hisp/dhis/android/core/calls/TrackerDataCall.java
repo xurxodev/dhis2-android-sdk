@@ -115,7 +115,7 @@ public class TrackerDataCall implements Call<Response> {
         for (Map.Entry<String, TrackedEntityInstance> entry : trackedEntityInstances.entrySet()) {
 
             response = new TrackedEntityInstanceEndPointCall(trackedEntityInstanceService,
-                    databaseAdapter, trackedEntityInstanceHandler, resourceHandler,
+                    trackedEntityInstanceHandler, resourceHandler,
                     serverDate, entry.getValue().uid()).call();
 
             if (!response.isSuccessful()) {

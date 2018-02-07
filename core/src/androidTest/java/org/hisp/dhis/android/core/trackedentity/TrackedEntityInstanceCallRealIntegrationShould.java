@@ -45,4 +45,24 @@ public class TrackedEntityInstanceCallRealIntegrationShould extends AbsStoreTest
 
         Truth.assertThat(response.isSuccessful()).isTrue();
     }
+
+    @Test
+    @LargeTest
+    public void download_tei_enrollments_and_events_with_a_event_with_sql_constraint_exception() throws Exception {
+        retrofit2.Response response = null;
+        response = d2.logIn(RealServerMother.user, RealServerMother.password).call();
+        Truth.assertThat(response.isSuccessful()).isTrue();
+
+
+        response = d2.syncMetaData().call();
+        Truth.assertThat(response.isSuccessful()).isTrue();
+
+        TrackedEntityInstanceEndPointCall trackedEntityInstanceEndPointCall =
+                TrackedEntityInstanceCallFactory.create(
+                        d2.retrofit(), databaseAdapter(), "oi3PMIGYJH8");
+
+        response = trackedEntityInstanceEndPointCall.call();
+
+        Truth.assertThat(response.isSuccessful()).isTrue();
+    }
 }

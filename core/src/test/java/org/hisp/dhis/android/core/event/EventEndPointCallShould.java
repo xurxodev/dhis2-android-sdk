@@ -125,7 +125,7 @@ public class EventEndPointCallShould {
                 .build();
 
         EventEndPointCall eventEndPointCall =
-                new EventEndPointCall(eventService, databaseAdapter, resourceHandler,
+                new EventEndPointCall(eventService, resourceHandler,
                         eventHandler, serverDate, eventQuery);
 
         return eventEndPointCall;
@@ -143,7 +143,7 @@ public class EventEndPointCallShould {
 
 
         EventEndPointCall eventEndPointCall =
-                new EventEndPointCall(eventService, databaseAdapter, resourceHandler,
+                new EventEndPointCall(eventService, resourceHandler,
                         eventHandler, serverDate, eventQuery);
 
         return eventEndPointCall;
@@ -160,7 +160,7 @@ public class EventEndPointCallShould {
 
 
         EventEndPointCall eventEndPointCall =
-                new EventEndPointCall(eventService, databaseAdapter, resourceHandler,
+                new EventEndPointCall(eventService, resourceHandler,
                         eventHandler, serverDate, eventQuery);
 
         return eventEndPointCall;

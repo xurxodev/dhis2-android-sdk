@@ -345,7 +345,7 @@ public final class D2 {
         CategoryOptionHandler categoryOptionHandler = new CategoryOptionHandler(
                 categoryOptionStore);
 
-        this.eventHandler = new EventHandler(eventStore, trackedEntityDataValueHandler);
+        this.eventHandler = new EventHandler(eventStore, trackedEntityDataValueHandler, databaseAdapter);
 
         TrackedEntityAttributeValueHandler trackedEntityAttributeValueHandler =
                 new TrackedEntityAttributeValueHandler(trackedEntityAttributeValueStore);

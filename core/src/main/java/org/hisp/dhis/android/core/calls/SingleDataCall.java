@@ -143,7 +143,7 @@ public class SingleDataCall implements Call<Response> {
                         .withPageLimit(pageLimit)
                         .build();
 
-                response = new EventEndPointCall(eventService, databaseAdapter, resourceHandler,
+                response = new EventEndPointCall(eventService, resourceHandler,
                         eventHandler, serverDate, eventQuery).call();
 
                 if (!response.isSuccessful()) {

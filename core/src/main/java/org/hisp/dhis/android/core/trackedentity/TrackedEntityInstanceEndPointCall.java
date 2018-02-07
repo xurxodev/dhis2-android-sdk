@@ -7,8 +7,6 @@ import android.support.annotation.NonNull;
 import org.hisp.dhis.android.core.calls.Call;
 import org.hisp.dhis.android.core.common.Payload;
 import org.hisp.dhis.android.core.data.api.Fields;
-import org.hisp.dhis.android.core.data.database.DatabaseAdapter;
-import org.hisp.dhis.android.core.data.database.Transaction;
 import org.hisp.dhis.android.core.enrollment.Enrollment;
 import org.hisp.dhis.android.core.event.Event;
 import org.hisp.dhis.android.core.relationship.Relationship;
@@ -22,7 +20,6 @@ public class TrackedEntityInstanceEndPointCall implements
         Call<Response<Payload<TrackedEntityInstance>>> {
 
     private final TrackedEntityInstanceService trackedEntityInstanceService;
-    private final DatabaseAdapter databaseAdapter;
     private final TrackedEntityInstanceHandler trackedEntityInstanceHandler;
     private final ResourceHandler resourceHandler;
     private final Date serverDate;
@@ -32,13 +29,11 @@ public class TrackedEntityInstanceEndPointCall implements
 
     public TrackedEntityInstanceEndPointCall(
             @NonNull TrackedEntityInstanceService trackedEntityInstanceService,
-            @NonNull DatabaseAdapter databaseAdapter,
             @NonNull TrackedEntityInstanceHandler trackedEntityInstanceHandler,
             @NonNull ResourceHandler resourceHandler,
             @NonNull Date serverDate,
             @NonNull String trackedEntityInstanceUid) {
         this.trackedEntityInstanceService = trackedEntityInstanceService;
-        this.databaseAdapter = databaseAdapter;
         this.trackedEntityInstanceHandler = trackedEntityInstanceHandler;
         this.resourceHandler = resourceHandler;
         this.serverDate = new Date(serverDate.getTime());
@@ -70,18 +65,12 @@ public class TrackedEntityInstanceEndPointCall implements
                 trackedEntityInstanceService.trackedEntityInstance(trackedEntityInstanceUid,
                         fields(), true).execute();
 
-        Transaction transaction = databaseAdapter.beginNewTransaction();
-        try {
-            if (response != null && response.isSuccessful()) {
-                TrackedEntityInstance trackedEntityInstance = response.body();
 
-                trackedEntityInstanceHandler.handle(trackedEntityInstance);
+        if (response != null && response.isSuccessful()) {
+            TrackedEntityInstance trackedEntityInstance = response.body();
 
-                resourceHandler.handleResource(TRACKED_ENTITY_INSTANCE, serverDate);
-                transaction.setSuccessful();
-            }
-        } finally {
-            transaction.end();
+            trackedEntityInstanceHandler.handle(trackedEntityInstance);
+            resourceHandler.handleResource(TRACKED_ENTITY_INSTANCE, serverDate);
         }
 
         return response;

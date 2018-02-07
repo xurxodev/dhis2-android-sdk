@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.hisp.dhis.android.core.data.api.FieldsConverterFactory;
 import org.hisp.dhis.android.core.data.api.FilterConverterFactory;
-import org.hisp.dhis.android.core.data.database.DatabaseAdapter;
 import org.hisp.dhis.android.core.data.file.ResourcesFileReader;
 import org.hisp.dhis.android.core.data.server.api.Dhis2MockServer;
 import org.hisp.dhis.android.core.resource.ResourceHandler;
@@ -26,9 +25,6 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class TrackedEntityInstanceEndPointCallShould {
     @Mock
     private TrackedEntityInstanceService trackedEntityInstanceService;
-
-    @Mock
-    private DatabaseAdapter databaseAdapter;
 
     @Mock
     private ResourceHandler resourceHandler;
@@ -73,7 +69,7 @@ public class TrackedEntityInstanceEndPointCallShould {
             String trackedEntityInstanceUid) {
         TrackedEntityInstanceEndPointCall trackedEntityInstanceEndPointCall =
                 new TrackedEntityInstanceEndPointCall(
-                        trackedEntityInstanceService, databaseAdapter, trackedEntityInstanceHandler,
+                        trackedEntityInstanceService, trackedEntityInstanceHandler,
                         resourceHandler, serverDate, trackedEntityInstanceUid);
 
         return trackedEntityInstanceEndPointCall;

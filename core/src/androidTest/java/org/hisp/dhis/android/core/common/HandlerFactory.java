@@ -97,7 +97,7 @@ public class HandlerFactory {
 
         EventStore eventStore = new EventStoreImpl(databaseAdapter);
 
-        EventHandler eventHandler = new EventHandler(eventStore, trackedEntityDataValueHandler);
+        EventHandler eventHandler = new EventHandler(eventStore, trackedEntityDataValueHandler, databaseAdapter);
 
         return eventHandler;
     }

@@ -1,6 +1,8 @@
 package org.hisp.dhis.android.core.event;
 
 import org.hisp.dhis.android.core.common.State;
+import org.hisp.dhis.android.core.data.database.DatabaseAdapter;
+import org.hisp.dhis.android.core.data.database.Transaction;
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityDataValueHandler;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +28,12 @@ public class EventHandlerShould {
     private EventStore eventStore;
 
     @Mock
+    private DatabaseAdapter databaseAdapter;
+
+    @Mock
+    private Transaction transaction;
+
+    @Mock
     private TrackedEntityDataValueHandler trackedEntityDataValueHandler;
 
     @Mock
@@ -40,7 +48,9 @@ public class EventHandlerShould {
 
         when(event.uid()).thenReturn("test_event_uid");
 
-        eventHandler = new EventHandler(eventStore, trackedEntityDataValueHandler);
+        eventHandler = new EventHandler(eventStore, trackedEntityDataValueHandler, databaseAdapter);
+
+        when(databaseAdapter.beginNewTransaction()).thenReturn(transaction);
     }
 
     @Test
