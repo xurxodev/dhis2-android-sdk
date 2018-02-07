@@ -114,11 +114,10 @@ import org.hisp.dhis.android.core.program.ProgramStore;
 import org.hisp.dhis.android.core.program.ProgramStoreImpl;
 import org.hisp.dhis.android.core.program.ProgramTrackedEntityAttributeStore;
 import org.hisp.dhis.android.core.program.ProgramTrackedEntityAttributeStoreImpl;
+import org.hisp.dhis.android.core.relationship.RelationshipTypeFactory;
 import org.hisp.dhis.android.core.relationship.RelationshipHandler;
 import org.hisp.dhis.android.core.relationship.RelationshipStore;
 import org.hisp.dhis.android.core.relationship.RelationshipStoreImpl;
-import org.hisp.dhis.android.core.relationship.RelationshipTypeStore;
-import org.hisp.dhis.android.core.relationship.RelationshipTypeStoreImpl;
 import org.hisp.dhis.android.core.resource.ResourceHandler;
 import org.hisp.dhis.android.core.resource.ResourceStore;
 import org.hisp.dhis.android.core.resource.ResourceStoreImpl;
@@ -212,7 +211,6 @@ public final class D2 {
     private final ProgramStageDataElementStore programStageDataElementStore;
     private final ProgramStageSectionStore programStageSectionStore;
     private final ProgramStageStore programStageStore;
-    private final RelationshipTypeStore relationshipTypeStore;
     private final RelationshipStore relationshipStore;
     private final TrackedEntityStore trackedEntityStore;
 
@@ -246,6 +244,7 @@ public final class D2 {
     private final OptionSetFactory optionSetFactory;
     private final TrackedEntityFactory trackedEntityFactory;
     private final DataElementFactory dataElementFactory;
+    private final RelationshipTypeFactory relationshipTypeFactory;
 
     @VisibleForTesting
     D2(@NonNull Retrofit retrofit, @NonNull DatabaseAdapter databaseAdapter,
@@ -305,8 +304,6 @@ public final class D2 {
                 new ProgramStageSectionStoreImpl(databaseAdapter);
         this.programStageStore =
                 new ProgramStageStoreImpl(databaseAdapter);
-        this.relationshipTypeStore =
-                new RelationshipTypeStoreImpl(databaseAdapter);
         this.relationshipStore =
                 new RelationshipStoreImpl(databaseAdapter);
         this.trackedEntityStore =
@@ -317,8 +314,6 @@ public final class D2 {
                 new EnrollmentStoreImpl(databaseAdapter);
         this.eventStore =
                 new EventStoreImpl(databaseAdapter);
-        RelationshipStore relationshipStore = new RelationshipStoreImpl(databaseAdapter);
-
         this.trackedEntityDataValueStore =
                 new TrackedEntityDataValueStoreImpl(databaseAdapter);
         this.trackedEntityAttributeValueStore =
@@ -389,10 +384,14 @@ public final class D2 {
         this.dataElementFactory =
                 new DataElementFactory(retrofit, databaseAdapter, resourceHandler);
 
+        relationshipTypeFactory =
+                new RelationshipTypeFactory(retrofit, databaseAdapter, resourceHandler);
+
         if (metadataAuditConnection != null) {
             MetadataAuditHandlerFactory metadataAuditHandlerFactory =
-                    new MetadataAuditHandlerFactory(trackedEntityFactory, optionSetFactory, dataElementFactory,
-                            trackedEntityAttributeFactory);
+                    new MetadataAuditHandlerFactory(trackedEntityFactory, optionSetFactory,
+                            dataElementFactory, trackedEntityAttributeFactory,
+                            relationshipTypeFactory);
 
             this.metadataAuditListener = new MetadataAuditListener(metadataAuditHandlerFactory);
             this.metadataAuditConsumer = new MetadataAuditConsumer(metadataAuditConnection);
@@ -468,7 +467,7 @@ public final class D2 {
         deletableStoreList.add(programStageDataElementStore);
         deletableStoreList.add(programStageSectionStore);
         deletableStoreList.add(programStageStore);
-        deletableStoreList.add(relationshipTypeStore);
+        deletableStoreList.addAll(relationshipTypeFactory.getDeletableStores());
         deletableStoreList.add(relationshipStore);
         deletableStoreList.add(trackedEntityStore);
         deletableStoreList.add(trackedEntityInstanceStore);
@@ -499,10 +498,11 @@ public final class D2 {
                 programRuleVariableStore, programIndicatorStore,
                 programStageSectionProgramIndicatorLinkStore, programRuleActionStore,
                 programRuleStore, programStageDataElementStore,
-                programStageSectionStore, programStageStore, relationshipTypeStore,
+                programStageSectionStore, programStageStore,
                 organisationUnitProgramLinkStore, categoryQuery, categoryService, categoryHandler,
                 categoryComboQuery, comboService, categoryComboHandler, optionSetFactory,
-                trackedEntityFactory, trackedEntityAttributeFactory, dataElementFactory);
+                trackedEntityFactory, trackedEntityAttributeFactory, dataElementFactory,
+                relationshipTypeFactory);
     }
 
     @NonNull
@@ -521,7 +521,7 @@ public final class D2 {
 
     @NonNull
     public Call<Response<WebResponse>> syncTrackedEntityInstances() {
-        return new TrackedEntityInstancePostCall(new RelationshipStoreImpl(databaseAdapter),
+        return new TrackedEntityInstancePostCall(relationshipStore,
                 trackedEntityInstanceService, trackedEntityInstanceStore, enrollmentStore, eventStore,
                 trackedEntityDataValueStore, trackedEntityAttributeValueStore);
     }
