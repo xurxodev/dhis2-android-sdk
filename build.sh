@@ -1,6 +1,9 @@
 #!/bin/bash
 set -xe
-
+if [ -z "$TEST_SUITE" ];
+then
+return 0;
+fi
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_DIR=$DIR/
 
