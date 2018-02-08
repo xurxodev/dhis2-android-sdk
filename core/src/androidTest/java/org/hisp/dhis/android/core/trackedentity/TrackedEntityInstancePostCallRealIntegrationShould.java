@@ -12,6 +12,7 @@ import org.hisp.dhis.android.core.common.D2Factory;
 import org.hisp.dhis.android.core.common.State;
 import org.hisp.dhis.android.core.common.TrackedEntityInstanceCallFactory;
 import org.hisp.dhis.android.core.data.database.AbsStoreTestCase;
+import org.hisp.dhis.android.core.data.server.RealServerMother;
 import org.hisp.dhis.android.core.enrollment.Enrollment;
 import org.hisp.dhis.android.core.enrollment.EnrollmentStatus;
 import org.hisp.dhis.android.core.enrollment.EnrollmentStore;
@@ -34,7 +35,6 @@ import java.util.Map;
 
 import retrofit2.Response;
 
-@RunWith(AndroidJUnit4.class)
 public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStoreTestCase {
     /**
      * A quick integration test that is probably flaky, but will help with finding bugs related to the
@@ -73,7 +73,7 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
     public void setUp() throws IOException {
         super.setUp();
 
-        d2 = D2Factory.create("https://play.dhis2.org/android-current/api/", databaseAdapter());
+        d2 = D2Factory.create(RealServerMother.url, databaseAdapter());
 
         trackedEntityInstanceStore = new TrackedEntityInstanceStoreImpl(databaseAdapter());
         enrollmentStore = new EnrollmentStoreImpl(databaseAdapter());
@@ -102,7 +102,7 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
     }
 
     @Test
-    @LargeTest
+    @MediumTest
     public void response_true_when_data_sync() throws Exception {
 
         Response response = null;
