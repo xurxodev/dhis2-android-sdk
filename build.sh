@@ -1,6 +1,9 @@
 #!/bin/bash
 set -xe
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_DIR=$DIR/
+
 android-wait-for-emulator
 sleep 180
 adb devices
@@ -12,6 +15,6 @@ then
 fi
 if [ "$TEST_SUITE" == "integration_large" ]
 then
-"$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=medium
+"$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=medium --stacktrace --info
 fi
 

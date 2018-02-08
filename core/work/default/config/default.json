@@ -1,0 +1,43 @@
+{
+  "id" : "b5447fcd-b288-4b32-894e-df6635f87acd",
+  "name" : "default",
+  "createdTime" : 1517847358698,
+  "lastUpdatedTime" : 1517847358698,
+  "type" : "Memory",
+  "modelVersion" : "6.1",
+  "exchanges" : [ {
+    "id" : "cabd4dd5-5d92-47cc-9856-36c6820dc3e9",
+    "name" : "amq.direct",
+    "type" : "direct",
+    "lastUpdatedTime" : 1517847358698,
+    "createdTime" : 1517847358698
+  }, {
+    "id" : "9fde58ff-2793-41aa-9566-05e9065caf32",
+    "name" : "amq.fanout",
+    "type" : "fanout",
+    "lastUpdatedTime" : 1517847358698,
+    "createdTime" : 1517847358698
+  }, {
+    "id" : "d5e87b64-c238-4055-903a-2803f6e1575d",
+    "name" : "amq.match",
+    "type" : "headers",
+    "lastUpdatedTime" : 1517847358698,
+    "createdTime" : 1517847358698
+  }, {
+    "id" : "b2fefec0-c559-4ada-94c7-66a46a8a61ac",
+    "name" : "amq.topic",
+    "type" : "topic",
+    "lastUpdatedTime" : 1517847358698,
+    "createdTime" : 1517847358698
+  }, {
+    "id" : "34488b51-d04c-4b22-be79-3987e5976625",
+    "name" : "dhis2",
+    "type" : "topic",
+    "durable" : true,
+    "lifetimePolicy" : "PERMANENT",
+    "lastUpdatedBy" : "guest",
+    "lastUpdatedTime" : 1517847358901,
+    "createdBy" : "guest",
+    "createdTime" : 1517847358901
+  } ]
+}
