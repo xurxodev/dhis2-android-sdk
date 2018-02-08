@@ -101,8 +101,8 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         trackedEntityInstance1Uid = codeGenerator.generate();
     }
 
-    @Test
-    @MediumTest
+    //@Test
+    //@MediumTest
     public void response_true_when_data_sync() throws Exception {
 
         Response response = null;
