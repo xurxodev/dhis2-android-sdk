@@ -25,24 +25,24 @@ env:
   matrix:
   - TEST_SUITE=units
   - TEST_SUITE=integration
-  - TEST_SUITE=integration_large17
+#  - TEST_SUITE=integration_large1
+#  - TEST_SUITE=integration_large2
+#  - TEST_SUITE=integration_large3
+#  - TEST_SUITE=integration_large4
+#  - TEST_SUITE=integration_large5
+#  - TEST_SUITE=integration_large6
+#  - TEST_SUITE=integration_large7
+#  - TEST_SUITE=integration_large8
+#  - TEST_SUITE=integration_large9
+#  - TEST_SUITE=integration_large10
+#  - TEST_SUITE=integration_large11
+#  - TEST_SUITE=integration_large12
+#  - TEST_SUITE=integration_large13
+#  - TEST_SUITE=integration_large14
+#  - TEST_SUITE=integration_large15
+#  - TEST_SUITE=integration_large16
+#  - TEST_SUITE=integration_large17
   - TEST_SUITE=integration_large18
-  - TEST_SUITE=integration_large1
-  - TEST_SUITE=integration_large2
-  - TEST_SUITE=integration_large3
-  - TEST_SUITE=integration_large4
-  - TEST_SUITE=integration_large5
-  - TEST_SUITE=integration_large6
-  - TEST_SUITE=integration_large7
-  - TEST_SUITE=integration_large8
-  - TEST_SUITE=integration_large9
-  - TEST_SUITE=integration_large10
-  - TEST_SUITE=integration_large11
-  - TEST_SUITE=integration_large12
-  - TEST_SUITE=integration_large13
-  - TEST_SUITE=integration_large14
-  - TEST_SUITE=integration_large15
-  - TEST_SUITE=integration_large16
 script:
 - travis_wait 30 ./build.sh $TEST_SUITE
 before_script:
