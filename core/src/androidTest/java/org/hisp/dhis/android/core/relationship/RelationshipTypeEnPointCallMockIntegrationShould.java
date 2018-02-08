@@ -3,7 +3,7 @@ package org.hisp.dhis.android.core.relationship;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,7 +54,7 @@ public class RelationshipTypeEnPointCallMockIntegrationShould extends AbsStoreTe
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void download_RelationShipTypes_according_to_default_query() throws Exception {
         String filename = "relationship_types.json";
 

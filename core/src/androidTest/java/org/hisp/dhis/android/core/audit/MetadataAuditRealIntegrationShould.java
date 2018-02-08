@@ -4,6 +4,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
+import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
+
 import org.hisp.dhis.android.core.D2;
 import org.hisp.dhis.android.core.audit.broker.RealBrokerMother;
 import org.hisp.dhis.android.core.common.D2Factory;
@@ -45,6 +48,7 @@ public class MetadataAuditRealIntegrationShould extends AbsStoreTestCase {
     // 4) Launch the test
     // 5) Manually Modify some piece of metadata on a DHIS2 instance connected to the same broker
     //@Test
+    //@MediumTest
     public void notify_metadata_synced_in_local_when_a_change_occurs_on_the_server()
             throws Exception {
         d2.logIn(RealServerMother.user, RealServerMother.password).call();

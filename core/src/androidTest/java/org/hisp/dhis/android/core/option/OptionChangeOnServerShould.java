@@ -8,6 +8,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import android.support.test.filters.SmallTest;
+
 import org.hisp.dhis.android.core.D2;
 import org.hisp.dhis.android.core.audit.GenericClassParser;
 import org.hisp.dhis.android.core.audit.MetadataAudit;
@@ -71,6 +73,7 @@ public class OptionChangeOnServerShould extends AbsStoreTestCase {
     }
 
     @Test
+    @SmallTest
     public void ignore_option_if_audit_type_is_create() throws Exception {
         MetadataAudit<Option> metadataAudit =
                 givenAMetadataAudit("audit/option_create.json");
@@ -92,6 +95,7 @@ public class OptionChangeOnServerShould extends AbsStoreTestCase {
     }
 
     @Test
+    @SmallTest
     public void update_option_set_if_audit_type_is_update() throws Exception {
         String filename = "option_sets.json";
 
@@ -120,6 +124,7 @@ public class OptionChangeOnServerShould extends AbsStoreTestCase {
     }
 
     @Test
+    @SmallTest
     public void delete_option_set_in_database_if_audit_type_is_delete() throws Exception {
         givenAPreExistingOption();
 

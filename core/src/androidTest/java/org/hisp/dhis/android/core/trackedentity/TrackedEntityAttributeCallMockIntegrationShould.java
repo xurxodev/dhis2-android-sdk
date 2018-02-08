@@ -3,7 +3,7 @@ package org.hisp.dhis.android.core.trackedentity;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-import android.support.test.filters.MediumTest;
+import android.support.test.filters.SmallTest;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,7 +57,7 @@ public class TrackedEntityAttributeCallMockIntegrationShould extends AbsStoreTes
     }
 
     @Test
-    @MediumTest
+    @SmallTest
     public void download_TrackedEntityAttributes_according_to_default_query() throws Exception {
 
         dhis2MockServer.enqueueMockResponse("tracked_entity_attributes.json");

@@ -30,7 +30,6 @@ package org.hisp.dhis.android.core.option;
 
 import android.content.ContentValues;
 import android.database.MatrixCursor;
-import android.support.test.filters.MediumTest;
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 

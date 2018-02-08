@@ -8,6 +8,8 @@ import static org.hisp.dhis.android.core.utils.StoreUtils.parse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import android.support.test.filters.MediumTest;
+
 import org.hisp.dhis.android.core.D2;
 import org.hisp.dhis.android.core.audit.GenericClassParser;
 import org.hisp.dhis.android.core.audit.MetadataAudit;
@@ -72,6 +74,7 @@ public class TrackedEntityAttributeChangeOnServerShould extends AbsStoreTestCase
     }
 
     @Test
+    @MediumTest
     public void create_tracked_entity_attribute_in_database_if_audit_type_is_create()
             throws Exception {
         givenAExistedOptionDependencyPreviously();
@@ -101,6 +104,7 @@ public class TrackedEntityAttributeChangeOnServerShould extends AbsStoreTestCase
     }
 
     @Test
+    @MediumTest
     public void update_tracked_entity_attribute_if_audit_type_is_update() throws Exception {
         String filename = "tracked_entity_attribute_updated.json";
 
@@ -135,6 +139,7 @@ public class TrackedEntityAttributeChangeOnServerShould extends AbsStoreTestCase
     }
 
     @Test
+    @MediumTest
     public void delete_tracked_entity_attribute_in_database_if_audit_type_is_delete()
             throws Exception {
         givenAExistedOptionDependencyPreviously();

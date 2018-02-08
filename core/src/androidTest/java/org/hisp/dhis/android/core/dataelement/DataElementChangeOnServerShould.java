@@ -7,6 +7,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import android.support.test.filters.SmallTest;
+
 import org.hisp.dhis.android.core.D2;
 import org.hisp.dhis.android.core.audit.GenericClassParser;
 import org.hisp.dhis.android.core.audit.MetadataAudit;
@@ -65,6 +67,7 @@ public class DataElementChangeOnServerShould extends AbsStoreTestCase {
     }
 
     @Test
+    @SmallTest
     public void create_data_element_in_database_if_audit_type_is_create() throws Exception {
         MetadataAudit<DataElement> metadataAudit =
                 givenAMetadataAudit("audit/data_element_create.json");
@@ -89,6 +92,7 @@ public class DataElementChangeOnServerShould extends AbsStoreTestCase {
     }
 
     @Test
+    @SmallTest
     public void update_data_element_if_audit_type_is_update() throws Exception {
         String filename = "data_element_updated.json";
 
@@ -119,6 +123,7 @@ public class DataElementChangeOnServerShould extends AbsStoreTestCase {
     }
 
     @Test
+    @SmallTest
     public void delete_data_element_in_database_if_audit_type_is_delete() throws Exception {
         givenAExistedDataElementPreviously();
 

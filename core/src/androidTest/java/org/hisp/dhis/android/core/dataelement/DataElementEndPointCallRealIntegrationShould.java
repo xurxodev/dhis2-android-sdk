@@ -1,6 +1,6 @@
 package org.hisp.dhis.android.core.dataelement;
 
-import android.support.test.filters.LargeTest;
+import android.support.test.filters.MediumTest;
 
 import com.google.common.truth.Truth;
 
@@ -30,7 +30,7 @@ public class DataElementEndPointCallRealIntegrationShould extends AbsStoreTestCa
     }
 
     @Test
-    @LargeTest
+    @MediumTest
     public void download_data_element_according_to_default_query() throws Exception {
         retrofit2.Response response = null;
         response = d2.logIn(RealServerMother.user, RealServerMother.password).call();

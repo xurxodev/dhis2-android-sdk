@@ -8,6 +8,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import android.support.test.filters.SmallTest;
+
 import org.hisp.dhis.android.core.D2;
 import org.hisp.dhis.android.core.audit.GenericClassParser;
 import org.hisp.dhis.android.core.audit.MetadataAudit;
@@ -78,6 +80,7 @@ public class ProgramIndicatorChangeOnServerShould extends AbsStoreTestCase {
     }
 
     @Test
+    @SmallTest
     public void create_program_indicator_in_database_if_audit_type_is_create() throws Exception {
         givenAMetadataInDatabase();
 
@@ -106,6 +109,7 @@ public class ProgramIndicatorChangeOnServerShould extends AbsStoreTestCase {
     }
 
     @Test
+    @SmallTest
     public void update_program_indicator_if_audit_type_is_update() throws Exception {
         givenAMetadataInDatabase();
 
@@ -138,6 +142,7 @@ public class ProgramIndicatorChangeOnServerShould extends AbsStoreTestCase {
     }
 
     @Test
+    @SmallTest
     public void delete_program_indicator_in_database_if_audit_type_is_delete() throws Exception {
         givenAMetadataInDatabase();
 
