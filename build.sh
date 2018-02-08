@@ -80,4 +80,5 @@ fi
 if [ "$TEST_SUITE" == "integration_large18" ]
 then
 "$PROJECT_DIR"/gradlew -Pandroid.testInstrumentationRunnerArguments.class=org.hisp.dhis.android.core.trackedentity.TrackedEntityInstanceCallRealIntegrationShould#response_true_when_data_sync core:connectedAndroidTest --info
+return 0
 fi
