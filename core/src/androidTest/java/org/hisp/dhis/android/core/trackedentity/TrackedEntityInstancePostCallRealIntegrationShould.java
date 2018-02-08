@@ -11,6 +11,7 @@ import org.hisp.dhis.android.core.common.D2Factory;
 import org.hisp.dhis.android.core.common.State;
 import org.hisp.dhis.android.core.common.TrackedEntityInstanceCallFactory;
 import org.hisp.dhis.android.core.data.database.AbsStoreTestCase;
+import org.hisp.dhis.android.core.data.server.RealServerMother;
 import org.hisp.dhis.android.core.enrollment.Enrollment;
 import org.hisp.dhis.android.core.enrollment.EnrollmentStatus;
 import org.hisp.dhis.android.core.enrollment.EnrollmentStore;
@@ -72,7 +73,7 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
     public void setUp() throws IOException {
         super.setUp();
 
-        d2 = D2Factory.create("https://play.dhis2.org/android-current/api/", databaseAdapter());
+        d2= D2Factory.create(RealServerMother.url, databaseAdapter());
 
         trackedEntityInstanceStore = new TrackedEntityInstanceStoreImpl(databaseAdapter());
         enrollmentStore = new EnrollmentStoreImpl(databaseAdapter());
@@ -135,6 +136,7 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
     * */
 
     //@Test
+    //@MediumTest
     public void pull_event_after_push_tracked_entity_instance_with_that_event() throws Exception {
         downloadMetadata();
 

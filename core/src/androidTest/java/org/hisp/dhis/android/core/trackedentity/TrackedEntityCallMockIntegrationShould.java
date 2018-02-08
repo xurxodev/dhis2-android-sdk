@@ -27,8 +27,6 @@
  */
 package org.hisp.dhis.android.core.trackedentity;
 
-import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
-
 import android.database.Cursor;
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
@@ -36,12 +34,14 @@ import android.support.test.runner.AndroidJUnit4;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.hisp.dhis.android.core.calls.Call;
 import org.hisp.dhis.android.core.common.BaseIdentifiableObject;
+import org.hisp.dhis.android.core.calls.Call;
+import org.hisp.dhis.android.core.common.HandlerFactory;
 import org.hisp.dhis.android.core.common.Payload;
 import org.hisp.dhis.android.core.data.api.FieldsConverterFactory;
 import org.hisp.dhis.android.core.data.api.FilterConverterFactory;
 import org.hisp.dhis.android.core.data.database.AbsStoreTestCase;
+import org.hisp.dhis.android.core.resource.ResourceModel;
 import org.hisp.dhis.android.core.resource.ResourceStore;
 import org.hisp.dhis.android.core.resource.ResourceStoreImpl;
 import org.hisp.dhis.android.core.utils.HeaderUtils;
@@ -60,6 +60,8 @@ import okhttp3.mockwebserver.MockWebServer;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
+
+import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCursor;
 
 @RunWith(AndroidJUnit4.class)
 public class TrackedEntityCallMockIntegrationShould extends AbsStoreTestCase {
@@ -129,15 +131,13 @@ public class TrackedEntityCallMockIntegrationShould extends AbsStoreTestCase {
                 .addConverterFactory(FilterConverterFactory.create())
                 .build();
 
-        TrackedEntityService service = retrofit.create(TrackedEntityService.class);
-
         HashSet<String> uids = new HashSet<>(Arrays.asList("kIeke8tAQnd", "nEenWmSyUEp"));
-        TrackedEntityStore trackedEntityStore = new TrackedEntityStoreImpl(databaseAdapter());
-        ResourceStore resourceStore = new ResourceStoreImpl(databaseAdapter());
 
-        trackedEntityCall = new TrackedEntityCall(
-                uids, databaseAdapter(), trackedEntityStore, resourceStore, service, new Date()
-        );
+        TrackedEntityFactory trackedEntityFactory =
+                new TrackedEntityFactory(retrofit, databaseAdapter(),
+                        HandlerFactory.createResourceHandler(databaseAdapter()));
+
+        trackedEntityCall = trackedEntityFactory.newEndPointCall(uids, new Date());
     }
 
     @Test

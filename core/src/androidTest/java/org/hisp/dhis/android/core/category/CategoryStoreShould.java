@@ -102,11 +102,14 @@ public class CategoryStoreShould extends AbsStoreTestCase {
     }
 
     private void whenDeleteCategoryInserted() {
-        wasDeleted = store.delete(newCategory);
+        int rowsAffected = store.delete(newCategory.uid());
+        wasDeleted = rowsAffected >= 1;
     }
 
     private void whenUpdateCategory() {
-        wasUpdated = store.update(newCategory);
+        int rowsAffected = store.update(newCategory);
+        wasUpdated = rowsAffected >= 1;
+
     }
 
     private void thenAssertLastInsertedIDIsOne() {

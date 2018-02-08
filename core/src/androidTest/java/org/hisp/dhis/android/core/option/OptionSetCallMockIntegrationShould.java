@@ -34,7 +34,6 @@ import static org.hisp.dhis.android.core.data.database.CursorAssert.assertThatCu
 
 import android.database.Cursor;
 import android.support.test.filters.SmallTest;
-import android.support.test.runner.AndroidJUnit4;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,12 +43,12 @@ import org.hisp.dhis.android.core.common.Payload;
 import org.hisp.dhis.android.core.common.ValueType;
 import org.hisp.dhis.android.core.data.api.FieldsConverterFactory;
 import org.hisp.dhis.android.core.data.database.AbsStoreTestCase;
+import org.hisp.dhis.android.core.resource.ResourceHandler;
 import org.hisp.dhis.android.core.resource.ResourceStore;
 import org.hisp.dhis.android.core.resource.ResourceStoreImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.Date;
@@ -63,7 +62,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
-@RunWith(AndroidJUnit4.class)
 public class OptionSetCallMockIntegrationShould extends AbsStoreTestCase {
     private static final String[] OPTION_SET_PROJECTION = {
             OptionSetModel.Columns.ID,
@@ -205,19 +203,16 @@ public class OptionSetCallMockIntegrationShould extends AbsStoreTestCase {
                 .addConverterFactory(FieldsConverterFactory.create())
                 .build();
 
-        OptionSetService optionSetService = retrofit.create(OptionSetService.class);
-        OptionSetStore optionSetStore = new OptionSetStoreImpl(databaseAdapter());
-        OptionStore optionStore = new OptionStoreImpl(databaseAdapter());
         ResourceStore resourceStore = new ResourceStoreImpl(databaseAdapter());
 
         Set<String> uids = new HashSet<>();
         uids.add("POc7DkGU3QU");
 
+        OptionSetFactory optionSetFactory =
+                new OptionSetFactory(retrofit, databaseAdapter(),
+                        new ResourceHandler(resourceStore));
 
-        optionSetCall = new OptionSetCall(
-                optionSetService, optionSetStore, databaseAdapter(), resourceStore, uids, new Date(),
-                optionStore);
-
+        optionSetCall = optionSetFactory.newEndPointCall(uids, new Date());
     }
 
 
