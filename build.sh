@@ -1,6 +1,9 @@
 #!/bin/bash
 set -xe
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_DIR=$DIR/
+
 android-wait-for-emulator
 sleep 180
 adb devices
