@@ -2,6 +2,7 @@ package org.hisp.dhis.android.core.trackedentity;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import android.support.test.filters.LargeTest;
 import android.support.test.filters.MediumTest;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -101,7 +102,7 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
     }
 
     @Test
-    @MediumTest
+    @LargeTest
     public void response_true_when_data_sync() throws Exception {
 
         Response response = null;
