@@ -20,10 +20,29 @@ env:
   - secure: XVjRNpEzXe1TuT6v1FklkNr6f50jbA4qS51Cg9vCE5u5WEbFTuKPkoFhyRv3clTpLm2QS+kF/Iah0P9GjCvYI4VOcfe+zp+p3LCc4vZjFtdfFJfdZ1+P9IiSB4rUnvnHdxzHg3QEAxAO/zMEzUFAkCc6OyZruEcuid1q8vHu6r4=
   - secure: XXl6Te0fn10PTM/myO3kwI5j1drZqTNWhlANxzQ94hmz26Bc9xPDc/EVCA4ijKiro9S1grFuBoVU/5bGa8NLBK05W2YdisMcnL+KobZqtYK7nKtRVg2aNAkl60NwO9DOzgmG77BQccDZEnd7fwdxwX7/rujQ/uYutCQG9dp3alI=
   - EXECUTE_INTEGRATION=false
+  - GRADLE_OPTS="-Xmx512m -XX:MaxPermSize=512m"
+  - cache: false
   matrix:
   - TEST_SUITE=units
   - TEST_SUITE=integration
-  - TEST_SUITE=integration_medium
+  - TEST_SUITE=integration_large17
+  - TEST_SUITE=integration_large18
+  - TEST_SUITE=integration_large1
+  - TEST_SUITE=integration_large2
+  - TEST_SUITE=integration_large3
+  - TEST_SUITE=integration_large4
+  - TEST_SUITE=integration_large5
+  - TEST_SUITE=integration_large6
+  - TEST_SUITE=integration_large7
+  - TEST_SUITE=integration_large8
+  - TEST_SUITE=integration_large9
+  - TEST_SUITE=integration_large10
+  - TEST_SUITE=integration_large11
+  - TEST_SUITE=integration_large12
+  - TEST_SUITE=integration_large13
+  - TEST_SUITE=integration_large14
+  - TEST_SUITE=integration_large15
+  - TEST_SUITE=integration_large16
 script:
 - travis_wait 30 ./build.sh $TEST_SUITE
 before_script:
