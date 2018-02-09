@@ -34,12 +34,9 @@ import org.hisp.dhis.android.core.trackedentity.TrackedEntityAttributeValueStore
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityDataValueHandler;
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityDataValueStore;
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityDataValueStoreImpl;
-import org.hisp.dhis.android.core.trackedentity.TrackedEntityHandler;
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityInstanceHandler;
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityInstanceStore;
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityInstanceStoreImpl;
-import org.hisp.dhis.android.core.trackedentity.TrackedEntityStore;
-import org.hisp.dhis.android.core.trackedentity.TrackedEntityStoreImpl;
 
 public class HandlerFactory {
 
@@ -128,9 +125,10 @@ public class HandlerFactory {
     public static CategoryOptionHandler createCategoryOptionHandler(
             DatabaseAdapter databaseAdapter) {
         CategoryOptionStore categoryOptionStore = new CategoryOptionStoreImpl(databaseAdapter);
-
+        CategoryCategoryOptionLinkStore categoryCategoryOptionLinkStore =
+                new CategoryCategoryOptionLinkStoreImpl(databaseAdapter);
         CategoryOptionHandler categoryOptionHandler = new CategoryOptionHandler(
-                categoryOptionStore);
+                categoryOptionStore, categoryCategoryOptionLinkStore);
 
         return categoryOptionHandler;
     }
@@ -138,12 +136,9 @@ public class HandlerFactory {
     public static CategoryHandler createCategoryHandler(DatabaseAdapter databaseAdapter) {
         CategoryStore categoryStore = new CategoryStoreImpl(databaseAdapter);
         CategoryOptionHandler categoryOptionHandler = createCategoryOptionHandler(databaseAdapter);
-        CategoryCategoryOptionLinkStore
-                categoryCategoryOptionLinkStore = new CategoryCategoryOptionLinkStoreImpl(
-                databaseAdapter);
 
-        CategoryHandler categoryHandler = new CategoryHandler(categoryStore, categoryOptionHandler,
-                categoryCategoryOptionLinkStore);
+        CategoryHandler categoryHandler =
+                new CategoryHandler(categoryStore, categoryOptionHandler);
 
         return categoryHandler;
     }
@@ -155,17 +150,18 @@ public class HandlerFactory {
 
         CategoryOptionComboStore optionComboStore = new CategoryOptionComboStoreImpl(
                 databaseAdapter);
-        CategoryOptionComboHandler optionComboHandler = new CategoryOptionComboHandler(
-                optionComboStore);
-
-        CategoryComboStore store = new CategoryComboStoreImpl(databaseAdapter);
 
         CategoryOptionComboCategoryLinkStore
                 categoryComboOptionLinkCategoryStore = new CategoryOptionComboCategoryLinkStoreImpl(
                 databaseAdapter);
 
+        CategoryOptionComboHandler optionComboHandler = new CategoryOptionComboHandler(
+                optionComboStore, categoryComboOptionLinkCategoryStore);
+
+        CategoryComboStore store = new CategoryComboStoreImpl(databaseAdapter);
+
         CategoryComboHandler categoryComboHandler = new CategoryComboHandler(store,
-                categoryComboOptionLinkCategoryStore, categoryCategoryComboLinkStore,
+                categoryCategoryComboLinkStore,
                 optionComboHandler);
 
         return categoryComboHandler;
