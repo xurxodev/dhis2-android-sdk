@@ -102,12 +102,6 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
 
     @Test
     @MediumTest
-    public void response_true_when_data_sync2() throws Exception {
-        assertThat(true).isTrue();
-    }
-
-    @Test
-    @MediumTest
     public void response_true_when_data_sync() throws Exception {
 
         Response response = null;
@@ -189,6 +183,7 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         trackedEntityInstanceStore.insert(
                 trackedEntityInstanceUid, new Date(), new Date(), null, null, orgUnitUid, trackedEntityUid, State.TO_POST
         );
+        System.out.println("jddjejd");
 
         enrollmentStore.insert(
                 enrollmentUid, new Date(), new Date(), null, null, orgUnitUid, programUid, new Date(),
