@@ -101,8 +101,8 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         trackedEntityInstance1Uid = codeGenerator.generate();
     }
 
-    //@Test
-    //@MediumTest
+    @Test
+    @MediumTest
     public void response_true_when_data_sync() throws Exception {
 
         Response response = null;
@@ -112,12 +112,6 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         createDummyDataToPost(
                 orgUnitUid, programUid, programStageUid, trackedEntityUid,
                 eventUid, enrollmentUid, trackedEntityInstanceUid, trackedEntityAttributeUid,
-                dataElementUid
-        );
-
-        createDummyDataToPost(
-                orgUnitUid, programUid, programStageUid, trackedEntityUid,
-                event1Uid, enrollment1Uid, trackedEntityInstance1Uid, trackedEntityAttributeUid,
                 dataElementUid
         );
 
@@ -273,7 +267,7 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
 
     private void downloadMetadata() throws Exception {
         Response response;
-        response = d2.logIn("android", "Android123").call();
+        response = d2.logIn(RealServerMother.user, RealServerMother.password).call();
         assertThat(response.isSuccessful()).isTrue();
 
         response = d2.syncMetaData().call();

@@ -14,9 +14,8 @@ then
 "$PROJECT_DIR"/gradlew clean
 "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=small
 fi
-if [ "$TEST_SUITE" == "integration_large" ]
+if [ "$TEST_SUITE" == "integration_large18" ]
 then
 "$PROJECT_DIR"/gradlew clean
-ulimit -s 1082768  # Require a bit of more memory.
 "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=medium
 fi
