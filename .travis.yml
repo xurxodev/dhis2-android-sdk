@@ -6,7 +6,7 @@ android:
   components:
   - tools
   - platform-tools
-  - build-tools-25.0.2
+  - build-tools-27.0.3
   - android-27
   - extra-android-m2repository
   - extra-google-google_play_services
@@ -22,7 +22,7 @@ env:
   matrix:
   - TEST_SUITE=units
   - TEST_SUITE=integration
-  - TEST_SUITE=integration_large18
+  - TEST_SUITE=integration_large
 script:
 - travis_wait 100 ./build.sh $TEST_SUITE
 before_script:

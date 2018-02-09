@@ -2,7 +2,6 @@ package org.hisp.dhis.android.core.trackedentity;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import android.support.test.filters.LargeTest;
 import android.support.test.filters.MediumTest;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -112,6 +111,12 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         createDummyDataToPost(
                 orgUnitUid, programUid, programStageUid, trackedEntityUid,
                 eventUid, enrollmentUid, trackedEntityInstanceUid, trackedEntityAttributeUid,
+                dataElementUid
+        );
+
+        createDummyDataToPost(
+                orgUnitUid, programUid, programStageUid, trackedEntityUid,
+                event1Uid, enrollment1Uid, trackedEntityInstance1Uid, trackedEntityAttributeUid,
                 dataElementUid
         );
 
