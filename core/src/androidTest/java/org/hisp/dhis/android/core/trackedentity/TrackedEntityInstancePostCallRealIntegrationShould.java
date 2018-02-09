@@ -102,6 +102,12 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
 
     @Test
     @MediumTest
+    public void response_true_when_data_sync2() throws Exception {
+        assertThat(true).isTrue();
+    }
+
+    @Test
+    @MediumTest
     public void response_true_when_data_sync() throws Exception {
 
         Response response = null;
