@@ -7,13 +7,12 @@ android:
   - tools
   - platform-tools
   - build-tools-25.0.2
-  - android-25
-  - android-22
+  - android-27
   - extra-android-m2repository
   - extra-google-google_play_services
   - extra-google-m2repository
   - extra-android-m2repository
-  - sys-img-armeabi-v7a-android-22
+  - sys-img-armeabi-v7a-android-27
   - extra-android-support
 env:
   global:
