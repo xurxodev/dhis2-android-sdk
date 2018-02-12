@@ -12,12 +12,12 @@ then
 "$PROJECT_DIR"/gradlew build -Dscan
 "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=small
 fi
-if [ "$TEST_SUITE" == "integration" ]
+if [ "$TRAVIS_BRANCH" == "development" ]
 then
-    if [ "$TRAVIS_BRANCH" == "development" ] || [ "$TRAVIS_BRANCH" == "master" ]
+    if [ "$TEST_SUITE" == "integration" ]
     then "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=medium
     fi
-fi
-if [ "$TEST_SUITE" == "integration_large" ] && [ "$TRAVIS_BRANCH" == "master" ]
-then "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=large
+    if [ "$TEST_SUITE" == "integration_large" ]
+    then "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=large
+    fi
 fi
