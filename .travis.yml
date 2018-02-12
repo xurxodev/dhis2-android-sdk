@@ -26,12 +26,7 @@ env:
 script:
 - travis_wait 30 ./build.sh $TEST_SUITE
 before_script:
-- echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
-- emulator -avd test -no-audio -no-window &
-- android-wait-for-emulator
-- sleep 180
-- adb devices
-- adb shell input keyevent 82 &
+- ./before_script.sh $TEST_SUITE
 #after_success:
 #- ".buildscript/deploy.sh"
 notifications:

@@ -10,8 +10,8 @@ if [ "$TEST_SUITE" == "units" ];
 then
 "$PROJECT_DIR"/gradlew clean
 "$PROJECT_DIR"/gradlew build -Dscan
-"$PROJECT_DIR"/gradlew test
-"$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=small; fi
+"$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=small
+fi
 if [ "$TEST_SUITE" == "integration" ]
 then
     if [ "$TRAVIS_BRANCH" == "development" ] || [ "$TRAVIS_BRANCH" == "master" ]
