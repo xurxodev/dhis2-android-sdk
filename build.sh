@@ -10,14 +10,19 @@ if [ "$TEST_SUITE" == "units" ];
 then
 "$PROJECT_DIR"/gradlew clean
 "$PROJECT_DIR"/gradlew build -Dscan
-"$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=small
 fi
 if [ "$TRAVIS_BRANCH" == "development" ]
 then
-    if [ "$TEST_SUITE" == "integration" ]
-    then "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=medium
+    if [ "$TEST_SUITE" == "integration_small" ]
+    then
+    "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=small
+    fi
+    if [ "$TEST_SUITE" == "integration_medium" ]
+    then
+    "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=medium
     fi
     if [ "$TEST_SUITE" == "integration_large" ]
-    then "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=large
+    then
+    "$PROJECT_DIR"/gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.size=large
     fi
 fi
