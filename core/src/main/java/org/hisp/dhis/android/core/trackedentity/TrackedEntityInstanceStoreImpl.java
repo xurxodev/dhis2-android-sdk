@@ -255,13 +255,11 @@ public class TrackedEntityInstanceStoreImpl extends Store implements TrackedEnti
                     String lastUpdatedAtClient = getStringFromCursor(cursor, 4);
                     String organisationUnit = getStringFromCursor(cursor, 5);
                     String trackedEntity = getStringFromCursor(cursor, 6);
-                    //State state = getStateTypeFromCursor(cursor, 7);
 
                     trackedEntityInstanceMap.put(uid, TrackedEntityInstance.builder()
                             .uid(uid).created(created).lastUpdated(lastUpdated).createdAtClient(createdAtClient)
                             .lastUpdatedAtClient(lastUpdatedAtClient).organisationUnit(organisationUnit)
                             .trackedEntity(trackedEntity).deleted(false)
-                            //.state(state)
                             .build());
 
                 } while (cursor.moveToNext());
