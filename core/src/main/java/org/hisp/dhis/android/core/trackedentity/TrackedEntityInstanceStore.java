@@ -64,4 +64,6 @@ public interface TrackedEntityInstanceStore extends IdentifiableStore {
     Map<String, TrackedEntityInstance> querySynced();
 
     Map<String, TrackedEntityInstance> queryAll();
+
+    TrackedEntityInstance queryByUId(String target);
 }

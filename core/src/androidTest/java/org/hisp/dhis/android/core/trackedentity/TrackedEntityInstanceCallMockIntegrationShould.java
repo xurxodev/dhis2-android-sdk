@@ -170,7 +170,7 @@ public class TrackedEntityInstanceCallMockIntegrationShould extends AbsStoreTest
 
     private TrackedEntityInstance addRelationships(TrackedEntityInstance trackedEntityInstance) {
         RelationshipStore relationshipStore = new RelationshipStoreImpl(databaseAdapter());
-        List<Relationship> relationships = relationshipStore.queryByAtoBTrackedEntityInstanceUid(trackedEntityInstance.uid());
+        List<Relationship> relationships = relationshipStore.queryByTrackedEntityInstanceUid(trackedEntityInstance.uid());
 
         if (relationships != null && relationships.size() > 0) {
             trackedEntityInstance = TrackedEntityInstance.builder().uid(trackedEntityInstance.uid())

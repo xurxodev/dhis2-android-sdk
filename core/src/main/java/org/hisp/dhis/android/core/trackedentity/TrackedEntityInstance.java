@@ -35,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 
+import org.hisp.dhis.android.core.common.State;
 import org.hisp.dhis.android.core.data.api.Field;
 import org.hisp.dhis.android.core.data.api.NestedField;
 import org.hisp.dhis.android.core.enrollment.Enrollment;
@@ -57,6 +58,7 @@ public abstract class TrackedEntityInstance {
     private static final String TRACKED_ENTITY = "trackedEntity";
     private static final String DELETED = "deleted";
     private static final String ENROLLMENTS = "enrollments";
+    private static final String STATE = "state";
 
     public static final Field<TrackedEntityInstance, String> uid = Field.create(UID);
     public static final Field<TrackedEntityInstance, Date> created = Field.create(CREATED);
@@ -67,6 +69,8 @@ public abstract class TrackedEntityInstance {
     public static final Field<TrackedEntityInstance, String> trackedEntity = Field.create(
             TRACKED_ENTITY);
     public static final Field<TrackedEntityInstance, Boolean> deleted = Field.create(DELETED);
+    public static final Field<TrackedEntityInstance, State> state = Field.create(
+            STATE);
 
     public static final NestedField<TrackedEntityInstance, Enrollment> enrollment
             = NestedField.create(ENROLLMENTS);
@@ -105,6 +109,9 @@ public abstract class TrackedEntityInstance {
     @Nullable
     @JsonProperty(DELETED)
     public abstract Boolean deleted();
+
+    @Nullable
+    public abstract State state();
 
     @Nullable
     @JsonProperty(TRACKED_ENTITY_ATTRIBUTE_VALUES)
@@ -152,6 +159,8 @@ public abstract class TrackedEntityInstance {
 
         @JsonProperty(DELETED)
         public abstract Builder deleted(@Nullable Boolean deleted);
+
+        public abstract Builder state(@Nullable State state);
 
         @JsonProperty(TRACKED_ENTITY_ATTRIBUTE_VALUES)
         public abstract Builder trackedEntityAttributeValues(@Nullable

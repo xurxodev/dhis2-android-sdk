@@ -77,7 +77,7 @@ public class TrackedEntityInstancePostCall implements Call<Response<WebResponse>
 
         }
 
-        List<TrackedEntityInstance> trackedEntityInstancesToPost = queryDataToSync();
+        List<TrackedEntityInstance> trackedEntityInstancesToPost = queryDataToSync(false);
 
         // if size is 0, then no need to do network request
         if (trackedEntityInstancesToPost.isEmpty()) {
@@ -92,14 +92,39 @@ public class TrackedEntityInstancePostCall implements Call<Response<WebResponse>
                 .execute();
 
         if (response.isSuccessful()) {
-            handleWebResponse(response);
+            response = postTrackedEntityInstancesWithRelationships(trackedEntityInstancePayload, response);
         }
 
         return response;
     }
 
+    @SuppressWarnings("PMD.AvoidReassigningParameters")
+    private Response<WebResponse> postTrackedEntityInstancesWithRelationships(
+            TrackedEntityInstancePayload trackedEntityInstancePayload,
+            Response<WebResponse> response) throws java.io.IOException {
+        List<TrackedEntityInstance> trackedEntityInstancesToPost;
+        trackedEntityInstancesToPost = queryDataToSync(true);
+
+        if (trackedEntityInstancesToPost.isEmpty()) {
+            return response;
+        }
+
+        trackedEntityInstancePayload.trackedEntityInstances = trackedEntityInstancesToPost;
+
+        response = trackedEntityInstanceService.postTrackedEntityInstances(
+                trackedEntityInstancePayload)
+                .execute();
+
+
+        if (response.isSuccessful()) {
+
+            handleWebResponse(response);
+        }
+        return response;
+    }
+
     @NonNull
-    private List<TrackedEntityInstance> queryDataToSync() {
+    private List<TrackedEntityInstance> queryDataToSync(boolean syncRelationships) {
         Map<String, List<TrackedEntityDataValue>> dataValueMap =
                 trackedEntityDataValueStore.queryTrackedEntityDataValues(Boolean.FALSE);
         Map<String, List<Event>> eventMap = eventStore.queryEventsAttachedToEnrollmentToPost();
@@ -112,7 +137,7 @@ public class TrackedEntityInstancePostCall implements Call<Response<WebResponse>
 
 
 
-        List<Relationship> relationshipRecreated;
+        List<Relationship> relationshipRecreated = new ArrayList<>();
 
         // EMPTY LISTS TO REPLACE NULL VALUES SO THAT API DOESN'T BREAK.
         List<TrackedEntityAttributeValue> emptyAttributeValueList = new ArrayList<>();
@@ -159,8 +184,23 @@ public class TrackedEntityInstancePostCall implements Call<Response<WebResponse>
                 attributeValues = emptyAttributeValueList;
             }
             TrackedEntityInstance trackedEntityInstance = trackedEntityInstances.get(teiUid.getKey());
+            if(syncRelationships) {
+                //The relationships should be posted after a first post to avoid server
+                // 500 error.
+                //This problem is related with foreing key exception when the tracked entity instance referenced
+                // in the relationship is not in the server.
 
-            relationshipRecreated = relationshipStore.queryByAtoBTrackedEntityInstanceUid(trackedEntityInstance.uid());
+
+                relationshipRecreated = relationshipStore.queryByTrackedEntityInstanceUid(
+                        trackedEntityInstance.uid());
+                //When post a group of trackedEntityInstance with relations the enrollment should be
+                // empty to avoid other server 500 error.
+                enrollmentsRecreated=new ArrayList<>();
+                if(relationshipRecreated.isEmpty()){
+                    //ignore no relationships tei
+                    continue;
+                }
+            }
 
             trackedEntityInstancesRecreated.add(
                     trackedEntityInstance.toBuilder()

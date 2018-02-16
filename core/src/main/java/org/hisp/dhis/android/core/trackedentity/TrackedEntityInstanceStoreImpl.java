@@ -28,7 +28,6 @@
 
 package org.hisp.dhis.android.core.trackedentity;
 
-import static org.hisp.dhis.android.core.utils.StoreUtils.parse;
 import static org.hisp.dhis.android.core.utils.StoreUtils.sqLiteBind;
 
 import android.database.Cursor;
@@ -37,6 +36,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.hisp.dhis.android.core.common.State;
+import org.hisp.dhis.android.core.common.Store;
 import org.hisp.dhis.android.core.data.database.DatabaseAdapter;
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityInstanceModel.Columns;
 
@@ -48,18 +48,20 @@ import java.util.Map;
         "PMD.AvoidDuplicateLiterals",
         "PMD.NPathComplexity"
 })
-public class TrackedEntityInstanceStoreImpl implements TrackedEntityInstanceStore {
+public class TrackedEntityInstanceStoreImpl extends Store implements TrackedEntityInstanceStore {
 
-    private static final String INSERT_STATEMENT = "INSERT INTO " +
-            TrackedEntityInstanceModel.TABLE + " (" +
-            Columns.UID + ", " +
+    private static final String FIELDS =
+            " "+ Columns.UID + ", " +
             Columns.CREATED + ", " +
             Columns.LAST_UPDATED + ", " +
             Columns.CREATED_AT_CLIENT + ", " +
             Columns.LAST_UPDATED_AT_CLIENT + ", " +
             Columns.ORGANISATION_UNIT + ", " +
             Columns.TRACKED_ENTITY + ", " +
-            Columns.STATE +
+            Columns.STATE+" ";
+
+    private static final String INSERT_STATEMENT = "INSERT INTO " +
+            TrackedEntityInstanceModel.TABLE + " (" + FIELDS +
             ") " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
     private static final String UPDATE_STATEMENT =
@@ -86,15 +88,15 @@ public class TrackedEntityInstanceStoreImpl implements TrackedEntityInstanceStor
             " WHERE " +
             Columns.UID + " =?;";
 
-    private static final String QUERY_STATEMENT = "SELECT " +
-            "  TrackedEntityInstance.uid, " +
-            "  TrackedEntityInstance.created, " +
-            "  TrackedEntityInstance.lastUpdated, " +
-            "  TrackedEntityInstance.createdAtClient, " +
-            "  TrackedEntityInstance.lastUpdatedAtClient, " +
-            "  TrackedEntityInstance.organisationUnit, " +
-            "  TrackedEntityInstance.trackedEntity " +
+    private static final String QUERY_STATEMENT = "SELECT "
+            + FIELDS +
             "FROM TrackedEntityInstance ";
+
+    private static final String QUERY_BY_UID = "SELECT "
+            + FIELDS +
+            "FROM TrackedEntityInstance "
+            +" WHERE "+
+            Columns.UID + "=?;";
 
     private static final String QUERY_STATEMENT_TO_POST =
             QUERY_STATEMENT +
@@ -225,6 +227,15 @@ public class TrackedEntityInstanceStoreImpl implements TrackedEntityInstanceStor
     }
 
     @Override
+    public TrackedEntityInstance queryByUId(String target) {
+        Cursor cursor = databaseAdapter.query(QUERY_BY_UID);
+
+        Map<String, TrackedEntityInstance> trackedEntityInstanceMap = mapFromCursor(cursor);
+
+        return trackedEntityInstanceMap.get(target);
+    }
+
+    @Override
     public Boolean exists(String uid) {
         Cursor cursor = databaseAdapter.query(CHECK_IF_EXIST_BY_UID_STATMENT, uid);
         return cursor.getCount() > 0;
@@ -237,18 +248,20 @@ public class TrackedEntityInstanceStoreImpl implements TrackedEntityInstanceStor
             if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
                 do {
-                    String uid = cursor.getString(0);
-                    Date created = cursor.getString(1) == null ? null : parse(cursor.getString(1));
-                    Date lastUpdated = cursor.getString(2) == null ? null : parse(cursor.getString(2));
-                    String createdAtClient = cursor.getString(3) == null ? null : cursor.getString(3);
-                    String lastUpdatedAtClient = cursor.getString(4) == null ? null : cursor.getString(4);
-                    String organisationUnit = cursor.getString(5) == null ? null : cursor.getString(5);
-                    String trackedEntity = cursor.getString(6) == null ? null : cursor.getString(6);
+                    String uid = getStringFromCursor(cursor, 0);
+                    Date created = getDateFromCursor(cursor, 1);
+                    Date lastUpdated = getDateFromCursor(cursor, 2);
+                    String createdAtClient = getStringFromCursor(cursor, 3);
+                    String lastUpdatedAtClient = getStringFromCursor(cursor, 4);
+                    String organisationUnit = getStringFromCursor(cursor, 5);
+                    String trackedEntity = getStringFromCursor(cursor, 6);
+                    //State state = getStateTypeFromCursor(cursor, 7);
 
                     trackedEntityInstanceMap.put(uid, TrackedEntityInstance.builder()
                             .uid(uid).created(created).lastUpdated(lastUpdated).createdAtClient(createdAtClient)
                             .lastUpdatedAtClient(lastUpdatedAtClient).organisationUnit(organisationUnit)
                             .trackedEntity(trackedEntity).deleted(false)
+                            //.state(state)
                             .build());
 
                 } while (cursor.moveToNext());
