@@ -53,6 +53,7 @@ import org.hisp.dhis.android.core.data.api.FieldsConverterFactory;
 import org.hisp.dhis.android.core.data.api.FilterConverterFactory;
 import org.hisp.dhis.android.core.data.database.DatabaseAdapter;
 import org.hisp.dhis.android.core.dataelement.DataElementFactory;
+import org.hisp.dhis.android.core.deletedobject.DeletedObjectFactory;
 import org.hisp.dhis.android.core.enrollment.EnrollmentHandler;
 import org.hisp.dhis.android.core.enrollment.EnrollmentStore;
 import org.hisp.dhis.android.core.enrollment.EnrollmentStoreImpl;
@@ -64,6 +65,7 @@ import org.hisp.dhis.android.core.event.EventStoreImpl;
 import org.hisp.dhis.android.core.imports.WebResponse;
 import org.hisp.dhis.android.core.option.OptionSetFactory;
 import org.hisp.dhis.android.core.organisationunit.OrganisationUnitFactory;
+import org.hisp.dhis.android.core.program.ProgramFactory;
 import org.hisp.dhis.android.core.organisationunit.OrganisationUnitStore;
 import org.hisp.dhis.android.core.organisationunit.OrganisationUnitStoreImpl;
 import org.hisp.dhis.android.core.program.ProgramFactory;
@@ -71,6 +73,7 @@ import org.hisp.dhis.android.core.relationship.RelationshipTypeFactory;
 import org.hisp.dhis.android.core.relationship.RelationshipHandler;
 import org.hisp.dhis.android.core.relationship.RelationshipStore;
 import org.hisp.dhis.android.core.relationship.RelationshipStoreImpl;
+import org.hisp.dhis.android.core.relationship.RelationshipTypeFactory;
 import org.hisp.dhis.android.core.resource.ResourceHandler;
 import org.hisp.dhis.android.core.resource.ResourceStore;
 import org.hisp.dhis.android.core.resource.ResourceStoreImpl;
@@ -99,6 +102,7 @@ import org.hisp.dhis.android.core.user.UserCredentialsHandler;
 import org.hisp.dhis.android.core.user.UserCredentialsStore;
 import org.hisp.dhis.android.core.user.UserCredentialsStoreImpl;
 import org.hisp.dhis.android.core.user.UserHandler;
+import org.hisp.dhis.android.core.user.UserQuery;
 import org.hisp.dhis.android.core.user.UserRoleHandler;
 import org.hisp.dhis.android.core.user.UserRoleProgramLinkStore;
 import org.hisp.dhis.android.core.user.UserRoleProgramLinkStoreImpl;
@@ -110,6 +114,7 @@ import org.hisp.dhis.android.core.user.UserStoreImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import okhttp3.OkHttpClient;
@@ -134,12 +139,11 @@ public final class D2 {
     private final UserStore userStore;
     private final UserCredentialsStore userCredentialsStore;
     private final AuthenticatedUserStore authenticatedUserStore;
-    private final OrganisationUnitStore organisationUnitStore;
-    private final ResourceStore resourceStore;
-    private final SystemInfoStore systemInfoStore;
     private final UserRoleStore userRoleStore;
     private final UserRoleProgramLinkStore userRoleProgramLinkStore;
     private final RelationshipStore relationshipStore;
+    private final ResourceStore resourceStore;
+    private final SystemInfoStore systemInfoStore;
 
     private final TrackedEntityInstanceStore trackedEntityInstanceStore;
     private final EnrollmentStore enrollmentStore;
@@ -155,6 +159,9 @@ public final class D2 {
     private final ResourceHandler resourceHandler;
     private MetadataAuditConsumer metadataAuditConsumer;
     private MetadataAuditListener metadataAuditListener;
+    private final DeletedObjectFactory deletedObjectFactory;
+    private final boolean isTranslationOn;
+    private final String translationLocale;
 
     //Factories
     private final OptionSetFactory optionSetFactory;
@@ -169,9 +176,13 @@ public final class D2 {
 
     @VisibleForTesting
     D2(@NonNull Retrofit retrofit, @NonNull DatabaseAdapter databaseAdapter,
-            MetadataAuditConnection metadataAuditConnection) {
+            MetadataAuditConnection metadataAuditConnection,
+            boolean isTranslationOn, @NonNull String translationLocale) {
         this.retrofit = retrofit;
         this.databaseAdapter = databaseAdapter;
+        this.isTranslationOn = isTranslationOn;
+        this.translationLocale = translationLocale;
+
         // services
         this.userService = retrofit.create(UserService.class);
         this.systemInfoService = retrofit.create(SystemInfoService.class);
@@ -185,8 +196,6 @@ public final class D2 {
                 new UserCredentialsStoreImpl(databaseAdapter);
         this.authenticatedUserStore =
                 new AuthenticatedUserStoreImpl(databaseAdapter);
-        this.organisationUnitStore =
-                new OrganisationUnitStoreImpl(databaseAdapter);
         this.resourceStore =
                 new ResourceStoreImpl(databaseAdapter);
         this.systemInfoStore =
@@ -195,8 +204,6 @@ public final class D2 {
                 new UserRoleStoreImpl(databaseAdapter);
         this.userRoleProgramLinkStore =
                 new UserRoleProgramLinkStoreImpl(databaseAdapter);
-        this.relationshipStore =
-                new RelationshipStoreImpl(databaseAdapter);
         this.trackedEntityInstanceStore =
                 new TrackedEntityInstanceStoreImpl(databaseAdapter);
         this.enrollmentStore =
@@ -209,12 +216,13 @@ public final class D2 {
                 new TrackedEntityAttributeValueStoreImpl(databaseAdapter);
 
         //handlers
-        resourceHandler = new ResourceHandler(resourceStore);
+        this.resourceHandler = new ResourceHandler(resourceStore);
         UserRoleHandler userRoleHandler = new UserRoleHandler(userRoleStore,
                 userRoleProgramLinkStore);
         UserCredentialsHandler userCredentialsHandler = new UserCredentialsHandler(
                 userCredentialsStore);
-        userHandler = new UserHandler(userStore, userCredentialsHandler, resourceHandler,
+
+        this.userHandler = new UserHandler(userStore, userCredentialsHandler, resourceHandler,
                 userRoleHandler);
 
         TrackedEntityDataValueHandler trackedEntityDataValueHandler =
@@ -226,48 +234,51 @@ public final class D2 {
                 new TrackedEntityAttributeValueHandler(trackedEntityAttributeValueStore);
 
         EnrollmentHandler enrollmentHandler = new EnrollmentHandler(enrollmentStore, eventHandler);
-
+        relationshipStore = new RelationshipStoreImpl(databaseAdapter);
         RelationshipHandler relationshipHandler = new RelationshipHandler(relationshipStore,
                 trackedEntityInstanceStore);
 
-        trackedEntityInstanceHandler =
+        this.trackedEntityInstanceHandler =
                 new TrackedEntityInstanceHandler(
                         trackedEntityInstanceStore,
                         trackedEntityAttributeValueHandler,
-                        enrollmentHandler,
-                        relationshipHandler);
-
+                        enrollmentHandler, relationshipHandler);
 
         //factories
-        optionSetFactory = new OptionSetFactory(retrofit, databaseAdapter, resourceHandler);
+        this.optionSetFactory = new OptionSetFactory(retrofit, databaseAdapter, resourceHandler);
 
-        trackedEntityFactory =
+        this.trackedEntityFactory =
                 new TrackedEntityFactory(retrofit, databaseAdapter, resourceHandler);
 
-        organisationUnitFactory =
+        this.organisationUnitFactory =
                 new OrganisationUnitFactory(retrofit, databaseAdapter, resourceHandler);
 
-        trackedEntityAttributeFactory = new TrackedEntityAttributeFactory(
+        this.trackedEntityAttributeFactory = new TrackedEntityAttributeFactory(
                 retrofit, databaseAdapter, resourceHandler);
 
         this.dataElementFactory = new DataElementFactory(retrofit, databaseAdapter,
                 resourceHandler);
 
-        programFactory = new ProgramFactory(retrofit, databaseAdapter,
+        this.programFactory = new ProgramFactory(retrofit, databaseAdapter,
                 optionSetFactory.getOptionSetHandler(), dataElementFactory, resourceHandler);
 
-        relationshipTypeFactory =
+        this.relationshipTypeFactory =
                 new RelationshipTypeFactory(retrofit, databaseAdapter, resourceHandler);
+
         this.categoryFactory = new CategoryFactory(retrofit(), databaseAdapter, resourceHandler);
 
-        this.categoryComboFactory = new CategoryComboFactory(retrofit(), databaseAdapter, resourceHandler);
+        this.categoryComboFactory = new CategoryComboFactory(retrofit(), databaseAdapter,
+                resourceHandler);
+
+        this.deletedObjectFactory = new DeletedObjectFactory(retrofit, databaseAdapter,
+                resourceHandler);
 
         if (metadataAuditConnection != null) {
             MetadataAuditHandlerFactory metadataAuditHandlerFactory =
                     new MetadataAuditHandlerFactory(trackedEntityFactory, optionSetFactory,
                             dataElementFactory, trackedEntityAttributeFactory, programFactory,
                             relationshipTypeFactory, organisationUnitFactory, categoryFactory,
-                            categoryComboFactory);
+                            categoryComboFactory, isTranslationOn, translationLocale);
 
             this.metadataAuditListener = new MetadataAuditListener(metadataAuditHandlerFactory);
             this.metadataAuditConsumer = new MetadataAuditConsumer(metadataAuditConnection);
@@ -294,9 +305,10 @@ public final class D2 {
             throw new NullPointerException("password == null");
         }
 
+        UserQuery userQuery = UserQuery.defaultQuery(isTranslationOn, translationLocale);
         return new UserAuthenticateCall(userService, databaseAdapter, userHandler,
-                authenticatedUserStore, organisationUnitFactory.getOrganisationUnitHandler(),
-                username, password
+                authenticatedUserStore, organisationUnitFactory.getOrganisationUnitHandler()
+                , username, password, userQuery
         );
     }
 
@@ -326,6 +338,7 @@ public final class D2 {
         deletableStoreList.add(resourceStore);
         deletableStoreList.add(systemInfoStore);
         deletableStoreList.add(userRoleStore);
+        deletableStoreList.add(relationshipStore);
         deletableStoreList.add(userRoleProgramLinkStore);
         deletableStoreList.add(trackedEntityInstanceStore);
         deletableStoreList.add(enrollmentStore);
@@ -351,21 +364,23 @@ public final class D2 {
         return new MetadataCall(
                 databaseAdapter, systemInfoService, userService, userHandler, systemInfoStore,
                 resourceStore, optionSetFactory, trackedEntityFactory, programFactory,
-                organisationUnitFactory, categoryFactory, categoryComboFactory);
+                organisationUnitFactory, categoryFactory, categoryComboFactory,
+                deletedObjectFactory, isTranslationOn, translationLocale);
     }
 
     @NonNull
     public Call<Response> syncSingleData(int eventLimitByOrgUnit) {
-        return new SingleDataCall(organisationUnitStore, systemInfoStore, systemInfoService,
-                resourceStore,
-                eventService, databaseAdapter, resourceHandler, eventHandler, eventLimitByOrgUnit);
+        return new SingleDataCall(organisationUnitFactory.getOrganisationUnitStore(),
+                systemInfoStore, systemInfoService, resourceStore,
+                eventService, databaseAdapter, resourceHandler, eventHandler, eventLimitByOrgUnit,
+                isTranslationOn, translationLocale);
     }
 
     @NonNull
     public Call<Response> syncTrackerData() {
         return new TrackerDataCall(trackedEntityInstanceStore, systemInfoStore, systemInfoService,
                 resourceStore, trackedEntityInstanceService, databaseAdapter, resourceHandler,
-                trackedEntityInstanceHandler);
+                trackedEntityInstanceHandler, isTranslationOn, translationLocale);
     }
 
     @NonNull
@@ -394,6 +409,9 @@ public final class D2 {
         private DatabaseAdapter databaseAdapter;
         private OkHttpClient okHttpClient;
         private MetadataAuditConnection metadataAuditConnection;
+        private boolean isTranslationOn;
+        private Locale translationLocale = Locale.ENGLISH;
+
 
         public Builder() {
             // empty constructor
@@ -414,6 +432,13 @@ public final class D2 {
         @NonNull
         public Builder okHttpClient(@NonNull OkHttpClient okHttpClient) {
             this.okHttpClient = okHttpClient;
+            return this;
+        }
+
+        @NonNull
+        public Builder translation(@NonNull Locale locale) {
+            this.isTranslationOn = true;
+            this.translationLocale = locale;
             return this;
         }
 
@@ -449,7 +474,8 @@ public final class D2 {
                     .validateEagerly(true)
                     .build();
 
-            return new D2(retrofit, databaseAdapter, metadataAuditConnection);
+            return new D2(retrofit, databaseAdapter, metadataAuditConnection,
+                    isTranslationOn, translationLocale.toString());
         }
     }
 }

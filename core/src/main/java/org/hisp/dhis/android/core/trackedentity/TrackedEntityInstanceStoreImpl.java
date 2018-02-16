@@ -49,6 +49,7 @@ import java.util.Map;
         "PMD.NPathComplexity"
 })
 public class TrackedEntityInstanceStoreImpl implements TrackedEntityInstanceStore {
+
     private static final String INSERT_STATEMENT = "INSERT INTO " +
             TrackedEntityInstanceModel.TABLE + " (" +
             Columns.UID + ", " +
@@ -224,7 +225,7 @@ public class TrackedEntityInstanceStoreImpl implements TrackedEntityInstanceStor
     }
 
     @Override
-    public boolean exists(String uid) {
+    public Boolean exists(String uid) {
         Cursor cursor = databaseAdapter.query(CHECK_IF_EXIST_BY_UID_STATMENT, uid);
         return cursor.getCount() > 0;
     }
