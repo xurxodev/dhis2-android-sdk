@@ -58,10 +58,6 @@ public class RelationshipStoreImpl extends Store implements RelationshipStore {
             RelationshipModel.Columns.TRACKED_ENTITY_INSTANCE_A + "=? OR " +
             RelationshipModel.Columns.TRACKED_ENTITY_INSTANCE_B + "=?;";
 
-    private static final String QUERY_BY_A_TO_B_UID = "SELECT " + FIELDS + " FROM " +
-            RelationshipModel.TABLE + " WHERE " +
-            RelationshipModel.Columns.TRACKED_ENTITY_INSTANCE_A + "=?;";
-
     private static final String QUERY_BY_UID = "SELECT " + FIELDS + " FROM " +
             RelationshipModel.TABLE + " WHERE " +
             RelationshipModel.Columns.TRACKED_ENTITY_INSTANCE_A + "=? OR " +
@@ -103,15 +99,6 @@ public class RelationshipStoreImpl extends Store implements RelationshipStore {
         int delete = databaseAdapter.executeUpdateDelete(RelationshipModel.TABLE, deleteStatement);
         deleteStatement.clearBindings();
         return delete;
-    }
-
-    @Override
-    public List<Relationship> queryByAtoBTrackedEntityInstanceUid(String uid) {
-        Cursor cursor = databaseAdapter.query(QUERY_BY_A_TO_B_UID, uid);
-
-        List<Relationship> relationships = mapFromCursor(cursor);
-
-        return relationships;
     }
 
     @Override

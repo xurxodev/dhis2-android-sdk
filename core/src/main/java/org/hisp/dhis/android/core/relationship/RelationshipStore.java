@@ -44,7 +44,5 @@ public interface RelationshipStore extends DeletableStore {
 
     int removeOldRelations(String uid);
 
-    List<Relationship> queryByAtoBTrackedEntityInstanceUid(String uid);
-
     List<Relationship> queryByTrackedEntityInstanceUid(String uid);
 }
