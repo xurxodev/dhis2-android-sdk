@@ -33,10 +33,4 @@ public class Store {
         return cursor.getString(index) == null ? null :
                 ValueType.valueOf(cursor.getString(index));
     }
-
-    @Nullable
-    protected State getStateTypeFromCursor(Cursor cursor, int index) {
-        return cursor.getString(index) == null ? null :
-                State.valueOf(cursor.getString(index));
-    }
 }
