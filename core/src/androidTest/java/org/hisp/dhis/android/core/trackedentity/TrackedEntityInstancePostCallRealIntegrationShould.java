@@ -6,6 +6,8 @@ import static com.google.common.truth.Truth.assertThat;
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.google.common.truth.Truth;
+
 import org.hisp.dhis.android.core.D2;
 import org.hisp.dhis.android.core.calls.Call;
 import org.hisp.dhis.android.core.common.D2Factory;
@@ -99,8 +101,8 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         programStageDataElementUid = "LBNxoXdMnkv";
         trackedEntityAttributeUid = "w75KJ2mc4zz";
 
-        categoryOptionUid = "CW81uF03hvV";
-        categoryComboOptionUid = "l5QR5hJ4u44";
+        categoryOptionUid = null;
+        categoryComboOptionUid = null;
         eventUid = codeGenerator.generate();
         enrollmentUid = codeGenerator.generate();
         trackedEntityInstanceUid = codeGenerator.generate();
@@ -137,6 +139,10 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         response = call.call();
 
         assertThat(response.isSuccessful()).isTrue();
+
+        assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstance1Uid);
+
+        assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstanceUid);
     }
 
     @Test
@@ -163,6 +169,20 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         response = call.call();
 
         assertThat(response.isSuccessful()).isTrue();
+
+        assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstance1Uid);
+
+        assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstanceUid);
+    }
+
+    private void assertDownloadTrackedEntityInstanceFromServer(String trackedEntityInstanceUid) throws Exception {
+        Response response;TrackedEntityInstanceEndPointCall trackedEntityInstanceEndPointCall =
+                TrackedEntityInstanceCallFactory.create(
+                        d2.retrofit(), databaseAdapter(), trackedEntityInstanceUid);
+
+        response = trackedEntityInstanceEndPointCall.call();
+
+        Truth.assertThat(response.isSuccessful()).isTrue();
     }
 
 
