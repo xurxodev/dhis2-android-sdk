@@ -175,6 +175,118 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstanceUid);
     }
 
+
+    @Test
+    @LargeTest
+    //To run this test is necessary add  the given category combo into the given program.
+    //In dhis web server you need go to Programs/aatributes app
+    //Select "WHO RMNCH Tracker"->"Edit"
+    //Change "default" by "Project" and save
+    public void response_true_when_data_sync_with_category_combo() throws Exception {
+
+        filAlternativeUidToTestCategoryCombos();
+        Response response = null;
+        downloadMetadata();
+
+
+        createDummyDataToPost(
+                orgUnitUid, programUid, programStageUid, trackedEntityUid,
+                eventUid, enrollmentUid, trackedEntityInstanceUid, trackedEntityAttributeUid,
+                dataElementUid
+        );
+
+
+        createDummyDataToPost(
+                orgUnitUid, programUid, programStageUid, trackedEntityUid,
+                event1Uid, enrollment1Uid, trackedEntityInstance1Uid, trackedEntityAttributeUid,
+                dataElementUid
+        );
+
+        createDummyCompulsoryAttributesDataToPost(trackedEntityInstanceUid);
+        createDummyCompulsoryAttributesDataToPost(trackedEntityInstance1Uid);
+
+        Call<Response<WebResponse>> call = d2.syncTrackedEntityInstances();
+        response = call.call();
+
+        assertThat(response.isSuccessful()).isTrue();
+
+        assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstance1Uid);
+
+        assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstanceUid);
+    }
+
+    @Test
+    @LargeTest
+    //To run this test is necessary add the given category combo into the given program.
+    //In dhis web server you need go to Programs/aatributes app
+    //Select "WHO RMNCH Tracker"->"Edit"
+    //Change "default" by "Project" and save
+    public void response_true_when_data_with_relationship_and_category_combo_sync() throws Exception {
+
+        filAlternativeUidToTestCategoryCombos();
+
+        Response response = null;
+        downloadMetadata();
+
+        createDummyDataToPost(
+                orgUnitUid, programUid, programStageUid, trackedEntityUid,
+                eventUid, enrollmentUid, trackedEntityInstanceUid, trackedEntityAttributeUid,
+                dataElementUid
+        );
+
+        createDummyDataToPost(
+                orgUnitUid, programUid, programStageUid, trackedEntityUid,
+                event1Uid, enrollment1Uid, trackedEntityInstance1Uid, trackedEntityAttributeUid,
+                dataElementUid
+        );
+
+        createDummyCompulsoryAttributesDataToPost(trackedEntityInstanceUid);
+        createDummyCompulsoryAttributesDataToPost(trackedEntityInstance1Uid);
+
+        createDummyRelationship(trackedEntityInstanceUid, trackedEntityInstance1Uid);
+
+        Call<Response<WebResponse>> call = d2.syncTrackedEntityInstances();
+        response = call.call();
+
+        assertThat(response.isSuccessful()).isTrue();
+
+        assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstance1Uid);
+
+        assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstanceUid);
+    }
+
+    private void createDummyCompulsoryAttributesDataToPost(String trackedEntityInstanceUid ) {
+        createDummyCompulsoryAttributesDataToPost("last name",
+                "zDhUuAYrxNC", trackedEntityInstanceUid);
+        createDummyCompulsoryAttributesDataToPost("2018-02-05",
+                "gHGyrwKPzej", trackedEntityInstanceUid);
+        createDummyCompulsoryAttributesDataToPost("12324",
+                "lZGmxYbs97q", trackedEntityInstanceUid);
+    }
+
+    private void createDummyCompulsoryAttributesDataToPost(String value, String trackedEntityAttributeUid,
+            String trackedEntityInstanceUid ) {
+        trackedEntityAttributeValueStore.insert(
+                value, new Date(), new Date(), trackedEntityAttributeUid,
+                trackedEntityInstanceUid
+        );
+    }
+
+    private void filAlternativeUidToTestCategoryCombos() {
+        orgUnitUid = "DiszpKrYNg8";
+        programUid = "WSGAb5XwJ3Y";
+        programStageUid = "PUZaKR0Jh2k";
+        trackedEntityUid = "nEenWmSyUEp";
+
+        dataElementUid = "mrVkW9h2Rdp";
+
+        programStageDataElementUid = "tDb3kAS2den";
+        trackedEntityAttributeUid = "w75KJ2mc4zz";
+
+        categoryOptionUid = "M58XdOfhiJ7";
+        categoryComboOptionUid = "oawMLLH7OjA";
+    }
+
     private void assertDownloadTrackedEntityInstanceFromServer(String trackedEntityInstanceUid) throws Exception {
         Response response;TrackedEntityInstanceEndPointCall trackedEntityInstanceEndPointCall =
                 TrackedEntityInstanceCallFactory.create(
