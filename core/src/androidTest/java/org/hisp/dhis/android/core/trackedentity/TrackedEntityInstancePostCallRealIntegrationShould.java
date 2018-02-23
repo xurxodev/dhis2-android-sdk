@@ -63,7 +63,6 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
     private String programStageUid;
     private String dataElementUid;
     private String trackedEntityUid;
-    private String programStageDataElementUid;
     private String trackedEntityAttributeUid;
     private String eventUid;
     private String enrollmentUid;
@@ -98,7 +97,6 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         programStageUid = "A03MvHHogjR";
         dataElementUid = "a3kGcGDCuk6";
         trackedEntityUid = "nEenWmSyUEp";
-        programStageDataElementUid = "LBNxoXdMnkv";
         trackedEntityAttributeUid = "w75KJ2mc4zz";
 
         categoryOptionUid = null;
@@ -149,6 +147,7 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
     @Test
     @LargeTest
     public void response_true_when_data_with_relationship_sync() throws Exception {
+
         Response response = null;
         downloadMetadata();
 
@@ -185,7 +184,8 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
     //Change "default" by "Project" and save
     public void response_true_when_data_sync_with_category_combo() throws Exception {
 
-        filAlternativeUidToTestCategoryCombos();
+        replaceUIdsByUIDsWithCategoryCombos();
+
         Response response = null;
         downloadMetadata();
 
@@ -224,7 +224,7 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
     //Change "default" by "Project" and save
     public void response_true_when_data_with_relationship_and_category_combo_sync() throws Exception {
 
-        filAlternativeUidToTestCategoryCombos();
+        replaceUIdsByUIDsWithCategoryCombos();
 
         Response response = null;
         downloadMetadata();
@@ -256,7 +256,8 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         assertTrackedEntityInstanceWithRelationships(trackedEntityInstanceUid);
     }
 
-    private TrackedEntityInstance assertTrackedEntityInstanceWithRelationships(String trackedEntityInstanceUid) throws Exception {
+    private TrackedEntityInstance assertTrackedEntityInstanceWithRelationships(String trackedEntityInstanceUid)
+            throws Exception {
         TrackedEntityInstance trackedEntityInstance = assertTrackedEntityInstance(trackedEntityInstanceUid);
 
         assertTrackedEntityInstanceFromServerContainsRelationshipRelationship(trackedEntityInstance);
@@ -278,7 +279,8 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         Truth.assertThat(trackedEntityInstance.relationships().size() == 1).isTrue();
     }
 
-    private void assertTrackedEntityInstanceFromServer(TrackedEntityInstance trackedEntityInstance, String trackedEntityInstanceUid){
+    private void assertTrackedEntityInstanceFromServer(TrackedEntityInstance trackedEntityInstance,
+            String trackedEntityInstanceUid){
         Truth.assertThat(trackedEntityInstance.uid().equals(trackedEntityInstanceUid)).isTrue();
         Truth.assertThat(trackedEntityInstance.enrollments().size()==1).isTrue();
         Truth.assertThat(trackedEntityInstance.enrollments().get(0).events().size()==1).isTrue();
@@ -319,16 +321,11 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         );
     }
 
-    private void filAlternativeUidToTestCategoryCombos() {
+    private void replaceUIdsByUIDsWithCategoryCombos() {
         orgUnitUid = "DiszpKrYNg8";
         programUid = "WSGAb5XwJ3Y";
         programStageUid = "PUZaKR0Jh2k";
-        trackedEntityUid = "nEenWmSyUEp";
-
         dataElementUid = "mrVkW9h2Rdp";
-
-        programStageDataElementUid = "tDb3kAS2den";
-        trackedEntityAttributeUid = "w75KJ2mc4zz";
 
         categoryOptionUid = "M58XdOfhiJ7";
         categoryComboOptionUid = "oawMLLH7OjA";
