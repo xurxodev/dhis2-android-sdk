@@ -140,9 +140,10 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
 
         assertThat(response.isSuccessful()).isTrue();
 
-        assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstance1Uid);
 
-        assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstanceUid);
+        assertTrackedEntityInstance(trackedEntityInstance1Uid);
+
+        assertTrackedEntityInstance(trackedEntityInstanceUid);
     }
 
     @Test
@@ -170,14 +171,14 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
 
         assertThat(response.isSuccessful()).isTrue();
 
-        assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstance1Uid);
+        assertTrackedEntityInstanceWithRelationships(trackedEntityInstance1Uid);
 
-        assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstanceUid);
+        assertTrackedEntityInstanceWithRelationships(trackedEntityInstanceUid);
     }
 
 
-    @Test
-    @LargeTest
+    //@Test
+    //@LargeTest
     //To run this test is necessary add  the given category combo into the given program.
     //In dhis web server you need go to Programs/aatributes app
     //Select "WHO RMNCH Tracker"->"Edit"
@@ -210,13 +211,13 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
 
         assertThat(response.isSuccessful()).isTrue();
 
-        assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstance1Uid);
+        assertTrackedEntityInstance(trackedEntityInstance1Uid);
 
-        assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstanceUid);
+        assertTrackedEntityInstance(trackedEntityInstanceUid);
     }
 
-    @Test
-    @LargeTest
+    //@Test
+    //@LargeTest
     //To run this test is necessary add the given category combo into the given program.
     //In dhis web server you need go to Programs/aatributes app
     //Select "WHO RMNCH Tracker"->"Edit"
@@ -250,9 +251,55 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
 
         assertThat(response.isSuccessful()).isTrue();
 
-        assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstance1Uid);
+        assertTrackedEntityInstanceWithRelationships(trackedEntityInstance1Uid);
 
-        assertDownloadTrackedEntityInstanceFromServer(trackedEntityInstanceUid);
+        assertTrackedEntityInstanceWithRelationships(trackedEntityInstanceUid);
+    }
+
+    private TrackedEntityInstance assertTrackedEntityInstanceWithRelationships(String trackedEntityInstanceUid) throws Exception {
+        TrackedEntityInstance trackedEntityInstance = assertTrackedEntityInstance(trackedEntityInstanceUid);
+
+        assertTrackedEntityInstanceFromServerContainsRelationshipRelationship(trackedEntityInstance);
+        return trackedEntityInstance;
+    }
+
+    private TrackedEntityInstance assertTrackedEntityInstance(String trackedEntityInstanceUid) throws Exception {
+        Response response;
+        response = downloadTrackedEntityInstanceFromServer(trackedEntityInstanceUid);
+        Truth.assertThat(response.isSuccessful()).isTrue();
+
+        TrackedEntityInstance trackedEntityInstance = (TrackedEntityInstance)response.body();
+        assertTrackedEntityInstanceFromServer(trackedEntityInstance, trackedEntityInstanceUid);
+        return trackedEntityInstance;
+    }
+
+    private void assertTrackedEntityInstanceFromServerContainsRelationshipRelationship(
+            TrackedEntityInstance trackedEntityInstance) {
+        Truth.assertThat(trackedEntityInstance.relationships().size() == 1).isTrue();
+    }
+
+    private void assertTrackedEntityInstanceFromServer(TrackedEntityInstance trackedEntityInstance, String trackedEntityInstanceUid){
+        Truth.assertThat(trackedEntityInstance.uid().equals(trackedEntityInstanceUid)).isTrue();
+        Truth.assertThat(trackedEntityInstance.enrollments().size()==1).isTrue();
+        Truth.assertThat(trackedEntityInstance.enrollments().get(0).events().size()==1).isTrue();
+        if(categoryOptionUid!=null) {
+            Truth.assertThat(trackedEntityInstance.enrollments().get(0).events().get(
+                    0).attributeCategoryOptions().equals(categoryOptionUid)).isTrue();
+            Truth.assertThat(trackedEntityInstance.enrollments().get(0).events().get(
+                    0).attributeOptionCombo().equals(categoryComboOptionUid)).isTrue();
+        }
+    }
+
+    private void assertPushAndDownloadTrackedEntityInstances(
+            TrackedEntityInstance pushedTrackedEntityInstance, Enrollment pushedEnrollment,
+            Event pushedEvent, TrackedEntityInstance downloadedTrackedEntityInstance,
+            Enrollment downloadedEnrollment, Event downloadedEvent) {
+        assertThat(pushedTrackedEntityInstance.uid().equals(downloadedTrackedEntityInstance.uid())).isTrue();
+        assertThat(pushedTrackedEntityInstance.uid().equals(downloadedTrackedEntityInstance.uid())).isTrue();
+        assertThat(pushedEnrollment.uid().equals(downloadedEnrollment.uid())).isTrue();
+        assertThat(pushedEvent.uid().equals(downloadedEvent.uid())).isTrue();
+        assertThat(pushedEvent.uid().equals(downloadedEvent.uid())).isTrue();
+        verifyEventCategoryAttributes(pushedEvent, downloadedEvent);
     }
 
     private void createDummyCompulsoryAttributesDataToPost(String trackedEntityInstanceUid ) {
@@ -287,14 +334,13 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
         categoryComboOptionUid = "oawMLLH7OjA";
     }
 
-    private void assertDownloadTrackedEntityInstanceFromServer(String trackedEntityInstanceUid) throws Exception {
-        Response response;TrackedEntityInstanceEndPointCall trackedEntityInstanceEndPointCall =
+    private Response downloadTrackedEntityInstanceFromServer(String trackedEntityInstanceUid) throws Exception {
+        Response response;
+        TrackedEntityInstanceEndPointCall trackedEntityInstanceEndPointCall =
                 TrackedEntityInstanceCallFactory.create(
                         d2.retrofit(), databaseAdapter(), trackedEntityInstanceUid);
-
         response = trackedEntityInstanceEndPointCall.call();
-
-        Truth.assertThat(response.isSuccessful()).isTrue();
+        return response;
     }
 
 
@@ -374,18 +420,6 @@ public class TrackedEntityInstancePostCallRealIntegrationShould extends AbsStore
                 "new2", new Date(), new Date(), trackedEntityAttributeUid,
                 trackedEntityInstanceUid
         );
-    }
-
-    private void assertPushAndDownloadTrackedEntityInstances(
-            TrackedEntityInstance pushedTrackedEntityInstance, Enrollment pushedEnrollment,
-            Event pushedEvent, TrackedEntityInstance downloadedTrackedEntityInstance,
-            Enrollment downloadedEnrollment, Event downloadedEvent) {
-        assertThat(pushedTrackedEntityInstance.uid().equals(downloadedTrackedEntityInstance.uid())).isTrue();
-        assertThat(pushedTrackedEntityInstance.uid().equals(downloadedTrackedEntityInstance.uid())).isTrue();
-        assertThat(pushedEnrollment.uid().equals(downloadedEnrollment.uid())).isTrue();
-        assertThat(pushedEvent.uid().equals(downloadedEvent.uid())).isTrue();
-        assertThat(pushedEvent.uid().equals(downloadedEvent.uid())).isTrue();
-        verifyEventCategoryAttributes(pushedEvent, downloadedEvent);
     }
 
     private TrackedEntityInstance getTrackedEntityInstanceFromDB(String trackedEntityInstanceUid) {
