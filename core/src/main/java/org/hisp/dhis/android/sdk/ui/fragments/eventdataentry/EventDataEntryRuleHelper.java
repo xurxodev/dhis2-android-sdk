@@ -285,7 +285,7 @@ public class EventDataEntryRuleHelper implements IProgramRuleFragmentHelper {
                     .newInstance(fragment.getString(R.string.warning_hidefieldwithvalue), dataElementNames
                     );
             eventDataEntryFragment.setValidationErrorDialog(validationErrorDialog);
-            if (fragment.isAdded()) {
+            if (fragment.isAdded()&& fragment.isVisible()) {
                 eventDataEntryFragment.getValidationErrorDialog().show(fragment.getChildFragmentManager());
             }
         }
