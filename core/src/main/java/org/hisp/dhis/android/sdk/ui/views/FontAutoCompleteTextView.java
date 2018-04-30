@@ -29,6 +29,8 @@
 
 package org.hisp.dhis.android.sdk.ui.views;
 
+import static org.hisp.dhis.android.sdk.utils.Preconditions.isNull;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
@@ -64,6 +66,8 @@ public class FontAutoCompleteTextView extends TextView {
     }
 
     private void setFont(final String fontName) {
+        isNull(fontName, "fontName must not be null");
+
         if (getContext() != null && getContext().getAssets() != null && fontName != null) {
             Typeface typeface = TypefaceManager.getTypeface(getContext().getAssets(), fontName);
             if (typeface != null) {

@@ -29,16 +29,18 @@
 
 package org.hisp.dhis.android.sdk.ui.views;
 
+import static org.hisp.dhis.android.sdk.utils.Preconditions.isNull;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.support.v7.widget.AppCompatSpinner;
 import android.util.AttributeSet;
-import android.widget.Spinner;
 
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.utils.TypefaceManager;
 
-public class FontSpinner extends Spinner {
+public class FontSpinner extends AppCompatSpinner {
 
     public FontSpinner(Context context) {
         super(context);
@@ -68,6 +70,8 @@ public class FontSpinner extends Spinner {
     }
 
     public void setFont(final String fontName) {
+        isNull(fontName, "fontName must not be null");
+
         if (getContext() != null && getContext().getAssets() != null && fontName != null) {
             Typeface typeface = TypefaceManager.getTypeface(getContext().getAssets(), fontName);
             /*if (typeface != null) {
