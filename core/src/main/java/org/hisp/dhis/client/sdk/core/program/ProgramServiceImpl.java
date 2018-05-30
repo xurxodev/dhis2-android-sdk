@@ -68,6 +68,13 @@ public final class ProgramServiceImpl implements ProgramService {
     }
 
     @Override
+    public List<Program> list(OrganisationUnit organisationUnit, boolean assignedToCurrentUser,
+            Set<ProgramType> programTypes, String attributeCode, String attributeValue) {
+        return programStore.query(organisationUnit, assignedToCurrentUser, programTypes,
+                attributeCode, attributeValue);
+    }
+
+    @Override
     public List<Program> list(List<OrganisationUnit> organisationUnits) {
         return programStore.query(organisationUnits);
     }

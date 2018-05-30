@@ -47,5 +47,8 @@ public interface ProgramService extends Service, Get<Program>, GetUid<Program>,
 
     List<Program> list(boolean assignedToCurrentUser, Set<ProgramType> programTypes);
 
+    List<Program> list(OrganisationUnit organisationUnit, boolean assignedToCurrentUser,
+            Set<ProgramType> programTypes, String attributeCode, String attributeValue);
+
     List<Program> list(List<OrganisationUnit> organisationUnits);
 }
