@@ -51,5 +51,8 @@ public interface UserProgramInteractor {
 
     Observable<List<Program>> list(Set<ProgramType> programTypes);
 
+    Observable<List<Program>> list(OrganisationUnit organisationUnit, Set<ProgramType> programTypes,
+            String attributeCode, String attributeValue);
+
     Observable<List<Program>> list(List<OrganisationUnit> organisationUnits);
 }

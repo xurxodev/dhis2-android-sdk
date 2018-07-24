@@ -95,6 +95,20 @@ public class UserProgramInteractorImpl implements UserProgramInteractor {
     }
 
     @Override
+    public Observable<List<Program>> list(final OrganisationUnit organisationUnit,
+            final Set<ProgramType> programTypes, final String attributeCode,
+            final String attributeValue) {
+        return Observable.create(new DefaultOnSubscribe<List<Program>>() {
+
+            @Override
+            public List<Program> call() {
+                return programService.list(organisationUnit, true, programTypes,
+                        attributeCode, attributeValue);
+            }
+        });
+    }
+
+    @Override
     public Observable<List<Program>> list(final List<OrganisationUnit> organisationUnits) {
         return Observable.create(new DefaultOnSubscribe<List<Program>>() {
 

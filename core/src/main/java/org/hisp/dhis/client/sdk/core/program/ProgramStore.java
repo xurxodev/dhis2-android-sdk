@@ -41,5 +41,8 @@ public interface ProgramStore extends IdentifiableObjectStore<Program> {
 
     List<Program> query(boolean assignedToCurrentUser, Set<ProgramType> programType);
 
+    List<Program> query(OrganisationUnit organisationUnit, boolean assignedToCurrentUser, Set<ProgramType> programType,
+            String attributeCode, String attributeValue);
+
     List<Program> query(List<OrganisationUnit> units);
 }

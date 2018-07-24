@@ -130,9 +130,9 @@ public class NetworkModuleImpl implements NetworkModule {
     private static final SimpleDateFormat DATE_FORMAT =
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 
-    private static final int DEFAULT_CONNECT_TIMEOUT_MILLIS = 15 * 1000;   // 15s
-    private static final int DEFAULT_READ_TIMEOUT_MILLIS = 20 * 1000;      // 20s
-    private static final int DEFAULT_WRITE_TIMEOUT_MILLIS = 20 * 1000;     // 20s
+    private static final int DEFAULT_CONNECT_TIMEOUT_MILLIS = 30 * 1000;   // 30s
+    private static final int DEFAULT_READ_TIMEOUT_MILLIS = 30 * 1000;      // 30s
+    private static final int DEFAULT_WRITE_TIMEOUT_MILLIS = 30 * 1000;     // 30s
 
     private final OrganisationUnitApiClient organisationUnitApiClient;
     private final AttributeApiClient attributeApiClient;

@@ -28,8 +28,13 @@
 
 package org.hisp.dhis.client.sdk.android.program;
 
+import com.raizlabs.android.dbflow.sql.language.Join;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
+import org.hisp.dhis.client.sdk.android.api.persistence.flow.AttributeFlow;
+import org.hisp.dhis.client.sdk.android.api.persistence.flow.AttributeFlow_Table;
+import org.hisp.dhis.client.sdk.android.api.persistence.flow.AttributeValueFlow;
+import org.hisp.dhis.client.sdk.android.api.persistence.flow.AttributeValueFlow_Table;
 import org.hisp.dhis.client.sdk.android.api.persistence.flow.ModelLinkFlow;
 import org.hisp.dhis.client.sdk.android.api.persistence.flow.ProgramFlow;
 import org.hisp.dhis.client.sdk.android.api.persistence.flow.ProgramFlow_Table;
@@ -43,6 +48,8 @@ import org.hisp.dhis.client.sdk.models.program.ProgramStage;
 import org.hisp.dhis.client.sdk.models.program.ProgramType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -89,6 +96,37 @@ public class ProgramStoreImpl extends
                 .where(ProgramFlow_Table
                         .isAssignedToUser.is(assignedToCurrentUser))
                 .and(ProgramFlow_Table.programType.in(programType))
+                .queryList();
+
+        List<Program> programs = getMapper().mapToModels(programFlows);
+        return queryProgramRelationships(programs);
+    }
+
+    @Override
+    public List<Program> query(OrganisationUnit organisationUnit, boolean assignedToCurrentUser,
+            Set<ProgramType> programType, String attributeCode, String attributeValue) {
+        isNull(programType, "Set of ProgramType must not be null");
+
+        List<ProgramFlow> programByOrgUnitFlows = ModelLinkFlow.queryRelatedModels(ProgramFlow.class,
+                PROGRAM_TO_ORGANISATION_UNITS, Arrays.asList(organisationUnit));
+
+        Set<String> programUIds =  new HashSet<>();
+
+        for (ProgramFlow program: programByOrgUnitFlows) {
+            programUIds.add(program.getUId());
+        }
+
+        List<ProgramFlow> programFlows = new Select()
+                .from(ProgramFlow.class)
+                .join(AttributeValueFlow.class, Join.JoinType.LEFT_OUTER)
+                .on(AttributeValueFlow_Table.reference.eq(ProgramFlow_Table.uId))
+                .join(AttributeFlow.class, Join.JoinType.LEFT_OUTER)
+                .on(AttributeFlow_Table.attributeUId.eq(AttributeValueFlow_Table.attribute))
+                .where(ProgramFlow_Table.isAssignedToUser.is(assignedToCurrentUser))
+                .and(ProgramFlow_Table.programType.in(programType))
+                .and(AttributeFlow_Table.code.is(attributeCode))
+                .and(AttributeValueFlow_Table.value.is(attributeValue))
+                .and(ProgramFlow_Table.uId.in(programUIds))
                 .queryList();
 
         List<Program> programs = getMapper().mapToModels(programFlows);
