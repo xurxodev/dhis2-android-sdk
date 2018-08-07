@@ -59,7 +59,8 @@ public final class SystemInfo {
     @JsonProperty("version")
     String version;
 
-    private static final int latestSupportedAPIVersion = 30;
+    public static final int maxSupportedAPIVersion = 30;
+    public static final int minSupportedAPIVersion = 26;
 
     public SystemInfo() {
         // explicit empty constructor
@@ -122,12 +123,19 @@ public final class SystemInfo {
     }
 
     public int getApiVersion() {
-        String[] completedVersionParts = version.split(Pattern.quote("."));
-        int serverVersion = Integer.parseInt(completedVersionParts[1]);
+        if (version != null) {
+            String[] completedVersionParts = version.split(Pattern.quote("."));
+            int serverVersion = Integer.parseInt(completedVersionParts[1]);
 
-        if (serverVersion > latestSupportedAPIVersion)
-            return latestSupportedAPIVersion;
-        else
-            return serverVersion;
+            if (serverVersion < minSupportedAPIVersion)
+                throw new UnsupportedServerVersionException(serverVersion, minSupportedAPIVersion);
+
+            if (serverVersion > maxSupportedAPIVersion)
+                return maxSupportedAPIVersion;
+            else
+                return serverVersion;
+        } else {
+            return minSupportedAPIVersion;
+        }
     }
 }
