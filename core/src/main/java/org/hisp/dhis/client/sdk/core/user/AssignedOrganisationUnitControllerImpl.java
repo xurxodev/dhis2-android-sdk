@@ -32,6 +32,7 @@ import org.hisp.dhis.client.sdk.core.common.controllers.SyncStrategy;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.core.common.utils.ModelUtils;
 import org.hisp.dhis.client.sdk.core.organisationunit.OrganisationUnitController;
+import org.hisp.dhis.client.sdk.core.systeminfo.SystemInfoController;
 import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
 import org.hisp.dhis.client.sdk.models.user.UserAccount;
 
@@ -40,6 +41,7 @@ import java.util.Set;
 
 public class AssignedOrganisationUnitControllerImpl implements AssignedOrganisationUnitsController {
 
+    private final SystemInfoController systemInfoController;
     // Api Clients
     private final UserApiClient userApiClient;
 
@@ -47,7 +49,9 @@ public class AssignedOrganisationUnitControllerImpl implements AssignedOrganisat
     private final OrganisationUnitController organisationUnitController;
 
     public AssignedOrganisationUnitControllerImpl(
+            SystemInfoController systemInfoController,
             OrganisationUnitController organisationUnitController, UserApiClient userApiClient) {
+        this.systemInfoController = systemInfoController;
         this.userApiClient = userApiClient;
         this.organisationUnitController = organisationUnitController;
     }
@@ -59,7 +63,8 @@ public class AssignedOrganisationUnitControllerImpl implements AssignedOrganisat
 
     @Override
     public void sync(SyncStrategy strategy) throws ApiException {
-        UserAccount userAccount = userApiClient.getUserAccount();
+        UserAccount userAccount = userApiClient.getUserAccount(
+                systemInfoController.getSystemInfo().getApiVersion());
 
         /* get list of assigned organisation units */
         List<OrganisationUnit> assignedOrganisationUnits = userAccount.getOrganisationUnits();

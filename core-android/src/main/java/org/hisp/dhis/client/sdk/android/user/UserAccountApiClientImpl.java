@@ -28,13 +28,13 @@
 
 package org.hisp.dhis.client.sdk.android.user;
 
+import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.call;
+
 import org.hisp.dhis.client.sdk.core.user.UserApiClient;
 import org.hisp.dhis.client.sdk.models.user.UserAccount;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.call;
 
 public class UserAccountApiClientImpl implements UserApiClient {
     private final UserApiClientRetrofit apiClient;
@@ -44,14 +44,14 @@ public class UserAccountApiClientImpl implements UserApiClient {
     }
 
     @Override
-    public UserAccount getUserAccount() {
+    public UserAccount getUserAccount(int apiVersion) {
         Map<String, String> QUERY_PARAMS = new HashMap<>();
         QUERY_PARAMS.put("fields", "id,created,lastUpdated,name,displayName," +
                 "firstName,surname,gender,birthday,introduction," +
                 "education,employer,interests,jobTitle,languages,email,phoneNumber," +
-                "organisationUnits[id],userCredentials[userRoles[dataSets[id],programs[id,programType]]]");
+                "organisationUnits[id,programs[id,programType]],userCredentials[userRoles], programs, dataSets");
 
-        return call(apiClient.getCurrentUserAccount(QUERY_PARAMS));
+        return call(apiClient.getCurrentUserAccount(apiVersion, QUERY_PARAMS));
     }
 
     @Override

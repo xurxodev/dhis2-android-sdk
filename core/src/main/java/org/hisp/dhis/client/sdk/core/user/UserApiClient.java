@@ -31,7 +31,7 @@ package org.hisp.dhis.client.sdk.core.user;
 import org.hisp.dhis.client.sdk.models.user.UserAccount;
 
 public interface UserApiClient {
-    UserAccount getUserAccount();
+    UserAccount getUserAccount(int apiVersion);
 
     void postUserAccount(UserAccount userAccount);
 }

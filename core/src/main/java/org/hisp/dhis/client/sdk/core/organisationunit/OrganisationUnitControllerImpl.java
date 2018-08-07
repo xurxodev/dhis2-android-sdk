@@ -44,6 +44,7 @@ import org.hisp.dhis.client.sdk.core.common.utils.ModelUtils;
 import org.hisp.dhis.client.sdk.core.systeminfo.SystemInfoController;
 import org.hisp.dhis.client.sdk.core.user.UserApiClient;
 import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
+import org.hisp.dhis.client.sdk.models.common.SystemInfo;
 import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
 import org.joda.time.DateTime;
 
@@ -84,7 +85,8 @@ public class OrganisationUnitControllerImpl extends AbsSyncStrategyController<Or
 
     @Override
     protected void synchronize(SyncStrategy strategy, Set<String> uids) {
-        DateTime serverTime = systemInfoController.getSystemInfo().getServerDate();
+        SystemInfo systemInfo = systemInfoController.getSystemInfo();
+        DateTime serverTime = systemInfo.getServerDate();
         DateTime lastUpdated = lastUpdatedPreferences.get(
                 ResourceType.ORGANISATION_UNITS, DateType.SERVER);
 
@@ -122,7 +124,8 @@ public class OrganisationUnitControllerImpl extends AbsSyncStrategyController<Or
 
         // we need to mark assigned organisation units as "assigned" before storing them
         Map<String, OrganisationUnit> assignedOrganisationUnits = ModelUtils
-                .toMap(userApiClient.getUserAccount().getOrganisationUnits());
+                .toMap(userApiClient.getUserAccount(systemInfo.getApiVersion())
+                        .getOrganisationUnits());
 
         for (OrganisationUnit updatedOrganisationUnit : updatedOrganisationUnits) {
             OrganisationUnit assignedOrganisationUnit = assignedOrganisationUnits
@@ -156,7 +159,8 @@ public class OrganisationUnitControllerImpl extends AbsSyncStrategyController<Or
     @Override
     public List<OrganisationUnit> pullAllDescendants(SyncStrategy strategy, String uid)
             throws ApiException {
-        DateTime serverTime = systemInfoController.getSystemInfo().getServerDate();
+        SystemInfo systemInfo = systemInfoController.getSystemInfo();
+        DateTime serverTime = systemInfo.getServerDate();
         DateTime lastUpdated = lastUpdatedPreferences.get(
                 ResourceType.ORGANISATION_UNITS, DateType.SERVER);
 
@@ -183,7 +187,8 @@ public class OrganisationUnitControllerImpl extends AbsSyncStrategyController<Or
 
         // we need to mark assigned organisation units as "assigned" before storing them
         Map<String, OrganisationUnit> assignedOrganisationUnits = ModelUtils
-                .toMap(userApiClient.getUserAccount().getOrganisationUnits());
+                .toMap(userApiClient.getUserAccount(systemInfo.getApiVersion())
+                        .getOrganisationUnits());
 
         for (OrganisationUnit updatedOrganisationUnit : updatedOrganisationUnits) {
             OrganisationUnit assignedOrganisationUnit = assignedOrganisationUnits

@@ -32,7 +32,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
 import org.hisp.dhis.client.sdk.models.common.Access;
 import org.hisp.dhis.client.sdk.models.common.base.IdentifiableObject;
 import org.hisp.dhis.client.sdk.models.common.state.Action;
@@ -41,9 +40,7 @@ import org.hisp.dhis.client.sdk.models.program.Program;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserAccount implements IdentifiableObject {
@@ -125,6 +122,12 @@ public class UserAccount implements IdentifiableObject {
 
     @JsonProperty("organisationUnits")
     List<OrganisationUnit> organisationUnits;
+
+    @JsonProperty("programs")
+    List<String> programsUIds;
+
+    @JsonProperty("dataSets")
+    List<String> dataSets;
 
     public UserAccount() {
         action = Action.SYNCED;
@@ -210,22 +213,43 @@ public class UserAccount implements IdentifiableObject {
         return sortOrder;
     }
 
-    /* Exposing getPrograms() instead of making UserCredentials model public */
     public List<Program> getPrograms() {
-        Map<String, Program> programMap = new HashMap<>();
-        if (userCredentials != null && userCredentials.getUserRoles() != null) {
+        List<Program> programs = new ArrayList<>();
 
-            /* go through all UserRoles and extract assigned programs */
-            for (UserRole userRole : userCredentials.getUserRoles()) {
-                if (userRole.getPrograms() != null) {
-                    for (Program program : userRole.getPrograms()) {
-                        programMap.put(program.getUId(), program);
+        for(String programUid : programsUIds){
+            Program programAssociatedToOrgUnit = findProgramInOrgUnits(programUid);
+
+            if (programAssociatedToOrgUnit == null) {
+                Program program = new Program();
+                program.setUId(programUid);
+                programs.add(program);
+            } else {
+                programs.add(programAssociatedToOrgUnit);
+            }
+        }
+
+        return programs;
+    }
+
+    private Program findProgramInOrgUnits(String programUid) {
+        Program existedProgram = null;
+
+        if (organisationUnits != null) {
+            for (OrganisationUnit orgUnit : organisationUnits) {
+                if (orgUnit.getPrograms() != null) {
+                    for (Program program : orgUnit.getPrograms()) {
+                        if (program.getUId().equals(programUid))
+                            existedProgram = program;
                     }
                 }
             }
         }
 
-        return new ArrayList<>(programMap.values());
+        return existedProgram;
+    }
+
+    public List<String> getDataSets() {
+        return dataSets;
     }
 
     public List<OrganisationUnit> getOrganisationUnits() {

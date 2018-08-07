@@ -183,7 +183,7 @@ public class ControllersModuleImpl implements ControllersModule {
                 preferencesModule.getLastUpdatedPreferences(),
                 persistenceModule.getTransactionManager());
 
-        assignedProgramsController = new AssignedProgramsControllerImpl(
+        assignedProgramsController = new AssignedProgramsControllerImpl(systemInfoController,
                 programControllerImpl, networkModule.getUserApiClient());
 
         organisationUnitController = new OrganisationUnitControllerImpl(
@@ -202,9 +202,10 @@ public class ControllersModuleImpl implements ControllersModule {
                 persistenceModule.getTransactionManager());
 
         assignedOrganisationUnitsController = new AssignedOrganisationUnitControllerImpl(
-                organisationUnitController, networkModule.getUserApiClient());
+                systemInfoController, organisationUnitController, networkModule.getUserApiClient());
 
         userAccountController = new UserAccountControllerImpl(
+                systemInfoController,
                 networkModule.getUserApiClient(),
                 persistenceModule.getUserAccountStore(),
                 persistenceModule.getAttributeValueStore(),

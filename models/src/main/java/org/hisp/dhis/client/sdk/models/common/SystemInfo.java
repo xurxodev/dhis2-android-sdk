@@ -33,6 +33,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.joda.time.DateTime;
 
+import java.util.regex.Pattern;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class SystemInfo {
 
@@ -56,6 +58,8 @@ public final class SystemInfo {
 
     @JsonProperty("version")
     String version;
+
+    private static final int latestSupportedAPIVersion = 30;
 
     public SystemInfo() {
         // explicit empty constructor
@@ -115,5 +119,15 @@ public final class SystemInfo {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public int getApiVersion() {
+        String[] completedVersionParts = version.split(Pattern.quote("."));
+        int serverVersion = Integer.parseInt(completedVersionParts[1]);
+
+        if (serverVersion > latestSupportedAPIVersion)
+            return latestSupportedAPIVersion;
+        else
+            return serverVersion;
     }
 }
