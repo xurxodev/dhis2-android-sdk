@@ -122,6 +122,10 @@ public final class TrackerController extends ResourceController {
         return TrackerDataLoader.getEndDate();
     }
 
+    public static void setDownloadData(boolean downloadData){
+        TrackerDataLoader.setDownloadData(downloadData);
+    }
+
     /**
      * Returns false if some data value flags that have been enabled have not been downloaded.
      *
@@ -449,6 +453,7 @@ public final class TrackerController extends ResourceController {
      * Loads datavalues from the server and stores it in local persistence.
      */
     public static void loadDataValues(Context context, DhisApi dhisApi) throws APIException {
+
         UiUtils.postProgressMessage(context.getString(R.string.loading_metadata));
         TrackerDataLoader.updateDataValueDataItems(context, dhisApi);
     }
