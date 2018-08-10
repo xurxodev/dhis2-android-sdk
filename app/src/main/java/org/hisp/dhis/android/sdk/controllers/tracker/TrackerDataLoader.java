@@ -29,15 +29,15 @@
 
 package org.hisp.dhis.android.sdk.controllers.tracker;
 
+import static org.hisp.dhis.android.sdk.utils.NetworkUtils.unwrapResponse;
+
 import android.content.Context;
 import android.util.Log;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.controllers.ApiEndpointContainer;
-import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.controllers.LoadingController;
 import org.hisp.dhis.android.sdk.controllers.ResourceController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
@@ -56,7 +56,6 @@ import org.hisp.dhis.android.sdk.persistence.models.meta.DbOperation;
 import org.hisp.dhis.android.sdk.persistence.preferences.DateTimeManager;
 import org.hisp.dhis.android.sdk.persistence.preferences.ResourceType;
 import org.hisp.dhis.android.sdk.utils.DbUtils;
-import org.hisp.dhis.android.sdk.utils.StringUtils;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
 import org.hisp.dhis.android.sdk.utils.Utils;
 import org.hisp.dhis.android.sdk.utils.api.ProgramType;
@@ -64,15 +63,12 @@ import org.hisp.dhis.android.sdk.utils.log.SdkLogger;
 import org.hisp.dhis.android.sdk.utils.support.DateUtils;
 import org.joda.time.DateTime;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import static org.hisp.dhis.android.sdk.utils.NetworkUtils.unwrapResponse;
 
 /**
  * @author Simen Skogly Russnes on 24.08.15.
@@ -95,6 +91,8 @@ final class TrackerDataLoader extends ResourceController {
      * End date to retrieve from server
      */
     private static String endDate = WITHOUT_DATE;
+
+    private static boolean isDownloadData;
 
     /**
      * save event changes value by value
@@ -151,14 +149,18 @@ final class TrackerDataLoader extends ResourceController {
      * Loads datavalue items that is scheduled to be loaded but has not yet been.
      */
     static void updateDataValueDataItems(Context context, DhisApi dhisApi) throws APIException {
-        updateDataValueDataItems(context,dhisApi,false);
+        if(isDownloadData) {
+            updateDataValueDataItems(context, dhisApi, false);
+        }
     }
 
     /**
      * Loads datavalue items that is scheduled to be loaded but has not yet been.
      */
     static void updateLastDataValueDataItems(Context context, DhisApi dhisApi) throws APIException {
-        updateDataValueDataItems(context, dhisApi, true);
+        if(isDownloadData) {
+            updateDataValueDataItems(context, dhisApi, true);
+        }
     }
     /**
      * Loads datavalue items that is scheduled to be loaded but has not yet been.
@@ -256,7 +258,8 @@ final class TrackerDataLoader extends ResourceController {
         map.put("fields", "event,eventDate");
 
         Event lastEvent=null;
-        JsonNode response = dhisApi.getMinimizedEvents(programUid, organisationUnitUid, map);
+        JsonNode response = dhisApi.getMinimizedEvents(programUid, organisationUnitUid, map,
+                startDate,endDate);
         List<Event> pageEvents = EventsWrapper.getEvents(response);
         for(Event event:pageEvents){
             if(lastEvent==null || DateUtils.parseDate(lastEvent.getEventDate()).before(DateUtils.parseDate(event.getEventDate()))){
@@ -446,5 +449,9 @@ final class TrackerDataLoader extends ResourceController {
 
         Event updatedEvent = dhisApi.getEvent(uid, QUERY_MAP_FULL);
         return updatedEvent;
+    }
+
+    public static void setDownloadData(boolean downloadData) {
+        isDownloadData=downloadData;
     }
 }

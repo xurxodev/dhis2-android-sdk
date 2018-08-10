@@ -116,6 +116,7 @@ public final class DhisController {
 
     static void loadLastData(Context context) throws APIException, IllegalStateException {
         LoadingController.loadMetaData(context, getInstance().getDhisApi());
+
         LoadingController.loadLastDataValues(context, getInstance().getDhisApi());
     }
 
