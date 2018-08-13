@@ -44,7 +44,7 @@
     <LinearLayout
         android:id="@+id/login_views_container"
         android:layout_width="390dp"
-        android:layout_height="340dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
 
