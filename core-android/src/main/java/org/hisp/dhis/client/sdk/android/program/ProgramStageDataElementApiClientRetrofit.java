@@ -29,7 +29,7 @@
 package org.hisp.dhis.client.sdk.android.program;
 
 
-import org.hisp.dhis.client.sdk.models.program.ProgramStageDataElement;
+import org.hisp.dhis.client.sdk.models.program.Program;
 
 import java.util.List;
 import java.util.Map;
@@ -40,7 +40,7 @@ import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 public interface ProgramStageDataElementApiClientRetrofit {
-    @GET("programStageDataElements")
-    Call<Map<String, List<ProgramStageDataElement>>> getProgramStageDataElements(
+    @GET("programs")
+    Call<Map<String, List<Program>>> getProgramStageDataElements(
             @QueryMap Map<String, String> queryMap, @Query("filter") List<String> filters);
 }
