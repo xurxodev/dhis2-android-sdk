@@ -76,7 +76,7 @@ public enum ValueType {
             BOOLEAN, TRUE_ONLY));
 
     public static final Set<ValueType> TEXT_TYPES = new HashSet<>(Arrays.asList(
-            TEXT, LONG_TEXT, LETTER, COORDINATE, TIME, URL));
+            TEXT, LONG_TEXT, LETTER, COORDINATE, TIME, URL, EMAIL));
 
     public static final Set<ValueType> DATE_TYPES = new HashSet<>(Arrays.asList(
             DATE, DATETIME, AGE));

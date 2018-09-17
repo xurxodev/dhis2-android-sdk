@@ -286,4 +286,7 @@
     <string name="pull">Starting pull...</string>
     <string name="error_url">Invalid url</string>
     <string name="enter_url">Please enter a valid url</string>
+
+    <string name="error_email">Invalid email</string>
+    <string name="enter_email">Please enter a valid email</string>
 </resources>
