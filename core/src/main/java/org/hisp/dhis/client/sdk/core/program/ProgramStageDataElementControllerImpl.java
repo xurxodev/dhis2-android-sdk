@@ -41,11 +41,13 @@ import org.hisp.dhis.client.sdk.core.common.preferences.ResourceType;
 import org.hisp.dhis.client.sdk.core.common.utils.ModelUtils;
 import org.hisp.dhis.client.sdk.core.dataelement.DataElementController;
 import org.hisp.dhis.client.sdk.core.systeminfo.SystemInfoController;
+import org.hisp.dhis.client.sdk.models.dataelement.DataElement;
 import org.hisp.dhis.client.sdk.models.program.ProgramStageDataElement;
 import org.hisp.dhis.client.sdk.models.program.ProgramStageSection;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -174,21 +176,31 @@ public class ProgramStageDataElementControllerImpl
             return updatedElements;
         }
 
-        Map<String, ProgramStageDataElement> stageDataElementMap =
-                ModelUtils.toMap(updatedElements);
+        Map<String, ProgramStageDataElement> stageDataElementMap = new HashMap<>();
+
+        if (updatedElements != null) {
+            for (ProgramStageDataElement programStageDataElement : updatedElements) {
+                if (programStageDataElement.getDataElement() != null) {
+                    stageDataElementMap.put(programStageDataElement.getDataElement().getUId(),
+                            programStageDataElement);
+                }
+            }
+        }
+
         for (ProgramStageSection stageSection : sections) {
-            if (stageSection.getProgramStageDataElements() == null ||
-                    stageSection.getProgramStageDataElements().isEmpty()) {
+            if (stageSection.getDataElements() == null ||
+                    stageSection.getDataElements().isEmpty()) {
                 continue;
             }
 
-            for (ProgramStageDataElement element : stageSection.getProgramStageDataElements()) {
+            for (DataElement dataElement : stageSection.getDataElements()) {
                 ProgramStageDataElement updatedDataElement =
-                        stageDataElementMap.get(element.getUId());
+                        stageDataElementMap.get(dataElement.getUId());
                 updatedDataElement.setProgramStageSection(stageSection);
-                updatedDataElement.setSortOrderWithinProgramStageSection(element.getSortOrderWithinProgramStageSection());
             }
         }
+
+
 
         return updatedElements;
     }

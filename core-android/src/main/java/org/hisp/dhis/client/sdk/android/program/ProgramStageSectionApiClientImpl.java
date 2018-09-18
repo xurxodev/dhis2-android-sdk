@@ -76,7 +76,7 @@ public class ProgramStageSectionApiClientImpl implements ProgramStageSectionApiC
 
         @Override
         public String getBasicProperties() {
-            return "id,programStageDataElements[id]";
+            return "id,dataElements[id]";
         }
 
         @Override

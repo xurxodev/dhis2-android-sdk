@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.hisp.dhis.client.sdk.models.common.base.BaseIdentifiableObject;
+import org.hisp.dhis.client.sdk.models.dataelement.DataElement;
 
 import java.util.Comparator;
 import java.util.List;
@@ -49,6 +50,9 @@ public final class ProgramStageSection extends BaseIdentifiableObject {
 
     @JsonProperty("programStageDataElements")
     private List<ProgramStageDataElement> programStageDataElements;
+
+    @JsonProperty("dataElements")
+    private List<DataElement> dataElements;
 
     @JsonProperty("programIndicators")
     private List<ProgramIndicator> programIndicators;
@@ -76,6 +80,15 @@ public final class ProgramStageSection extends BaseIdentifiableObject {
     public void setProgramStageDataElements(List<ProgramStageDataElement>
                                                     programStageDataElements) {
         this.programStageDataElements = programStageDataElements;
+    }
+
+    public List<DataElement> getDataElements() {
+        return dataElements;
+    }
+
+    public void setDataElements(List<DataElement>
+            dataElements) {
+        this.dataElements = dataElements;
     }
 
     public List<ProgramIndicator> getProgramIndicators() {

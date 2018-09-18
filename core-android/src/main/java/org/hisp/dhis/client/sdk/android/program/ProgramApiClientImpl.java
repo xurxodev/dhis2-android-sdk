@@ -31,6 +31,7 @@ package org.hisp.dhis.client.sdk.android.program;
 import org.hisp.dhis.client.sdk.android.api.network.ApiResource;
 import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
+import org.hisp.dhis.client.sdk.core.dataelement.DataElementApiClient;
 import org.hisp.dhis.client.sdk.core.program.ProgramApiClient;
 import org.hisp.dhis.client.sdk.models.optionset.Option;
 import org.hisp.dhis.client.sdk.models.optionset.OptionSet;
@@ -38,8 +39,11 @@ import org.hisp.dhis.client.sdk.models.program.Program;
 import org.hisp.dhis.client.sdk.models.program.ProgramStage;
 import org.hisp.dhis.client.sdk.models.program.ProgramStageDataElement;
 import org.hisp.dhis.client.sdk.models.program.ProgramStageSection;
+import org.hisp.dhis.client.sdk.models.dataelement.DataElement;
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -84,31 +88,52 @@ public class ProgramApiClientImpl implements ProgramApiClient {
             @Override
             public String getDescendantProperties() {
                 return IDENTIFIABLE_PROPERTIES + "," + ATTRIBUTEVALUES_PROPERTIES
-                        + ",version,programType,organisationUnits[id],trackedEntity[" + IDENTIFIABLE_PROPERTIES + "]," +
-                        "programTrackedEntityAttributes[" + IDENTIFIABLE_PROPERTIES + ",mandatory," + // start programTrackedEntityAttributes
-                        "displayShortName,externalAccess,valueType,allowFutureDate,displayInList,program[id]," +
-                        "trackedEntityAttribute[" + IDENTIFIABLE_PROPERTIES + ",unique,programScope," + // start trackedEntityAttribute of parent programTrackedEntityAttributes
-                        "orgunitScope,displayInListNoProgram,displayOnVisitSchedule,externalAccess," +
-                        "valueType,confidential,inherit,sortOrderVisitSchedule,dimension,sortOrderInListNoProgram," +
-                        "optionSet[" + IDENTIFIABLE_PROPERTIES + ",version,options[" + IDENTIFIABLE_PROPERTIES + ",code]]]]" + //end programTrackedEntityAttributes
+                        + ",version,programType,organisationUnits[id],trackedEntity["
+                        + IDENTIFIABLE_PROPERTIES + "]," +
+                        "programTrackedEntityAttributes[" + IDENTIFIABLE_PROPERTIES + ",mandatory,"
+                        + // start programTrackedEntityAttributes
+                        "displayShortName,externalAccess,valueType,allowFutureDate,displayInList,"
+                        + "program[id],"
+                        +
+                        "trackedEntityAttribute[" + IDENTIFIABLE_PROPERTIES
+                        + ",unique,programScope," +
+                        // start trackedEntityAttribute of parent programTrackedEntityAttributes
+                        "orgunitScope,displayInListNoProgram,displayOnVisitSchedule,externalAccess,"
+                        +
+                        "valueType,confidential,inherit,sortOrderVisitSchedule,dimension,"
+                        + "sortOrderInListNoProgram,"
+                        +
+                        "optionSet[" + IDENTIFIABLE_PROPERTIES + ",version,options["
+                        + IDENTIFIABLE_PROPERTIES + ",code]]]]" +
+                        //end programTrackedEntityAttributes
                         ",displayFrontPageList,useFirstStageDuringRegistration," +
-                        "selectEnrollmentDatesInFuture,incidentDateLabel,selectIncidentDatesInFuture," +
-                        "onlyEnrollOnce,enrollmentDateLabel,ignoreOverdueEvents,displayIncidentDate," +
+                        "selectEnrollmentDatesInFuture,incidentDateLabel,"
+                        + "selectIncidentDatesInFuture,"
+                        +
+                        "onlyEnrollOnce,enrollmentDateLabel,ignoreOverdueEvents,"
+                        + "displayIncidentDate,"
+                        +
                         "withoutRegistration,registration,relationshipFromA," +
-                        "programStages[" + IDENTIFIABLE_PROPERTIES + ",dataEntryType," + // start programStages
+                        "programStages[" + IDENTIFIABLE_PROPERTIES + ",dataEntryType," +
+                        // start programStages
                         "blockEntryForm,reportDateDescription,executionDateLabel," +
                         "displayGenerateEventBox,description,externalAccess,openAfterEnrollment," +
                         "captureCoordinates,defaultTemplateMessage,remindCompleted," +
                         "validCompleteOnly,sortOrder,generatedByEnrollmentDate,preGenerateUID," +
                         "autoGenerateEvent,allowGenerateNextVisit,repeatable,minDaysFromStart," +
-                        "program[id],programStageSections[" + IDENTIFIABLE_PROPERTIES + ",sortOrder," + // start programStageSections of parent programStages
-                        "programStage[id],programStageDataElements[id]" + "]," +
-                        "programStageDataElements[" + IDENTIFIABLE_PROPERTIES + ",programStage[id]," + // start programStageDataElements of parent programStageSections
+                        "program[id],programStageSections[" + IDENTIFIABLE_PROPERTIES
+                        + ",sortOrder," + // start programStageSections of parent programStages
+                        "programStage[id],dataElements[id]" + "]," +
+                        "programStageDataElements[" + IDENTIFIABLE_PROPERTIES + ",programStage[id],"
+                        + // start programStageDataElements of parent programStageSections
                         "allowFutureDate,sortOrder,displayInReports,allowProvidedElsewhere," +
-                        "compulsory,dataElement[code,description," +ATTRIBUTEVALUES_PROPERTIES + "," +
-                        IDENTIFIABLE_PROPERTIES + "shortName,valueType," + // start dataElement of parent programStageDataElements
+                        "compulsory,dataElement[code,description," + ATTRIBUTEVALUES_PROPERTIES
+                        + "," +
+                        IDENTIFIABLE_PROPERTIES + "shortName,valueType," +
+                        // start dataElement of parent programStageDataElements
                         "zeroIsSignificant,aggregationOperator,formName,numberType,domainType," +
-                        "dimension,displayFormName,optionSet[" + IDENTIFIABLE_PROPERTIES + // start optionSet of parent dataElement
+                        "dimension,displayFormName,optionSet[" + IDENTIFIABLE_PROPERTIES +
+                        // start optionSet of parent dataElement
                         ",version,options[" + IDENTIFIABLE_PROPERTIES + ",code]]]]]"; // end
             }
 
@@ -121,25 +146,46 @@ public class ProgramApiClientImpl implements ProgramApiClient {
 
         List<Program> programs = getCollection(apiResource, fields, lastUpdated, uids);
 
+
         for (Program program : programs) {
             if (program.getProgramStages() != null && !program.getProgramStages().isEmpty()) {
                 for (ProgramStage programStage : program.getProgramStages()) {
-                    if (programStage.getProgramStageSections() != null && !programStage.getProgramStageSections().isEmpty()) {
-                        for (ProgramStageSection programStageSection : programStage.getProgramStageSections()) {
-                            if (programStageSection.getProgramStageDataElements() != null && !programStageSection.getProgramStageDataElements().isEmpty()) {
-                                for (int i = 0; i < programStageSection.getProgramStageDataElements().size(); i++) {
-                                    ProgramStageDataElement programStageDataElement = programStageSection.getProgramStageDataElements().get(i);
-                                    programStageDataElement.setSortOrderWithinProgramStageSection(i);
+                    if (programStage.getProgramStageSections() != null
+                            && !programStage.getProgramStageSections().isEmpty()) {
+                        for (ProgramStageSection programStageSection : programStage
+                                .getProgramStageSections()) {
+
+                            AssignProgramStageDataElementToSections(programStageSection,
+                                    programStage.getProgramStageDataElements());
+
+                            if (programStageSection.getProgramStageDataElements() != null
+                                    && !programStageSection.getProgramStageDataElements().isEmpty
+                                    ()) {
+                                for (int i = 0; i
+                                        < programStageSection.getProgramStageDataElements().size();
+                                        i++) {
+                                    ProgramStageDataElement programStageDataElement =
+                                            programStageSection.getProgramStageDataElements().get(
+                                                    i);
+                                    programStageDataElement.setSortOrderWithinProgramStageSection(
+                                            i);
                                 }
                             }
 
-                            if (programStage.getProgramStageDataElements() != null && !programStage.getProgramStageDataElements().isEmpty()) {
-                                for (ProgramStageDataElement programStageDataElement : programStage.getProgramStageDataElements()) {
-                                    if (programStageDataElement.getDataElement() != null && programStageDataElement.getDataElement().getOptionSet() != null) {
-                                        OptionSet optionSet = programStageDataElement.getDataElement().getOptionSet();
+                            if (programStage.getProgramStageDataElements() != null
+                                    && !programStage.getProgramStageDataElements().isEmpty()) {
+                                for (ProgramStageDataElement programStageDataElement :
+                                        programStage.getProgramStageDataElements()) {
+                                    if (programStageDataElement.getDataElement() != null &&
+                                            programStageDataElement.getDataElement().getOptionSet()
+                                                    != null) {
+                                        OptionSet optionSet =
+                                                programStageDataElement.getDataElement()
+                                                        .getOptionSet();
 
                                         if (optionSet.getOptions() != null) {
-                                            for (int i = 0; i < optionSet.getOptions().size(); i++) {
+                                            for (int i = 0; i < optionSet.getOptions().size();
+                                                    i++) {
                                                 Option option = optionSet.getOptions().get(i);
                                                 option.setSortOrder(i);
                                             }
@@ -153,5 +199,32 @@ public class ProgramApiClientImpl implements ProgramApiClient {
             }
         }
         return programs;
+    }
+
+    private void AssignProgramStageDataElementToSections(ProgramStageSection programStageSection,
+            List<ProgramStageDataElement> programStageDataElements) {
+        Map<String, ProgramStageDataElement> stageDataElementMap = new HashMap<>();
+
+        if (programStageDataElements != null) {
+            for (ProgramStageDataElement programStageDataElement : programStageDataElements) {
+                if (programStageDataElement.getDataElement() != null) {
+                    stageDataElementMap.put(programStageDataElement.getDataElement().getUId(),
+                            programStageDataElement);
+                }
+            }
+        }
+
+        List<ProgramStageDataElement> programStageDataElementsToAddInSection = new ArrayList<>();
+
+        if (programStageSection.getDataElements() != null) {
+            for (DataElement dataElement : programStageSection.getDataElements()) {
+                ProgramStageDataElement programStageDataElement =
+                        stageDataElementMap.get(dataElement.getUId());
+
+                programStageDataElementsToAddInSection.add(programStageDataElement);
+            }
+        }
+
+        programStageSection.setProgramStageDataElements(programStageDataElementsToAddInSection);
     }
 }
