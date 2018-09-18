@@ -28,20 +28,23 @@
 
 package org.hisp.dhis.client.sdk.android.program;
 
-import org.hisp.dhis.client.sdk.android.api.network.ApiResource;
+import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.call;
+import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.unwrap;
+
 import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
+import org.hisp.dhis.client.sdk.core.common.utils.CollectionUtils;
 import org.hisp.dhis.client.sdk.core.program.ProgramStageDataElementApiClient;
 import org.hisp.dhis.client.sdk.models.program.ProgramStageDataElement;
+import org.hisp.dhis.client.sdk.models.program.Program;
+import org.hisp.dhis.client.sdk.models.program.ProgramStage;
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import retrofit2.Call;
-
-import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.getCollection;
 
 public class ProgramStageDataElementApiClientImpl implements ProgramStageDataElementApiClient {
     private final ProgramStageDataElementApiClientRetrofit apiClientRetrofit;
@@ -55,38 +58,83 @@ public class ProgramStageDataElementApiClientImpl implements ProgramStageDataEle
     public List<ProgramStageDataElement> getProgramStageDataElements(
             Fields fields, DateTime lastUpdated, Set<String> uids) throws ApiException {
 
-        ApiResource<ProgramStageDataElement> apiResource = new ApiResource<ProgramStageDataElement>() {
 
-            @Override
-            public String getResourceName() {
-                return "programStageDataElements";
+        Map<String, String> queryMap = new HashMap<>();
+        List<String> filters = new ArrayList<>();
+
+        /* disable paging */
+        queryMap.put("paging", "false");
+
+        /* filter programs by lastUpdated field */
+        if (lastUpdated != null) {
+            filters.add("lastUpdated:gt:" + lastUpdated.toString());
+        }
+
+        addFields(fields, queryMap);
+
+        List<ProgramStageDataElement> models = new ArrayList<>();
+        List<Program> programs = new ArrayList<>();
+        if (uids != null && !uids.isEmpty()) {
+
+            // splitting up request into chunks
+            List<String> idFilters = buildIdFilter(uids);
+            for (String idFilter : idFilters) {
+                List<String> combinedFilters = new ArrayList<>(filters);
+                combinedFilters.add(idFilter);
+
+                // downloading subset of models
+                programs.addAll(unwrap(call(
+                        apiClientRetrofit.getProgramStageDataElements(queryMap,combinedFilters)),
+                        "programs"));
             }
+        } else {
+            programs.addAll(unwrap(call(
+                    apiClientRetrofit.getProgramStageDataElements(queryMap,filters)),
+                    "programs"));
 
-            @Override
-            public String getBasicProperties() {
-                return "id";
+        }
+
+        for (Program program:programs) {
+            if (program.getProgramStages() != null){
+                for (ProgramStage programStage:program.getProgramStages()) {
+                    if (programStage.getProgramStageDataElements() != null){
+                        for (ProgramStageDataElement programStageDataElement:programStage.getProgramStageDataElements()){
+                            models.add(programStageDataElement);
+                        }
+                    }
+                }
             }
+        }
 
-            @Override
-            public String getAllProperties() {
-                return "id,created,lastUpdated,access," +
+        return models;
+    }
+
+    private void addFields(Fields fields, Map<String, String> queryMap) {
+        switch (fields) {
+            case BASIC: {
+                queryMap.put("fields", "programStages[programStageDataElements[id]]");
+                break;
+            }
+            case ALL: {
+                queryMap.put("fields", "programStages[programStageDataElements[" +
+                        "id,created,lastUpdated,access," +
                         "programStage[id],dataElement[id],allowFutureDate," +
-                        "sortOrder,displayInReports,allowProvidedElsewhere,compulsory";
+                        "sortOrder,displayInReports,allowProvidedElsewhere,compulsory]]");
+                break;
             }
+        }
+    }
 
-            @Override
-            public String getDescendantProperties() {
-                throw new UnsupportedOperationException();
+    private static List<String> buildIdFilter(Set<String> ids) {
+        List<String> idFilters = new ArrayList<>();
+
+        if (ids != null && !ids.isEmpty()) {
+            List<List<String>> splittedIds = CollectionUtils.slice(new ArrayList<>(ids), 64);
+            for (List<String> listOfIds : splittedIds) {
+                idFilters.add(CollectionUtils.join(listOfIds, ";"));
             }
+        }
 
-            @Override
-            public Call<Map<String, List<ProgramStageDataElement>>> getEntities(
-                    Map<String, String> queryMap, List<String> filters) throws
-                    ApiException {
-                return apiClientRetrofit.getProgramStageDataElements(queryMap, filters);
-            }
-        };
-
-        return getCollection(apiResource, fields, lastUpdated, uids);
+        return idFilters;
     }
 }
