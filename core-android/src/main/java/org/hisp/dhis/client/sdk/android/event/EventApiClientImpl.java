@@ -89,6 +89,16 @@ public class EventApiClientImpl implements EventApiClient {
     }
 
     @Override
+    public List<ApiMessage> putEvents(List<Event> events) throws ApiException {
+        List<ApiMessage> apiMessages = new ArrayList<>();
+        for(Event event : events){
+            apiMessages.add(call(eventApiclientRetrofit.putEvent(event.getUId(), event)));
+        }
+
+        return apiMessages;
+    }
+
+    @Override
     public ApiMessage deleteEvent(Event event) throws ApiException {
         return call(eventApiclientRetrofit.deleteEvent(event.getUId()));
     }

@@ -45,5 +45,7 @@ public interface EventApiClient {
 
     ApiMessage postEvents(List<Event> events) throws ApiException;
 
+    List<ApiMessage> putEvents(List<Event> events) throws ApiException;
+
     ApiMessage deleteEvent(Event event) throws ApiException;
 }
