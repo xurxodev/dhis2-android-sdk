@@ -48,6 +48,7 @@ import org.hisp.dhis.client.sdk.core.systeminfo.SystemInfoController;
 import org.hisp.dhis.client.sdk.core.trackedentity.TrackedEntityController;
 import org.hisp.dhis.client.sdk.core.user.UserApiClient;
 import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
+import org.hisp.dhis.client.sdk.models.common.SystemInfo;
 import org.hisp.dhis.client.sdk.models.dataelement.DataElement;
 import org.hisp.dhis.client.sdk.models.optionset.Option;
 import org.hisp.dhis.client.sdk.models.optionset.OptionSet;
@@ -138,7 +139,8 @@ public class ProgramControllerImpl extends
     }
 
     private void synchronizeByLastUpdated(Set<String> uids) {
-        DateTime serverTime = systemInfoController.getSystemInfo().getServerDate();
+        SystemInfo systemInfo = systemInfoController.getSystemInfo();
+        DateTime serverTime = systemInfo.getServerDate();
         DateTime lastUpdated = lastUpdatedPreferences.get(ResourceType.PROGRAMS, DateType.SERVER);
 
         List<Program> persistedPrograms = identifiableObjectStore.queryAll();
@@ -172,7 +174,7 @@ public class ProgramControllerImpl extends
         // we need to mark assigned programs as "assigned" before storing them
         // TODO remove this call (additional request which performs check if user is assigned)
         Map<String, Program> assignedPrograms = toMap(userApiClient
-                .getUserAccount().getPrograms());
+                .getUserAccount(systemInfo.getApiVersion()).getPrograms());
 
         for (Program updatedProgram : updatedPrograms) {
             Program assignedProgram = assignedPrograms.get(updatedProgram.getUId());
@@ -274,7 +276,7 @@ public class ProgramControllerImpl extends
 
         // we need to mark assigned programs as "assigned" before storing them
         Map<String, Program> assignedPrograms = toMap(userApiClient
-                .getUserAccount().getPrograms());
+                .getUserAccount(systemInfoController.getSystemInfo().getApiVersion()).getPrograms());
 
         for (Program updatedProgram : updatedPrograms) {
             Program assignedProgram = assignedPrograms.get(updatedProgram.getUId());

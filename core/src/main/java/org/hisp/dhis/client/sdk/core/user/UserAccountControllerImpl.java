@@ -31,22 +31,18 @@ package org.hisp.dhis.client.sdk.core.user;
 import org.hisp.dhis.client.sdk.core.attribute.AttributeValueStore;
 import org.hisp.dhis.client.sdk.core.common.StateStore;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
-import org.hisp.dhis.client.sdk.core.common.persistence.DbOperation;
-import org.hisp.dhis.client.sdk.core.common.persistence.DbOperationImpl;
-import org.hisp.dhis.client.sdk.core.common.persistence.DbUtils;
 import org.hisp.dhis.client.sdk.core.common.persistence.TransactionManager;
-import org.hisp.dhis.client.sdk.models.attribute.AttributeValue;
+import org.hisp.dhis.client.sdk.core.systeminfo.SystemInfoController;
 import org.hisp.dhis.client.sdk.models.common.state.Action;
-import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
 import org.hisp.dhis.client.sdk.models.user.UserAccount;
 import org.hisp.dhis.client.sdk.utils.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public final class UserAccountControllerImpl implements UserAccountController {
     private static final String TAG = UserAccountControllerImpl.class.getSimpleName();
 
+    private final SystemInfoController systemInfoController;
     private final UserApiClient userApiClient;
     private final UserAccountStore userAccountStore;
     private final StateStore stateStore;
@@ -55,11 +51,14 @@ public final class UserAccountControllerImpl implements UserAccountController {
     private final AttributeValueStore attributeValueStore;
     private final TransactionManager transactionManager;
 
-    public UserAccountControllerImpl(UserApiClient userApiClient,
-                                     UserAccountStore userAccountStore,
-                                     AttributeValueStore attributeValueStore,
-                                     TransactionManager transactionManager,
-                                     StateStore stateStore, Logger logger) {
+    public UserAccountControllerImpl(
+            SystemInfoController systemInfoController,
+            UserApiClient userApiClient,
+            UserAccountStore userAccountStore,
+            AttributeValueStore attributeValueStore,
+            TransactionManager transactionManager,
+            StateStore stateStore, Logger logger) {
+        this.systemInfoController = systemInfoController;
         this.userApiClient = userApiClient;
         this.userAccountStore = userAccountStore;
         this.attributeValueStore = attributeValueStore;
@@ -70,7 +69,8 @@ public final class UserAccountControllerImpl implements UserAccountController {
 
     @Override
     public void pull() throws ApiException {
-        UserAccount userAccount = userApiClient.getUserAccount();
+        UserAccount userAccount = userApiClient.getUserAccount(
+                systemInfoController.getSystemInfo().getApiVersion());
 
         // update userAccount in database
         userAccountStore.save(userAccount);

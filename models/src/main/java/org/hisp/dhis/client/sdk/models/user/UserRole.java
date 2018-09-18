@@ -31,37 +31,16 @@ package org.hisp.dhis.client.sdk.models.user;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.hisp.dhis.client.sdk.models.common.base.BaseIdentifiableObject;
 import org.hisp.dhis.client.sdk.models.dataset.DataSet;
 import org.hisp.dhis.client.sdk.models.program.Program;
 
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class UserRole {
-
-    @JsonProperty("programs")
-    List<Program> programs;
-
-    @JsonProperty("dataSets")
-    List<DataSet> dataSets;
+class UserRole extends BaseIdentifiableObject {
 
     public UserRole() {
         // explicit empty constructor
-    }
-
-    public List<Program> getPrograms() {
-        return programs;
-    }
-
-    public void setPrograms(List<Program> programs) {
-        this.programs = programs;
-    }
-
-    public List<DataSet> getDataSets() {
-        return dataSets;
-    }
-
-    public void setDataSets(List<DataSet> dataSets) {
-        this.dataSets = dataSets;
     }
 }

@@ -33,11 +33,11 @@ import org.hisp.dhis.client.sdk.models.user.UserAccount;
 
 import java.util.Map;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
 public interface UserApiClientRetrofit {
@@ -46,8 +46,9 @@ public interface UserApiClientRetrofit {
     // Methods for getting user information
     /////////////////////////////////////////////////////////////////////////
 
-    @GET("me/")
-    Call<UserAccount> getCurrentUserAccount(@QueryMap Map<String, String> queryParams);
+    @GET("{apiVersion}/me")
+    Call<UserAccount> getCurrentUserAccount(@Path("apiVersion") int apiVersion,
+            @QueryMap Map<String, String> queryParams);
 
     @POST("me/profile")
     Call<Void> postCurrentUserAccount(@Body UserAccount userAccount);

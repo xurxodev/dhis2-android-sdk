@@ -33,6 +33,7 @@ import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.core.common.utils.ModelUtils;
 import org.hisp.dhis.client.sdk.core.program.ProgramController;
 import org.hisp.dhis.client.sdk.core.program.ProgramFields;
+import org.hisp.dhis.client.sdk.core.systeminfo.SystemInfoController;
 import org.hisp.dhis.client.sdk.models.program.Program;
 import org.hisp.dhis.client.sdk.models.program.ProgramType;
 import org.hisp.dhis.client.sdk.models.user.UserAccount;
@@ -48,14 +49,19 @@ import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
  */
 public class AssignedProgramsControllerImpl implements AssignedProgramsController {
 
+    private final SystemInfoController systemInfoController;
+
     /* Program controller */
     private final ProgramController programController;
 
     /* Api clients */
     private final UserApiClient userApiClient;
 
-    public AssignedProgramsControllerImpl(ProgramController programController,
-                                          UserApiClient userApiClient) {
+    public AssignedProgramsControllerImpl(
+            SystemInfoController systemInfoController,
+            ProgramController programController,
+            UserApiClient userApiClient) {
+        this.systemInfoController = systemInfoController;
         this.userApiClient = userApiClient;
         this.programController = programController;
     }
@@ -74,7 +80,8 @@ public class AssignedProgramsControllerImpl implements AssignedProgramsControlle
             throw new IllegalArgumentException("Specify at least one ProgramType");
         }
 
-        UserAccount userAccount = userApiClient.getUserAccount();
+        UserAccount userAccount = userApiClient.getUserAccount(
+                systemInfoController.getSystemInfo().getApiVersion());
 
         /* get list of assigned programs */
         List<Program> assignedPrograms = userAccount.getPrograms();
