@@ -225,10 +225,7 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
                 System.out.println("ApiResponse: " + apiMessage);
                 importSummaries = apiMessage.getResponse().getImportSummaries();
             } else if (action.equals(Action.TO_UPDATE)){
-                List<ApiMessage> apiMessages =  eventApiClient.putEvents(events);
-                for(ApiMessage apiMessage : apiMessages){
-                    importSummaries.addAll(apiMessage.getResponse().getImportSummaries());
-                }
+                importSummaries =  eventApiClient.putEvents(events);
             }
 
             Map<String, Event> eventMap = ModelUtils.toMap(events);

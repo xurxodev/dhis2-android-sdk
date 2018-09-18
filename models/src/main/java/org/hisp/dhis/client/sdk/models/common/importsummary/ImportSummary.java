@@ -58,6 +58,12 @@ public class ImportSummary {
         // explicit empty constructor
     }
 
+    public ImportSummary(Status status, ImportCount importCount, String reference) {
+        this.status = status;
+        this.importCount = importCount;
+        this.reference = reference;
+    }
+
     public Status getStatus() {
         return status;
     }
