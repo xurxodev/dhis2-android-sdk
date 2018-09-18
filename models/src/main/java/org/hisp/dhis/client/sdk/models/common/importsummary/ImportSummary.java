@@ -58,10 +58,11 @@ public class ImportSummary {
         // explicit empty constructor
     }
 
-    public ImportSummary(Status status, ImportCount importCount, String reference) {
+    public ImportSummary(Status status, ImportCount importCount, String reference, List<Conflict>  conflicts) {
         this.status = status;
         this.importCount = importCount;
         this.reference = reference;
+        this.conflicts = conflicts;
     }
 
     public Status getStatus() {

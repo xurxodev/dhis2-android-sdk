@@ -43,6 +43,10 @@ public class Conflict {
     public Conflict() {
         // explicit empty constructor
     }
+    public Conflict(String value, String object) {
+        this.value = value;
+        this.object = object;
+    }
 
     public String getObject() {
         return object;

@@ -113,7 +113,7 @@ public class EventApiClientImpl implements EventApiClient {
         } else if (apiMessage.getStatus().equals("WARNING")) {
             status = ImportSummary.Status.WARNING;
         }
-        return new ImportSummary(status, apiMessage.getResponse().getImportCount(), event.getUId());
+        return new ImportSummary(status, apiMessage.getResponse().getImportCount(), event.getUId(), apiMessage.getResponse().getConflicts());
     }
 
     @Override
