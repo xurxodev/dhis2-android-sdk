@@ -28,6 +28,8 @@
 
 package org.hisp.dhis.client.sdk.android.event;
 
+import android.support.annotation.NonNull;
+
 import org.hisp.dhis.client.sdk.android.api.utils.DefaultOnSubscribe;
 import org.hisp.dhis.client.sdk.core.common.controllers.SyncStrategy;
 import org.hisp.dhis.client.sdk.core.event.EventController;
@@ -41,8 +43,6 @@ import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
 import org.hisp.dhis.client.sdk.models.program.Program;
 import org.hisp.dhis.client.sdk.models.program.ProgramStage;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,24 +105,12 @@ public class EventInteractorImpl implements EventInteractor {
 
     @Override
     public Observable<Map<String,ImportSummary>> push(final Set<String> uids) {
-        return Observable.create(new DefaultOnSubscribe<Map<String,ImportSummary>>() {
-            @Override
-            public Map<String,ImportSummary> call() {
-                Map<String,ImportSummary> importSumariesAndEventsMap = new HashMap<String, ImportSummary>();
-                List<ImportSummary> importSummaries = eventController.push(uids);
-                for(String event:uids){
-                    for(ImportSummary importSummary:importSummaries){
-                        if(importSummary.getReference()==null){
-                            importSumariesAndEventsMap.put(event,importSummary);
-                        }else if(importSummary.getReference().equals(event)){
-                                importSumariesAndEventsMap.put(event,importSummary);
-                                continue;
-                            }
-                    }
-                }
-                return importSumariesAndEventsMap;
-            }
-        });
+        return pushUids(uids, Action.TO_POST);
+    }
+
+    @Override
+    public Observable<Map<String,ImportSummary>> push(final Set<String> uids, Action action) {
+        return pushUids(uids, action);
     }
 
     @Override
@@ -218,6 +206,28 @@ public class EventInteractorImpl implements EventInteractor {
             @Override
             public List<Event> call() {
                 return eventService.listByActions(actionSet);
+            }
+        });
+    }
+
+    @NonNull
+    private Observable<Map<String, ImportSummary>> pushUids(final Set<String> uids, final Action action) {
+        return Observable.create(new DefaultOnSubscribe<Map<String,ImportSummary>>() {
+            @Override
+            public Map<String,ImportSummary> call() {
+                Map<String,ImportSummary> importSumariesAndEventsMap = new HashMap<String, ImportSummary>();
+                List<ImportSummary> importSummaries = eventController.push(uids, action);
+                for(String event:uids){
+                    for(ImportSummary importSummary:importSummaries){
+                        if(importSummary.getReference()==null){
+                            importSumariesAndEventsMap.put(event,importSummary);
+                        }else if(importSummary.getReference().equals(event)){
+                            importSumariesAndEventsMap.put(event,importSummary);
+                            continue;
+                        }
+                    }
+                }
+                return importSumariesAndEventsMap;
             }
         });
     }
