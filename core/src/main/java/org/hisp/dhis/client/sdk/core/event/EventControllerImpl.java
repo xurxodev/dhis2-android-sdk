@@ -189,12 +189,20 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
     public List<ImportSummary> push(Set<String> uids) throws ApiException {
         isEmpty(uids, "Set of event uids must not be null");
 
-        List <ImportSummary> importSummaries = sendEvents(uids);
+        List <ImportSummary> importSummaries = sendEvents(uids, Action.TO_POST);
         //deleteEvents(uids);
         return importSummaries;
     }
 
-    private List<ImportSummary> sendEvents(Set<String> eventUids) throws ApiException {
+    @Override
+    public List<ImportSummary> push(Set<String> uids, Action action) throws ApiException {
+        isEmpty(uids, "Set of event uids must not be null");
+        List<ImportSummary> importSummaries = sendEvents(uids, action);
+        //deleteEvents(uids);
+        return importSummaries;
+    }
+
+    private List<ImportSummary> sendEvents(Set<String> eventUids, Action action) throws ApiException {
         // retrieve basic events with given state from database
 
         //TODO  Implement the action event states
@@ -209,12 +217,17 @@ public final class EventControllerImpl extends AbsDataController<Event> implemen
 
         List<Event> events = eventStore.queryByUids(eventUids);
 
+
         try {
-            ApiMessage apiMessage = eventApiClient.postEvents(events);
+            List<ImportSummary> importSummaries = new ArrayList<>();
+            if(action.equals(Action.TO_POST)) {
+                ApiMessage apiMessage = eventApiClient.postEvents(events);
+                System.out.println("ApiResponse: " + apiMessage);
+                importSummaries = apiMessage.getResponse().getImportSummaries();
+            } else if (action.equals(Action.TO_UPDATE)){
+                importSummaries =  eventApiClient.putEvents(events);
+            }
 
-            System.out.println("ApiResponse: " + apiMessage);
-
-            List<ImportSummary> importSummaries = apiMessage.getResponse().getImportSummaries();
             Map<String, Event> eventMap = ModelUtils.toMap(events);
 
             // check if all items were synced successfully

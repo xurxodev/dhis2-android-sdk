@@ -31,6 +31,7 @@ package org.hisp.dhis.client.sdk.core.common.controllers;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;
 import org.hisp.dhis.client.sdk.models.common.base.IdentifiableObject;
 import org.hisp.dhis.client.sdk.models.common.importsummary.ImportSummary;
+import org.hisp.dhis.client.sdk.models.common.state.Action;
 
 import java.util.List;
 import java.util.Set;
@@ -43,4 +44,6 @@ public interface IdentifiableDataController<T extends IdentifiableObject>
     void sync(SyncStrategy strategy, Set<String> uids);
 
     List<ImportSummary> push(Set<String> uids) throws ApiException;
+
+    List<ImportSummary> push(Set<String> uids, Action action) throws ApiException;
 }

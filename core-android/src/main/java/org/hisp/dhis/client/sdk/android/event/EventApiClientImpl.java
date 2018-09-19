@@ -11,6 +11,7 @@ import org.hisp.dhis.client.sdk.core.common.network.ApiMessage;
 import org.hisp.dhis.client.sdk.core.common.utils.CollectionUtils;
 import org.hisp.dhis.client.sdk.core.event.EventApiClient;
 import org.hisp.dhis.client.sdk.core.event.EventFilters;
+import org.hisp.dhis.client.sdk.models.common.importsummary.ImportSummary;
 import org.hisp.dhis.client.sdk.models.event.Event;
 import org.hisp.dhis.client.sdk.models.event.EventWrapper;
 import org.joda.time.DateTime;
@@ -86,6 +87,33 @@ public class EventApiClientImpl implements EventApiClient {
         eventMap.put("events", events);
 
         return call(eventApiclientRetrofit.postEvents(eventMap));
+    }
+
+    @Override
+    public List<ImportSummary> putEvents(List<Event> events) throws ApiException {
+        List<ImportSummary> importSummaries = new ArrayList<>();
+        for(Event event : events){
+            ApiMessage apiMessage = call(eventApiclientRetrofit.putEvent(event.getUId(), event));
+            if(apiMessage!=null) {
+                importSummaries.add(fixEmptyImportSummary(event, apiMessage));
+            }
+        }
+
+        return importSummaries;
+    }
+
+    private ImportSummary fixEmptyImportSummary(Event event, ApiMessage apiMessage) {
+        ImportSummary.Status status = ImportSummary.Status.ERROR;
+        if (apiMessage.getStatus().equals("OK")) {
+            status = ImportSummary.Status.OK;
+        } else if (apiMessage.getStatus().equals("SUCCESS")) {
+            status = ImportSummary.Status.SUCCESS;
+        } else if (apiMessage.getStatus().equals("ERROR")) {
+            status = ImportSummary.Status.ERROR;
+        } else if (apiMessage.getStatus().equals("WARNING")) {
+            status = ImportSummary.Status.WARNING;
+        }
+        return new ImportSummary(status, apiMessage.getResponse().getImportCount(), event.getUId(), apiMessage.getResponse().getConflicts());
     }
 
     @Override

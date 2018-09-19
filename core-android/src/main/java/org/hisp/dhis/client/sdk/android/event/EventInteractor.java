@@ -38,7 +38,6 @@ import org.hisp.dhis.client.sdk.models.organisationunit.OrganisationUnit;
 import org.hisp.dhis.client.sdk.models.program.Program;
 import org.hisp.dhis.client.sdk.models.program.ProgramStage;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -75,6 +74,8 @@ public interface EventInteractor {
     Observable<List<Event>> pull(final EventFilters eventFilters);
 
     Observable<Map<String,ImportSummary>> push(Set<String> uids);
+
+    Observable<Map<String,ImportSummary>> push(Set<String> uids, Action action);
 
     Observable<List<Event>> sync(Set<String> uids);
 

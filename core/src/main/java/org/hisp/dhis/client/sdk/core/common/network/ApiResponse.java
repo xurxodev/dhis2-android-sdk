@@ -31,6 +31,7 @@ package org.hisp.dhis.client.sdk.core.common.network;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.hisp.dhis.client.sdk.models.common.importsummary.Conflict;
 import org.hisp.dhis.client.sdk.models.common.importsummary.ImportCount;
 import org.hisp.dhis.client.sdk.models.common.importsummary.ImportSummary;
 import org.hisp.dhis.client.sdk.models.common.importsummary.ImportSummary.Status;
@@ -52,6 +53,9 @@ public class ApiResponse {
     @JsonProperty("importSummaries")
     private List<ImportSummary> importSummaries;
 
+    @JsonProperty("conflicts")
+    private List<Conflict> conflicts;
+
     public ApiResponse() {
         // explicit empty constructor
     }
@@ -70,6 +74,10 @@ public class ApiResponse {
 
     public List<ImportSummary> getImportSummaries() {
         return importSummaries;
+    }
+
+    public List<Conflict> getConflicts() {
+        return conflicts;
     }
 
     @Override
