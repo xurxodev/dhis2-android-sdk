@@ -53,6 +53,9 @@ public class SelectProgramFragmentState implements Parcelable {
     private String programName;
     private String programId;
 
+    private String categoryOptionComboName;
+    private String categoryOptionComboId;
+
     public SelectProgramFragmentState() {
     }
 
@@ -72,6 +75,9 @@ public class SelectProgramFragmentState implements Parcelable {
 
         programName = in.readString();
         programId = in.readString();
+
+        categoryOptionComboName = in.readString();
+        categoryOptionComboId = in.readString();
     }
 
     @Override
@@ -88,6 +94,9 @@ public class SelectProgramFragmentState implements Parcelable {
 
         parcel.writeString(programName);
         parcel.writeString(programId);
+
+        parcel.writeString(categoryOptionComboName);
+        parcel.writeString(categoryOptionComboId);
     }
 
     public boolean isSyncInProcess() {
@@ -140,5 +149,27 @@ public class SelectProgramFragmentState implements Parcelable {
 
     public String getProgramId() {
         return programId;
+    }
+
+    public void setCategoryOptionCombo(String categoryOptionComboId, String categoryOptionComboLabel) {
+        this.categoryOptionComboId = categoryOptionComboId;
+        this.categoryOptionComboName = categoryOptionComboLabel;
+    }
+
+    public void resetCategoryOptionCombo() {
+        categoryOptionComboId = null;
+        categoryOptionComboName = null;
+    }
+
+    public boolean isCategoryOptionComboEmpty() {
+        return (categoryOptionComboId == null || categoryOptionComboName == null);
+    }
+
+    public String getCategoryOptionComboName() {
+        return categoryOptionComboName;
+    }
+
+    public String getCategoryOptionComboId() {
+        return categoryOptionComboId;
     }
 }

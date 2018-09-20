@@ -58,6 +58,7 @@ import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.controllers.DhisService;
 import org.hisp.dhis.android.sdk.controllers.SyncStrategy;
 import org.hisp.dhis.android.sdk.events.UiEvent;
+import org.hisp.dhis.android.sdk.persistence.models.CategoryOptionCombo;
 import org.hisp.dhis.android.sdk.ui.activities.INavigationHandler;
 import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.TrackedEntityInstanceItemRow;
@@ -89,6 +90,7 @@ public abstract class SelectProgramFragment extends Fragment
 
     protected CardTextViewButton mOrgUnitButton;
     protected CardTextViewButton mProgramButton;
+    protected CardTextViewButton mCategoryComboOptionButton;
 
     protected SelectProgramFragmentState mState;
     protected SelectProgramFragmentPreferences mPrefs;
@@ -163,11 +165,15 @@ public abstract class SelectProgramFragment extends Fragment
             // restoring last selection of program
             Pair<String, String> orgUnit = mPrefs.getOrgUnit();
             Pair<String, String> program = mPrefs.getProgram();
+            Pair<String, String> categoryComboOption = mPrefs.getCategoryOptionCombo();
             mState = new SelectProgramFragmentState();
             if (orgUnit != null) {
                 mState.setOrgUnit(orgUnit.first, orgUnit.second);
                 if (program != null) {
                     mState.setProgram(program.first, program.second);
+                        if(categoryComboOption !=null){
+                            mState.setCategoryOptionCombo(categoryComboOption.first, categoryComboOption.second);
+                        }
                 }
             }
         }
@@ -195,6 +201,7 @@ public abstract class SelectProgramFragment extends Fragment
         mProgressBar.setVisibility(View.GONE);
         mOrgUnitButton = (CardTextViewButton) header.findViewById(R.id.select_organisation_unit);
         mProgramButton = (CardTextViewButton) header.findViewById(R.id.select_program);
+        mCategoryComboOptionButton = (CardTextViewButton) header.findViewById(R.id.select_category);
 
         mOrgUnitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,9 +221,19 @@ public abstract class SelectProgramFragment extends Fragment
                 fragment.show(getChildFragmentManager());
             }
         });
+        mCategoryComboOptionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProgramDialogFragment fragment = ProgramDialogFragment
+                        .newInstance(SelectProgramFragment.this, mState.getOrgUnitId(),
+                                getProgramTypes());
+                fragment.show(getChildFragmentManager());
+            }
+        });
 
         mOrgUnitButton.setEnabled(true);
         mProgramButton.setEnabled(false);
+        mCategoryComboOptionButton.setEnabled(false);
     }
 
     protected abstract ProgramType[] getProgramTypes();
@@ -269,6 +286,10 @@ public abstract class SelectProgramFragment extends Fragment
             }
             case ProgramDialogFragment.ID: {
                 onProgramSelected(id, name);
+                break;
+            }
+            case CategoryOptionComboDialogFragment.ID: {
+                onCategoryOptionComboSelected(id, name);
                 break;
             }
         }
@@ -335,6 +356,12 @@ public abstract class SelectProgramFragment extends Fragment
                         backedUpState.getProgramName()
                 );
             }
+            if (!backedUpState.isCategoryOptionComboEmpty()) {
+                onCategoryOptionComboSelected(
+                        backedUpState.getCategoryOptionComboId(),
+                        backedUpState.getProgramName()
+                );
+            }
         }
     }
 
@@ -356,6 +383,18 @@ public abstract class SelectProgramFragment extends Fragment
 
         mState.setProgram(programId, programName);
         mPrefs.putProgram(new Pair<>(programId, programName));
+        handleViews(1);
+
+        mProgressBar.setVisibility(View.VISIBLE);
+        // this call will trigger onCreateLoader method
+        getLoaderManager().restartLoader(LOADER_ID, getArguments(), this);
+    }
+
+    public void onCategoryOptionComboSelected(String categoryOptionComboId, String categoryOptionComboName) {
+        mCategoryComboOptionButton.setText(categoryOptionComboName);
+
+        mState.setCategoryOptionCombo(categoryOptionComboId, categoryOptionComboName);
+        mPrefs.putCategoryOptionCombo(new Pair<>(categoryOptionComboId, categoryOptionComboName));
         handleViews(1);
 
         mProgressBar.setVisibility(View.VISIBLE);
