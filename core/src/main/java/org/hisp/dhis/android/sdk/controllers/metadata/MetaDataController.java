@@ -737,7 +737,9 @@ public final class MetaDataController extends ResourceController {
         final Map<String, String> QUERY_MAP_FULL = new HashMap<>();
 
         QUERY_MAP_FULL.put("fields",
-                "*,trackedEntity[*],programIndicators[*],programStages[*,!dataEntryForm,program[id],programIndicators[*]," +
+                "*,categoryCombo[id,created,access,lastUpdated,displayName,name,categoryOptionCombos[id,shortName,displayName,lastUpdated,created,access,name,categoryOptions]," +
+                        "categories[id,created,lastUpdated,access,name,displayName,categoryOptions[id,code,lastUpdated,created,access,displayName,shortName,name]]]," +
+                        "trackedEntity[*],programIndicators[*],programStages[*,!dataEntryForm,program[id],programIndicators[*]," +
                         "programStageSections[*,programStageDataElements[*,programStage[id]," +
                         "dataElement[*,id,attributeValues[*,attribute[*]],optionSet[id]]],programIndicators[*]],programStageDataElements" +
                         "[*,programStage[id],dataElement[*,optionSet[id]]]],programTrackedEntityAttributes" +

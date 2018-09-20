@@ -32,6 +32,10 @@ package org.hisp.dhis.android.sdk.controllers.wrappers;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.models.Attribute;
 import org.hisp.dhis.android.sdk.persistence.models.AttributeValue;
+import org.hisp.dhis.android.sdk.persistence.models.Category;
+import org.hisp.dhis.android.sdk.persistence.models.CategoryCombo;
+import org.hisp.dhis.android.sdk.persistence.models.CategoryOption;
+import org.hisp.dhis.android.sdk.persistence.models.CategoryOptionCombo;
 import org.hisp.dhis.android.sdk.persistence.models.DataElement;
 import org.hisp.dhis.android.sdk.persistence.models.Program;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramIndicator;
@@ -59,6 +63,9 @@ public class ProgramWrapper {
         if(program != null && program.getUid() != null) {
             operations.addAll(update(program));
             operations.add(DbOperation.save(program));
+
+            addCategoryComboIntoOperations(program, operations);
+
             int sortOrder = 0;
             for (ProgramTrackedEntityAttribute ptea : program.getProgramTrackedEntityAttributes()) {
                 ptea.setProgram(program.getUid());
@@ -107,6 +114,28 @@ public class ProgramWrapper {
             }
         }
         return operations;
+    }
+
+    private static void addCategoryComboIntoOperations(Program program, List<DbOperation> operations) {
+        CategoryCombo categoryCombo = program.getCategoryCombo();
+        List<Category> categories = categoryCombo.getCategories();
+        for(Category category : categories){
+
+            List<CategoryOption> categoryOptions = category.getCategoryOptions();
+            for(CategoryOption categoryOption:categoryOptions){
+                categoryOption.setCategoryUId(category.getUid());
+                operations.add(DbOperation.save(categoryOption));
+            }
+
+            operations.add(DbOperation.save(category));
+        }
+
+        for(CategoryOptionCombo categoryOptionCombo : categoryCombo.getCategoryOptionCombos()){
+            categoryOptionCombo.setCategoryOption(categoryOptionCombo.getCategoryOptions().get(0).getUid());
+            categoryOptionCombo.setCategoryCombo(categoryCombo.getUid());
+            operations.add(DbOperation.save(categoryOptionCombo));
+        }
+        operations.add(DbOperation.save(categoryCombo));
     }
 
     private static List<ProgramStageDataElement> getProgramStageDataElementsBySection(

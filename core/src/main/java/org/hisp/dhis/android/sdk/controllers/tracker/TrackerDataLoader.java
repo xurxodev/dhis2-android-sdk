@@ -46,6 +46,7 @@ import org.hisp.dhis.android.sdk.controllers.wrappers.EventsWrapper;
 import org.hisp.dhis.android.sdk.events.LoadingMessageEvent;
 import org.hisp.dhis.android.sdk.network.APIException;
 import org.hisp.dhis.android.sdk.network.DhisApi;
+import org.hisp.dhis.android.sdk.persistence.models.CategoryOptionCombo;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
@@ -117,7 +118,15 @@ final class TrackerDataLoader extends ResourceController {
                         UiUtils.postProgressMessage(context.getString(R.string.loading_events) + ": "
                                 + organisationUnit.getLabel() + ": " + program.getName(), LoadingMessageEvent.EventType.DATA);
                         try {
-                        getEventsDataFromServer(dhisApi, syncStrategy, organisationUnit.getId(), program.getUid(), serverDateTime);
+                            if(program.getCategoryCombo() == null){
+                                getEventsDataFromServer(dhisApi, syncStrategy, organisationUnit.getId(), program.getUid(), "", "", serverDateTime);
+                            }else {
+                                for (CategoryOptionCombo categoryOptionCombo : program.getCategoryCombo().getCategoryOptionCombos()){
+
+                                    getEventsDataFromServer(dhisApi, syncStrategy, organisationUnit.getId(), program.getUid(),
+                                            categoryOptionCombo.getCategoryCombo(), categoryOptionCombo.getCategoryOption(), serverDateTime);
+                                }
+                            }
                         } catch (APIException e) {
                         e.printStackTrace();
                         //todo: could probably do something prettier here. This catch is done to prevent
@@ -162,8 +171,7 @@ final class TrackerDataLoader extends ResourceController {
         UiUtils.postProgressMessage("",LoadingMessageEvent.EventType.FINISH);
     }
 
-
-    static void getEventsDataFromServer(DhisApi dhisApi, SyncStrategy syncStrategy,String organisationUnitUid, String programUid, DateTime serverDateTime) throws APIException {
+    static void getEventsDataFromServer(DhisApi dhisApi, SyncStrategy syncStrategy, String organisationUnitUid, String programUid, String categoryComboUid, String categoryOptionUid, DateTime serverDateTime) throws APIException {
         Log.d(CLASS_TAG, "getEventsDataFromServer");
 
         DateTime lastUpdated = null;
@@ -177,6 +185,10 @@ final class TrackerDataLoader extends ResourceController {
         if (lastUpdated != null) {
             map.put("lastUpdated", lastUpdated.toString());
         }
+        if(!categoryComboUid.isEmpty() && !categoryOptionUid.isEmpty()) {
+            map.put("attributeCc", categoryComboUid);
+            map.put("attributeCos", categoryOptionUid);
+        }
         JsonNode response = dhisApi.getEvents(programUid, organisationUnitUid, 50,
                 map);
         List<Event> events = EventsWrapper.getEvents(response);
@@ -184,7 +196,7 @@ final class TrackerDataLoader extends ResourceController {
     }
 
     static void deleteRemotelyDeletedEvents(DhisApi dhisApi, String organisationUnitUid, String programUid) throws APIException {
-        Log.d(CLASS_TAG, "getEventsDataFromServer");
+        Log.d(CLASS_TAG, "deleteRemotelyDeletedEvents");
         final Map<String, String> map = new HashMap<>();
         map.put("fields", "[event]");
         map.put("skipPaging", "true");
