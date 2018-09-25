@@ -350,7 +350,7 @@ public abstract class SelectProgramFragment extends Fragment
             if (!backedUpState.isCategoryOptionComboEmpty()) {
                 onCategoryOptionComboSelected(
                         backedUpState.getCategoryOptionComboId(),
-                        backedUpState.getProgramName()
+                        backedUpState.getCategoryOptionComboName()
                 );
             }
         }
