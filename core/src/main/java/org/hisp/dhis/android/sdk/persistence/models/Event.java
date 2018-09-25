@@ -140,6 +140,14 @@ public class Event extends BaseSerializableModel {
     @Column(name = "completedDate")
     String completedDate;
 
+    @JsonIgnore
+    @Column(name = "attributeCos")
+    String attributeCOS;
+
+    @JsonProperty("attributeCategoryOptions")
+    @Column(name = "attributeCC")
+    String attributeCC;
+
     @JsonProperty("dataValues")
     List<DataValue> dataValues;
 
@@ -397,5 +405,21 @@ public class Event extends BaseSerializableModel {
     @JsonIgnore
     public boolean isComplete(){
         return getStatus().equals(Event.STATUS_COMPLETED);
+    }
+
+    public String getAttributeCOS() {
+        return attributeCOS;
+    }
+
+    public void setAttributeCOS(String attributeCOS) {
+        this.attributeCOS = attributeCOS;
+    }
+
+    public String getAttributeCC() {
+        return attributeCC;
+    }
+
+    public void setAttributeCC(String attributeCC) {
+        this.attributeCC = attributeCC;
     }
 }

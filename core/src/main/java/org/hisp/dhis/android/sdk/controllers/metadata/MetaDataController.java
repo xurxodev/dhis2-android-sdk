@@ -52,6 +52,8 @@ import org.hisp.dhis.android.sdk.persistence.models.Attribute;
 import org.hisp.dhis.android.sdk.persistence.models.Attribute$Table;
 import org.hisp.dhis.android.sdk.persistence.models.AttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.AttributeValue$Table;
+import org.hisp.dhis.android.sdk.persistence.models.CategoryOptionCombo;
+import org.hisp.dhis.android.sdk.persistence.models.CategoryOptionCombo$Table;
 import org.hisp.dhis.android.sdk.persistence.models.Conflict;
 import org.hisp.dhis.android.sdk.persistence.models.Constant;
 import org.hisp.dhis.android.sdk.persistence.models.Constant$Table;
@@ -322,6 +324,34 @@ public final class MetaDataController extends ResourceController {
             }
         }
         return programs;
+    }
+
+    /**
+     * Returns a list of category option combos assigned to the given program id
+     *
+     * @param programId
+     * @return
+     */
+    public static List<CategoryOptionCombo> getCategoryOptionComboFromProgram(String programId) {
+        Program program = new Select().from(Program.class).where(
+                Condition.column(Program$Table.ID).is(programId)).querySingle();
+
+        List<CategoryOptionCombo> plist = new Select().from(CategoryOptionCombo.class).where(
+                Condition.column(CategoryOptionCombo$Table.CATEGORYCOMBO).is(program.getCategoryComboUId()))
+                .queryList();
+        return plist;
+    }
+
+    /**
+     * Returns a list of category option combos assigned to the given program id
+     *
+     * @param programId
+     * @return
+     */
+    public static CategoryOptionCombo getCategoryOptionCombo(String categoryOptionComboId) {
+        CategoryOptionCombo categoryOptionCombo = new Select().from(CategoryOptionCombo.class).where(
+                Condition.column(CategoryOptionCombo$Table.ID).is(categoryOptionComboId)).querySingle();
+        return categoryOptionCombo;
     }
 
     public static List<ProgramStage> getProgramStages(String program) {

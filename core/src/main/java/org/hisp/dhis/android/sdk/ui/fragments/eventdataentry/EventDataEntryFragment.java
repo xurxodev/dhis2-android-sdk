@@ -101,6 +101,8 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
     private static final String ORG_UNIT_ID = "extra:orgUnitId";
     private static final String PROGRAM_ID = "extra:ProgramId";
     private static final String PROGRAM_STAGE_ID = "extra:ProgramStageId";
+    private static final String CATEGORY_OPTION_COMBO_ID = "extra:CategoryCombo";
+    private static final String CATEGORY_OPTION_ID = "extra:CategoryOption";
     private static final String EVENT_ID = "extra:EventId";
     private static final String ENROLLMENT_ID = "extra:EnrollmentId";
     private ImageView previousSectionButton;
@@ -126,12 +128,40 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
     }
 
     public static EventDataEntryFragment newInstance(String unitId, String programId, String programStageId,
-                                                long eventId) {
+                                                     String attributeCC, String attributeCOS) {
         EventDataEntryFragment fragment = new EventDataEntryFragment();
         Bundle args = new Bundle();
         args.putString(ORG_UNIT_ID, unitId);
         args.putString(PROGRAM_ID, programId);
         args.putString(PROGRAM_STAGE_ID, programStageId);
+        args.putString(CATEGORY_OPTION_COMBO_ID, attributeCC);
+        args.putString(CATEGORY_OPTION_ID, attributeCOS);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static EventDataEntryFragment newInstance(String unitId, String programId, String programStageId,
+                                                     long eventId) {
+        EventDataEntryFragment fragment = new EventDataEntryFragment();
+        Bundle args = new Bundle();
+        args.putString(ORG_UNIT_ID, unitId);
+        args.putString(PROGRAM_ID, programId);
+        args.putString(PROGRAM_STAGE_ID, programStageId);
+        args.putLong(EVENT_ID, eventId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static EventDataEntryFragment newInstance(String unitId, String programId, String programStageId,
+                                                     String attributeCC, String attributeCOS,
+                                                     long eventId) {
+        EventDataEntryFragment fragment = new EventDataEntryFragment();
+        Bundle args = new Bundle();
+        args.putString(ORG_UNIT_ID, unitId);
+        args.putString(PROGRAM_ID, programId);
+        args.putString(PROGRAM_STAGE_ID, programStageId);
+        args.putString(CATEGORY_OPTION_COMBO_ID, attributeCC);
+        args.putString(CATEGORY_OPTION_ID, attributeCOS);
         args.putLong(EVENT_ID, eventId);
         fragment.setArguments(args);
         return fragment;
@@ -246,6 +276,8 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
                     fragmentArguments.getString(ORG_UNIT_ID),
                     fragmentArguments.getString(PROGRAM_ID),
                     fragmentArguments.getString(PROGRAM_STAGE_ID),
+                    fragmentArguments.getString(CATEGORY_OPTION_COMBO_ID),
+                    fragmentArguments.getString(CATEGORY_OPTION_ID),
                     fragmentArguments.getLong(EVENT_ID, -1),
                     fragmentArguments.getLong(ENROLLMENT_ID, -1)
                 )
