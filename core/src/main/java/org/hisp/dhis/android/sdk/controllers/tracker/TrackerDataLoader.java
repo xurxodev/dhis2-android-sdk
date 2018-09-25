@@ -118,14 +118,10 @@ final class TrackerDataLoader extends ResourceController {
                         UiUtils.postProgressMessage(context.getString(R.string.loading_events) + ": "
                                 + organisationUnit.getLabel() + ": " + program.getName(), LoadingMessageEvent.EventType.DATA);
                         try {
-                            if(program.getCategoryCombo() == null){
-                                getEventsDataFromServer(dhisApi, syncStrategy, organisationUnit.getId(), program.getUid(), "", "", serverDateTime);
-                            }else {
-                                for (CategoryOptionCombo categoryOptionCombo : program.getCategoryCombo().getCategoryOptionCombos()){
+                            for (CategoryOptionCombo categoryOptionCombo : program.getCategoryCombo().getCategoryOptionCombos()){
 
-                                    getEventsDataFromServer(dhisApi, syncStrategy, organisationUnit.getId(), program.getUid(),
-                                            categoryOptionCombo.getCategoryCombo(), categoryOptionCombo.getCategoryOption(), serverDateTime);
-                                }
+                                getEventsDataFromServer(dhisApi, syncStrategy, organisationUnit.getId(), program.getUid(),
+                                        categoryOptionCombo.getCategoryCombo(), categoryOptionCombo.getCategoryOption(), serverDateTime);
                             }
                         } catch (APIException e) {
                         e.printStackTrace();

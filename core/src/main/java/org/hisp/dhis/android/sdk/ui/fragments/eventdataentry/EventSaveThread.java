@@ -94,7 +94,6 @@ public class EventSaveThread extends AsyncHelperThread {
         saveEvent = false;
         event.setFromServer(false);
         Event tempEvent = new Event();
-        tempEvent.setAttributeCOS(event.getAttributeCOS());
         tempEvent.setAttributeCC(event.getAttributeCC());
         tempEvent.setLocalId(event.getLocalId());
         tempEvent.setEvent(event.getEvent());
