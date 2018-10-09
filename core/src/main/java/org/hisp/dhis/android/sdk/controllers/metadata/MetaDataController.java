@@ -52,6 +52,8 @@ import org.hisp.dhis.android.sdk.persistence.models.Attribute;
 import org.hisp.dhis.android.sdk.persistence.models.Attribute$Table;
 import org.hisp.dhis.android.sdk.persistence.models.AttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.AttributeValue$Table;
+import org.hisp.dhis.android.sdk.persistence.models.CategoryOptionCombo;
+import org.hisp.dhis.android.sdk.persistence.models.CategoryOptionCombo$Table;
 import org.hisp.dhis.android.sdk.persistence.models.Conflict;
 import org.hisp.dhis.android.sdk.persistence.models.Constant;
 import org.hisp.dhis.android.sdk.persistence.models.Constant$Table;
@@ -322,6 +324,34 @@ public final class MetaDataController extends ResourceController {
             }
         }
         return programs;
+    }
+
+    /**
+     * Returns a list of category option combos assigned to the given program id
+     *
+     * @param programId
+     * @return
+     */
+    public static List<CategoryOptionCombo> getCategoryOptionComboFromProgram(String programId) {
+        Program program = new Select().from(Program.class).where(
+                Condition.column(Program$Table.ID).is(programId)).querySingle();
+
+        List<CategoryOptionCombo> plist = new Select().from(CategoryOptionCombo.class).where(
+                Condition.column(CategoryOptionCombo$Table.CATEGORYCOMBO).is(program.getCategoryComboUId()))
+                .queryList();
+        return plist;
+    }
+
+    /**
+     * Returns a list of category option combos assigned to the given program id
+     *
+     * @param programId
+     * @return
+     */
+    public static CategoryOptionCombo getCategoryOptionCombo(String categoryOptionComboId) {
+        CategoryOptionCombo categoryOptionCombo = new Select().from(CategoryOptionCombo.class).where(
+                Condition.column(CategoryOptionCombo$Table.ID).is(categoryOptionComboId)).querySingle();
+        return categoryOptionCombo;
     }
 
     public static List<ProgramStage> getProgramStages(String program) {
@@ -737,7 +767,9 @@ public final class MetaDataController extends ResourceController {
         final Map<String, String> QUERY_MAP_FULL = new HashMap<>();
 
         QUERY_MAP_FULL.put("fields",
-                "*,trackedEntity[*],programIndicators[*],programStages[*,!dataEntryForm,program[id],programIndicators[*]," +
+                "*,categoryCombo[id,created,access,lastUpdated,displayName,name,categoryOptionCombos[id,shortName,displayName,lastUpdated,created,access,name,categoryOptions]," +
+                        "categories[id,created,lastUpdated,access,name,displayName,categoryOptions[id,code,lastUpdated,created,access,displayName,shortName,name]]]," +
+                        "trackedEntity[*],programIndicators[*],programStages[*,!dataEntryForm,program[id],programIndicators[*]," +
                         "programStageSections[*,programStageDataElements[*,programStage[id]," +
                         "dataElement[*,id,attributeValues[*,attribute[*]],optionSet[id]]],programIndicators[*]],programStageDataElements" +
                         "[*,programStage[id],dataElement[*,optionSet[id]]]],programTrackedEntityAttributes" +

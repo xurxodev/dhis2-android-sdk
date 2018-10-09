@@ -200,6 +200,23 @@ public final class TrackerController extends ResourceController {
     }
 
     /**
+     * Returns a list of events for a given org unit and program
+     *
+     * @param organisationUnitId
+     * @param programId
+     * @return
+     */
+    public static List<Event> getNotDeletedEvents(String organisationUnitId, String programId,String attributeCC) {
+        List<Event> events = new Select().from(Event.class).where(Condition.column
+                (Event$Table.ORGANISATIONUNITID).is(organisationUnitId)).
+                and(Condition.column(Event$Table.PROGRAMID).is(programId)).
+                and(Condition.column(Event$Table.ATTRIBUTECC).is(attributeCC)).
+                and(Condition.column(Event$Table.STATUS).isNot(Event.STATUS_DELETED))
+                .orderBy(false, Event$Table.LASTUPDATED).queryList();
+        return events;
+    }
+
+    /**
      * Returns a list of events for a given org unit and from server
      *
      * @return

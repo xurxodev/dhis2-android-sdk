@@ -47,6 +47,14 @@
         android:layout_marginBottom="4dp"
         app:hint="@string/choose_program" />
 
+    <org.hisp.dhis.android.sdk.ui.views.CardTextViewButton
+        android:id="@+id/select_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:visibility="gone"
+        app:hint="@string/choose_category" />
+
     <org.hisp.dhis.android.sdk.ui.views.FloatingActionButton
         android:id="@+id/register_new_event"
         android:layout_width="wrap_content"

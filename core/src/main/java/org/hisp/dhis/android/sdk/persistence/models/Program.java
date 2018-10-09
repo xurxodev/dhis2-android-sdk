@@ -126,6 +126,15 @@ public class Program extends BaseMetaDataObject {
     @Column(name = "selectIncidentDatesInFuture")
     boolean selectIncidentDatesInFuture;
 
+    /**
+     * Reference to lazy categoryCombo
+     */
+    @JsonProperty("categoryCombo")
+    CategoryCombo categoryCombo;
+
+    @Column(name = "categoryCombo")
+    String categoryComboUId;
+
     @JsonProperty("programStages")
     List<ProgramStage> programStages;
 
@@ -317,5 +326,31 @@ public class Program extends BaseMetaDataObject {
 
     public void setCompleteEventsExpiryDays(int completeEventsExpiryDays) {
         this.completeEventsExpiryDays = completeEventsExpiryDays;
+    }
+
+    public CategoryCombo getCategoryCombo() {
+            if (categoryCombo == null) {
+                if (categoryComboUId == null) return null;
+                categoryCombo = new Select()
+                        .from(CategoryCombo.class)
+                        .where(Condition.column(CategoryCombo$Table.ID)
+                                .is(categoryComboUId)).querySingle();
+            }
+        return categoryCombo;
+    }
+
+    public void setCategoryCombo(CategoryCombo categoryCombo) {
+        if(categoryCombo!=null){
+            this.categoryComboUId = categoryCombo.getUid();
+        }
+        this.categoryCombo = categoryCombo;
+    }
+
+    public String getCategoryComboUId() {
+        return categoryComboUId;
+    }
+
+    public void setCategoryComboUId(String categoryComboUId) {
+        this.categoryComboUId = categoryComboUId;
     }
 }

@@ -36,9 +36,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.Pair;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -47,7 +44,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -57,23 +53,20 @@ import com.squareup.otto.Subscribe;
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.controllers.DhisService;
 import org.hisp.dhis.android.sdk.controllers.SyncStrategy;
+import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.events.UiEvent;
+import org.hisp.dhis.android.sdk.persistence.models.CategoryCombo;
 import org.hisp.dhis.android.sdk.ui.activities.INavigationHandler;
-import org.hisp.dhis.android.sdk.controllers.DhisController;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.events.TrackedEntityInstanceItemRow;
+import org.hisp.dhis.android.sdk.ui.dialogs.CategoryOptionComboDialogFragment;
 import org.hisp.dhis.android.sdk.ui.fragments.AboutUsFragment;
 import org.hisp.dhis.android.sdk.ui.fragments.settings.SettingsFragment;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
-import org.hisp.dhis.android.sdk.persistence.models.Program;
 import org.hisp.dhis.android.sdk.ui.adapters.AbsAdapter;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.events.EventRow;
 import org.hisp.dhis.android.sdk.ui.dialogs.AutoCompleteDialogFragment;
 import org.hisp.dhis.android.sdk.ui.dialogs.OrgUnitDialogFragment;
 import org.hisp.dhis.android.sdk.ui.dialogs.ProgramDialogFragment;
 import org.hisp.dhis.android.sdk.ui.views.CardTextViewButton;
 import org.hisp.dhis.android.sdk.utils.api.ProgramType;
-
-import java.util.List;
 
 public abstract class SelectProgramFragment extends Fragment
         implements View.OnClickListener, AutoCompleteDialogFragment.OnOptionSelectedListener,
@@ -89,6 +82,7 @@ public abstract class SelectProgramFragment extends Fragment
 
     protected CardTextViewButton mOrgUnitButton;
     protected CardTextViewButton mProgramButton;
+    protected CardTextViewButton mCategoryComboOptionButton;
 
     protected SelectProgramFragmentState mState;
     protected SelectProgramFragmentPreferences mPrefs;
@@ -163,11 +157,15 @@ public abstract class SelectProgramFragment extends Fragment
             // restoring last selection of program
             Pair<String, String> orgUnit = mPrefs.getOrgUnit();
             Pair<String, String> program = mPrefs.getProgram();
+            Pair<String, String> categoryComboOption = mPrefs.getCategoryOptionCombo();
             mState = new SelectProgramFragmentState();
             if (orgUnit != null) {
                 mState.setOrgUnit(orgUnit.first, orgUnit.second);
                 if (program != null) {
                     mState.setProgram(program.first, program.second);
+                        if(categoryComboOption !=null){
+                            mState.setCategoryOptionCombo(categoryComboOption.first, categoryComboOption.second);
+                        }
                 }
             }
         }
@@ -195,6 +193,7 @@ public abstract class SelectProgramFragment extends Fragment
         mProgressBar.setVisibility(View.GONE);
         mOrgUnitButton = (CardTextViewButton) header.findViewById(R.id.select_organisation_unit);
         mProgramButton = (CardTextViewButton) header.findViewById(R.id.select_program);
+        mCategoryComboOptionButton = (CardTextViewButton) header.findViewById(R.id.select_category);
 
         mOrgUnitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,9 +213,18 @@ public abstract class SelectProgramFragment extends Fragment
                 fragment.show(getChildFragmentManager());
             }
         });
+        mCategoryComboOptionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CategoryOptionComboDialogFragment fragment = CategoryOptionComboDialogFragment
+                        .newInstance(SelectProgramFragment.this, mState.getProgramId(), mState.getCategoryName());
+                fragment.show(getChildFragmentManager());
+            }
+        });
 
         mOrgUnitButton.setEnabled(true);
         mProgramButton.setEnabled(false);
+        mCategoryComboOptionButton.setEnabled(false);
     }
 
     protected abstract ProgramType[] getProgramTypes();
@@ -269,6 +277,10 @@ public abstract class SelectProgramFragment extends Fragment
             }
             case ProgramDialogFragment.ID: {
                 onProgramSelected(id, name);
+                break;
+            }
+            case CategoryOptionComboDialogFragment.ID: {
+                onCategoryOptionComboSelected(id, name);
                 break;
             }
         }
@@ -335,6 +347,12 @@ public abstract class SelectProgramFragment extends Fragment
                         backedUpState.getProgramName()
                 );
             }
+            if (!backedUpState.isCategoryOptionComboEmpty()) {
+                onCategoryOptionComboSelected(
+                        backedUpState.getCategoryOptionComboId(),
+                        backedUpState.getCategoryOptionComboName()
+                );
+            }
         }
     }
 
@@ -344,11 +362,23 @@ public abstract class SelectProgramFragment extends Fragment
 
         mState.setOrgUnit(orgUnitId, orgUnitLabel);
         mState.resetProgram();
+        mState.resetCategoryOptionCombo();
+        showCategoryOptionCombo(false);
 
         mPrefs.putOrgUnit(new Pair<>(orgUnitId, orgUnitLabel));
         mPrefs.putProgram(null);
 
-        handleViews(0);
+        showEventButton(false);
+    }
+
+    private void showCategoryOptionCombo(boolean value) {
+        if(value) {
+            mCategoryComboOptionButton.setVisibility(View.VISIBLE);
+            mCategoryComboOptionButton.setEnabled(true);
+        }else{
+            mCategoryComboOptionButton.setVisibility(View.GONE);
+            mCategoryComboOptionButton.setEnabled(false);
+        }
     }
 
     public void onProgramSelected(String programId, String programName) {
@@ -356,7 +386,29 @@ public abstract class SelectProgramFragment extends Fragment
 
         mState.setProgram(programId, programName);
         mPrefs.putProgram(new Pair<>(programId, programName));
-        handleViews(1);
+        mState.resetCategoryOptionCombo();
+        CategoryCombo categoryCombo = MetaDataController.getProgram(programId).getCategoryCombo();
+        if(categoryCombo==null) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            showEventButton(true);
+            showCategoryOptionCombo(false);
+            // this call will trigger onCreateLoader method
+            getLoaderManager().restartLoader(LOADER_ID, getArguments(), this);
+        }else{
+            mState.setCategoryName(categoryCombo.getName());
+            mCategoryComboOptionButton.setVisibility(View.VISIBLE);
+            mCategoryComboOptionButton.setEnabled(true);
+            showCategoryOptionCombo(true);
+            showEventButton(false);
+        }
+    }
+
+    public void onCategoryOptionComboSelected(String categoryOptionComboId, String categoryOptionComboName) {
+        mCategoryComboOptionButton.setText(categoryOptionComboName);
+
+        mState.setCategoryOptionCombo(categoryOptionComboId, categoryOptionComboName);
+        mPrefs.putCategoryOptionCombo(new Pair<>(categoryOptionComboId, categoryOptionComboName));
+        showEventButton(true);
 
         mProgressBar.setVisibility(View.VISIBLE);
         // this call will trigger onCreateLoader method
@@ -372,5 +424,5 @@ public abstract class SelectProgramFragment extends Fragment
         }
     }
 
-    protected abstract void handleViews(int level);
+    protected abstract void showEventButton(boolean value);
 }
