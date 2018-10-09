@@ -45,6 +45,7 @@
     <string name="date_format">yyyy-mm-dd</string>
     <string name="dialog_organisation_units">Organisation units</string>
     <string name="dialog_programs">Programs</string>
+    <string name="dialog_categories">Categories</string>
 
     <string name="please_enter">Please enter</string>
 
@@ -195,6 +196,7 @@
     <string name="report_date">Report date</string>
     <string name="choose_organisation_unit">Choose organisation unit</string>
     <string name="choose_program">Choose program</string>
+    <string name="choose_category">Choose category</string>
     <string name="duedate">Due date</string>
     <string name="eventname">Event name</string>
     <string name="startdate">Start date</string>

@@ -88,13 +88,15 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
     private final String orgUnitId;
     private final String programId;
     private final String programStageId;
+    private final String attributeCC;
     private final long eventId;
     private final long enrollmentId;
 
-    EventDataEntryFragmentQuery(String orgUnitId, String programId, String programStageId, long eventId, long enrollmentId) {
+    EventDataEntryFragmentQuery(String orgUnitId, String programId, String programStageId, String attributeCC, long eventId, long enrollmentId) {
         this.orgUnitId = orgUnitId;
         this.programId = programId;
         this.programStageId = programStageId;
+        this.attributeCC = attributeCC;
         this.eventId = eventId;
         this.enrollmentId = enrollmentId;
     }
@@ -112,7 +114,7 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
         final Event event = getEvent(
                 orgUnitId, programId, eventId, enrollmentId, stage, username
         );
-
+        event.setAttributeCC(attributeCC);
         form.setEvent(event);
         if(enrollmentId > 0) {
             Enrollment enrollment = TrackerController.getEnrollment(enrollmentId);

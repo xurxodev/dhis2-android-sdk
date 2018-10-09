@@ -41,35 +41,32 @@ import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;
 import org.hisp.dhis.android.sdk.persistence.loaders.Query;
+import org.hisp.dhis.android.sdk.persistence.models.CategoryCombo;
+import org.hisp.dhis.android.sdk.persistence.models.CategoryOptionCombo;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitProgramRelationship;
 import org.hisp.dhis.android.sdk.persistence.models.Program;
 import org.hisp.dhis.android.sdk.ui.dialogs.AutoCompleteDialogAdapter.OptionAdapterValue;
-import org.hisp.dhis.android.sdk.utils.api.ProgramType;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ProgramDialogFragment extends AutoCompleteDialogFragment
+public class CategoryOptionComboDialogFragment extends AutoCompleteDialogFragment
         implements LoaderManager.LoaderCallbacks<List<OptionAdapterValue>> {
-    public static final int ID = 921345;
+    public static final int ID = 921346;
     private static final int LOADER_ID = 1;
-    private static final String PROGRAMTYPE = "programType";
-    private static final String ORGANISATIONUNITID = "organisationUnitId";
+    private static final String PROGRAMID = "programid";
+    private static final String CATEGORY_NAME = "categoryname";
+    private static String mCategoryName="";
 
 
-    public static ProgramDialogFragment newInstance(OnOptionSelectedListener listener,
-                                                    String orgUnitId, ProgramType... programKinds) {
-        ProgramDialogFragment fragment = new ProgramDialogFragment();
+    public static CategoryOptionComboDialogFragment newInstance(OnOptionSelectedListener listener,
+                                                                String programID, String categoryName) {
+        CategoryOptionComboDialogFragment fragment = new CategoryOptionComboDialogFragment();
         Bundle args = new Bundle();
-        args.putString(ORGANISATIONUNITID, orgUnitId);
-        if (programKinds != null) {
-            String[] programKindStrings = new String[programKinds.length];
-            for (int i = 0; i < programKinds.length; i++) {
-                programKindStrings[i] = programKinds[i].name();
-            }
-            args.putStringArray(PROGRAMTYPE, programKindStrings);
-        }
+        args.putString(PROGRAMID, programID);
+        args.putString(CATEGORY_NAME, categoryName);
+        mCategoryName=categoryName;
         fragment.setArguments(args);
         fragment.setOnOptionSetListener(listener);
         return fragment;
@@ -78,7 +75,7 @@ public class ProgramDialogFragment extends AutoCompleteDialogFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setDialogLabel(R.string.dialog_programs);
+        setDialogLabel(mCategoryName);
         setDialogId(ID);
         mProgressBar.setVisibility(View.VISIBLE);
     }
@@ -92,20 +89,12 @@ public class ProgramDialogFragment extends AutoCompleteDialogFragment
     @Override
     public Loader<List<OptionAdapterValue>> onCreateLoader(int id, Bundle args) {
         if (LOADER_ID == id && isAdded()) {
-            String organisationUnitId = args.getString(ORGANISATIONUNITID);
-            String[] kinds = args.getStringArray(PROGRAMTYPE);
-            ProgramType[] types = null;
-            if (kinds != null) {
-                types = new ProgramType[kinds.length];
-                for (int i = 0; i < kinds.length; i++) {
-                    types[i] = ProgramType.valueOf(kinds[i]);
-                }
-            }
+            String programid = args.getString(PROGRAMID);
             List<Class<? extends Model>> modelsToTrack = new ArrayList<>();
             modelsToTrack.add(Program.class);
             modelsToTrack.add(OrganisationUnitProgramRelationship.class);
             return new DbLoader<>(
-                    getActivity().getBaseContext(), modelsToTrack, new ProgramQuery(organisationUnitId, types)
+                    getActivity().getBaseContext(), modelsToTrack, new CategoryQuery(programid)
             );
         }
         return null;
@@ -127,25 +116,22 @@ public class ProgramDialogFragment extends AutoCompleteDialogFragment
         getAdapter().swapData(null);
     }
 
-    static class ProgramQuery implements Query<List<OptionAdapterValue>> {
-        private final String mOrgUnitId;
-        private final ProgramType[] mKinds;
+    static class CategoryQuery implements Query<List<OptionAdapterValue>> {
+        private final String mProgramId;
 
-        public ProgramQuery(String orgUnitId, ProgramType[] kinds) {
-            mOrgUnitId = orgUnitId;
-            mKinds = kinds;
+        public CategoryQuery(String programID) {
+            mProgramId = programID;
         }
 
         @Override
         public List<OptionAdapterValue> query(Context context) {
-            List<Program> programs = MetaDataController
-                    .getProgramsForOrganisationUnit(
-                            mOrgUnitId, mKinds
-                    );
+            List<CategoryOptionCombo> categoryOptionCombos = MetaDataController
+                    .getCategoryOptionComboFromProgram(
+                            mProgramId);
             List<OptionAdapterValue> values = new ArrayList<>();
-            if (programs != null && !programs.isEmpty()) {
-                for (Program program : programs) {
-                    values.add(new OptionAdapterValue(program.getUid(), program.getName()));
+            if (categoryOptionCombos != null && !categoryOptionCombos.isEmpty()) {
+                for (CategoryOptionCombo categoryOptionCombo : categoryOptionCombos) {
+                    values.add(new OptionAdapterValue(categoryOptionCombo.getUid(), categoryOptionCombo.getName()));
                 }
             }
             Collections.sort(values);

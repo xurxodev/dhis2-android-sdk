@@ -37,9 +37,12 @@ import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
+import org.hisp.dhis.android.sdk.persistence.models.CategoryOptionCombo;
+import org.hisp.dhis.android.sdk.persistence.models.Program$Table;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitProgramRelationship;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitProgramRelationship$Table;
+import org.hisp.dhis.android.sdk.persistence.models.Program;
 
 import static org.hisp.dhis.android.sdk.utils.Preconditions.isNull;
 
@@ -54,6 +57,9 @@ public final class SelectProgramFragmentPreferences {
 
     private static final String PROGRAM_ID = "key:programId";
     private static final String PROGRAM_LABEL = "key:programLabel";
+
+    private static final String CATEGORY_OPTION_COMBO_ID = "key:categoryOptionComboId";
+    private static final String CATEGORY_OPTION_COMBO_LABEL = "key:categoryOptionComboLabel";
 
     private final SharedPreferences mPrefs;
 
@@ -78,6 +84,8 @@ public final class SelectProgramFragmentPreferences {
         remove(ORG_UNIT_LABEL);
         remove(PROGRAM_ID);
         remove(PROGRAM_LABEL);
+        remove(CATEGORY_OPTION_COMBO_ID);
+        remove(CATEGORY_OPTION_COMBO_LABEL);
     }
 
     public Pair<String, String> getOrgUnit() {
@@ -120,6 +128,31 @@ public final class SelectProgramFragmentPreferences {
             return new Pair<>(programId, programLabel);
         } else {
             putProgram(null);
+            return null;
+        }
+    }
+
+    public void putCategoryOptionCombo(Pair<String, String> categoryOptionCombo) {
+        if (categoryOptionCombo != null) {
+            put(CATEGORY_OPTION_COMBO_ID, categoryOptionCombo.first);
+            put(CATEGORY_OPTION_COMBO_LABEL, categoryOptionCombo.second);
+        } else {
+            remove(CATEGORY_OPTION_COMBO_ID);
+            remove(CATEGORY_OPTION_COMBO_LABEL);
+        }
+    }
+
+    public Pair<String, String> getCategoryOptionCombo() {
+        String programId = get(PROGRAM_ID);
+        String categoryOptionComboID = get(CATEGORY_OPTION_COMBO_ID);
+        String categoryOptionComboLabel = get(CATEGORY_OPTION_COMBO_LABEL);
+
+        Program program = new Select().count().from(Program.class).where(
+                Condition.column(Program$Table.ID).is(programId)).querySingle();
+        if(program!=null && program.getCategoryCombo()!=null){
+            return new Pair<>(categoryOptionComboID, categoryOptionComboLabel);
+        } else {
+            putCategoryOptionCombo(null);
             return null;
         }
     }
