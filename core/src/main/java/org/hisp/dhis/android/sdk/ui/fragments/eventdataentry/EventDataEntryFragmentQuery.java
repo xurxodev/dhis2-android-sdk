@@ -57,7 +57,6 @@ import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRowTypes;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DatePickerRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DateTimePickerRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EditTextRow;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EmailEditTextRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EventCoordinatesRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EventDatePickerRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EventDueDatePickerRow;
@@ -322,7 +321,7 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
         } else if (dataElement.getValueType().equals(ValueType.URL)) {
             row = new URLEditTextRow(dataElementName, programStageDataElement.getCompulsory(), null, dataValue, true, DataEntryRowTypes.URL, event);
         } else if (dataElement.getValueType().equals(ValueType.EMAIL)) {
-            row = new EmailEditTextRow(dataElementName, programStageDataElement.getCompulsory(),
+            row = new EditTextRow(dataElementName, programStageDataElement.getCompulsory(),
                     null, dataValue,  DataEntryRowTypes.EMAIL, event);
         } else {
             row = new EditTextRow(dataElementName, programStageDataElement.getCompulsory(), null, dataValue, DataEntryRowTypes.NOT_SUPPORTED, event);
