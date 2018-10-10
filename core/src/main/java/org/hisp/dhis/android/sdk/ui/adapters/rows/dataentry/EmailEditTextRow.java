@@ -69,7 +69,7 @@ public class EmailEditTextRow extends Row {
             EditText editText = (EditText) root.findViewById(R.id.edit_text_row);
             detailedInfoButton = root.findViewById(R.id.detailed_info_button_layout);
 
-            editText.setInputType(InputType.TYPE_TEXT_VARIATION_URI);
+            editText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
             editText.setHint(R.string.enter_email);
             editText.setSingleLine(true);
 
@@ -240,7 +240,7 @@ public class EmailEditTextRow extends Row {
                 + "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:"
                 + "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09"
                 + "\\x0b\\x0c\\x0e-\\x7f])+)\\])";
-        if (url.matches(regExp) && url.length() > 0) {
+        if (url.matches(regExp) || url.length() == 0) {
             return true;
         } else {
             return false;
