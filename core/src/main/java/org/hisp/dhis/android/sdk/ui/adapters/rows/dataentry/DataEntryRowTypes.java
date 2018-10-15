@@ -53,5 +53,6 @@ public enum DataEntryRowTypes {
     NOT_SUPPORTED,
     TIME,
     DATETIME,
-    URL
+    URL,
+    EMAIL
 }

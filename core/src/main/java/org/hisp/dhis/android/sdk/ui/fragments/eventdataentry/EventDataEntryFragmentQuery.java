@@ -53,15 +53,15 @@ import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.AutoCompleteRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.CheckBoxRow;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DateTimePickerRow;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.QuestionCoordinatesRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRowTypes;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DatePickerRow;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DateTimePickerRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EditTextRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EventCoordinatesRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EventDatePickerRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EventDueDatePickerRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.IndicatorRow;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.QuestionCoordinatesRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.RadioButtonsRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.Row;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.StatusRow;
@@ -320,6 +320,9 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
             row = new DateTimePickerRow(dataElementName, programStageDataElement.getCompulsory(), null, dataValue, true);
         } else if (dataElement.getValueType().equals(ValueType.URL)) {
             row = new URLEditTextRow(dataElementName, programStageDataElement.getCompulsory(), null, dataValue, true, DataEntryRowTypes.URL, event);
+        } else if (dataElement.getValueType().equals(ValueType.EMAIL)) {
+            row = new EditTextRow(dataElementName, programStageDataElement.getCompulsory(),
+                    null, dataValue,  DataEntryRowTypes.EMAIL, event);
         } else {
             row = new EditTextRow(dataElementName, programStageDataElement.getCompulsory(), null, dataValue, DataEntryRowTypes.NOT_SUPPORTED, event);
         }

@@ -74,6 +74,7 @@ public class EditTextRow extends Row {
                 !DataEntryRowTypes.INTEGER_NEGATIVE.equals(rowType) &&
                 !DataEntryRowTypes.INTEGER_ZERO_OR_POSITIVE.equals(rowType) &&
                 !DataEntryRowTypes.INTEGER_POSITIVE.equals(rowType) &&
+                !DataEntryRowTypes.EMAIL.equals(rowType) &&
                 !DataEntryRowTypes.NOT_SUPPORTED.equals(rowType)) {
             throw new IllegalArgumentException("Unsupported row type");
         }
@@ -140,6 +141,15 @@ public class EditTextRow extends Row {
                 editText.setHint(R.string.enter_positive_integer);
                 editText.setFilters(new InputFilter[]{new PosFilter()});
                 editText.setSingleLine(true);
+            } else if(DataEntryRowTypes.EMAIL.equals(mRowType)){
+                EmailWatcher listener = new EmailWatcher(editText, errorLabel);
+                listener.setRow(this);
+                listener.setRowType(rowTypeTemp);
+                editText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                editText.setHint(R.string.enter_email);
+                editText.setSingleLine(true);
+                listener.setBaseValue(mValue);
+                editText.addTextChangedListener(listener);
             }
             
             OnTextChangeListener listener = new OnTextChangeListener(inflater.getContext(), editText);
@@ -413,6 +423,57 @@ public class EditTextRow extends Row {
     public void setOnEditorActionListener(
             TextView.OnEditorActionListener onEditorActionListener) {
         mOnEditorActionListener = onEditorActionListener;
+    }
+
+    private class EmailWatcher extends OnTextChangeListener {
+        final private EditText mEditText;
+        final private TextView mErrorLabel;
+
+
+        public EmailWatcher(EditText editText, TextView errorLabel) {
+            super(editText.getContext(), editText);
+            mEditText = editText;
+            mErrorLabel = errorLabel;
+        }
+
+        public void afterTextChanged(Editable s) {
+            super.afterTextChanged(s);
+            String text = mEditText.getText().toString();
+            if (validateEmail(text)) {
+                setError(null);
+            } else {
+                setError(R.string.error_email);
+            }
+        }
+
+        private void setError(Integer stringId) {
+            if (stringId == null) {
+                mError = null;
+                mErrorLabel.setVisibility(View.GONE);
+                mErrorLabel.setText("");
+            } else {
+                mErrorLabel.setVisibility(View.VISIBLE);
+                mErrorLabel.setText(stringId);
+                mError = mErrorLabel.getText().toString();
+            }
+        }
+
+    }
+
+    public boolean validateEmail(String url) {
+        String regExp = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\""
+                + "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01"
+                + "-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)"
+                + "+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:"
+                + "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}"
+                + "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:"
+                + "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09"
+                + "\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+        if (url.matches(regExp) || url.length() == 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
