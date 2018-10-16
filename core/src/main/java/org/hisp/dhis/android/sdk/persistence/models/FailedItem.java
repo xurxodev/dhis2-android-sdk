@@ -44,16 +44,16 @@ import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
  *
  * @author Simen Skogly Russnes on 26.02.15.
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class FailedItem extends BaseModel {
 
     public static final String EVENT = "Event";
     public static final String ENROLLMENT = "Enrollment";
     public static final String TRACKEDENTITYINSTANCE = "TrackedEntityInstance";
     private final static String CLASS_TAG = "FailedItem";
-    @Column
-    @ForeignKey(references = {@ForeignKeyReference(columnName = "importSummary",
-            columnType = int.class, foreignColumnName = "id")})
+    //@Column
+    //@ForeignKey(references = {@ForeignKeyReference(columnName = "importSummary",
+    //        columnType = int.class, foreignColumnName = "id")})
     protected ImportSummary importSummary;
     @Column
     @PrimaryKey

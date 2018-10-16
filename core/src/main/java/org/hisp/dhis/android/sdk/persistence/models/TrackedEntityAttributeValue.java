@@ -34,7 +34,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Update;
 
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
@@ -47,7 +46,7 @@ import java.io.Serializable;
 /**
  * @author Simen Skogly Russnes on 03.03.15.
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class TrackedEntityAttributeValue extends BaseValue implements Serializable {
     private static final String CLASS_TAG = TrackedEntityAttributeValue.class.getSimpleName();
 
@@ -102,7 +101,7 @@ public class TrackedEntityAttributeValue extends BaseValue implements Serializab
     }
 
     @Override
-    public void save() {
+    public boolean save() {
         if (Utils.isLocal(trackedEntityInstanceId) && TrackerController.
                 getTrackedEntityAttributeValue(trackedEntityAttributeId,
                         localTrackedEntityInstanceId) != null) {
@@ -112,19 +111,20 @@ public class TrackedEntityAttributeValue extends BaseValue implements Serializab
         } else {
             super.save();
         }
+        return true;
     }
 
 
     public void updateManually() {
         new Update(TrackedEntityAttributeValue.class).set(
-                Condition.column(TrackedEntityAttributeValue$Table.VALUE).is(value))
-                .where(Condition.column(TrackedEntityAttributeValue$Table.LOCALTRACKEDENTITYINSTANCEID).is(localTrackedEntityInstanceId),
-                        Condition.column(TrackedEntityAttributeValue$Table.TRACKEDENTITYATTRIBUTEID).is(trackedEntityAttributeId)).queryClose();
+                TrackedEntityAttributeValue_Table.value.is(value)
+                .where(TrackedEntityAttributeValue_Table.localtrackedentityinstanceid.is(localTrackedEntityInstanceId).and(
+                       TrackedEntityAttributeValue_Table.trackedentityattributeid).is(trackedEntityAttributeId))).queryClose();
     }
 
     @Override
-    public void update() {
-        save();
+    public boolean update() {
+        return save();
     }
 
     public String getTrackedEntityAttributeId() {

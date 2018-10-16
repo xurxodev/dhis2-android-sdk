@@ -43,7 +43,7 @@ import org.joda.time.DateTime;
 /**
  * @author Simen Skogly Russnes on 26.02.15.
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class SystemInfo extends BaseModel {
 
     @Column(name = "id")

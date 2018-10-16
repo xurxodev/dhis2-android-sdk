@@ -43,7 +43,7 @@ import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
  * This model is intended to represent relationship between program indicators
  * and program stages and stage sections
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public final class ProgramIndicatorToSectionRelationship extends BaseModel {
 
     @PrimaryKey(autoincrement = true)
@@ -53,12 +53,12 @@ public final class ProgramIndicatorToSectionRelationship extends BaseModel {
     /**
      * Using foreign keys here in order to ensure data integrity.
      */
-    @Column
-    @ForeignKey(
-            references = {
-                    @ForeignKeyReference(columnName = "programIndicatorId", columnType = String.class, foreignColumnName = "id")
-            }, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE
-    )
+    //@Column
+    //@ForeignKey(
+    //        references = {
+    //                @ForeignKeyReference(columnName = "programIndicatorId", columnType = String.class, foreignColumnName = "id")
+    //        }, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE
+    //)
     ProgramIndicator programIndicator;
 
     // This can be Stage or Section UUID.

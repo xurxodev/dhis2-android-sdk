@@ -36,7 +36,6 @@ import com.raizlabs.android.dbflow.annotation.ForeignKey;
 import com.raizlabs.android.dbflow.annotation.ForeignKeyReference;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
@@ -47,7 +46,7 @@ import java.util.List;
 /**
  * @author Simen Skogly Russnes on 24.02.15.
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class ImportSummary extends BaseModel {
 
     public static final String SUCCESS = "SUCCESS";
@@ -67,10 +66,10 @@ public class ImportSummary extends BaseModel {
     String description;
 
     @JsonProperty("importCount")
-    @Column
-    @ForeignKey(references = {
-            @ForeignKeyReference(columnName = "importCount", columnType = int.class, foreignColumnName = "id")
-    })
+    //@Column
+    //@ForeignKey(references = {
+    //        @ForeignKeyReference(columnName = "importCount", columnType = int.class, foreignColumnName = "id")
+    //})
     ImportCount importCount;
 
     @JsonProperty("reference")
@@ -91,7 +90,7 @@ public class ImportSummary extends BaseModel {
 
     public List<Conflict> getConflicts() {
         if( conflicts == null ) {
-            conflicts = new Select().from(Conflict.class).where(Condition.column(Conflict$Table.IMPORTSUMMARY).is(id)).queryList();
+            conflicts = new Select().from(Conflict.class).where(Conflict_Table.importsummary.is(id)).queryList();
         }
         return conflicts;
     }

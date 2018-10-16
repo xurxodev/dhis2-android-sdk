@@ -45,7 +45,7 @@ import java.util.Map;
 /**
  * @author Simen Skogly Russnes on 29.04.15.
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class ProgramRuleVariable extends BaseMetaDataObject {
 
     @Column(name = "trackedEntityAttribute")

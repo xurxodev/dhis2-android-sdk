@@ -35,7 +35,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Update;
 
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
@@ -45,7 +44,7 @@ import org.hisp.dhis.android.sdk.utils.Utils;
 /**
  * @author Simen Skogly Russnes on 23.02.15.
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class DataValue extends BaseValue {
 
     @JsonIgnore
@@ -107,19 +106,20 @@ public class DataValue extends BaseValue {
     }
 
     @Override
-    public void save() {
+    public boolean save() {
         if (Utils.isLocal(event) && TrackerController.getDataValue(localEventId, dataElement) != null) {
 
             //to avoid overwriting UID from server due to race conditions with autosyncing with server
             //we only update the value (ie not the other fields) if the currently in-memory event UID is locally created
             updateManually();
         } else
-            super.save();
+            return super.save();
+        return true;
     }
 
     @Override
-    public void update() {
-        save();
+    public boolean update() {
+        return save();
     }
 
     @JsonAnySetter
@@ -169,8 +169,8 @@ public class DataValue extends BaseValue {
     public void updateManually() {
 
         new Update(DataValue.class).set(
-                Condition.column(DataValue$Table.VALUE).is(this.getValue()))
-                .where(Condition.column(DataValue$Table.LOCALEVENTID).is(localEventId),
-                        Condition.column(DataValue$Table.DATAELEMENT).is(dataElement)).queryClose();
+                DataValue_Table.value.is(this.getValue()))
+                .where(DataValue_Table.localeventid.is(localEventId)).and(
+                        DataValue_Table.dataelement.is(dataElement)).queryClose();
     }
 }

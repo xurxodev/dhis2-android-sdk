@@ -38,18 +38,18 @@ import org.hisp.dhis.android.sdk.persistence.models.ProgramTrackedEntityAttribut
 /**
  * @author Simen Skogly Russnes on 27.05.15.
  */
-@Migration(version = 4, databaseName = Dhis2Database.NAME)
-public class Version4MigrationProgramTrackedEntityAttribute extends AlterTableMigration<ProgramTrackedEntityAttribute> {
-
-
-    public Version4MigrationProgramTrackedEntityAttribute() {
-        super(ProgramTrackedEntityAttribute.class);
-    }
-
-    @Override
-    public void onPreMigrate() {
-        // Simple ALTER TABLE migration wraps the statements into a nice builder notation
-        super.onPreMigrate();
-        addColumn(int.class, "sortOrder");
-    }
-}
+//@Migration(version = 4, databaseName = Dhis2Database.NAME)
+//public class Version4MigrationProgramTrackedEntityAttribute extends AlterTableMigration<ProgramTrackedEntityAttribute> {
+//
+//
+//    public Version4MigrationProgramTrackedEntityAttribute() {
+//        super(ProgramTrackedEntityAttribute.class);
+//    }
+//
+//    @Override
+//    public void onPreMigrate() {
+//        // Simple ALTER TABLE migration wraps the statements into a nice builder notation
+//        super.onPreMigrate();
+//        addColumn(int.class, "sortOrder");
+//    }
+//}

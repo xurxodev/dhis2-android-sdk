@@ -37,7 +37,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.annotation.Unique;
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Update;
 
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
@@ -51,7 +50,7 @@ import java.util.List;
  * @author Simen Skogly Russnes on 03.03.15.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class TrackedEntityInstance extends BaseSerializableModel implements Serializable {
 
     @JsonIgnore
@@ -128,7 +127,7 @@ public class TrackedEntityInstance extends BaseSerializableModel implements Seri
     }
 
     @Override
-    public void save() {
+    public boolean save() {
         /* check if there is an existing tei with the same UID to avoid duplicates */
         TrackedEntityInstance existingTei = TrackerController.
                 getTrackedEntityInstance(trackedEntityInstance);
@@ -144,6 +143,7 @@ public class TrackedEntityInstance extends BaseSerializableModel implements Seri
         } else {
             super.save();
         }
+        return true;
     }
 
     /**
@@ -153,14 +153,14 @@ public class TrackedEntityInstance extends BaseSerializableModel implements Seri
      */
     public void updateManually() {
         new Update<>(TrackedEntityInstance.class)
-                .set(Condition.column(TrackedEntityInstance$Table.FROMSERVER).is(fromServer))
-                .where(Condition.column(TrackedEntityInstance$Table.LOCALID).is(localId))
+                .set(TrackedEntityInstance_Table.fromserver).is(fromServer)
+                .where(TrackedEntityInstance_Table.localid).is(localId)
                 .queryClose();
     }
 
     @Override
-    public void update() {
-        save();
+    public boolean update() {
+        return save();
     }
 
     public String getTrackedEntity() {

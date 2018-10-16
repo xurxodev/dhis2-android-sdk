@@ -36,7 +36,7 @@ import com.raizlabs.android.dbflow.annotation.Table;
 
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public final class DashboardItemContent extends BaseMetaDataObject {
     public static final String TYPE_CHART = "chart";
     public static final String TYPE_EVENT_CHART = "eventChart";

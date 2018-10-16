@@ -36,14 +36,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.annotation.Unique;
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Update;
 
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 import org.hisp.dhis.android.sdk.utils.api.CodeGenerator;
-import org.hisp.dhis.android.sdk.utils.support.DateUtils;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -53,7 +51,7 @@ import java.util.List;
  * @author Simen Skogly Russnes on 04.03.15.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class Enrollment extends BaseSerializableModel {
 
     public static final String ACTIVE = "ACTIVE";
@@ -213,7 +211,7 @@ public class Enrollment extends BaseSerializableModel {
     }
 
     @Override
-    public void save() {
+    public boolean save() {
         /* check if there is an existing enrollment with the same UID to avoid duplicates */
         Enrollment existingEnrollment = TrackerController.getEnrollment(enrollment);
         boolean exists = false;
@@ -244,11 +242,12 @@ public class Enrollment extends BaseSerializableModel {
                 value.save();
             }
         }
+        return true;
     }
 
     @Override
-    public void update() {
-        save();
+    public boolean update() {
+        return save();
     }
 
     /**
@@ -257,11 +256,11 @@ public class Enrollment extends BaseSerializableModel {
      * and has previously been saved, so that it has a localId.
      */
     public void updateManually() {
-        new Update<>(Enrollment.class).set(
-                Condition.column(Enrollment$Table.STATUS).is(status),
-                Condition.column(Enrollment$Table.FROMSERVER).is(fromServer),
-                Condition.column(Enrollment$Table.FOLLOWUP).is(followup))
-                .where(Condition.column(Enrollment$Table.LOCALID).is(localId)).queryClose();
+        new Update<>(Enrollment.class)
+                .set((Enrollment_Table.status).is(status),
+                Enrollment_Table.fromserver.is(fromServer),
+                Enrollment_Table.followup.is(followup),
+                Enrollment_Table.localid.is(localId)).queryClose();
     }
 
     @JsonIgnore

@@ -44,7 +44,7 @@ import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
  *         This model class is intended to represent content of Interpretation {map, chart,
  *         reportTable, dataSet, period, organisationUnit}
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public final class InterpretationElement extends BaseMetaDataObject {
     public static final String TYPE_CHART = "chart";
     public static final String TYPE_MAP = "map";
@@ -57,13 +57,13 @@ public final class InterpretationElement extends BaseMetaDataObject {
     @NotNull
     String type;
 
-    @Column
-    @ForeignKey(
-            references = {
-                    @ForeignKeyReference(columnName = "interpretation",
-                            columnType = String.class, foreignColumnName = "id")
-            }, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE
-    )
+    //@Column
+   //@ForeignKey(
+   //        references = {
+   //                @ForeignKeyReference(columnName = "interpretation",
+   //                        columnType = String.class, foreignColumnName = "id")
+   //        }, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE
+   //)
     Interpretation interpretation;
 
     public InterpretationElement() {

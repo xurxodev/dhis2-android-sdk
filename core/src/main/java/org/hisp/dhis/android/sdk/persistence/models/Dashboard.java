@@ -35,7 +35,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
@@ -48,7 +47,7 @@ import java.util.List;
 
 import static org.hisp.dhis.android.sdk.utils.Preconditions.isNull;
 
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class Dashboard extends BaseMetaDataObject {
     /**
@@ -140,10 +139,9 @@ public final class Dashboard extends BaseMetaDataObject {
     @JsonIgnore
     public List<DashboardItem> queryRelatedDashboardItems() {
         return new Select().from(DashboardItem.class)
-                .where(Condition.column(DashboardItem$Table
-                        .DASHBOARD_DASHBOARD).is(getUid()))
-                .and(Condition.column(DashboardItem$Table
-                        .STATE).isNot(State.TO_DELETE.toString()))
+                .where(DashboardItem_Table.dashboard_dashboard.is(getUid()))
+                .and(DashboardItem_Table
+                        .state).isNot(State.TO_DELETE.toString())
                 .queryList();
     }
 

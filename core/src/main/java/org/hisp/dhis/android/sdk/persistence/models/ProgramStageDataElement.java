@@ -44,7 +44,7 @@ import java.util.Map;
 /**
  * @author Simen Skogly Russnes on 18.02.15.
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class ProgramStageDataElement extends BaseModel {
 
     private static final String CLASS_TAG = "ProgramStageDataElement";

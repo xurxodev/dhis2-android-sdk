@@ -33,15 +33,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Pair;
 
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
-import org.hisp.dhis.android.sdk.persistence.models.CategoryOptionCombo;
-import org.hisp.dhis.android.sdk.persistence.models.Program$Table;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitProgramRelationship;
-import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitProgramRelationship$Table;
 import org.hisp.dhis.android.sdk.persistence.models.Program;
 
 import static org.hisp.dhis.android.sdk.utils.Preconditions.isNull;
@@ -121,9 +117,9 @@ public final class SelectProgramFragmentPreferences {
 
         // we need to make sure that last selected program for particular
         // organisation unit is still in database and assigned to selected organisation unit
-        long count = new Select().count().from(OrganisationUnitProgramRelationship.class).where(
-                Condition.column(OrganisationUnitProgramRelationship$Table.ORGANISATIONUNITID).is(orgUnitId),
-                Condition.column(OrganisationUnitProgramRelationship$Table.PROGRAMID).is(programId)).count();
+        long count = new Select().from(OrganisationUnitProgramRelationship.class)
+                .where(OrganisationUnitProgramRelationship_Table.organisationunitid.is(orgUnitId)).and(
+                OrganisationUnitProgramRelationship_Table.program.is(programId)).queryList().size();
         if (count > 0) {
             return new Pair<>(programId, programLabel);
         } else {
@@ -147,8 +143,8 @@ public final class SelectProgramFragmentPreferences {
         String categoryOptionComboID = get(CATEGORY_OPTION_COMBO_ID);
         String categoryOptionComboLabel = get(CATEGORY_OPTION_COMBO_LABEL);
 
-        Program program = new Select().count().from(Program.class).where(
-                Condition.column(Program$Table.ID).is(programId)).querySingle();
+        Program program = new Select().from(Program.class).where(
+                Program_Table.id.is(programId)).querySingle().size();
         if(program!=null && program.getCategoryCombo()!=null){
             return new Pair<>(categoryOptionComboID, categoryOptionComboLabel);
         } else {

@@ -39,7 +39,7 @@ import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 /**
  * @author Simen Skogly Russnes on 20.02.15.
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class Option extends BaseMetaDataObject {
 
     @JsonIgnore

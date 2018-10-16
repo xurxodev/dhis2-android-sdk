@@ -35,18 +35,18 @@ import com.raizlabs.android.dbflow.sql.migration.AlterTableMigration;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramIndicator;
 
-@Migration(version = 5, databaseName = Dhis2Database.NAME)
-public class Version5MigrationProgramIndicator extends AlterTableMigration<ProgramIndicator> {
-
-
-    public Version5MigrationProgramIndicator() {
-        super(ProgramIndicator.class);
-    }
-
-    @Override
-    public void onPreMigrate() {
-        // Simple ALTER TABLE migration wraps the statements into a nice builder notation
-        super.onPreMigrate();
-        addColumn(Integer.class, "missingValueReplacement");
-    }
-}
+//@Migration(version = 5, databaseName = Dhis2Database.NAME)
+//public class Version5MigrationProgramIndicator extends AlterTableMigration<ProgramIndicator> {
+//
+//
+//    public Version5MigrationProgramIndicator() {
+//        super(ProgramIndicator.class);
+//    }
+//
+//    @Override
+//    public void onPreMigrate() {
+//        // Simple ALTER TABLE migration wraps the statements into a nice builder notation
+//        super.onPreMigrate();
+//        addColumn(Integer.class, "missingValueReplacement");
+//    }
+//}

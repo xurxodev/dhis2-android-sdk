@@ -45,7 +45,7 @@ import java.io.Serializable;
  * @author Simen Skogly Russnes on 07.07.15.
  */
 
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 @JsonIgnoreProperties("modelAdapter")
 public class Relationship extends BaseModel implements Serializable {
 

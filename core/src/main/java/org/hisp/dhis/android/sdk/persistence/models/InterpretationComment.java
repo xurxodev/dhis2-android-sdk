@@ -44,7 +44,7 @@ import org.hisp.dhis.android.sdk.persistence.models.meta.State;
 /**
  * @author Araz Abishov <araz.abishov.gsoc@gmail.com>.
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class InterpretationComment extends BaseMetaDataObject {
 
@@ -53,20 +53,20 @@ public final class InterpretationComment extends BaseMetaDataObject {
     String text;
 
     @JsonProperty("user")
-    @Column
-    @ForeignKey(
-            references = {
-                    @ForeignKeyReference(columnName = "user", columnType = String.class, foreignColumnName = "id")
-            }, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE
-    )
+    //@Column
+    //@ForeignKey(
+    //        references = {
+    //                @ForeignKeyReference(columnName = "user", columnType = String.class, foreignColumnName = "id")
+    //        }, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE
+    //)
     User user;
 
-    @Column
-    @ForeignKey(
-            references = {
-                    @ForeignKeyReference(columnName = "interpretation", columnType = String.class, foreignColumnName = "id")
-            }, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE
-    )
+    //@Column
+    //@ForeignKey(
+    //        references = {
+    //                @ForeignKeyReference(columnName = "interpretation", columnType = String.class, foreignColumnName = "id")
+    //        }, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE
+    //)
     Interpretation interpretation;
 
     @NotNull

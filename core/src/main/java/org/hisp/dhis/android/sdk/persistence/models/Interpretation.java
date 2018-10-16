@@ -49,7 +49,7 @@ import java.util.List;
 /**
  * @author Araz Abishov <araz.abishov.gsoc@gmail.com>.
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class Interpretation extends BaseMetaDataObject {
 
@@ -72,12 +72,12 @@ public final class Interpretation extends BaseMetaDataObject {
     State state;
 
     @JsonProperty("user")
-    @Column
-    @ForeignKey(
-            references = {
-                    @ForeignKeyReference(columnName = "user", columnType = String.class, foreignColumnName = "id")
-            }, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE
-    )
+    //@Column
+    //@ForeignKey(
+    //        references = {
+    //                @ForeignKeyReference(columnName = "user", columnType = String.class, foreignColumnName = "id")
+    //        }, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE
+    //)
     User user;
 
     @JsonProperty("chart")

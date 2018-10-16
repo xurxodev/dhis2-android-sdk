@@ -42,7 +42,7 @@ import java.util.Map;
 /**
  * @author Simen Skogly Russnes on 17.02.15.
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class ProgramStage extends BaseMetaDataObject {
 
     @Column(name = "program")

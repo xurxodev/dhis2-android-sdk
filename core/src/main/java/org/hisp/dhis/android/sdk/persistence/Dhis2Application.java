@@ -33,7 +33,10 @@ import android.app.Activity;
 import android.app.Application;
 
 import com.facebook.stetho.Stetho;
+import com.raizlabs.android.dbflow.config.DatabaseConfig;
+import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.runtime.ContentResolverNotifier;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 
@@ -55,7 +58,12 @@ public abstract class Dhis2Application extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        FlowManager.init(this);
+        FlowManager.init(FlowConfig.builder(this)
+                .addDatabaseConfig(DatabaseConfig.builder(Dhis2Database.class)
+                        .databaseName(Dhis2Database.NAME)
+                .modelNotifier(new ContentResolverNotifier("org.hisp.dhis.android.eventcapture_eyeseetea_dev"))
+                        .build())
+                .build());
         dhisController = new DhisController(this);
         bus.register(dhisController);
         Stetho.initializeWithDefaults(this);

@@ -33,7 +33,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
@@ -45,7 +44,7 @@ import java.util.regex.Pattern;
 /**
  * @author Simen Skogly Russnes on 29.04.15.
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class ProgramRule extends BaseMetaDataObject {
 
     public static final String SEPARATOR_ID = "\\.";
@@ -99,8 +98,7 @@ public class ProgramRule extends BaseMetaDataObject {
     public List<ProgramRuleAction> getProgramRuleActions() {
         return new Select()
                 .from(ProgramRuleAction.class)
-                .where(Condition.column(ProgramRuleAction$Table
-                        .PROGRAMRULE).is(id))
+                .where(ProgramRuleAction_Table.programrule).is(id)
                 .queryList();
     }
 

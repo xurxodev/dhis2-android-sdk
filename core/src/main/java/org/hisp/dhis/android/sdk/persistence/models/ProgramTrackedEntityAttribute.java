@@ -43,7 +43,7 @@ import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 /**
  * @author Simen Skogly Russnes on 20.02.15.
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class ProgramTrackedEntityAttribute extends BaseModel {
 
     private static final String CLASS_TAG = ProgramTrackedEntityAttribute.class.getSimpleName();

@@ -37,7 +37,7 @@ import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 
 import java.util.List;
 
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class CategoryOptionCombo extends BaseMetaDataObject {
 

@@ -31,14 +31,13 @@ package org.hisp.dhis.android.sdk.persistence.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 
 import java.util.List;
 
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class CategoryCombo extends BaseMetaDataObject {
 
@@ -63,8 +62,8 @@ public final class CategoryCombo extends BaseMetaDataObject {
         if (categoryOptionCombos == null) {
             categoryOptionCombos = new Select()
                     .from(CategoryOptionCombo.class)
-                    .where(Condition.column(CategoryOptionCombo$Table.CATEGORYCOMBO)
-                            .is(getUid())).queryList();
+                    .where(CategoryOptionCombo_Table.categorycombo)
+                            .is(getUid()).queryList();
         }
         return categoryOptionCombos;
     }

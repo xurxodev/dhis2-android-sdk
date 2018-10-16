@@ -42,18 +42,15 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.annotation.Unique;
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.sql.language.Update;
 
-import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRowTypes;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.RowValueChangedEvent;
 import org.hisp.dhis.android.sdk.utils.api.CodeGenerator;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -67,7 +64,7 @@ import java.util.Map;
  * @author Simen Skogly Russnes on 23.02.15.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class Event extends BaseSerializableModel {
 
     private static final String CLASS_TAG = "Event";
@@ -182,17 +179,17 @@ public class Event extends BaseSerializableModel {
     }
 
     @Override
-    public void delete() {
+    public boolean delete() {
         if (dataValues != null) {
             for (DataValue dataValue : dataValues) {
                 dataValue.delete();
             }
         }
-        super.delete();
+        return super.delete();
     }
 
     @Override
-    public void save() {
+    public boolean save() {
         /* check if there is an existing event with the same UID to avoid duplicates */
         Event existingEvent = TrackerController.getEventByUid(event);
         if (existingEvent != null) {
@@ -204,7 +201,7 @@ public class Event extends BaseSerializableModel {
             //unfortunately a bit of hard coding I suppose but it's important to verify data integrity
             updateManually();
         } else {
-            super.save(); //saving the event first to get a autoincrement index from db
+            return super.save(); //saving the event first to get a autoincrement index from db
         }
 
         if (dataValues != null) {
@@ -214,6 +211,7 @@ public class Event extends BaseSerializableModel {
                 dataValue.save();
             }
         }
+        return true;
     }
 
     public String getEnrollment() {
@@ -227,16 +225,16 @@ public class Event extends BaseSerializableModel {
      */
     private void updateManually() {
         new Update(Event.class).set(
-                Condition.column(Event$Table.LONGITUDE).is(longitude),
-                Condition.column(Event$Table.LATITUDE).is(latitude),
-                Condition.column(Event$Table.STATUS).is(status),
-                Condition.column(Event$Table.FROMSERVER).is(fromServer))
-                .where(Condition.column(Enrollment$Table.LOCALID).is(localId)).queryClose();
+                Event_Table.longitude.is(longitude),
+                Event_Table.latitude.is(latitude),
+                Event_Table.status.is(status),
+                Event_Table.fromserver.is(fromServer))
+                .where(Enrollment_Table.localid.is(localId)).queryClose();
     }
 
     @Override
-    public void update() {
-        save();
+    public boolean update() {
+        return save();
     }
 
     @JsonProperty("coordinate")
@@ -259,7 +257,7 @@ public class Event extends BaseSerializableModel {
 
     public List<DataValue> getDataValues() {
         if (dataValues == null) dataValues = new Select().from(DataValue.class).where(
-                Condition.column(DataValue$Table.LOCALEVENTID).is(localId)).queryList();
+                DataValue_Table.localeventid.is(localId)).queryList();
         return dataValues;
     }
 

@@ -32,7 +32,6 @@ package org.hisp.dhis.android.sdk.controllers.tracker;
 import android.content.Context;
 import android.util.Log;
 
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.hisp.dhis.android.sdk.R;
@@ -44,22 +43,15 @@ import org.hisp.dhis.android.sdk.events.LoadingMessageEvent;
 import org.hisp.dhis.android.sdk.network.APIException;
 import org.hisp.dhis.android.sdk.network.DhisApi;
 import org.hisp.dhis.android.sdk.persistence.models.DataValue;
-import org.hisp.dhis.android.sdk.persistence.models.DataValue$Table;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
-import org.hisp.dhis.android.sdk.persistence.models.Enrollment$Table;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
-import org.hisp.dhis.android.sdk.persistence.models.Event$Table;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
-import org.hisp.dhis.android.sdk.persistence.models.FailedItem$Table;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.Program;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramTrackedEntityAttribute;
 import org.hisp.dhis.android.sdk.persistence.models.Relationship;
-import org.hisp.dhis.android.sdk.persistence.models.Relationship$Table;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue$Table;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance$Table;
 import org.hisp.dhis.android.sdk.persistence.preferences.DateTimeManager;
 import org.hisp.dhis.android.sdk.persistence.preferences.ResourceType;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
@@ -99,22 +91,22 @@ public final class TrackerController extends ResourceController {
     }
 
     public static List<Relationship> getRelationships(String trackedEntityInstance) {
-        return new Select().from(Relationship.class).where(Condition.column
-                (Relationship$Table.TRACKEDENTITYINSTANCEA).is(trackedEntityInstance)).
-                or(Condition.column(Relationship$Table.TRACKEDENTITYINSTANCEB).is
+        return new Select().from(Relationship.class).where(
+                (Relationship_Table.trackedinstancea).is(trackedEntityInstance).
+                or(Relationship_Table.trackedinstanceb).is
                         (trackedEntityInstance)).queryList();
     }
 
     public static List<Enrollment> getEnrollments(String program, String organisationUnit) {
-        return new Select().from(Enrollment.class).where(Condition.column(Enrollment$Table.PROGRAM).
-                is(program)).and(Condition.column(Enrollment$Table.ORGUNIT).is(organisationUnit)).
-                orderBy(false, Enrollment$Table.ENROLLMENTDATE).
+        return new Select().from(Enrollment.class).where(Enrollment_Table.program).
+                is(program).and(Enrollment_Table.orgunit).is(organisationUnit).
+                orderBy(false, Enrollment_Table.enrollmentdate).
                 queryList();
     }
 
     public static List<Enrollment> getEnrollments(TrackedEntityInstance trackedEntityInstance) {
-        return new Select().from(Enrollment.class).where(Condition.column(Enrollment$Table.LOCALTRACKEDENTITYINSTANCEID).
-                is(trackedEntityInstance.getLocalId())).queryList();
+        return new Select().from(Enrollment.class).where(Enrollment_Table.localtrackedentityinstanceid).
+                is(trackedEntityInstance.getLocalId()).queryList();
     }
 
     /**
@@ -126,20 +118,20 @@ public final class TrackerController extends ResourceController {
      */
     public static List<Enrollment> getEnrollments(String program, TrackedEntityInstance trackedEntityInstance) {
         List<Enrollment> enrollments = new Select().from(Enrollment.class).
-                where(Condition.column(Enrollment$Table.PROGRAM).is(program)).
-                and(Condition.column(Enrollment$Table.LOCALTRACKEDENTITYINSTANCEID).
+                where(Enrollment_Table.program.is(program).
+                and(Enrollment_Table.localtrackedentityinstanceid).
                         is(trackedEntityInstance.getLocalId())).queryList();
         return enrollments;
     }
 
     public static Enrollment getEnrollment(String enrollment) {
-        return new Select().from(Enrollment.class).where(Condition.column
-                (Enrollment$Table.ENROLLMENT).is(enrollment)).querySingle();
+        return new Select().from(Enrollment.class).where(
+                (Enrollment_Table.enrollment).is(enrollment)).querySingle();
     }
 
     public static Enrollment getEnrollment(long localEnrollmentId) {
-        return new Select().from(Enrollment.class).where(Condition.column(Enrollment$Table.LOCALID).
-                is(localEnrollmentId)).querySingle();
+        return new Select().from(Enrollment.class).where(Enrollment_Table.localid).
+                is(localEnrollmentId).querySingle();
     }
 
     /**
@@ -154,10 +146,10 @@ public final class TrackerController extends ResourceController {
      */
     public static List<Event> getScheduledEvents(String programId, String orgUnitId,
                                                  String startDate, String endDate) {
-        return new Select().from(Event.class).where(Condition.column(Event$Table.PROGRAMID).is
-                (programId)).and(Condition.column(Event$Table.ORGANISATIONUNITID).is
-                (orgUnitId)).and(Condition.column(Event$Table.DUEDATE).between(startDate).and
-                (endDate)).orderBy(Event$Table.DUEDATE).queryList();
+        return new Select().from(Event.class).where(Event_Table.programid).is
+                (programId).and(Event_Table.organisationunitid).is
+                (orgUnitId).and(Event_Table.duedate).between(startDate).and
+                (endDate).orderBy(Event_Table.duedate).queryList();
     }
 
     /**
@@ -169,7 +161,7 @@ public final class TrackerController extends ResourceController {
      * @return
      */
     public static List<Event> getEventsByEnrollment(String enrollment) {
-        return new Select().from(Event.class).where(Condition.column(Event$Table.ENROLLMENT).is(enrollment)).queryList();
+        return new Select().from(Event.class).where(Event_Table.enrollment).is(enrollment).queryList();
     }
 
     /**
@@ -179,8 +171,8 @@ public final class TrackerController extends ResourceController {
      * @return
      */
     public static List<Event> getEventsByEnrollment(long localEnrollmentId) {
-        return new Select().from(Event.class).where(Condition.column(Event$Table.LOCALENROLLMENTID).is(localEnrollmentId))
-                .and(Condition.column(Event$Table.STATUS).isNot(Event.STATUS_DELETED)).queryList();
+        return new Select().from(Event.class).where(Event_Table.localenrollmentid).is(localEnrollmentId)
+                .and(Event_Table.status).isNot(Event.STATUS_DELETED).queryList();
     }
 
     /**
@@ -191,11 +183,11 @@ public final class TrackerController extends ResourceController {
      * @return
      */
     public static List<Event> getNotDeletedEvents(String organisationUnitId, String programId) {
-        List<Event> events = new Select().from(Event.class).where(Condition.column
-                (Event$Table.ORGANISATIONUNITID).is(organisationUnitId)).
-                and(Condition.column(Event$Table.PROGRAMID).is(programId)).
-                and(Condition.column(Event$Table.STATUS).isNot(Event.STATUS_DELETED))
-                .orderBy(false, Event$Table.LASTUPDATED).queryList();
+        List<Event> events = new Select().from(Event.class).where(
+                Event_Table.organisationunitid).is(organisationUnitId).
+                and(Event_Table.programid).is(programId).
+                and(Event_Table.status).isNot(Event.STATUS_DELETED)
+                .orderBy(false, Event_Table.lastupdated).queryList();
         return events;
     }
 
@@ -207,12 +199,12 @@ public final class TrackerController extends ResourceController {
      * @return
      */
     public static List<Event> getNotDeletedEvents(String organisationUnitId, String programId,String attributeCC) {
-        List<Event> events = new Select().from(Event.class).where(Condition.column
-                (Event$Table.ORGANISATIONUNITID).is(organisationUnitId)).
-                and(Condition.column(Event$Table.PROGRAMID).is(programId)).
-                and(Condition.column(Event$Table.ATTRIBUTECC).is(attributeCC)).
-                and(Condition.column(Event$Table.STATUS).isNot(Event.STATUS_DELETED))
-                .orderBy(false, Event$Table.LASTUPDATED).queryList();
+        List<Event> events = new Select().from(Event.class).where(
+                Event_Table.organisationunitid).is(organisationUnitId).
+                and(Event_Table.programid).is(programId).
+                and(Event_Table.attributecc).is(attributeCC).
+                and(Event_Table.status).isNot(Event.STATUS_DELETED)
+                .orderBy(false, Event_Table.lastupdated).queryList();
         return events;
     }
 
@@ -223,8 +215,8 @@ public final class TrackerController extends ResourceController {
      */
     public static List<Event> getDeletedEvents() {
         List<Event> events = new Select().from(Event.class)
-                .where(Condition.column(Event$Table.STATUS).is(Event.STATUS_DELETED))
-                .orderBy(false, Event$Table.LASTUPDATED).queryList();
+                .where(Event_Table.status).is(Event.STATUS_DELETED)
+                .orderBy(false, Event_Table.lastupdated).queryList();
         return events;
     }
 
@@ -236,11 +228,11 @@ public final class TrackerController extends ResourceController {
      * @return
      */
     public static List<Event> getServerEvents(String organisationUnitId, String programId) {
-        List<Event> events = new Select().from(Event.class).where(Condition.column
-                (Event$Table.ORGANISATIONUNITID).is(organisationUnitId)).
-                and(Condition.column(Event$Table.PROGRAMID).is(programId))
-                .and(Condition.column(Event$Table.CREATED).isNotNull())
-                .orderBy(false, Event$Table.LASTUPDATED).queryList();
+        List<Event> events = new Select().from(Event.class).where(
+                (Event_Table.organisationunitid).is(organisationUnitId).
+                and(Event_Table.programid).is(programId)
+                .and(Event_Table.created).isNotNull())
+                .orderBy(false, Event_Table.lastupdated).queryList();
         return events;
     }
 
@@ -251,7 +243,7 @@ public final class TrackerController extends ResourceController {
      * @return
      */
     public static Event getEvent(long localId) {
-        return new Select().from(Event.class).where(Condition.column(Event$Table.LOCALID).is(localId)).querySingle();
+        return new Select().from(Event.class).where(Event_Table.localid.is(localId)).querySingle();
     }
 
     /**
@@ -262,9 +254,9 @@ public final class TrackerController extends ResourceController {
      * @return
      */
     public static Event getEvent(long localEnrollment, String programStage) {
-        return new Select().from(Event.class).where(Condition.column
-                        (Event$Table.LOCALENROLLMENTID).is(localEnrollment),
-                Condition.column(Event$Table.PROGRAMSTAGEID).is(programStage)).querySingle();
+        return new Select().from(Event.class).where(
+                        (Event_Table.localenrollmentid).is(localEnrollment),
+                Event_Table.programstageid).is(programStage).querySingle();
     }
 
     /**
@@ -276,12 +268,12 @@ public final class TrackerController extends ResourceController {
      * @return
      */
     public static Event getEventByUid(String event) {
-        return new Select().from(Event.class).where(Condition.column(Event$Table.EVENT).is(event)).querySingle();
+        return new Select().from(Event.class).where(Event_Table.event.is(event)).querySingle();
     }
 
     public static DataValue getDataValue(long eventId, String dataElement) {
-        return new Select().from(DataValue.class).where(Condition.column(DataValue$Table.
-                LOCALEVENTID).is(eventId), Condition.column(DataValue$Table.DATAELEMENT).is(dataElement)).querySingle();
+        return new Select().from(DataValue.class).where(DataValue_Table.
+                localeventid).is(eventId).and(DataValue_Table.dataelement).is(dataElement).querySingle();
     }
 
     /**
@@ -291,12 +283,13 @@ public final class TrackerController extends ResourceController {
      * @return
      */
     public static TrackedEntityInstance getTrackedEntityInstance(String trackedEntityInstance) {
-        return new Select().from(TrackedEntityInstance.class).where(Condition.column(TrackedEntityInstance$Table.TRACKEDENTITYINSTANCE).is(trackedEntityInstance)).querySingle();
+        return new Select().from(TrackedEntityInstance.class)
+                .where(TrackedEntityInstance_Table.trackedentityatributeid).is(trackedEntityInstance).querySingle();
     }
 
     public static TrackedEntityInstance getTrackedEntityInstance(long localId) {
         return new Select().from(TrackedEntityInstance.class).where
-                (Condition.column(TrackedEntityInstance$Table.LOCALID).is(localId)).querySingle();
+                (TrackedEntityInstance_Table.localid).is(localId).querySingle();
     }
 
     /*
@@ -329,10 +322,10 @@ public final class TrackerController extends ResourceController {
      */
     public static TrackedEntityAttributeValue getTrackedEntityAttributeValue(String trackedEntityAttribute, String trackedEntityInstance) {
         return new Select().from(TrackedEntityAttributeValue.class).where(
-                Condition.column(TrackedEntityAttributeValue$Table.
-                        TRACKEDENTITYATTRIBUTEID).is(trackedEntityAttribute),
-                Condition.column(TrackedEntityAttributeValue$Table.
-                        TRACKEDENTITYINSTANCEID).is(trackedEntityInstance)).querySingle();
+                TrackedEntityAttributeValue_Table.
+                        trackedentityatributeid).is(trackedEntityAttribute).and(
+                TrackedEntityAttributeValue_Table.
+                        trackedentityatributeid).is(trackedEntityInstance).querySingle();
     }
 
     /**
@@ -343,8 +336,8 @@ public final class TrackerController extends ResourceController {
      */
     public static List<TrackedEntityAttributeValue> getTrackedEntityAttributeValues
     (String trackedEntityInstance) {
-        return new Select().from(TrackedEntityAttributeValue.class).where(Condition.column
-                (TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID).is(trackedEntityInstance)).queryList();
+        return new Select().from(TrackedEntityAttributeValue.class).where(
+                (TrackedEntityAttributeValue_Table.trackedentityatributeid).is(trackedEntityInstance)).queryList();
     }
 
     /**
@@ -356,10 +349,10 @@ public final class TrackerController extends ResourceController {
      */
     public static TrackedEntityAttributeValue getTrackedEntityAttributeValue(String trackedEntityAttribute, long trackedEntityInstance) {
         return new Select().from(TrackedEntityAttributeValue.class).where(
-                Condition.column(TrackedEntityAttributeValue$Table.
-                        TRACKEDENTITYATTRIBUTEID).is(trackedEntityAttribute),
-                Condition.column(TrackedEntityAttributeValue$Table.
-                        LOCALTRACKEDENTITYINSTANCEID).is(trackedEntityInstance)).querySingle();
+                TrackedEntityAttributeValue_Table.
+                        trackedentityatributeid).is(trackedEntityAttribute).and(
+                TrackedEntityAttributeValue_Table.
+                        localtrackedentityinstanceid).is(trackedEntityInstance).querySingle();
     }
 
     /**
@@ -370,8 +363,9 @@ public final class TrackerController extends ResourceController {
      */
     public static List<TrackedEntityAttributeValue> getTrackedEntityAttributeValues
     (long trackedEntityInstance) {
-        return new Select().from(TrackedEntityAttributeValue.class).where(Condition.column
-                (TrackedEntityAttributeValue$Table.LOCALTRACKEDENTITYINSTANCEID).is(trackedEntityInstance)).orderBy(TrackedEntityAttributeValue$Table.TRACKEDENTITYATTRIBUTEID).queryList();
+        return new Select().from(TrackedEntityAttributeValue.class).where(
+                (TrackedEntityAttributeValue_Table.localtrackedentityinstanceid).is(trackedEntityInstance))
+                .orderBy(localtrackedentityinstanceid.TRACKEDENTITYATTRIBUTEID).queryList();
     }
 
     /**
@@ -387,11 +381,12 @@ public final class TrackerController extends ResourceController {
     }
 
     public static List<FailedItem> getFailedItems(String type) {
-        return new Select().from(FailedItem.class).where(Condition.column(FailedItem$Table.ITEMTYPE).is(type)).queryList();
+        return new Select().from(FailedItem.class).where(FailedItem_Table.itemtype).is(type).queryList();
     }
 
     public static FailedItem getFailedItem(String type, long id) {
-        return new Select().from(FailedItem.class).where(Condition.column(FailedItem$Table.ITEMTYPE).is(type), Condition.column(FailedItem$Table.ITEMID).is(id)).querySingle();
+        return new Select().from(FailedItem.class).where(FailedItem_Table.itemtype).is(type).and(FailedItem_Table.itemid)
+        .is(id).querySingle();
     }
 
     /**

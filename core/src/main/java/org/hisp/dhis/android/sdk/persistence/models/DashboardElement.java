@@ -40,7 +40,7 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 import org.hisp.dhis.android.sdk.persistence.models.meta.State;
 
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public final class DashboardElement extends BaseMetaDataObject {
     static final String DASHBOARD_ITEM_KEY = "dashboardItem";
 
@@ -50,13 +50,13 @@ public final class DashboardElement extends BaseMetaDataObject {
     State state;
 
     @JsonIgnore
-    @Column
+    //@Column
     @NotNull
-    @ForeignKey(
-            references = {
-                    @ForeignKeyReference(columnName = DASHBOARD_ITEM_KEY, columnType = String.class, foreignColumnName = "id")
-            }, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE
-    )
+    //@ForeignKey(
+    //        references = {
+    //                @ForeignKeyReference(columnName = DASHBOARD_ITEM_KEY, columnType = String.class, foreignColumnName = "id")
+    //        }, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE
+    //)
     DashboardItem dashboardItem;
 
     public DashboardElement() {

@@ -83,7 +83,7 @@ public abstract class BaseIdentifiableObject extends BaseModel {
     String lastUpdated;
 
     @JsonProperty("access")
-    @Column(name = "access")
+    //@Column(name = "access")
     Access access;
 
     @JsonAnySetter

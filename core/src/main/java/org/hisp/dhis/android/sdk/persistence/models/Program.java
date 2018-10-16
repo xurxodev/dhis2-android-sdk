@@ -35,7 +35,6 @@ import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ForeignKey;
 import com.raizlabs.android.dbflow.annotation.ForeignKeyReference;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
@@ -47,15 +46,15 @@ import java.util.List;
 /**
  * @author Simen Skogly Russnes on 17.02.15.
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class Program extends BaseMetaDataObject {
 
     @JsonProperty("trackedEntity")
-    @Column
-    @ForeignKey(references = {
-            @ForeignKeyReference(columnName = "trackedEntity",
-                    columnType = String.class, foreignColumnName = "id")
-    })
+   // @Column
+    //@ForeignKey(references = {
+    //        @ForeignKeyReference(columnName = "trackedEntity",
+    //                columnType = String.class, foreignColumnName = "id")
+    //})
     TrackedEntity trackedEntity;
 
     @JsonProperty("programType")
@@ -197,7 +196,7 @@ public class Program extends BaseMetaDataObject {
     }
 
     public List<ProgramRule> getProgramRules() {
-        return new Select().from(ProgramRule.class).where(Condition.column(ProgramRule$Table.PROGRAM).is(id)).queryList();
+        return new Select().from(ProgramRule.class).where(ProgramRule_Table.program.is(id)).queryList();
     }
 
     public boolean getRelationshipFromA() {
@@ -333,7 +332,7 @@ public class Program extends BaseMetaDataObject {
                 if (categoryComboUId == null) return null;
                 categoryCombo = new Select()
                         .from(CategoryCombo.class)
-                        .where(Condition.column(CategoryCombo$Table.ID)
+                        .where(CategoryCombo_Table.id
                                 .is(categoryComboUId)).querySingle();
             }
         return categoryCombo;

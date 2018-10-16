@@ -29,7 +29,7 @@
 
 package org.hisp.dhis.android.sdk.utils;
 
-import com.raizlabs.android.dbflow.runtime.TransactionManager;
+import com.raizlabs.android.dbflow.config.DatabaseConfig;
 
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 import org.hisp.dhis.android.sdk.persistence.models.BaseIdentifiableObject;
@@ -65,31 +65,50 @@ public final class DbUtils {
         if (operations.isEmpty()) {
             return;
         }
-
-        TransactionManager.transact(Dhis2Database.NAME, new Runnable() {
-            @Override
-            public void run() {
-                for (DbOperation operation : operations) {
-                    switch (operation.getAction()) {
-                        case INSERT: {
-                            operation.getModel().insert();
-                            break;
-                        }
-                        case UPDATE: {
-                            operation.getModel().update();
-                            break;
-                        }
-                        case SAVE:
-                            operation.getModel().save();
-                            break;
-                        case DELETE: {
-                            operation.getModel().delete();
-                            break;
-                        }
-                    }
+        //fixme
+        for (DbOperation operation : operations) {
+            switch (operation.getAction()) {
+                case INSERT: {
+                    operation.getModel().insert();
+                    break;
+                }
+                case UPDATE: {
+                    operation.getModel().update();
+                    break;
+                }
+                case SAVE:
+                    operation.getModel().save();
+                    break;
+                case DELETE: {
+                    operation.getModel().delete();
+                    break;
                 }
             }
-        });
+        }
+        //TransactionManager.transact(Dhis2Database.NAME, new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        for (DbOperation operation : operations) {
+        //            switch (operation.getAction()) {
+        //                case INSERT: {
+        //                    operation.getModel().insert();
+        //                    break;
+        //                }
+        //                case UPDATE: {
+        //                    operation.getModel().update();
+        //                    break;
+        //                }
+        //                case SAVE:
+        //                    operation.getModel().save();
+        //                    break;
+        //                case DELETE: {
+        //                    operation.getModel().delete();
+        //                    break;
+        //                }
+        //            }
+        //        }
+        //    }
+        //});
     }
 
     /**

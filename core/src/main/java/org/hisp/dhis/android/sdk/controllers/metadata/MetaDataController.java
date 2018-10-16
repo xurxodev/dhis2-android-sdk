@@ -32,7 +32,6 @@ package org.hisp.dhis.android.sdk.controllers.metadata;
 import android.content.Context;
 import android.util.Log;
 
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
@@ -49,20 +48,15 @@ import org.hisp.dhis.android.sdk.events.LoadingMessageEvent;
 import org.hisp.dhis.android.sdk.network.APIException;
 import org.hisp.dhis.android.sdk.network.DhisApi;
 import org.hisp.dhis.android.sdk.persistence.models.Attribute;
-import org.hisp.dhis.android.sdk.persistence.models.Attribute$Table;
 import org.hisp.dhis.android.sdk.persistence.models.AttributeValue;
-import org.hisp.dhis.android.sdk.persistence.models.AttributeValue$Table;
 import org.hisp.dhis.android.sdk.persistence.models.CategoryOptionCombo;
-import org.hisp.dhis.android.sdk.persistence.models.CategoryOptionCombo$Table;
 import org.hisp.dhis.android.sdk.persistence.models.Conflict;
 import org.hisp.dhis.android.sdk.persistence.models.Constant;
-import org.hisp.dhis.android.sdk.persistence.models.Constant$Table;
 import org.hisp.dhis.android.sdk.persistence.models.Dashboard;
 import org.hisp.dhis.android.sdk.persistence.models.DashboardElement;
 import org.hisp.dhis.android.sdk.persistence.models.DashboardItem;
 import org.hisp.dhis.android.sdk.persistence.models.DashboardItemContent;
 import org.hisp.dhis.android.sdk.persistence.models.DataElement;
-import org.hisp.dhis.android.sdk.persistence.models.DataElement$Table;
 import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
@@ -73,39 +67,24 @@ import org.hisp.dhis.android.sdk.persistence.models.Interpretation;
 import org.hisp.dhis.android.sdk.persistence.models.InterpretationComment;
 import org.hisp.dhis.android.sdk.persistence.models.InterpretationElement;
 import org.hisp.dhis.android.sdk.persistence.models.Option;
-import org.hisp.dhis.android.sdk.persistence.models.Option$Table;
 import org.hisp.dhis.android.sdk.persistence.models.OptionSet;
-import org.hisp.dhis.android.sdk.persistence.models.OptionSet$Table;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
-import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit$Table;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitProgramRelationship;
-import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitProgramRelationship$Table;
 import org.hisp.dhis.android.sdk.persistence.models.Program;
-import org.hisp.dhis.android.sdk.persistence.models.Program$Table;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramIndicator;
-import org.hisp.dhis.android.sdk.persistence.models.ProgramIndicator$Table;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramIndicatorToSectionRelationship;
-import org.hisp.dhis.android.sdk.persistence.models.ProgramIndicatorToSectionRelationship$Table;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramRule;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramRuleAction;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramRuleVariable;
-import org.hisp.dhis.android.sdk.persistence.models.ProgramRuleVariable$Table;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage;
-import org.hisp.dhis.android.sdk.persistence.models.ProgramStage$Table;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStageDataElement;
-import org.hisp.dhis.android.sdk.persistence.models.ProgramStageDataElement$Table;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStageSection;
-import org.hisp.dhis.android.sdk.persistence.models.ProgramStageSection$Table;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramTrackedEntityAttribute;
-import org.hisp.dhis.android.sdk.persistence.models.ProgramTrackedEntityAttribute$Table;
 import org.hisp.dhis.android.sdk.persistence.models.Relationship;
 import org.hisp.dhis.android.sdk.persistence.models.RelationshipType;
-import org.hisp.dhis.android.sdk.persistence.models.RelationshipType$Table;
 import org.hisp.dhis.android.sdk.persistence.models.SystemInfo;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntity;
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntity$Table;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttribute;
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttribute$Table;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.persistence.models.User;
@@ -192,30 +171,33 @@ public final class MetaDataController extends ResourceController {
     }
 
     public static RelationshipType getRelationshipType(String relation) {
-        return new Select().from(RelationshipType.class).where(Condition.column(RelationshipType$Table.ID).is(relation)).querySingle();
+        return new Select().from(RelationshipType.class).where(RelationshipType_Table.id).is(relation).querySingle();
     }
 
     public static List<Option> getOptions(String optionSetId) {
-        return new Select().from(Option.class).where(Condition.column(Option$Table.OPTIONSET).is(optionSetId)).orderBy(Option$Table.SORTINDEX).queryList();
+        return new Select().from(Option.class).where(Option_Table.optionset).is(optionSetId)
+                .orderBy(Option_Table.sortindex)
+                .queryList();
     }
 
     public static List<ProgramStageSection> getProgramStageSections(String programStageId) {
-        return new Select().from(ProgramStageSection.class).where(Condition.column
-                (ProgramStageSection$Table.PROGRAMSTAGE).is(programStageId)).
-                orderBy(true, ProgramStageSection$Table.SORTORDER).queryList();
+        return new Select().from(ProgramStageSection.class).where(
+                ProgramStageSection_Table.programstage.is(programStageId).
+                orderBy(true, ProgramStageSection_Table.sortorder))
+                .queryList();
     }
 
     public static List<ProgramStageDataElement> getProgramStageDataElements(ProgramStageSection section) {
         if (section == null) return null;
-        return new Select().from(ProgramStageDataElement.class).where(Condition.column
-                (ProgramStageDataElement$Table.PROGRAMSTAGESECTION).is(section.getUid())).queryList();
+        return new Select().from(ProgramStageDataElement.class).where(
+                ProgramStageDataElement_Table.programstagesection.is(section.getUid())).queryList();
     }
 
     public static List<ProgramStageDataElement> getProgramStageDataElements(ProgramStage programStage) {
         if (programStage == null) return null;
-        return new Select().from(ProgramStageDataElement.class).where(Condition.column
-                (ProgramStageDataElement$Table.PROGRAMSTAGE).is(programStage.getUid())).orderBy
-                (ProgramStageDataElement$Table.SORTORDER).queryList();
+        return new Select().from(ProgramStageDataElement.class).where(
+                (ProgramStageDataElement_Table.programstage).is(programStage.getUid())).orderBy
+                (ProgramStageDataElement_Table.sortorder).queryList();
     }
 
     /**
@@ -225,7 +207,7 @@ public final class MetaDataController extends ResourceController {
      */
     public static List<Attribute> getAttributes() {
         return new Select().from(Attribute.class)
-                .orderBy(Attribute$Table.ID).queryList();
+                .orderBy(Attribute_Table.id).queryList();
     }
 
     /**
@@ -235,7 +217,7 @@ public final class MetaDataController extends ResourceController {
      */
     public static List<AttributeValue> getAttributeValues() {
         return new Select().from(AttributeValue.class)
-                .orderBy(AttributeValue$Table.ID).queryList();
+                .orderBy(AttributeValue_Table.id).queryList();
     }
 
     /**
@@ -247,8 +229,8 @@ public final class MetaDataController extends ResourceController {
     public static List<AttributeValue> getAttributeValues(DataElement dataElement){
         if (dataElement == null) return null;
         return new Select().from(AttributeValue.class)
-                .where(Condition.column(AttributeValue$Table.DATAELEMENT).is(dataElement.getUid()))
-                .orderBy(AttributeValue$Table.ID).queryList();
+                .where(AttributeValue_Table.dataelement).is(dataElement.getUid())
+                .orderBy(AttributeValue_Table.id).queryList();
     }
 
     /**
@@ -260,7 +242,7 @@ public final class MetaDataController extends ResourceController {
     public static AttributeValue getAttributeValue(Long id){
         if (id == null) return null;
         return new Select().from(AttributeValue.class)
-                .where(Condition.column(AttributeValue$Table.ID).is(id)).querySingle();
+                .where(AttributeValue_Table.id).is(id).querySingle();
     }
 
     /**
@@ -272,7 +254,7 @@ public final class MetaDataController extends ResourceController {
     public static Attribute getAttribute(String attributeId){
         if (attributeId == null) return null;
         return new Select().from(Attribute.class)
-                .where(Condition.column(Attribute$Table.ID).is(attributeId)).querySingle();
+                .where(Attribute_Table.id).is(attributeId).querySingle();
     }
 
     /**
@@ -282,8 +264,8 @@ public final class MetaDataController extends ResourceController {
      * @return
      */
     public static TrackedEntity getTrackedEntity(String trackedEntity) {
-        return new Select().from(TrackedEntity.class).where(Condition.column
-                (TrackedEntity$Table.ID).is(trackedEntity)).querySingle();
+        return new Select().from(TrackedEntity.class).where(
+                (TrackedEntity_Table.id).is(trackedEntity)).querySingle();
     }
 
     /**
@@ -293,9 +275,9 @@ public final class MetaDataController extends ResourceController {
      * @return
      */
     public static List<ProgramTrackedEntityAttribute> getProgramTrackedEntityAttributes(String program) {
-        return new Select().from(ProgramTrackedEntityAttribute.class).where(Condition.column
-                (ProgramTrackedEntityAttribute$Table.PROGRAM).is(program)).orderBy(true,
-                ProgramTrackedEntityAttribute$Table.SORTORDER).queryList();
+        return new Select().from(ProgramTrackedEntityAttribute.class).where(
+                ProgramTrackedEntityAttribute_Table.program.is(program)).orderBy(true,
+                ProgramTrackedEntityAttribute_Table.sortorder).queryList();
     }
 
     /**
@@ -309,16 +291,16 @@ public final class MetaDataController extends ResourceController {
                                                                ProgramType... kinds) {
         List<OrganisationUnitProgramRelationship> organisationUnitProgramRelationships =
                 new Select().from(OrganisationUnitProgramRelationship.class).where(
-                        Condition.column(OrganisationUnitProgramRelationship$Table.ORGANISATIONUNITID).
-                                is(organisationUnitId)).queryList();
+                        OrganisationUnitProgramRelationship_Table.organisationunitid).
+                                is(organisationUnitId).queryList();
 
         List<Program> programs = new ArrayList<Program>();
         for (OrganisationUnitProgramRelationship oupr : organisationUnitProgramRelationships) {
             if (kinds != null) {
                 for (ProgramType kind : kinds) {
                     List<Program> plist = new Select().from(Program.class).where(
-                            Condition.column(Program$Table.ID).is(oupr.getProgramId())).and(
-                            Condition.column(Program$Table.PROGRAMTYPE).is(kind.toString())).queryList();
+                            Program_Table.id).is(oupr.getProgramId()).and(
+                            Program_Table.programtype).is(kind.toString()).queryList();
                     programs.addAll(plist);
                 }
             }
@@ -334,10 +316,10 @@ public final class MetaDataController extends ResourceController {
      */
     public static List<CategoryOptionCombo> getCategoryOptionComboFromProgram(String programId) {
         Program program = new Select().from(Program.class).where(
-                Condition.column(Program$Table.ID).is(programId)).querySingle();
+                Program_Table.id).is(programId).querySingle();
 
         List<CategoryOptionCombo> plist = new Select().from(CategoryOptionCombo.class).where(
-                Condition.column(CategoryOptionCombo$Table.CATEGORYCOMBO).is(program.getCategoryComboUId()))
+                CategoryOptionCombo_Table.categorycombo).is(program.getCategoryComboUId())
                 .queryList();
         return plist;
     }
@@ -345,19 +327,19 @@ public final class MetaDataController extends ResourceController {
     /**
      * Returns a list of category option combos assigned to the given program id
      *
-     * @param programId
+     * @param categoryOptionComboId
      * @return
      */
     public static CategoryOptionCombo getCategoryOptionCombo(String categoryOptionComboId) {
         CategoryOptionCombo categoryOptionCombo = new Select().from(CategoryOptionCombo.class).where(
-                Condition.column(CategoryOptionCombo$Table.ID).is(categoryOptionComboId)).querySingle();
+                CategoryOptionCombo_Table.id).is(categoryOptionComboId).querySingle();
         return categoryOptionCombo;
     }
 
     public static List<ProgramStage> getProgramStages(String program) {
         return new Select().from(ProgramStage.class).where(
-                Condition.column(ProgramStage$Table.PROGRAM).is(program)).orderBy(
-                ProgramStage$Table.SORTORDER).queryList();
+                ProgramStage_Table.program).is(program).orderBy(
+                ProgramStage_Table.sortorder).queryList();
     }
 
     /**
@@ -368,12 +350,12 @@ public final class MetaDataController extends ResourceController {
      */
     public static ProgramStage getProgramStage(String programStageUid) {
         return new Select().from(ProgramStage.class).where(
-                Condition.column(ProgramStage$Table.ID).is(programStageUid)).querySingle();
+                ProgramStage_Table.id).is(programStageUid).querySingle();
     }
 
     public static TrackedEntityAttribute getTrackedEntityAttribute(String trackedEntityAttributeId) {
-        return new Select().from(TrackedEntityAttribute.class).where(Condition.column
-                (TrackedEntityAttribute$Table.ID).is(trackedEntityAttributeId)).querySingle();
+        return new Select().from(TrackedEntityAttribute.class).where(
+                (TrackedEntityAttribute_Table.id).is(trackedEntityAttributeId)).querySingle();
     }
 
     public static List<TrackedEntityAttribute> getTrackedEntityAttributes() {
@@ -388,7 +370,7 @@ public final class MetaDataController extends ResourceController {
      */
     public static Constant getConstant(String id) {
         return new Select().from(Constant.class).where
-                (Condition.column(Constant$Table.ID).is(id)).querySingle();
+                (Constant_Table.id).is(id).querySingle();
     }
 
     /**
@@ -413,11 +395,11 @@ public final class MetaDataController extends ResourceController {
     }
 
     public static ProgramRuleVariable getProgramRuleVariable(String id) {
-        return new Select().from(ProgramRuleVariable.class).where(Condition.column(ProgramRuleVariable$Table.ID).is(id)).querySingle();
+        return new Select().from(ProgramRuleVariable.class).where(ProgramRuleVariable_Table.id).is(id).querySingle();
     }
 
     public static ProgramRuleVariable getProgramRuleVariableByName(String name) {
-        return new Select().from(ProgramRuleVariable.class).where(Condition.column(ProgramRuleVariable$Table.NAME).is(name)).querySingle();
+        return new Select().from(ProgramRuleVariable.class).where(ProgramRuleVariable_Table.name).is(name).querySingle();
     }
 
     /**
@@ -436,7 +418,7 @@ public final class MetaDataController extends ResourceController {
     }
 
     public static OrganisationUnit getOrganisationUnit(String id) {
-        return new Select().from(OrganisationUnit.class).where(Condition.column(OrganisationUnit$Table.ID).is(id)).querySingle();
+        return new Select().from(OrganisationUnit.class).where(OrganisationUnit_Table.id).is(id).querySingle();
     }
 
     public static SystemInfo getSystemInfo() {
@@ -445,8 +427,8 @@ public final class MetaDataController extends ResourceController {
 
     public static Program getProgram(String programId) {
         if (programId == null) return null;
-        return new Select().from(Program.class).where(Condition.column(Program$Table.ID).
-                is(programId)).querySingle();
+        return new Select().from(Program.class).where(Program_Table.id).
+                is(programId).querySingle();
     }
 
     /**
@@ -500,8 +482,8 @@ public final class MetaDataController extends ResourceController {
      * @return
      */
     public static DataElement getDataElement(String dataElementId) {
-        return new Select().from(DataElement.class).where(Condition.column(DataElement$Table.ID).
-                is(dataElementId)).querySingle();
+        return new Select().from(DataElement.class).where(DataElement_Table.id).
+                is(dataElementId).querySingle();
     }
 
     /**
@@ -529,8 +511,8 @@ public final class MetaDataController extends ResourceController {
      * @return
      */
     public static OptionSet getOptionSet(String optionSetId) {
-        return new Select().from(OptionSet.class).where(Condition.column(OptionSet$Table.ID).
-                is(optionSetId)).querySingle();
+        return new Select().from(OptionSet.class).where(OptionSet_Table.id).
+                is(optionSetId).querySingle();
     }
 
     public static List<OptionSet> getOptionSets() {
@@ -540,16 +522,16 @@ public final class MetaDataController extends ResourceController {
     public static List<ProgramIndicator> getProgramIndicatorsByProgram(String program) {
         return new Select()
                 .from(ProgramIndicator.class)
-                .where(Condition.column(ProgramIndicator$Table
-                        .PROGRAM).is(program))
+                .where(ProgramIndicator_Table
+                        .program).is(program)
                 .queryList();
     }
 
     public static List<ProgramIndicator> getProgramIndicatorsByProgramStage(String programStage) {
         List<ProgramIndicatorToSectionRelationship> relations = new Select()
                 .from(ProgramIndicatorToSectionRelationship.class)
-                .where(Condition.column(ProgramIndicatorToSectionRelationship$Table
-                        .PROGRAMSECTION).is(programStage))
+                .where(ProgramIndicatorToSectionRelationship_Table
+                        .programsection).is(programStage)
                 .queryList();
         List<ProgramIndicator> indicators = new ArrayList<>();
         if (relations != null && !relations.isEmpty()) {
@@ -563,8 +545,8 @@ public final class MetaDataController extends ResourceController {
     public static List<ProgramIndicator> getProgramIndicatorsBySection(String section) {
         List<ProgramIndicatorToSectionRelationship> relations = new Select()
                 .from(ProgramIndicatorToSectionRelationship.class)
-                .where(Condition.column(ProgramIndicatorToSectionRelationship$Table
-                        .PROGRAMSECTION).is(section))
+                .where(ProgramIndicatorToSectionRelationship_Table
+                        .programsection).is(section)
                 .queryList();
         List<ProgramIndicator> indicators = new ArrayList<>();
         if (relations != null && !relations.isEmpty()) {

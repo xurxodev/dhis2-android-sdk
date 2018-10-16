@@ -41,7 +41,7 @@ import java.util.regex.Pattern;
 /**
  * @author Simen Skogly Russnes on 27.03.15.
  */
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class ProgramIndicator extends BaseNameableObject {
 
     public static final String SEPARATOR_ID = "\\.";

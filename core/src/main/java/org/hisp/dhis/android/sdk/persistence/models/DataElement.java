@@ -40,7 +40,7 @@ import org.hisp.dhis.android.sdk.utils.api.ValueType;
 import java.util.List;
 import java.util.Map;
 
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class DataElement extends BaseNameableObject {
 
     @JsonProperty("valueType")

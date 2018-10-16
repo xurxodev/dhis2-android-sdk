@@ -40,7 +40,7 @@ import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
  * @author Simen Skogly Russnes on 30.03.15.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public class Constant extends BaseMetaDataObject {
 
     @JsonProperty("value")

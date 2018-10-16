@@ -37,7 +37,6 @@ import com.raizlabs.android.dbflow.annotation.ForeignKeyAction;
 import com.raizlabs.android.dbflow.annotation.ForeignKeyReference;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
@@ -51,7 +50,7 @@ import java.util.List;
 
 import static android.text.TextUtils.isEmpty;
 
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 public final class DashboardItem extends BaseMetaDataObject {
     public static final int MAX_CONTENT = 8;
     public static final String SHAPE_NORMAL = "normal";
@@ -72,12 +71,12 @@ public final class DashboardItem extends BaseMetaDataObject {
     String shape;
 
     @JsonIgnore
-    @Column
-    @ForeignKey(
-            references = {
-                    @ForeignKeyReference(columnName = "dashboard", columnType = String.class, foreignColumnName = "id")
-            }, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE
-    )
+    //@ForeignKey(
+    //        references = {
+    //                @ForeignKeyReference(columnName = "dashboard",
+    //                        foreignKeyColumnName = "id")
+    //        }, saveForeignKeyModel = false, onDelete = ForeignKeyAction.CASCADE
+    //)
     Dashboard dashboard;
 
     // DashboardElements
@@ -162,8 +161,8 @@ public final class DashboardItem extends BaseMetaDataObject {
     @JsonIgnore
     public long getContentCount() {
         List<DashboardElement> elements = new Select().from(DashboardElement.class)
-                .where(Condition.column(DashboardElement$Table.DASHBOARDITEM_DASHBOARDITEM).is(getUid()))
-                .and(Condition.column(DashboardElement$Table.STATE).isNot(State.TO_DELETE.toString()))
+                .where(DashboardElement_Table.dashboarditem_dashboarditem.is(getUid()))
+                .and(DashboardElement_Table.state.isNot(State.TO_DELETE.toString()))
                 .queryList();
         return elements == null ? 0 : elements.size();
     }
@@ -175,8 +174,8 @@ public final class DashboardItem extends BaseMetaDataObject {
         }
 
         List<DashboardElement> elements = new Select().from(DashboardElement.class)
-                .where(Condition.column(DashboardElement$Table.DASHBOARDITEM_DASHBOARDITEM).is(getUid()))
-                .and(Condition.column(DashboardElement$Table.STATE).isNot(State.TO_DELETE.toString()))
+                .where(DashboardElement_Table.dashboarditem_dashboarditem).is(getUid())
+                .and(DashboardElement_Table.state).isNot(State.TO_DELETE.toString())
                 .queryList();
 
         if (elements == null) {

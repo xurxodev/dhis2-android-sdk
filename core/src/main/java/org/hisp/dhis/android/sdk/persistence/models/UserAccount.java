@@ -35,7 +35,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
@@ -49,7 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Table(databaseName = Dhis2Database.NAME)
+@Table(database = Dhis2Database.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class UserAccount extends BaseModel implements IdentifiableObject {
 
@@ -184,9 +183,11 @@ public final class UserAccount extends BaseModel implements IdentifiableObject {
 
     @JsonIgnore
     public static UserAccount getCurrentUserAccountFromDb() {
-        return new Select().from(UserAccount.class)
-                .where(Condition.column(UserAccount$Table.ID).is(LOCAL_ID))
-                .querySingle();
+        //fixme
+        //return new Select().from(UserAccount.class)
+        //        .where(UserAccount_Table.id).is(LOCAL_ID)
+        //        .querySingle();
+        return null;
     }
 
     /* @JsonIgnore

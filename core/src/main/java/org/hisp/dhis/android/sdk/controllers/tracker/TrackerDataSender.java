@@ -32,7 +32,6 @@ package org.hisp.dhis.android.sdk.controllers.tracker;
 import android.util.Log;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Join;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.sql.language.Update;
@@ -44,21 +43,14 @@ import org.hisp.dhis.android.sdk.network.response.ApiResponse2;
 import org.hisp.dhis.android.sdk.network.response.ImportSummary2;
 import org.hisp.dhis.android.sdk.persistence.models.ApiResponse;
 import org.hisp.dhis.android.sdk.persistence.models.DataValue;
-import org.hisp.dhis.android.sdk.persistence.models.DataValue$Table;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
-import org.hisp.dhis.android.sdk.persistence.models.Enrollment$Table;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
-import org.hisp.dhis.android.sdk.persistence.models.Event$Table;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
-import org.hisp.dhis.android.sdk.persistence.models.FailedItem$Table;
 import org.hisp.dhis.android.sdk.persistence.models.ImportSummary;
 import org.hisp.dhis.android.sdk.persistence.models.Relationship;
-import org.hisp.dhis.android.sdk.persistence.models.Relationship$Table;
 import org.hisp.dhis.android.sdk.persistence.models.SystemInfo;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue$Table;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance$Table;
 import org.hisp.dhis.android.sdk.utils.StringConverter;
 import org.hisp.dhis.android.sdk.utils.Utils;
 import org.hisp.dhis.android.sdk.utils.NetworkUtils;
@@ -86,17 +78,17 @@ final class TrackerDataSender {
 
     static void sendEventChanges(DhisApi dhisApi) throws APIException {
         List<Event> events = new Select().from(Event.class).where
-                (Condition.column(Event$Table.FROMSERVER).is(false))
-                .and(Condition.column(Event$Table.STATUS).isNot(Event.STATUS_DELETED))
+                (Event_Table.fromserver.is(false))
+                .and(Event_Table.status.isNot(Event.STATUS_DELETED))
                 .queryList();
 
         List<Event> eventsWithFailedThreshold = new Select().from(Event.class)
-                .join(FailedItem.class, Join.JoinType.LEFT)
-                .on(Condition.column(FailedItem$Table.ITEMID).eq(Event$Table.LOCALID))
-                .where(Condition.column(FailedItem$Table.ITEMTYPE).eq(FailedItem.EVENT))
-                .and(Condition.column(FailedItem$Table.FAILCOUNT).greaterThan(3))
-                .and(Condition.column(Event$Table.FROMSERVER).is(false))
-                .and(Condition.column(Event$Table.STATUS).isNot(Event.STATUS_DELETED))
+                .join(FailedItem.class, Join.JoinType.LEFT_OUTER)
+                .on(FailedItem_Table.itemid.eq(Event_Table.localid))
+                .where(FailedItem_Table.itemtype.eq(FailedItem.EVENT))
+                .and(FailedItem_Table.failcount.greaterThan(3))
+                .and(Event_Table.fromserver.is(false))
+                .and(Event_Table.status.isNot(Event.STATUS_DELETED))
                 .queryList();
 
         List<Event> eventsToPost = new ArrayList<>();
@@ -249,14 +241,13 @@ final class TrackerDataSender {
     }
 
     private static void updateEventReferences(long localId, String newReference) {
-        new Update(DataValue.class).set(Condition.column
-                (DataValue$Table.EVENT).is
-                (newReference)).where(Condition.column(DataValue$Table.LOCALEVENTID).is(localId)).async().execute();
+        new Update(DataValue.class).set((DataValue_Table.event.is
+                (newReference)).where(DataValue_Table.localeventid).is(localId)).async().execute();
 
-        new Update(Event.class).set(Condition.column
-                (Event$Table.EVENT).is
-                (newReference), Condition.column(Event$Table.FROMSERVER).
-                is(true)).where(Condition.column(Event$Table.LOCALID).is(localId)).async().execute();
+        new Update(Event.class).set(
+                Event_Table.event.is(newReference),
+                Event_Table.fromserver.is(true))
+                .where(Event_Table.localid).is(localId).async().execute();
         Event event = new Event();
         event.save();
         event.delete();//for triggering modelchangelistener
@@ -321,7 +312,7 @@ final class TrackerDataSender {
     }
 
     static void sendEnrollmentChanges(DhisApi dhisApi, boolean sendEvents) throws APIException {
-        List<Enrollment> enrollments = new Select().from(Enrollment.class).where(Condition.column(Enrollment$Table.FROMSERVER).is(false)).queryList();
+        List<Enrollment> enrollments = new Select().from(Enrollment.class).where(Enrollment_Table.fromserver).is(false).queryList();
         if(enrollments.size() <= 1) {
             sendEnrollmentChanges(dhisApi, enrollments, sendEvents);
         }
@@ -425,15 +416,16 @@ final class TrackerDataSender {
         //updating any local events that had reference to local enrollment to new
         //reference from server.
         Log.d(CLASS_TAG, "updating enrollment references");
-        new Update(Event.class).set(Condition.column
-                (Event$Table.ENROLLMENT).is
-                (newReference)).where(Condition.column(Event$Table.LOCALENROLLMENTID).is(localId)).and(Condition.column(Event$Table.STATUS).isNot(Event.STATUS_DELETED)).async().execute();
+        new Update(Event.class).set(
+                (Event_Table.enrollment).is
+                (newReference)).where(Event_Table.localenrollmentid).is(localId).
+                and(Event_Table.status).isNot(Event.STATUS_DELETED).async().execute();
 
-        new Update(Enrollment.class).set(Condition.column
-                (Enrollment$Table.ENROLLMENT).is
-                (newReference), Condition.column(Enrollment$Table.FROMSERVER)
-                .is(true)).where(Condition.column(Enrollment$Table.LOCALID).is
-                (localId)).async().execute();
+        new Update(Enrollment.class).set(
+                (Enrollment_Table.enrollment).is(newReference),
+                Enrollment_Table.fromserver).is(true)
+                .where(Enrollment_Table.localid).is
+                (localId).async().execute();
     }
 
     private static void UpdateEnrollmentTimestamp(Enrollment enrollment, DhisApi dhisApi) throws APIException {
@@ -453,7 +445,8 @@ final class TrackerDataSender {
     }
 
     static void sendTrackedEntityInstanceChanges(DhisApi dhisApi, boolean sendEnrollments) throws APIException {
-        List<TrackedEntityInstance> trackedEntityInstances = new Select().from(TrackedEntityInstance.class).where(Condition.column(TrackedEntityInstance$Table.FROMSERVER).is(false)).queryList();
+        List<TrackedEntityInstance> trackedEntityInstances = new Select().from(TrackedEntityInstance.class)
+                .where(TrackedEntityInstance_Table.fromserver).is(false).queryList();
         if(trackedEntityInstances.size() <= 1) {
             sendTrackedEntityInstanceChanges(dhisApi,trackedEntityInstances,sendEnrollments);
         }
@@ -582,26 +575,25 @@ final class TrackerDataSender {
 
     private static void updateTrackedEntityInstanceReferences(long localId, String newTrackedEntityInstanceReference, String oldTempTrackedEntityInstanceReference) {
         //update references with uid received from server
-        new Update(TrackedEntityAttributeValue.class).set(Condition.column
-                (TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID).is
-                (newTrackedEntityInstanceReference)).where(Condition.column(TrackedEntityAttributeValue$Table.LOCALTRACKEDENTITYINSTANCEID).is(localId)).async().execute();
+        new Update(TrackedEntityAttributeValue.class).set(
+                (TrackedEntityAttributeValue_Table.trackedentityinstance).is
+                (newTrackedEntityInstanceReference)).where(TrackedEntityAttributeValue_Table.localtrackedentityinstanceid).is(localId).async().execute();
 
-        new Update(Event.class).set(Condition.column(Event$Table.
-                TRACKEDENTITYINSTANCE).is(newTrackedEntityInstanceReference)).where(Condition.
-                column(Event$Table.TRACKEDENTITYINSTANCE).is(oldTempTrackedEntityInstanceReference)).async().execute();
+        new Update(Event.class).set(Event_Table.
+                trackedentityinstance).is(newTrackedEntityInstanceReference)
+                .where(Event_Table.trackedentityinstance).is(oldTempTrackedEntityInstanceReference).async().execute();
 
-        new Update(Enrollment.class).set(Condition.column
-                (Enrollment$Table.TRACKEDENTITYINSTANCE).is(newTrackedEntityInstanceReference)).
-                where(Condition.column(Enrollment$Table.TRACKEDENTITYINSTANCE).is
-                        (oldTempTrackedEntityInstanceReference)).async().execute();
+        new Update(Enrollment.class).set(
+                (Enrollment_Table.trackedentityinstance).is(newTrackedEntityInstanceReference)).
+                where(Enrollment_Table.trackedentityinstance).is
+                        (oldTempTrackedEntityInstanceReference).async().execute();
 
-        long updated = new Update(Relationship.class).set(Condition.column(Relationship$Table.TRACKEDENTITYINSTANCEA
-        ).is(newTrackedEntityInstanceReference)).where(Condition.
-                column(Relationship$Table.TRACKEDENTITYINSTANCEA).is(oldTempTrackedEntityInstanceReference)).count();
+        long updated = new Update(Relationship.class).set(Relationship_Table.trackedentityinstancea
+        ).is(newTrackedEntityInstanceReference).where((Relationship_Table.trackedentityinstancea).is(oldTempTrackedEntityInstanceReference)).count();
 
-        updated += new Update(Relationship.class).set(Condition.column(Relationship$Table.TRACKEDENTITYINSTANCEB
-        ).is(newTrackedEntityInstanceReference)).where(Condition.
-                column(Relationship$Table.TRACKEDENTITYINSTANCEB).is(oldTempTrackedEntityInstanceReference)).count();
+        updated += new Update(Relationship.class).set(Relationship_Table.trackedentityinstanceb
+        ).is(newTrackedEntityInstanceReference).where(
+                (Relationship_Table.trackedentityinstanceb).is(oldTempTrackedEntityInstanceReference)).count();
 
         Log.d(CLASS_TAG, "updated relationships: " + updated);
 
@@ -613,8 +605,8 @@ final class TrackerDataSender {
                     * should get uploaded, as it is the first time it has been valid. */
         boolean hasValidRelationship = false;
         if (Utils.isLocal(oldTempTrackedEntityInstanceReference)) {
-            List<Relationship> teiIsB = new Select().from(Relationship.class).where(Condition.column(Relationship$Table.TRACKEDENTITYINSTANCEB).is(newTrackedEntityInstanceReference)).queryList();
-            List<Relationship> teiIsA = new Select().from(Relationship.class).where(Condition.column(Relationship$Table.TRACKEDENTITYINSTANCEA).is(newTrackedEntityInstanceReference)).queryList();
+            List<Relationship> teiIsB = new Select().from(Relationship.class).where(Relationship_Table.trackedentityinstanceb).is(newTrackedEntityInstanceReference).queryList();
+            List<Relationship> teiIsA = new Select().from(Relationship.class).where(Relationship_Table.trackedentityinstancea).is(newTrackedEntityInstanceReference).queryList();
             if (teiIsB != null) {
                 for (Relationship relationship : teiIsB) {
                     if (!Utils.isLocal(relationship.getTrackedEntityInstanceA())) {
@@ -632,10 +624,10 @@ final class TrackerDataSender {
         }
         boolean fullySynced = !(hasValidRelationship && updated > 0);
 
-        new Update(TrackedEntityInstance.class).set(Condition.column
-                (TrackedEntityInstance$Table.TRACKEDENTITYINSTANCE).is
-                (newTrackedEntityInstanceReference), Condition.column(TrackedEntityInstance$Table.FROMSERVER).is(fullySynced)).
-                where(Condition.column(TrackedEntityInstance$Table.LOCALID).is(localId)).async().execute();
+        new Update(TrackedEntityInstance.class).set(
+                (TrackedEntityInstance_Table.trackedentityinstance).is
+                (newTrackedEntityInstanceReference), TrackedEntityInstance_Table.fromserver).is(fullySynced).
+                where(TrackedEntityInstance_Table.localid).is(localId).async().execute();
     }
 
     private static void UpdateTrackedEntityInstanceTimestamp(TrackedEntityInstance trackedEntityInstance, DhisApi dhisApi) throws APIException {
