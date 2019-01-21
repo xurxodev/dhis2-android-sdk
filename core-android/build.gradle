@@ -27,7 +27,6 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'com.neenbedankt.android-apt'
 
 def cfg = rootProject.ext.configuration
 def libs = rootProject.ext.libraries
@@ -41,6 +40,11 @@ android {
         targetSdkVersion cfg.targetSdkVersion
         versionCode cfg.versionCode
         versionName cfg.versionName
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ['targetModuleName': 'DHIS2']
+            }
+        }
     }
 
     compileOptions {
@@ -50,11 +54,6 @@ android {
 
     lintOptions {
         abortOnError false
-    }
-    apt {
-        arguments {
-            targetModuleName 'DHIS2'
-        }
     }
 }
 
@@ -73,7 +72,7 @@ dependencies {
     compile "io.reactivex:rxandroid:${libs.rxAndroidVersion}";
 
     // Raizlabs.
-    apt "com.github.Raizlabs.DBFlow:dbflow-processor:${libs.dbFlowVersion}"
+    annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${libs.dbFlowVersion}"
     compile "com.github.Raizlabs.DBFlow:dbflow:${libs.dbFlowVersion}"
     compile "com.github.Raizlabs.DBFlow:dbflow-core:${libs.dbFlowVersion}"
     compile "com.github.Raizlabs.DBFlow:dbflow-sqlcipher:${libs.dbFlowVersion}"
