@@ -58,29 +58,29 @@ android {
 }
 
 dependencies {
-    compile project(":core")
+    api project(":core")
 
     // Google
-    compile "com.android.support:support-annotations:${libs.supportVersion}"
+    api "com.android.support:support-annotations:${libs.supportVersion}"
 
     // Square
-    compile "com.squareup.okhttp3:okhttp:${libs.okhttpVersion}"
-    compile "com.squareup.retrofit2:retrofit:${libs.retrofitVersion}"
-    compile "com.squareup.retrofit2:converter-jackson:${libs.retrofitVersion}"
+    implementation "com.squareup.okhttp3:okhttp:${libs.okhttpVersion}"
+    implementation "com.squareup.retrofit2:retrofit:${libs.retrofitVersion}"
+    implementation "com.squareup.retrofit2:converter-jackson:${libs.retrofitVersion}"
 
     // ReactiveX
-    compile "io.reactivex:rxandroid:${libs.rxAndroidVersion}";
+    api "io.reactivex:rxandroid:${libs.rxAndroidVersion}";
 
     // Raizlabs.
     annotationProcessor "com.github.agrosner.dbflow:dbflow-processor:${libs.dbFlowVersion}"
-    compile "com.github.agrosner.dbflow:dbflow:${libs.dbFlowVersion}"
-    compile "com.github.agrosner.dbflow:dbflow-core:${libs.dbFlowVersion}"
-    compile "com.github.agrosner.dbflow:dbflow-sqlcipher:${libs.dbFlowVersion}"
+    api "com.github.agrosner.dbflow:dbflow:${libs.dbFlowVersion}"
+    api "com.github.agrosner.dbflow:dbflow-core:${libs.dbFlowVersion}"
+    api "com.github.agrosner.dbflow:dbflow-sqlcipher:${libs.dbFlowVersion}"
 
     // Test
-    testCompile "junit:junit:${libs.jUnitVersion}"
+    testImplementation "junit:junit:${libs.jUnitVersion}"
 
     // Needed to compile from jars
-    compile "com.squareup:javapoet:${libs.javapoetVersion}"
-    compile "com.google.guava:guava:${libs.guavaVersion}"
+    implementation "com.squareup:javapoet:${libs.javapoetVersion}"
+    implementation "com.google.guava:guava:${libs.guavaVersion}"
 }
