@@ -75,7 +75,6 @@ dependencies {
     annotationProcessor "com.github.agrosner.dbflow:dbflow-processor:${libs.dbFlowVersion}"
     compile "com.github.agrosner.dbflow:dbflow:${libs.dbFlowVersion}"
     compile "com.github.agrosner.dbflow:dbflow-core:${libs.dbFlowVersion}"
-    compile "com.github.agrosner.dbflow:dbflow-sqlcipher:${libs.dbFlowVersion}"
 
     // Test
     testCompile "junit:junit:${libs.jUnitVersion}"
