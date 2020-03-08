@@ -55,6 +55,15 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    buildTypes {
+        dexOptions {
+            matchingFallbacks = ['release', 'debug', 'staging']
+        }
+        debug {}
+        release {}
+        staging {}
+    }
 }
 
 dependencies {
