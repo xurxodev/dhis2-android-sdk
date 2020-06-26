@@ -46,6 +46,7 @@ import org.hisp.dhis.android.core.trackedentity.TrackedEntityDataValue;
 import org.hisp.dhis.android.core.trackedentity.internal.TrackedEntityAttributeValueStore;
 import org.hisp.dhis.android.core.trackedentity.internal.TrackedEntityDataValueStore;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -342,8 +343,8 @@ public class ProgramIndicatorEngine {
     }
 
     private TrackedEntityDataValue evaluateDataElementInStage(String deId,
-                                                              List<Event> events,
-                                                              AggregationType aggregationType) {
+            List<Event> events,
+            AggregationType aggregationType) {
         List<TrackedEntityDataValue> candidates = new ArrayList<>();
         for (Event event : events) {
             if (event.trackedEntityDataValues() != null) {
@@ -360,9 +361,35 @@ public class ProgramIndicatorEngine {
         } else if (AggregationType.LAST.equals(aggregationType) ||
                 AggregationType.LAST_AVERAGE_ORG_UNIT.equals(aggregationType)) {
             return candidates.get(candidates.size() - 1);
+        } else if (AggregationType.AVERAGE.equals(aggregationType)) {
+            double average =  ExpressionFunctions.avg(extractValues(candidates));
+
+            final TrackedEntityDataValue teDataValue = TrackedEntityDataValue.builder()
+                    .dataElement(candidates.get(0).dataElement())
+                    .value(String.valueOf((average))).build();
+
+            return teDataValue;
+        } else if (AggregationType.SUM.equals(aggregationType)) {
+            double sum =  ExpressionFunctions.sum(extractValues(candidates));
+
+            final TrackedEntityDataValue teDataValue = TrackedEntityDataValue.builder()
+                    .dataElement(candidates.get(0).dataElement())
+                    .value(String.valueOf((sum))).build();
+
+            return teDataValue;
         } else {
             return candidates.get(0);
         }
+    }
+
+    private Number[] extractValues(List<TrackedEntityDataValue> teDataValues) {
+        List<Number> values= new ArrayList<>();
+
+        for (TrackedEntityDataValue teDataValue : teDataValues) {
+            values.add(Double.parseDouble(teDataValue.value()));
+        }
+
+        return values.toArray(new Number[0]);
     }
 
     private String formatTEDV(TrackedEntityDataValue dataValue) {

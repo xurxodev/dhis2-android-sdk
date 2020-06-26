@@ -28,6 +28,7 @@
 
 package org.hisp.dhis.android.core.program.programindicatorengine;
 
+import org.hisp.dhis.android.core.trackedentity.TrackedEntityDataValue;
 import org.joda.time.DateTime;
 import org.joda.time.Months;
 import org.joda.time.Years;
@@ -405,4 +406,25 @@ public final class ExpressionFunctions {
         }
     }
     */
+
+
+    public static Double sum(Number... values) {
+        if (values == null || values.length == 0) {
+            throw new IllegalArgumentException("Argument is null or empty");
+        }
+
+        double sum = 0.0;
+
+        for (Number number : values) {
+            sum = sum + number.doubleValue();
+        }
+
+        return sum;
+    }
+
+    public static Double avg(Number... values) {
+        double sum = sum(values);
+
+        return sum/values.length;
+    }
 }
