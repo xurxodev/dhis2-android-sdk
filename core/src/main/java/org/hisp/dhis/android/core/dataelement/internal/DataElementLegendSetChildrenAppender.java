@@ -25,41 +25,40 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.hisp.dhis.android.core.dataelement.internal;
 
 import org.hisp.dhis.android.core.arch.db.access.DatabaseAdapter;
-import org.hisp.dhis.android.core.arch.db.stores.internal.IdentifiableObjectStore;
-import org.hisp.dhis.android.core.arch.handlers.internal.Handler;
+import org.hisp.dhis.android.core.arch.db.stores.internal.LinkChildStore;
+import org.hisp.dhis.android.core.arch.db.stores.internal.StoreFactory;
 import org.hisp.dhis.android.core.arch.repositories.children.internal.ChildrenAppender;
 import org.hisp.dhis.android.core.dataelement.DataElement;
+import org.hisp.dhis.android.core.legendset.DataElementLegendSetLinkTableInfo;
+import org.hisp.dhis.android.core.legendset.LegendSet;
 
-import java.util.Collections;
-import java.util.Map;
+final class DataElementLegendSetChildrenAppender extends ChildrenAppender<DataElement> {
 
-import dagger.Module;
-import dagger.Provides;
-import dagger.Reusable;
+    private final LinkChildStore<DataElement, LegendSet> linkChildStore;
 
-@Module
-public final class DataElementEntityDIModule {
-
-    @Provides
-    @Reusable
-    IdentifiableObjectStore<DataElement> store(DatabaseAdapter databaseAdapter) {
-        return DataElementStore.create(databaseAdapter);
+    private DataElementLegendSetChildrenAppender(
+            LinkChildStore<DataElement, LegendSet> linkChildStore) {
+        this.linkChildStore = linkChildStore;
     }
 
-    @Provides
-    @Reusable
-    Handler<DataElement> handler(DataElementHandler handler) {
-        return handler;
+    @Override
+    protected DataElement appendChildren(DataElement dataElement) {
+        DataElement.Builder builder = dataElement.toBuilder();
+        builder.legendSets(linkChildStore.getChildren(dataElement));
+        return builder.build();
     }
 
-    @Provides
-    @Reusable
-    Map<String, ChildrenAppender<DataElement>> childrenAppenders(DatabaseAdapter databaseAdapter) {
-        return Collections.singletonMap(DataElementFields.LEGEND_SETS,
-                DataElementLegendSetChildrenAppender.create(databaseAdapter));
+    static ChildrenAppender<DataElement> create(DatabaseAdapter databaseAdapter) {
+        return new DataElementLegendSetChildrenAppender(
+                StoreFactory.linkChildStore(
+                        databaseAdapter,
+                        DataElementLegendSetLinkTableInfo.TABLE_INFO,
+                        DataElementLegendSetLinkTableInfo.CHILD_PROJECTION,
+                        LegendSet::create
+                )
+        );
     }
 }
