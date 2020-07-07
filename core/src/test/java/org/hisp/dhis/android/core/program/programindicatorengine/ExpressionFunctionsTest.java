@@ -35,6 +35,7 @@ import java.text.ParseException;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hisp.dhis.android.core.program.programindicatorengine.ExpressionFunctions.addDays;
+import static org.hisp.dhis.android.core.program.programindicatorengine.ExpressionFunctions.avg;
 import static org.hisp.dhis.android.core.program.programindicatorengine.ExpressionFunctions.ceil;
 import static org.hisp.dhis.android.core.program.programindicatorengine.ExpressionFunctions.concatenate;
 import static org.hisp.dhis.android.core.program.programindicatorengine.ExpressionFunctions.condition;
@@ -49,6 +50,7 @@ import static org.hisp.dhis.android.core.program.programindicatorengine.Expressi
 import static org.hisp.dhis.android.core.program.programindicatorengine.ExpressionFunctions.round;
 import static org.hisp.dhis.android.core.program.programindicatorengine.ExpressionFunctions.split;
 import static org.hisp.dhis.android.core.program.programindicatorengine.ExpressionFunctions.substring;
+import static org.hisp.dhis.android.core.program.programindicatorengine.ExpressionFunctions.sum;
 import static org.hisp.dhis.android.core.program.programindicatorengine.ExpressionFunctions.validatePattern;
 import static org.hisp.dhis.android.core.program.programindicatorengine.ExpressionFunctions.weeksBetween;
 import static org.hisp.dhis.android.core.program.programindicatorengine.ExpressionFunctions.yearsBetween;
@@ -503,6 +505,20 @@ public class ExpressionFunctionsTest {
         assertThat(round(0.5001), is(equalTo(1L)));
         assertThat(round(-9.3), is(equalTo(-9L)));
         assertThat(round(-9.8), is(equalTo(-10L)));
+    }
+
+    @Test
+    public void sumShouldReturnTheExpectedSumResult() {
+        assertThat(sum(2), is(equalTo(2.0)));
+        assertThat(sum(2,3), is(equalTo(5.0)));
+        assertThat(sum(2,3,4), is(equalTo(9.0)));
+    }
+
+    @Test
+    public void avgShouldReturnTheExpectedAvgResult() {
+        assertThat(avg(2), is(equalTo(2.0)));
+        assertThat(avg(2,3), is(equalTo(2.5)));
+        assertThat(avg(2,3,4), is(equalTo(3.0)));
     }
 
     /*
