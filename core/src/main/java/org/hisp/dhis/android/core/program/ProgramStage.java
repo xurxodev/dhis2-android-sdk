@@ -185,7 +185,7 @@ public abstract class ProgramStage extends BaseIdentifiableObject
     @Nullable
     @JsonProperty()
     @ColumnAdapter(IgnoreAttributeValuesListAdapter.class)
-    abstract List<AttributeValue> attributeValues();
+    public abstract List<AttributeValue> attributeValues();
 
     public static Builder builder() {
         return new $$AutoValue_ProgramStage.Builder();

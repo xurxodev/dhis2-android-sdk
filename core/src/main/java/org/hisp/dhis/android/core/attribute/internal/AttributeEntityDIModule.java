@@ -26,39 +26,36 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.hisp.dhis.android.core.attribute;
+package org.hisp.dhis.android.core.attribute.internal;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import com.google.auto.value.AutoValue;
+import org.hisp.dhis.android.core.arch.db.access.DatabaseAdapter;
+import org.hisp.dhis.android.core.arch.db.stores.internal.IdentifiableObjectStore;
+import org.hisp.dhis.android.core.arch.handlers.internal.Handler;
+import org.hisp.dhis.android.core.arch.handlers.internal.IdentifiableHandlerImpl;
+import org.hisp.dhis.android.core.arch.repositories.children.internal.ChildrenAppender;
+import org.hisp.dhis.android.core.attribute.Attribute;
+import org.hisp.dhis.android.core.dataelement.DataElement;
+import org.hisp.dhis.android.core.dataelement.internal.DataElementStore;
 
-@AutoValue
-@JsonDeserialize(builder = AutoValue_AttributeValue.Builder.class)
-public abstract class AttributeValue {
+import java.util.Collections;
+import java.util.Map;
 
-    @JsonProperty()
-    public abstract String value();
+import dagger.Module;
+import dagger.Provides;
+import dagger.Reusable;
 
-    @JsonProperty()
-    public abstract Attribute attribute();
+@Module
+public final class AttributeEntityDIModule {
 
-    public static Builder builder() {
-        return new AutoValue_AttributeValue.Builder();
+    @Provides
+    @Reusable
+    IdentifiableObjectStore<Attribute> store(DatabaseAdapter databaseAdapter) {
+        return AttributeStore.create(databaseAdapter);
     }
 
-    public abstract Builder toBuilder();
-
-    @AutoValue.Builder
-    @JsonPOJOBuilder(withPrefix = "")
-    public abstract static class Builder {
-
-        @JsonProperty()
-        public abstract Builder value(String value);
-
-        @JsonProperty()
-        public abstract Builder attribute(Attribute attribute);
-
-        public abstract AttributeValue build();
+    @Provides
+    @Reusable
+    Handler<Attribute> handler(IdentifiableObjectStore<Attribute> store) {
+        return new IdentifiableHandlerImpl<>(store);
     }
 }

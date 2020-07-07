@@ -26,39 +26,33 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.hisp.dhis.android.core.attribute;
+package org.hisp.dhis.android.core.program.internal;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import com.google.auto.value.AutoValue;
+import org.hisp.dhis.android.core.arch.db.access.DatabaseAdapter;
+import org.hisp.dhis.android.core.arch.db.stores.internal.LinkStore;
+import org.hisp.dhis.android.core.arch.handlers.internal.LinkHandler;
+import org.hisp.dhis.android.core.arch.handlers.internal.LinkHandlerImpl;
+import org.hisp.dhis.android.core.attribute.Attribute;
+import org.hisp.dhis.android.core.attribute.ProgramStageAttributeLink;
+import org.hisp.dhis.android.core.attribute.internal.ProgramStageAttributeLinkStore;
 
-@AutoValue
-@JsonDeserialize(builder = AutoValue_AttributeValue.Builder.class)
-public abstract class AttributeValue {
+import dagger.Module;
+import dagger.Provides;
+import dagger.Reusable;
 
-    @JsonProperty()
-    public abstract String value();
+@Module
+public final class ProgramStageAttributeEntityDIModule {
 
-    @JsonProperty()
-    public abstract Attribute attribute();
-
-    public static Builder builder() {
-        return new AutoValue_AttributeValue.Builder();
+    @Provides
+    @Reusable
+    public LinkStore<ProgramStageAttributeLink> store(DatabaseAdapter databaseAdapter) {
+        return ProgramStageAttributeLinkStore.create(databaseAdapter);
     }
 
-    public abstract Builder toBuilder();
-
-    @AutoValue.Builder
-    @JsonPOJOBuilder(withPrefix = "")
-    public abstract static class Builder {
-
-        @JsonProperty()
-        public abstract Builder value(String value);
-
-        @JsonProperty()
-        public abstract Builder attribute(Attribute attribute);
-
-        public abstract AttributeValue build();
+    @Provides
+    @Reusable
+    public LinkHandler<Attribute, ProgramStageAttributeLink> handler(
+            LinkStore<ProgramStageAttributeLink> store) {
+        return new LinkHandlerImpl<>(store);
     }
 }

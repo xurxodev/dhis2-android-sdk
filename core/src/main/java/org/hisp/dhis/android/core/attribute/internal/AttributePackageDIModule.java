@@ -26,39 +26,18 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.hisp.dhis.android.core.attribute;
+package org.hisp.dhis.android.core.attribute.internal;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import com.google.auto.value.AutoValue;
+import dagger.Module;
 
-@AutoValue
-@JsonDeserialize(builder = AutoValue_AttributeValue.Builder.class)
-public abstract class AttributeValue {
+@Module(includes = {
+        AttributeEntityDIModule.class
+})
+public final class AttributePackageDIModule {
 
-    @JsonProperty()
-    public abstract String value();
-
-    @JsonProperty()
-    public abstract Attribute attribute();
-
-    public static Builder builder() {
-        return new AutoValue_AttributeValue.Builder();
-    }
-
-    public abstract Builder toBuilder();
-
-    @AutoValue.Builder
-    @JsonPOJOBuilder(withPrefix = "")
-    public abstract static class Builder {
-
-        @JsonProperty()
-        public abstract Builder value(String value);
-
-        @JsonProperty()
-        public abstract Builder attribute(Attribute attribute);
-
-        public abstract AttributeValue build();
-    }
+/*    @Provides
+    @Reusable
+    AttributeModule module(AttributeModuleImpl impl) {
+        return impl;
+    }*/
 }
