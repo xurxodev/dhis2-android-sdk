@@ -56,7 +56,7 @@ public final class AttributeTableInfo {
         public static final String UNIQUE = "uniqueProperty";
         public static final String MANDATORY = "mandatory";
         public static final String INDICATOR_ATTRIBUTE = "indicatorAttribute";
-        public static final String INDICATOR_GROUP__ATTRIBUTE = "indicatorGroupAttribute";
+        public static final String INDICATOR_GROUP_ATTRIBUTE = "indicatorGroupAttribute";
         public static final String USER_GROUP_ATTRIBUTE = "userGroupAttribute";
         public static final String DATA_ELEMENT_ATTRIBUTE = "dataElementAttribute";
         public static final String CONSTANT_ATTRIBUTE = "constantAttribute";
@@ -98,7 +98,7 @@ public final class AttributeTableInfo {
                     UNIQUE,
                     MANDATORY,
                     INDICATOR_ATTRIBUTE,
-                    INDICATOR_GROUP__ATTRIBUTE,
+                    INDICATOR_GROUP_ATTRIBUTE,
                     USER_GROUP_ATTRIBUTE,
                     DATA_ELEMENT_ATTRIBUTE,
                     CONSTANT_ATTRIBUTE,
