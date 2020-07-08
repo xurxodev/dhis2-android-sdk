@@ -32,22 +32,22 @@ import org.hisp.dhis.android.core.arch.db.access.DatabaseAdapter;
 import org.hisp.dhis.android.core.arch.db.stores.binders.internal.StatementBinder;
 import org.hisp.dhis.android.core.arch.db.stores.internal.LinkStore;
 import org.hisp.dhis.android.core.arch.db.stores.internal.StoreFactory;
-import org.hisp.dhis.android.core.attribute.ProgramStageAttributeLink;
-import org.hisp.dhis.android.core.attribute.ProgramStageAttributeLinkTableInfo;
+import org.hisp.dhis.android.core.attribute.ProgramStageAttributeValueLink;
+import org.hisp.dhis.android.core.attribute.ProgramStageAttributeValueLinkTableInfo;
 
-public final class ProgramStageAttributeLinkStore {
+public final class ProgramStageAttributeValueLinkStore {
 
-    private static final StatementBinder<ProgramStageAttributeLink> BINDER = (o, w) -> {
+    private static final StatementBinder<ProgramStageAttributeValueLink> BINDER = (o, w) -> {
         w.bind(1, o.programStage());
         w.bind(2, o.attribute());
         w.bind(3, o.value());
     };
 
-    private ProgramStageAttributeLinkStore() {}
+    private ProgramStageAttributeValueLinkStore() {}
 
-    public static LinkStore<ProgramStageAttributeLink> create(DatabaseAdapter databaseAdapter) {
-        return StoreFactory.linkStore(databaseAdapter, ProgramStageAttributeLinkTableInfo.TABLE_INFO,
-                ProgramStageAttributeLinkTableInfo.Columns.PROGRAM_STAGE,
-                BINDER, ProgramStageAttributeLink::create);
+    public static LinkStore<ProgramStageAttributeValueLink> create(DatabaseAdapter databaseAdapter) {
+        return StoreFactory.linkStore(databaseAdapter, ProgramStageAttributeValueLinkTableInfo.TABLE_INFO,
+                ProgramStageAttributeValueLinkTableInfo.Columns.PROGRAM_STAGE,
+                BINDER, ProgramStageAttributeValueLink::create);
     }
 }

@@ -26,33 +26,18 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.hisp.dhis.android.core.program.internal;
+package org.hisp.dhis.android.core.data.attribute;
 
-import org.hisp.dhis.android.core.arch.db.access.DatabaseAdapter;
-import org.hisp.dhis.android.core.arch.db.stores.internal.LinkStore;
-import org.hisp.dhis.android.core.arch.handlers.internal.LinkHandler;
-import org.hisp.dhis.android.core.arch.handlers.internal.LinkHandlerImpl;
-import org.hisp.dhis.android.core.attribute.Attribute;
-import org.hisp.dhis.android.core.attribute.ProgramStageAttributeLink;
-import org.hisp.dhis.android.core.attribute.internal.ProgramStageAttributeLinkStore;
+import org.hisp.dhis.android.core.attribute.ProgramStageAttributeValueLink;
 
-import dagger.Module;
-import dagger.Provides;
-import dagger.Reusable;
+public class ProgramStageAttributeValueLinkSamples {
 
-@Module
-public final class ProgramStageAttributeEntityDIModule {
-
-    @Provides
-    @Reusable
-    public LinkStore<ProgramStageAttributeLink> store(DatabaseAdapter databaseAdapter) {
-        return ProgramStageAttributeLinkStore.create(databaseAdapter);
-    }
-
-    @Provides
-    @Reusable
-    public LinkHandler<Attribute, ProgramStageAttributeLink> handler(
-            LinkStore<ProgramStageAttributeLink> store) {
-        return new LinkHandlerImpl<>(store);
+    public static ProgramStageAttributeValueLink getProgramStageAttribute() {
+        return ProgramStageAttributeValueLink.builder()
+                .id(1L)
+                .programStage("program_stage")
+                .attribute("attribute")
+                .value("value")
+                .build();
     }
 }

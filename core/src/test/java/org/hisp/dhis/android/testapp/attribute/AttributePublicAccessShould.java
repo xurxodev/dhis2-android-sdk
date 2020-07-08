@@ -26,49 +26,34 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.hisp.dhis.android.core.attribute;
+package org.hisp.dhis.android.testapp.attribute;
 
-import android.database.Cursor;
+import org.hisp.dhis.android.core.attribute.ProgramStageAttributeValueLink;
+import org.hisp.dhis.android.testapp.arch.BasePublicAccessShould;
+import org.mockito.Mock;
 
-import com.google.auto.value.AutoValue;
+public class AttributePublicAccessShould extends BasePublicAccessShould<ProgramStageAttributeValueLink> {
 
-import org.hisp.dhis.android.core.common.BaseObject;
-import org.hisp.dhis.android.core.common.CoreObject;
+    @Mock
+    private ProgramStageAttributeValueLink object;
 
-import androidx.annotation.Nullable;
-
-@AutoValue
-public abstract class ProgramStageAttributeLink implements CoreObject {
-
-    @Nullable
-    public abstract String programStage();
-
-    @Nullable
-    public abstract String attribute();
-
-    @Nullable
-    public abstract String value();
-
-    public static ProgramStageAttributeLink create(Cursor cursor) {
-        return AutoValue_ProgramStageAttributeLink.createFromCursor(cursor);
+    @Override
+    public ProgramStageAttributeValueLink object() {
+        return object;
     }
 
-    public static Builder builder() {
-        return new $$AutoValue_ProgramStageAttributeLink.Builder();
+    @Override
+    public void has_public_create_method() {
+        ProgramStageAttributeValueLink.create(null);
     }
 
-    public abstract Builder toBuilder();
+    @Override
+    public void has_public_builder_method() {
+        ProgramStageAttributeValueLink.builder();
+    }
 
-    @AutoValue.Builder
-    public static abstract class Builder extends BaseObject.Builder<Builder> {
-        public abstract Builder id(Long id);
-
-        public abstract Builder programStage(String programStage);
-
-        public abstract Builder attribute(String attribute);
-
-        public abstract Builder value(String value);
-
-        public abstract ProgramStageAttributeLink build();
+    @Override
+    public void has_public_to_builder_method() {
+        object().toBuilder();
     }
 }

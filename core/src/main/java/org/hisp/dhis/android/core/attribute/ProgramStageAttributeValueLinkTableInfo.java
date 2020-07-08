@@ -34,13 +34,13 @@ import org.hisp.dhis.android.core.arch.helpers.CollectionsHelper;
 import org.hisp.dhis.android.core.common.CoreColumns;
 import org.hisp.dhis.android.core.legendset.LegendSetTableInfo;
 
-public final class ProgramStageAttributeLinkTableInfo {
+public final class ProgramStageAttributeValueLinkTableInfo {
 
     public static final TableInfo TABLE_INFO = new TableInfo() {
 
         @Override
         public String name() {
-            return "ProgramStageAttributeLink";
+            return "ProgramStageAttributeValueLink";
         }
 
         @Override
@@ -54,7 +54,7 @@ public final class ProgramStageAttributeLinkTableInfo {
             Columns.PROGRAM_STAGE,
             Columns.ATTRIBUTE);
 
-    private ProgramStageAttributeLinkTableInfo() {
+    private ProgramStageAttributeValueLinkTableInfo() {
     }
 
     public static class Columns extends CoreColumns {

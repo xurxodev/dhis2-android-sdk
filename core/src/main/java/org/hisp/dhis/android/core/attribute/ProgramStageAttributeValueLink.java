@@ -26,18 +26,49 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.hisp.dhis.android.core.data.attribute;
+package org.hisp.dhis.android.core.attribute;
 
-import org.hisp.dhis.android.core.attribute.ProgramStageAttributeLink;
+import android.database.Cursor;
 
-public class ProgramStageAttributeLinkSamples {
+import com.google.auto.value.AutoValue;
 
-    public static ProgramStageAttributeLink getProgramStageAttribute() {
-        return ProgramStageAttributeLink.builder()
-                .id(1L)
-                .programStage("program_stage")
-                .attribute("attribute")
-                .value("value")
-                .build();
+import org.hisp.dhis.android.core.common.BaseObject;
+import org.hisp.dhis.android.core.common.CoreObject;
+
+import androidx.annotation.Nullable;
+
+@AutoValue
+public abstract class ProgramStageAttributeValueLink implements CoreObject {
+
+    @Nullable
+    public abstract String programStage();
+
+    @Nullable
+    public abstract String attribute();
+
+    @Nullable
+    public abstract String value();
+
+    public static ProgramStageAttributeValueLink create(Cursor cursor) {
+        return AutoValue_ProgramStageAttributeValueLink.createFromCursor(cursor);
+    }
+
+    public static Builder builder() {
+        return new $$AutoValue_ProgramStageAttributeValueLink.Builder();
+    }
+
+    public abstract Builder toBuilder();
+
+    @AutoValue.Builder
+    public static abstract class Builder extends BaseObject.Builder<Builder> {
+        public abstract Builder id(Long id);
+
+        public abstract Builder programStage(String programStage);
+
+        public abstract Builder attribute(String attribute);
+
+        public abstract Builder value(String value);
+
+        public abstract ProgramStageAttributeValueLink build();
     }
 }

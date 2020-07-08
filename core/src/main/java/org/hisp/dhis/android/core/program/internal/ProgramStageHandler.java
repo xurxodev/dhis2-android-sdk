@@ -39,7 +39,7 @@ import org.hisp.dhis.android.core.arch.handlers.internal.IdentifiableHandlerImpl
 import org.hisp.dhis.android.core.arch.handlers.internal.LinkHandler;
 import org.hisp.dhis.android.core.attribute.Attribute;
 import org.hisp.dhis.android.core.attribute.AttributeValue;
-import org.hisp.dhis.android.core.attribute.ProgramStageAttributeLink;
+import org.hisp.dhis.android.core.attribute.ProgramStageAttributeValueLink;
 import org.hisp.dhis.android.core.common.ObjectWithUid;
 import org.hisp.dhis.android.core.program.ProgramStage;
 import org.hisp.dhis.android.core.program.ProgramStageDataElement;
@@ -62,8 +62,8 @@ final class ProgramStageHandler extends IdentifiableHandlerImpl<ProgramStage> {
     private final OrphanCleaner<ProgramStage, ProgramStageSection> programStageSectionCleaner;
     private final SubCollectionCleaner<ProgramStage> programStageCleaner;
     private final Handler<Attribute> attributeHandler;
-    private final LinkHandler<Attribute, ProgramStageAttributeLink>
-            programStageAttributeLinkHandler;
+    private final LinkHandler<Attribute, ProgramStageAttributeValueLink>
+            programStageAttributeValueLinkHandler;
 
     @Inject
     ProgramStageHandler(IdentifiableObjectStore<ProgramStage> programStageStore,
@@ -73,7 +73,7 @@ final class ProgramStageHandler extends IdentifiableHandlerImpl<ProgramStage> {
                         OrphanCleaner<ProgramStage, ProgramStageSection> programStageSectionCleaner,
                         SubCollectionCleaner<ProgramStage> programStageCleaner,
                         Handler<Attribute> attributeHandler,
-                        LinkHandler<Attribute, ProgramStageAttributeLink> programStageAttributeLinkHandler) {
+                        LinkHandler<Attribute, ProgramStageAttributeValueLink> programStageAttributeValueLinkHandler) {
         super(programStageStore);
         this.programStageSectionHandler = programStageSectionHandler;
         this.programStageDataElementHandler = programStageDataElementHandler;
@@ -81,7 +81,7 @@ final class ProgramStageHandler extends IdentifiableHandlerImpl<ProgramStage> {
         this.programStageSectionCleaner = programStageSectionCleaner;
         this.programStageCleaner = programStageCleaner;
         this.attributeHandler = attributeHandler;
-        this.programStageAttributeLinkHandler = programStageAttributeLinkHandler;
+        this.programStageAttributeValueLinkHandler = programStageAttributeValueLinkHandler;
     }
 
     @Override
@@ -101,16 +101,12 @@ final class ProgramStageHandler extends IdentifiableHandlerImpl<ProgramStage> {
                     ProgramStageInternalAccessor.accessProgramStageSections(programStage));
         }
 
-        if (programStage.attributeValues().size() > 1){
-            Log.d("","");
-        }
-
         final List<Attribute> attributes = extractAttributes(programStage.attributeValues());
 
         attributeHandler.handleMany(attributes);
 
-        programStageAttributeLinkHandler.handleMany(programStage.uid(), attributes,
-                attribute -> ProgramStageAttributeLink.builder()
+        programStageAttributeValueLinkHandler.handleMany(programStage.uid(), attributes,
+                attribute -> ProgramStageAttributeValueLink.builder()
                         .programStage(programStage.uid())
                         .attribute(attribute.uid())
                         .value(extractValue(programStage.attributeValues(),attribute.uid()))

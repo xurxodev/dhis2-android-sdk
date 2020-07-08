@@ -28,40 +28,36 @@
 
 package org.hisp.dhis.android.core.attribute.internal;
 
-import org.hisp.dhis.android.core.attribute.ProgramStageAttributeLink;
-import org.hisp.dhis.android.core.attribute.ProgramStageAttributeLinkTableInfo;
-import org.hisp.dhis.android.core.data.attribute.ProgramStageAttributeLinkSamples;
+import org.hisp.dhis.android.core.attribute.ProgramStageAttributeValueLink;
+import org.hisp.dhis.android.core.attribute.ProgramStageAttributeValueLinkTableInfo;
+import org.hisp.dhis.android.core.data.attribute.ProgramStageAttributeValueLinkSamples;
 import org.hisp.dhis.android.core.data.database.LinkStoreAbstractIntegrationShould;
-import org.hisp.dhis.android.core.data.legendset.ProgramIndicatorLegendSetLinkSamples;
-import org.hisp.dhis.android.core.legendset.ProgramIndicatorLegendSetLink;
-import org.hisp.dhis.android.core.legendset.ProgramIndicatorLegendSetLinkTableInfo;
-import org.hisp.dhis.android.core.legendset.internal.ProgramIndicatorLegendSetLinkStore;
 import org.hisp.dhis.android.core.utils.integration.mock.TestDatabaseAdapterFactory;
 import org.hisp.dhis.android.core.utils.runner.D2JunitRunner;
 import org.junit.runner.RunWith;
 
 @RunWith(D2JunitRunner.class)
-public class ProgramStageAttributeLinkStoreIntegrationShould
-        extends LinkStoreAbstractIntegrationShould<ProgramStageAttributeLink> {
+public class ProgramStageAttributeValueLinkStoreIntegrationShould
+        extends LinkStoreAbstractIntegrationShould<ProgramStageAttributeValueLink> {
 
-    public ProgramStageAttributeLinkStoreIntegrationShould() {
-        super(ProgramStageAttributeLinkStore.create(TestDatabaseAdapterFactory.get()),
-                ProgramStageAttributeLinkTableInfo.TABLE_INFO, TestDatabaseAdapterFactory.get());
+    public ProgramStageAttributeValueLinkStoreIntegrationShould() {
+        super(ProgramStageAttributeValueLinkStore.create(TestDatabaseAdapterFactory.get()),
+                ProgramStageAttributeValueLinkTableInfo.TABLE_INFO, TestDatabaseAdapterFactory.get());
     }
 
 
     @Override
     protected String addMasterUid() {
-        return ProgramStageAttributeLinkSamples.getProgramStageAttribute().programStage();
+        return ProgramStageAttributeValueLinkSamples.getProgramStageAttribute().programStage();
     }
 
     @Override
-    protected ProgramStageAttributeLink buildObject() {
-        return ProgramStageAttributeLinkSamples.getProgramStageAttribute();
+    protected ProgramStageAttributeValueLink buildObject() {
+        return ProgramStageAttributeValueLinkSamples.getProgramStageAttribute();
     }
 
     @Override
-    protected ProgramStageAttributeLink buildObjectWithOtherMasterUid() {
+    protected ProgramStageAttributeValueLink buildObjectWithOtherMasterUid() {
         return buildObject().toBuilder()
                 .programStage("new_program_stage")
                 .build();
