@@ -101,16 +101,18 @@ final class ProgramStageHandler extends IdentifiableHandlerImpl<ProgramStage> {
                     ProgramStageInternalAccessor.accessProgramStageSections(programStage));
         }
 
-        final List<Attribute> attributes = extractAttributes(programStage.attributeValues());
+        if (programStage.attributeValues() != null){
+            final List<Attribute> attributes = extractAttributes(programStage.attributeValues());
 
-        attributeHandler.handleMany(attributes);
+            attributeHandler.handleMany(attributes);
 
-        programStageAttributeValueLinkHandler.handleMany(programStage.uid(), attributes,
-                attribute -> ProgramStageAttributeValueLink.builder()
-                        .programStage(programStage.uid())
-                        .attribute(attribute.uid())
-                        .value(extractValue(programStage.attributeValues(),attribute.uid()))
-                        .build());
+            programStageAttributeValueLinkHandler.handleMany(programStage.uid(), attributes,
+                    attribute -> ProgramStageAttributeValueLink.builder()
+                            .programStage(programStage.uid())
+                            .attribute(attribute.uid())
+                            .value(extractValue(programStage.attributeValues(),attribute.uid()))
+                            .build());
+        }
     }
 
     private List<Attribute> extractAttributes(List<AttributeValue> attributeValues) {
