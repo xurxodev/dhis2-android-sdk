@@ -29,37 +29,30 @@
 package org.hisp.dhis.android.core.dataelement.internal;
 
 import org.hisp.dhis.android.core.arch.db.access.DatabaseAdapter;
-import org.hisp.dhis.android.core.arch.db.stores.internal.IdentifiableObjectStore;
-import org.hisp.dhis.android.core.arch.handlers.internal.Handler;
-import org.hisp.dhis.android.core.arch.repositories.children.internal.ChildrenAppender;
-import org.hisp.dhis.android.core.dataelement.DataElement;
-
-import java.util.Collections;
-import java.util.Map;
+import org.hisp.dhis.android.core.arch.db.stores.internal.LinkStore;
+import org.hisp.dhis.android.core.arch.handlers.internal.LinkHandler;
+import org.hisp.dhis.android.core.arch.handlers.internal.LinkHandlerImpl;
+import org.hisp.dhis.android.core.legendset.DataElementLegendSetLink;
+import org.hisp.dhis.android.core.legendset.LegendSet;
+import org.hisp.dhis.android.core.legendset.internal.DataElementLegendSetLinkStore;
 
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
 
 @Module
-public final class DataElementEntityDIModule {
+public final class DataElementLegendSetEntityDIModule {
 
     @Provides
     @Reusable
-    IdentifiableObjectStore<DataElement> store(DatabaseAdapter databaseAdapter) {
-        return DataElementStore.create(databaseAdapter);
+    public LinkStore<DataElementLegendSetLink> store(DatabaseAdapter databaseAdapter) {
+        return DataElementLegendSetLinkStore.create(databaseAdapter);
     }
 
     @Provides
     @Reusable
-    Handler<DataElement> handler(DataElementHandler handler) {
-        return handler;
-    }
-
-    @Provides
-    @Reusable
-    Map<String, ChildrenAppender<DataElement>> childrenAppenders(DatabaseAdapter databaseAdapter) {
-        return Collections.singletonMap(DataElementFields.LEGEND_SETS,
-                DataElementLegendSetChildrenAppender.create(databaseAdapter));
+    public LinkHandler<LegendSet, DataElementLegendSetLink> handler(
+            LinkStore<DataElementLegendSetLink> store) {
+        return new LinkHandlerImpl<>(store);
     }
 }

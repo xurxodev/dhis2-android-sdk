@@ -26,40 +26,55 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.hisp.dhis.android.core.dataelement.internal;
+package org.hisp.dhis.android.core.legendset;
 
-import org.hisp.dhis.android.core.arch.db.access.DatabaseAdapter;
-import org.hisp.dhis.android.core.arch.db.stores.internal.IdentifiableObjectStore;
-import org.hisp.dhis.android.core.arch.handlers.internal.Handler;
-import org.hisp.dhis.android.core.arch.repositories.children.internal.ChildrenAppender;
-import org.hisp.dhis.android.core.dataelement.DataElement;
+import org.hisp.dhis.android.core.arch.db.stores.projections.internal.LinkTableChildProjection;
+import org.hisp.dhis.android.core.arch.db.tableinfos.TableInfo;
+import org.hisp.dhis.android.core.arch.helpers.CollectionsHelper;
+import org.hisp.dhis.android.core.common.CoreColumns;
 
-import java.util.Collections;
-import java.util.Map;
+public final class DataElementLegendSetLinkTableInfo {
 
-import dagger.Module;
-import dagger.Provides;
-import dagger.Reusable;
+    public static final TableInfo TABLE_INFO = new TableInfo() {
 
-@Module
-public final class DataElementEntityDIModule {
+        @Override
+        public String name() {
+            return "DataElementLegendSetLink";
+        }
 
-    @Provides
-    @Reusable
-    IdentifiableObjectStore<DataElement> store(DatabaseAdapter databaseAdapter) {
-        return DataElementStore.create(databaseAdapter);
+        @Override
+        public CoreColumns columns() {
+            return new Columns();
+        }
+    };
+
+    public static final LinkTableChildProjection CHILD_PROJECTION = new LinkTableChildProjection(
+            LegendSetTableInfo.TABLE_INFO,
+            Columns.DATA_ELEMENT,
+            Columns.LEGEND_SET);
+
+    private DataElementLegendSetLinkTableInfo() {
     }
 
-    @Provides
-    @Reusable
-    Handler<DataElement> handler(DataElementHandler handler) {
-        return handler;
-    }
+    public static class Columns extends CoreColumns {
 
-    @Provides
-    @Reusable
-    Map<String, ChildrenAppender<DataElement>> childrenAppenders(DatabaseAdapter databaseAdapter) {
-        return Collections.singletonMap(DataElementFields.LEGEND_SETS,
-                DataElementLegendSetChildrenAppender.create(databaseAdapter));
+        public static final String DATA_ELEMENT = "dataElement";
+        public static final String LEGEND_SET = "legendSet";
+
+        @Override
+        public String[] all() {
+            return CollectionsHelper.appendInNewArray(super.all(),
+                    DATA_ELEMENT,
+                    LEGEND_SET
+            );
+        }
+
+        @Override
+        public String[] whereUpdate() {
+            return CollectionsHelper.appendInNewArray(super.all(),
+                    DATA_ELEMENT,
+                    LEGEND_SET
+            );
+        }
     }
 }

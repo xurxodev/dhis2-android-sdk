@@ -26,40 +26,27 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.hisp.dhis.android.core.dataelement.internal;
+package org.hisp.dhis.android.core.legendset.internal;
 
 import org.hisp.dhis.android.core.arch.db.access.DatabaseAdapter;
-import org.hisp.dhis.android.core.arch.db.stores.internal.IdentifiableObjectStore;
-import org.hisp.dhis.android.core.arch.handlers.internal.Handler;
-import org.hisp.dhis.android.core.arch.repositories.children.internal.ChildrenAppender;
-import org.hisp.dhis.android.core.dataelement.DataElement;
+import org.hisp.dhis.android.core.arch.db.stores.binders.internal.StatementBinder;
+import org.hisp.dhis.android.core.arch.db.stores.internal.LinkStore;
+import org.hisp.dhis.android.core.arch.db.stores.internal.StoreFactory;
+import org.hisp.dhis.android.core.legendset.DataElementLegendSetLink;
+import org.hisp.dhis.android.core.legendset.DataElementLegendSetLinkTableInfo;
 
-import java.util.Collections;
-import java.util.Map;
+public final class DataElementLegendSetLinkStore {
 
-import dagger.Module;
-import dagger.Provides;
-import dagger.Reusable;
+    private static final StatementBinder<DataElementLegendSetLink> BINDER = (o, w) -> {
+        w.bind(1, o.dataElement());
+        w.bind(2, o.legendSet());
+    };
 
-@Module
-public final class DataElementEntityDIModule {
+    private DataElementLegendSetLinkStore() {}
 
-    @Provides
-    @Reusable
-    IdentifiableObjectStore<DataElement> store(DatabaseAdapter databaseAdapter) {
-        return DataElementStore.create(databaseAdapter);
-    }
-
-    @Provides
-    @Reusable
-    Handler<DataElement> handler(DataElementHandler handler) {
-        return handler;
-    }
-
-    @Provides
-    @Reusable
-    Map<String, ChildrenAppender<DataElement>> childrenAppenders(DatabaseAdapter databaseAdapter) {
-        return Collections.singletonMap(DataElementFields.LEGEND_SETS,
-                DataElementLegendSetChildrenAppender.create(databaseAdapter));
+    public static LinkStore<DataElementLegendSetLink> create(DatabaseAdapter databaseAdapter) {
+        return StoreFactory.linkStore(databaseAdapter, DataElementLegendSetLinkTableInfo.TABLE_INFO,
+                DataElementLegendSetLinkTableInfo.Columns.DATA_ELEMENT,
+                BINDER, DataElementLegendSetLink::create);
     }
 }

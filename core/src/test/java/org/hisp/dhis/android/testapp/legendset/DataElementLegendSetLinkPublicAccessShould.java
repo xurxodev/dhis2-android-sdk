@@ -26,40 +26,36 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.hisp.dhis.android.core.dataelement.internal;
+package org.hisp.dhis.android.testapp.legendset;
 
-import org.hisp.dhis.android.core.arch.db.access.DatabaseAdapter;
-import org.hisp.dhis.android.core.arch.db.stores.internal.IdentifiableObjectStore;
-import org.hisp.dhis.android.core.arch.handlers.internal.Handler;
-import org.hisp.dhis.android.core.arch.repositories.children.internal.ChildrenAppender;
-import org.hisp.dhis.android.core.dataelement.DataElement;
+import org.hisp.dhis.android.core.legendset.DataElementLegendSetLink;
+import org.hisp.dhis.android.core.legendset.ProgramIndicatorLegendSetLink;
+import org.hisp.dhis.android.testapp.arch.BasePublicAccessShould;
+import org.mockito.Mock;
 
-import java.util.Collections;
-import java.util.Map;
+public class DataElementLegendSetLinkPublicAccessShould
+        extends BasePublicAccessShould<DataElementLegendSetLink> {
 
-import dagger.Module;
-import dagger.Provides;
-import dagger.Reusable;
+    @Mock
+    private DataElementLegendSetLink object;
 
-@Module
-public final class DataElementEntityDIModule {
-
-    @Provides
-    @Reusable
-    IdentifiableObjectStore<DataElement> store(DatabaseAdapter databaseAdapter) {
-        return DataElementStore.create(databaseAdapter);
+    @Override
+    public DataElementLegendSetLink object() {
+        return object;
     }
 
-    @Provides
-    @Reusable
-    Handler<DataElement> handler(DataElementHandler handler) {
-        return handler;
+    @Override
+    public void has_public_create_method() {
+        DataElementLegendSetLink.create(null);
     }
 
-    @Provides
-    @Reusable
-    Map<String, ChildrenAppender<DataElement>> childrenAppenders(DatabaseAdapter databaseAdapter) {
-        return Collections.singletonMap(DataElementFields.LEGEND_SETS,
-                DataElementLegendSetChildrenAppender.create(databaseAdapter));
+    @Override
+    public void has_public_builder_method() {
+        DataElementLegendSetLink.builder();
+    }
+
+    @Override
+    public void has_public_to_builder_method() {
+        object().toBuilder();
     }
 }

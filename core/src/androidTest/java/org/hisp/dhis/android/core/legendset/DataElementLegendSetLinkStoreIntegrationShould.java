@@ -26,40 +26,40 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.hisp.dhis.android.core.dataelement.internal;
+package org.hisp.dhis.android.core.legendset;
 
-import org.hisp.dhis.android.core.arch.db.access.DatabaseAdapter;
-import org.hisp.dhis.android.core.arch.db.stores.internal.IdentifiableObjectStore;
-import org.hisp.dhis.android.core.arch.handlers.internal.Handler;
-import org.hisp.dhis.android.core.arch.repositories.children.internal.ChildrenAppender;
-import org.hisp.dhis.android.core.dataelement.DataElement;
+import org.hisp.dhis.android.core.data.database.LinkStoreAbstractIntegrationShould;
+import org.hisp.dhis.android.core.data.legendset.DataElementLegendSetLinkSamples;
+import org.hisp.dhis.android.core.data.legendset.ProgramIndicatorLegendSetLinkSamples;
+import org.hisp.dhis.android.core.legendset.internal.DataElementLegendSetLinkStore;
+import org.hisp.dhis.android.core.legendset.internal.ProgramIndicatorLegendSetLinkStore;
+import org.hisp.dhis.android.core.utils.integration.mock.TestDatabaseAdapterFactory;
+import org.hisp.dhis.android.core.utils.runner.D2JunitRunner;
+import org.junit.runner.RunWith;
 
-import java.util.Collections;
-import java.util.Map;
+@RunWith(D2JunitRunner.class)
+public class DataElementLegendSetLinkStoreIntegrationShould
+        extends LinkStoreAbstractIntegrationShould<DataElementLegendSetLink> {
 
-import dagger.Module;
-import dagger.Provides;
-import dagger.Reusable;
-
-@Module
-public final class DataElementEntityDIModule {
-
-    @Provides
-    @Reusable
-    IdentifiableObjectStore<DataElement> store(DatabaseAdapter databaseAdapter) {
-        return DataElementStore.create(databaseAdapter);
+    public DataElementLegendSetLinkStoreIntegrationShould() {
+        super(DataElementLegendSetLinkStore.create(TestDatabaseAdapterFactory.get()),
+                DataElementLegendSetLinkTableInfo.TABLE_INFO, TestDatabaseAdapterFactory.get());
     }
 
-    @Provides
-    @Reusable
-    Handler<DataElement> handler(DataElementHandler handler) {
-        return handler;
+    @Override
+    protected String addMasterUid() {
+        return DataElementLegendSetLinkSamples.getDataElementLegendSetLink().dataElement();
     }
 
-    @Provides
-    @Reusable
-    Map<String, ChildrenAppender<DataElement>> childrenAppenders(DatabaseAdapter databaseAdapter) {
-        return Collections.singletonMap(DataElementFields.LEGEND_SETS,
-                DataElementLegendSetChildrenAppender.create(databaseAdapter));
+    @Override
+    protected DataElementLegendSetLink buildObject() {
+        return DataElementLegendSetLinkSamples.getDataElementLegendSetLink();
+    }
+
+    @Override
+    protected DataElementLegendSetLink buildObjectWithOtherMasterUid() {
+        return buildObject().toBuilder()
+                .dataElement("new_data_element")
+                .build();
     }
 }

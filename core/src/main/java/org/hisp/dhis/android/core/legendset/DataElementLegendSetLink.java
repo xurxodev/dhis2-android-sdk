@@ -26,40 +26,44 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.hisp.dhis.android.core.dataelement.internal;
+package org.hisp.dhis.android.core.legendset;
 
-import org.hisp.dhis.android.core.arch.db.access.DatabaseAdapter;
-import org.hisp.dhis.android.core.arch.db.stores.internal.IdentifiableObjectStore;
-import org.hisp.dhis.android.core.arch.handlers.internal.Handler;
-import org.hisp.dhis.android.core.arch.repositories.children.internal.ChildrenAppender;
-import org.hisp.dhis.android.core.dataelement.DataElement;
+import android.database.Cursor;
 
-import java.util.Collections;
-import java.util.Map;
+import com.google.auto.value.AutoValue;
 
-import dagger.Module;
-import dagger.Provides;
-import dagger.Reusable;
+import org.hisp.dhis.android.core.common.BaseObject;
+import org.hisp.dhis.android.core.common.CoreObject;
 
-@Module
-public final class DataElementEntityDIModule {
+import androidx.annotation.Nullable;
 
-    @Provides
-    @Reusable
-    IdentifiableObjectStore<DataElement> store(DatabaseAdapter databaseAdapter) {
-        return DataElementStore.create(databaseAdapter);
+@AutoValue
+public abstract class DataElementLegendSetLink implements CoreObject {
+
+    @Nullable
+    public abstract String dataElement();
+
+    @Nullable
+    public abstract String legendSet();
+
+    public static DataElementLegendSetLink create(Cursor cursor) {
+        return AutoValue_DataElementLegendSetLink.createFromCursor(cursor);
     }
 
-    @Provides
-    @Reusable
-    Handler<DataElement> handler(DataElementHandler handler) {
-        return handler;
+    public static Builder builder() {
+        return new $$AutoValue_DataElementLegendSetLink.Builder();
     }
 
-    @Provides
-    @Reusable
-    Map<String, ChildrenAppender<DataElement>> childrenAppenders(DatabaseAdapter databaseAdapter) {
-        return Collections.singletonMap(DataElementFields.LEGEND_SETS,
-                DataElementLegendSetChildrenAppender.create(databaseAdapter));
+    public abstract Builder toBuilder();
+
+    @AutoValue.Builder
+    public static abstract class Builder extends BaseObject.Builder<Builder> {
+        public abstract Builder id(Long id);
+
+        public abstract Builder dataElement(String dataElement);
+
+        public abstract Builder legendSet(String legendSet);
+
+        public abstract DataElementLegendSetLink build();
     }
 }

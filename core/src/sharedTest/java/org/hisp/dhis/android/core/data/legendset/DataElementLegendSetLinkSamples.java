@@ -26,40 +26,17 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.hisp.dhis.android.core.dataelement.internal;
+package org.hisp.dhis.android.core.data.legendset;
 
-import org.hisp.dhis.android.core.arch.db.access.DatabaseAdapter;
-import org.hisp.dhis.android.core.arch.db.stores.internal.IdentifiableObjectStore;
-import org.hisp.dhis.android.core.arch.handlers.internal.Handler;
-import org.hisp.dhis.android.core.arch.repositories.children.internal.ChildrenAppender;
-import org.hisp.dhis.android.core.dataelement.DataElement;
+import org.hisp.dhis.android.core.legendset.DataElementLegendSetLink;
 
-import java.util.Collections;
-import java.util.Map;
+public class DataElementLegendSetLinkSamples {
 
-import dagger.Module;
-import dagger.Provides;
-import dagger.Reusable;
-
-@Module
-public final class DataElementEntityDIModule {
-
-    @Provides
-    @Reusable
-    IdentifiableObjectStore<DataElement> store(DatabaseAdapter databaseAdapter) {
-        return DataElementStore.create(databaseAdapter);
-    }
-
-    @Provides
-    @Reusable
-    Handler<DataElement> handler(DataElementHandler handler) {
-        return handler;
-    }
-
-    @Provides
-    @Reusable
-    Map<String, ChildrenAppender<DataElement>> childrenAppenders(DatabaseAdapter databaseAdapter) {
-        return Collections.singletonMap(DataElementFields.LEGEND_SETS,
-                DataElementLegendSetChildrenAppender.create(databaseAdapter));
+    public static DataElementLegendSetLink getDataElementLegendSetLink() {
+        return DataElementLegendSetLink.builder()
+                .id(1L)
+                .legendSet("legend_set")
+                .dataElement("data_element")
+                .build();
     }
 }
