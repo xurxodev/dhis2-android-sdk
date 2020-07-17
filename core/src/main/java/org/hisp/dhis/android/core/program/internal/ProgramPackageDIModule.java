@@ -48,6 +48,7 @@ import retrofit2.Retrofit;
         ProgramRuleVariableEntityDIModule.class,
         ProgramSectionEntityDIModule.class,
         ProgramStageDataElementEntityDIModule.class,
+        ProgramStageAttributeValueEntityDIModule.class,
         ProgramStageSectionDataElementEntityDIModule.class,
         ProgramSectionAttributeEntityDIModule.class,
         ProgramStageSectionEntityDIModule.class,
