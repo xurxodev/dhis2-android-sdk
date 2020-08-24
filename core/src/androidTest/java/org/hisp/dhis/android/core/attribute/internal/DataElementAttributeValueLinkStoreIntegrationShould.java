@@ -47,12 +47,12 @@ public class DataElementAttributeValueLinkStoreIntegrationShould
 
     @Override
     protected String addMasterUid() {
-        return DataElementAttributeValueLinkSamples.getProgramStageAttribute().dataElement();
+        return DataElementAttributeValueLinkSamples.getDataElementAttribute().dataElement();
     }
 
     @Override
     protected DataElementAttributeValueLink buildObject() {
-        return DataElementAttributeValueLinkSamples.getProgramStageAttribute();
+        return DataElementAttributeValueLinkSamples.getDataElementAttribute();
     }
 
     @Override

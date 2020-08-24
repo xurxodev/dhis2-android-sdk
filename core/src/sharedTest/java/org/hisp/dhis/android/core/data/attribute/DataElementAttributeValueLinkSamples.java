@@ -32,7 +32,7 @@ import org.hisp.dhis.android.core.attribute.DataElementAttributeValueLink;
 
 public class DataElementAttributeValueLinkSamples {
 
-    public static DataElementAttributeValueLink getProgramStageAttribute() {
+    public static DataElementAttributeValueLink getDataElementAttribute() {
         return DataElementAttributeValueLink.builder()
                 .id(1L)
                 .dataElement("data_element")

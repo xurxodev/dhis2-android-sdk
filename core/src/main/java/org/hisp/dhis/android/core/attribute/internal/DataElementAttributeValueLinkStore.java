@@ -33,7 +33,7 @@ import org.hisp.dhis.android.core.arch.db.stores.binders.internal.StatementBinde
 import org.hisp.dhis.android.core.arch.db.stores.internal.LinkStore;
 import org.hisp.dhis.android.core.arch.db.stores.internal.StoreFactory;
 import org.hisp.dhis.android.core.attribute.DataElementAttributeValueLink;
-import org.hisp.dhis.android.core.attribute.ProgramStageAttributeValueLinkTableInfo;
+import org.hisp.dhis.android.core.attribute.DataElementAttributeValueLinkTableInfo;
 
 public final class DataElementAttributeValueLinkStore {
 
@@ -46,8 +46,8 @@ public final class DataElementAttributeValueLinkStore {
     private DataElementAttributeValueLinkStore() {}
 
     public static LinkStore<DataElementAttributeValueLink> create(DatabaseAdapter databaseAdapter) {
-        return StoreFactory.linkStore(databaseAdapter, ProgramStageAttributeValueLinkTableInfo.TABLE_INFO,
-                ProgramStageAttributeValueLinkTableInfo.Columns.PROGRAM_STAGE,
+        return StoreFactory.linkStore(databaseAdapter, DataElementAttributeValueLinkTableInfo.TABLE_INFO,
+                DataElementAttributeValueLinkTableInfo.Columns.DATA_ELEMENT,
                 BINDER, DataElementAttributeValueLink::create);
     }
 }
