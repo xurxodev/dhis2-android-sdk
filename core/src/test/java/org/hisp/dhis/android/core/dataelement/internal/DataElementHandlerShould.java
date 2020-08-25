@@ -80,9 +80,6 @@ public class DataElementHandlerShould {
     @Mock
     private LegendSet legendSet;
 
-    @Mock
-    private AttributeValue attributeValue;
-
     // object to test
     private Handler<DataElement> dataElementHandler;
 
