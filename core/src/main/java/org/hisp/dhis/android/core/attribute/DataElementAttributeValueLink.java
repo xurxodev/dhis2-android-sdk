@@ -63,7 +63,7 @@ public abstract class DataElementAttributeValueLink implements CoreObject {
     public static abstract class Builder extends BaseObject.Builder<Builder> {
         public abstract Builder id(Long id);
 
-        public abstract Builder dataElement(String programStage);
+        public abstract Builder dataElement(String dataElement);
 
         public abstract Builder attribute(String attribute);
 
