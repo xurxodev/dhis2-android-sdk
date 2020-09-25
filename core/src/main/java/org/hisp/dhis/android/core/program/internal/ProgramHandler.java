@@ -29,6 +29,7 @@
 package org.hisp.dhis.android.core.program.internal;
 
 import org.hisp.dhis.android.core.arch.cleaners.internal.CollectionCleaner;
+import org.hisp.dhis.android.core.arch.cleaners.internal.LinkCleaner;
 import org.hisp.dhis.android.core.arch.cleaners.internal.ParentOrphanCleaner;
 import org.hisp.dhis.android.core.arch.handlers.internal.HandleAction;
 import org.hisp.dhis.android.core.arch.handlers.internal.Handler;
@@ -63,6 +64,7 @@ final class ProgramHandler extends IdentifiableHandlerImpl<Program> {
     private final Handler<ProgramSection> programSectionHandler;
     private final ParentOrphanCleaner<Program> orphanCleaner;
     private final CollectionCleaner<Program> collectionCleaner;
+    private final LinkCleaner<Program> linkCleaner;
 
     private final Handler<Attribute> attributeHandler;
     private final LinkHandler<Attribute, ProgramAttributeValueLink>
@@ -77,9 +79,9 @@ final class ProgramHandler extends IdentifiableHandlerImpl<Program> {
                    Handler<ProgramSection> programSectionHandler,
                    ParentOrphanCleaner<Program> orphanCleaner,
                    CollectionCleaner<Program> collectionCleaner,
+                   LinkCleaner<Program> linkCleaner,
                    Handler<Attribute> attributeHandler,
-                   LinkHandler<Attribute, ProgramAttributeValueLink> programAttributeLinkHandler
-            ) {
+                   LinkHandler<Attribute, ProgramAttributeValueLink> programAttributeLinkHandler) {
         super(programStore);
         this.programRuleVariableHandler = programRuleVariableHandler;
         this.programIndicatorHandler = programIndicatorHandler;
@@ -87,6 +89,7 @@ final class ProgramHandler extends IdentifiableHandlerImpl<Program> {
         this.programSectionHandler = programSectionHandler;
         this.orphanCleaner = orphanCleaner;
         this.collectionCleaner = collectionCleaner;
+        this.linkCleaner = linkCleaner;
         this.attributeHandler = attributeHandler;
         this.programAttributeLinkHandler = programAttributeLinkHandler;
     }
@@ -132,5 +135,6 @@ final class ProgramHandler extends IdentifiableHandlerImpl<Program> {
     @Override
     protected void afterCollectionHandled(Collection<Program> programs) {
         collectionCleaner.deleteNotPresent(programs);
+        linkCleaner.deleteNotPresent(programs);
     }
 }
