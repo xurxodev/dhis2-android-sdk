@@ -164,7 +164,7 @@ public class ProgramIndicatorEngineIntegrationShould extends BaseMockIntegration
         createEvent(event1, programStage1, new Date());
         insertTrackedEntityDataValue(event1, dataElement1, "4");
 
-        setProgramIndicatorExpressionAsAverage(de(programStage1,dataElement1));
+        setProgramIndicatorExpressionAsLast(de(programStage1,dataElement1));
 
         String result = programIndicatorEngine.getProgramIndicatorValue(enrollmentUid, event1, programIndicatorUid);
 

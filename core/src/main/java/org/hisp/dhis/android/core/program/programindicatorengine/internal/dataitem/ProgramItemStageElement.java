@@ -65,19 +65,11 @@ public class ProgramItemStageElement
                 } else if (AggregationType.AVERAGE.equals(aggregationType)) {
                     double average = avg(extractValues(candidates));
 
-                    final TrackedEntityDataValue teDataValue = TrackedEntityDataValue.builder()
-                            .dataElement(candidates.get(0).dataElement())
-                            .value(String.valueOf((average))).build();
-
-                    return teDataValue;
+                    value = String.valueOf(average);
                 } else if (AggregationType.SUM.equals(aggregationType)) {
                     double sum = sum(extractValues(candidates));
 
-                    final TrackedEntityDataValue teDataValue = TrackedEntityDataValue.builder()
-                            .dataElement(candidates.get(0).dataElement())
-                            .value(String.valueOf((sum))).build();
-
-                    return teDataValue;
+                    value = String.valueOf(sum);
                 } else {
                     value = candidates.get(0).value();
                 }
