@@ -169,7 +169,7 @@ public class ProgramIndicatorEngineShould {
 
         when(programIndicatorStore.selectByUid(programIndicatorUid)).thenReturn
                 (programIndicator);
-        when(programIndicator.aggregationType()).thenReturn(AggregationType.SUM);
+        when(programIndicator.aggregationType()).thenReturn(AggregationType.LAST);
 
         when(value1.dataElement()).thenReturn(dataElementUid1);
         when(value2.dataElement()).thenReturn(dataElementUid2);
@@ -427,7 +427,7 @@ public class ProgramIndicatorEngineShould {
                 de(programStageUid1, dataElementUid1) + " + " + de(programStageUid2, dataElementUid4));
 
         when(value1.value()).thenReturn("3.5");
-        when(value4.value()).thenReturn("2");
+        when(value5.value()).thenReturn("2");
 
         String resultWithoutEvent = programIndicatorEngine.parseIndicatorExpression(enrollmentUid, null,
                 programIndicatorUid);
@@ -488,7 +488,7 @@ public class ProgramIndicatorEngineShould {
         String sumResult = programIndicatorEngine.parseIndicatorExpression(enrollmentUid, null,
                 programIndicatorUid);
 
-        assertThat(sumResult).isEqualTo("2.0 * 10");
+        assertThat(sumResult).isEqualTo("6.0 * 10");
 
         when(programIndicator.aggregationType()).thenReturn(AggregationType.LAST);
         String lastResult = programIndicatorEngine.parseIndicatorExpression(enrollmentUid, null,

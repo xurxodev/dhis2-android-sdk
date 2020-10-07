@@ -39,6 +39,7 @@ import org.hisp.dhis.android.core.arch.handlers.internal.IdentifiableHandlerImpl
 import org.hisp.dhis.android.core.arch.handlers.internal.LinkHandler;
 import org.hisp.dhis.android.core.attribute.Attribute;
 import org.hisp.dhis.android.core.attribute.AttributeValue;
+import org.hisp.dhis.android.core.attribute.AttributeValueUtils;
 import org.hisp.dhis.android.core.attribute.ProgramStageAttributeValueLink;
 import org.hisp.dhis.android.core.common.ObjectWithUid;
 import org.hisp.dhis.android.core.program.ProgramStage;
@@ -102,7 +103,7 @@ final class ProgramStageHandler extends IdentifiableHandlerImpl<ProgramStage> {
         }
 
         if (programStage.attributeValues() != null){
-            final List<Attribute> attributes = extractAttributes(programStage.attributeValues());
+            final List<Attribute> attributes = AttributeValueUtils.extractAttributes(programStage.attributeValues());
 
             attributeHandler.handleMany(attributes);
 
@@ -110,32 +111,9 @@ final class ProgramStageHandler extends IdentifiableHandlerImpl<ProgramStage> {
                     attribute -> ProgramStageAttributeValueLink.builder()
                             .programStage(programStage.uid())
                             .attribute(attribute.uid())
-                            .value(extractValue(programStage.attributeValues(),attribute.uid()))
+                            .value(AttributeValueUtils.extractValue(programStage.attributeValues(),attribute.uid()))
                             .build());
         }
-    }
-
-    private List<Attribute> extractAttributes(List<AttributeValue> attributeValues) {
-        List<Attribute> attributes = new ArrayList<>();
-
-        for (AttributeValue attValue:attributeValues) {
-            attributes.add(attValue.attribute());
-        }
-
-        return attributes;
-    }
-
-    private String extractValue(List<AttributeValue> attributeValues, String attributeUId) {
-        String value = "";
-
-        for (AttributeValue attValue:attributeValues) {
-            if (attValue.attribute().uid().equals(attributeUId)){
-                value = attValue.value();
-                break;
-            }
-        }
-
-        return value;
     }
 
     @Override

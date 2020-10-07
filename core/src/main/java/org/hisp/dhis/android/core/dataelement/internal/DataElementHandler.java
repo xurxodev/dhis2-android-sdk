@@ -32,9 +32,15 @@ import org.hisp.dhis.android.core.arch.handlers.internal.HandleAction;
 import org.hisp.dhis.android.core.arch.handlers.internal.Handler;
 import org.hisp.dhis.android.core.arch.handlers.internal.IdentifiableHandlerImpl;
 import org.hisp.dhis.android.core.arch.handlers.internal.LinkHandler;
+import org.hisp.dhis.android.core.attribute.Attribute;
+import org.hisp.dhis.android.core.attribute.AttributeValueUtils;
+import org.hisp.dhis.android.core.attribute.DataElementAttributeValueLink;
+import org.hisp.dhis.android.core.attribute.ProgramStageAttributeValueLink;
 import org.hisp.dhis.android.core.dataelement.DataElement;
 import org.hisp.dhis.android.core.legendset.DataElementLegendSetLink;
 import org.hisp.dhis.android.core.legendset.LegendSet;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -45,20 +51,24 @@ final class DataElementHandler extends IdentifiableHandlerImpl<DataElement> {
 
     private final Handler<LegendSet> legendSetHandler;
     private final LinkHandler<LegendSet, DataElementLegendSetLink> dataElementLegendSetLinkHandler;
-
+    private final Handler<Attribute> attributeHandler;
+    private final LinkHandler<Attribute, DataElementAttributeValueLink>
+            dataElementAttributeLinkHandler;
 
     @Inject
     DataElementHandler(
             IdentifiableObjectStore<DataElement> programStageDataElementStore,
             Handler<LegendSet> legendSetHandler,
-            LinkHandler<LegendSet, DataElementLegendSetLink>
-                    dataElementLegendSetLinkHandler
+            LinkHandler<LegendSet, DataElementLegendSetLink> dataElementLegendSetLinkHandler,
+            Handler<Attribute> attributeHandler,
+            LinkHandler<Attribute, DataElementAttributeValueLink> dataElementAttributeLinkHandler
     ) {
 
         super(programStageDataElementStore);
         this.legendSetHandler = legendSetHandler;
-
         this.dataElementLegendSetLinkHandler = dataElementLegendSetLinkHandler;
+        this.attributeHandler = attributeHandler;
+        this.dataElementAttributeLinkHandler = dataElementAttributeLinkHandler;
     }
 
     @Override
@@ -68,5 +78,18 @@ final class DataElementHandler extends IdentifiableHandlerImpl<DataElement> {
         dataElementLegendSetLinkHandler.handleMany(dataElement.uid(), dataElement.legendSets(),
                 legendSet -> DataElementLegendSetLink.builder()
                         .dataElement(dataElement.uid()).legendSet(legendSet.uid()).build());
+
+        if (dataElement.attributeValues() != null){
+            final List<Attribute> attributes = AttributeValueUtils.extractAttributes(dataElement.attributeValues());
+
+            attributeHandler.handleMany(attributes);
+
+            dataElementAttributeLinkHandler.handleMany(dataElement.uid(), attributes,
+                    attribute -> DataElementAttributeValueLink.builder()
+                            .dataElement(dataElement.uid())
+                            .attribute(attribute.uid())
+                            .value(AttributeValueUtils.extractValue(dataElement.attributeValues(),attribute.uid()))
+                            .build());
+        }
     }
 }
