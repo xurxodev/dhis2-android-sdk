@@ -1,2 +1,10 @@
+# Creates the user settings table
+CREATE TABLE UserSettings (_id INTEGER PRIMARY KEY AUTOINCREMENT, keyUiLocale TEXT, keyDbLocale TEXT);
+
+# Creates the validation rule table and the data set validation rule link table
+CREATE TABLE ValidationRule (_id INTEGER PRIMARY KEY AUTOINCREMENT, uid TEXT NOT NULL UNIQUE, code TEXT, name TEXT, displayName TEXT, created TEXT, lastUpdated TEXT, shortName TEXT, displayShortName TEXT, description TEXT, displayDescription TEXT, instruction TEXT, importance TEXT, operator TEXT, periodType TEXT, skipFormValidation INTEGER, leftSideExpression TEXT, leftSideDescription TEXT, leftSideMissingValueStrategy TEXT, rightSideExpression TEXT, rightSideDescription TEXT, rightSideMissingValueStrategy TEXT);
+CREATE TABLE DataSetValidationRuleLink (_id INTEGER PRIMARY KEY AUTOINCREMENT, dataSet TEXT NOT NULL, validationRule TEXT NOT NULL, FOREIGN KEY (dataSet) REFERENCES DataSet (uid) ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY (validationRule) REFERENCES ValidationRule (uid) ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED, UNIQUE (dataSet, validationRule));
+
+# EyeSeeTea migration
 CREATE TABLE DataElementAttributeValueLink (_id INTEGER PRIMARY KEY AUTOINCREMENT, dataElement TEXT NOT NULL, attribute TEXT NOT NULL, value TEXT, FOREIGN KEY (dataElement) REFERENCES DataElement (uid) ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY (attribute) REFERENCES Attribute (uid) ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED, UNIQUE (dataElement, attribute));
 CREATE TABLE ProgramAttributeValueLink (_id INTEGER PRIMARY KEY AUTOINCREMENT, program TEXT NOT NULL, attribute TEXT NOT NULL, value TEXT, FOREIGN KEY (program) REFERENCES Program (uid) ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED, FOREIGN KEY (attribute) REFERENCES Attribute (uid) ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED, UNIQUE (program, attribute));
