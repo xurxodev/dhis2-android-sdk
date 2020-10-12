@@ -39,7 +39,7 @@ ext {
             minSdkVersion    : 19,
             targetSdkVersion : 28,
             versionCode      : 221,
-            versionName      : "1.2.1-eyeseetea-fork-3"
+            versionName      : "1.2.1-eyeseetea-fork-1"
     ]
 
     libraries = [
