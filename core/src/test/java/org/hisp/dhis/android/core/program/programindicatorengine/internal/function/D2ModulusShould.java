@@ -37,7 +37,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.w3c.dom.Comment;
 
 import static org.mockito.Mockito.when;
 
@@ -62,7 +61,6 @@ public class D2ModulusShould {
         when(context.expr(0)).thenReturn(mockedFirstExpr);
         when(context.expr(1)).thenReturn(mockedSecondExpr);
     }
-
 
     @Test
     public void return_argument_rounded_down_to_nearest_whole_number() {

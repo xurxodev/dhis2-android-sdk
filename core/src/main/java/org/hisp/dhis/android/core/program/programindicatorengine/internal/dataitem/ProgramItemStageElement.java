@@ -55,8 +55,7 @@ public class ProgramItemStageElement
         if (eventList != null) {
             List<TrackedEntityDataValue> candidates = getCandidates(eventList, dataElementId);
 
-            AggregationType aggregationType =
-                    visitor.getProgramIndicatorContext().programIndicator().aggregationType();
+            AggregationType aggregationType = visitor.getProgramIndicatorContext().programIndicator().aggregationType();
 
             if (!candidates.isEmpty()) {
                 if (AggregationType.LAST.equals(aggregationType) ||
