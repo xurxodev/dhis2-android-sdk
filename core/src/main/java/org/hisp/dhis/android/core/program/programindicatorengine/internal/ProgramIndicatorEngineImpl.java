@@ -150,7 +150,7 @@ public class ProgramIndicatorEngineImpl implements ProgramIndicatorEngine {
     private Map<String, List<Event>> getSingleEvent(String eventUid) {
         Map<String, List<Event>> eventMap = new HashMap<>();
 
-        Event event = eventRepository.uid(eventUid).blockingGet();
+        Event event = eventRepository.withTrackedEntityDataValues().uid(eventUid).blockingGet();
 
         if (event != null) {
             eventMap.put(event.programStage(), Collections.singletonList(event));
