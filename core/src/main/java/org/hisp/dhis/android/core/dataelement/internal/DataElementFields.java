@@ -71,6 +71,7 @@ public final class DataElementFields {
                     fh.<ObjectWithUid>nestedField(DataElementTableInfo.Columns.CATEGORY_COMBO)
                             .with(ObjectWithUid.uid),
                     fh.<String>field(DataElementTableInfo.Columns.FIELD_MASK),
+                    fh.<String>field(DataElementTableInfo.Columns.URL),
                     fh.<ObjectStyle>nestedField(STYLE)
                             .with(ObjectStyleFields.allFields),
                     fh.<Access>nestedField(ACCESS)

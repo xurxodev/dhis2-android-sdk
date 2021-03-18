@@ -109,6 +109,9 @@ public abstract class DataElement extends BaseNameableObject
     @ColumnAdapter(IgnoreAttributeValuesListAdapter.class)
     public abstract List<AttributeValue> attributeValues();
 
+    @Nullable
+    public abstract String url();
+
     public static Builder builder() {
         return new $$AutoValue_DataElement.Builder();
     }
@@ -147,6 +150,8 @@ public abstract class DataElement extends BaseNameableObject
         public abstract DataElement.Builder fieldMask(String fieldMask);
 
         public abstract Builder attributeValues(List<AttributeValue> attributeValues);
+
+        public abstract DataElement.Builder url(String url);
 
         abstract DataElement autoBuild();
 
