@@ -56,6 +56,7 @@ public final class DataElementStore {
             w.bind(19, o.optionSetUid());
             w.bind(20, o.categoryComboUid());
             w.bind(21, o.fieldMask());
+            w.bind(22, o.url());
         }
     };
 

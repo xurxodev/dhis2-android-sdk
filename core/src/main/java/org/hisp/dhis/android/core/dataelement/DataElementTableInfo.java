@@ -61,6 +61,7 @@ public final class DataElementTableInfo {
         public final static String OPTION_SET = "optionSet";
         public final static String CATEGORY_COMBO = "categoryCombo";
         public final static String FIELD_MASK = "fieldMask";
+        public final static String URL = "url";
 
         @Override
         public String[] all() {
@@ -73,7 +74,8 @@ public final class DataElementTableInfo {
                     DISPLAY_FORM_NAME,
                     OPTION_SET,
                     CATEGORY_COMBO,
-                    FIELD_MASK
+                    FIELD_MASK,
+                    URL
             );
         }
     }
