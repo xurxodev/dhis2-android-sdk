@@ -28,8 +28,8 @@
 
 package org.hisp.dhis.client.sdk.android.dashboard;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.hisp.dhis.client.sdk.android.api.network.DhisApi;
 import org.hisp.dhis.client.sdk.core.common.network.Response;

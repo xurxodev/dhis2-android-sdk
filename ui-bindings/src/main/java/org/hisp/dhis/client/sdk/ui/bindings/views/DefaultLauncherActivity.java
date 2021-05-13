@@ -30,8 +30,8 @@ package org.hisp.dhis.client.sdk.ui.bindings.views;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.hisp.dhis.client.sdk.ui.bindings.R;
 import org.hisp.dhis.client.sdk.ui.bindings.commons.Inject;

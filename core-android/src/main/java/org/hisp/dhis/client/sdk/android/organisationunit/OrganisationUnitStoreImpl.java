@@ -28,7 +28,7 @@
 
 package org.hisp.dhis.client.sdk.android.organisationunit;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.raizlabs.android.dbflow.sql.language.Select;
 

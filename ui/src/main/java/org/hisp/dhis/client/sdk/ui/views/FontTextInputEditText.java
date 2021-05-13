@@ -32,8 +32,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.support.annotation.StringRes;
-import android.support.design.widget.TextInputEditText;
+import androidx.annotation.StringRes;
+import com.google.android.material.textfield.TextInputEditText;
 import android.util.AttributeSet;
 
 import org.hisp.dhis.client.sdk.ui.R;

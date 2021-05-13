@@ -29,8 +29,9 @@
 package org.hisp.dhis.client.sdk.ui.rows;
 
 import android.app.DatePickerDialog;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;

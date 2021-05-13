@@ -31,7 +31,7 @@ package org.hisp.dhis.client.sdk.ui.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.CardView;
+import androidx.cardview.widget.CardView;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;

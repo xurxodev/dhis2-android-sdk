@@ -2,7 +2,7 @@ package org.hisp.dhis.client.sdk.ui.adapters.expandable;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;

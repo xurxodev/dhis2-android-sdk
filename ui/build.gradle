@@ -68,14 +68,14 @@ dependencies {
     api project(":utils")
 
     // Google
-    api "com.android.support:support-annotations:${libs.supportVersion}"
-    api "com.android.support:recyclerview-v7:${libs.supportVersion}"
-    api "com.android.support:preference-v7:${libs.supportVersion}"
-    api "com.android.support:preference-v14:${libs.supportVersion}"
-    api "com.android.support:appcompat-v7:${libs.supportVersion}"
-    api "com.android.support:cardview-v7:${libs.supportVersion}"
-    api "com.android.support:percent:${libs.supportVersion}"
-    api "com.android.support:design:${libs.supportVersion}"
+    api "androidx.annotation:annotation:${libs.androidXLegacyVersion}"
+    api "androidx.recyclerview:recyclerview:${libs.androidXLegacyVersion}"
+    api "androidx.preference:preference:${libs.androidXLegacyVersion}"
+    api "androidx.legacy:legacy-preference-v14:${libs.androidXLegacyVersion}"
+    api "androidx.appcompat:appcompat:${libs.androidXLegacyVersion}"
+    api "androidx.cardview:cardview:${libs.androidXLegacyVersion}"
+    api "androidx.percentlayout:percentlayout:${libs.androidXLegacyVersion}"
+    api "com.google.android.material:material:${libs.androidXLegacyVersion}"
 
     // Other
     api "com.github.castorflex.smoothprogressbar:library-circular:${libs.progressBarVersion}"

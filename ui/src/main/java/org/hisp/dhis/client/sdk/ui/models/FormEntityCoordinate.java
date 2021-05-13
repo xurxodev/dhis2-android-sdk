@@ -1,6 +1,6 @@
 package org.hisp.dhis.client.sdk.ui.models;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class FormEntityCoordinate extends FormEntity {
     private double latitude;

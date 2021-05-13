@@ -1,6 +1,6 @@
 package org.hisp.dhis.client.sdk.ui.models;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
 

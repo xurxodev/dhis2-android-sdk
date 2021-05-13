@@ -29,8 +29,8 @@
 package org.hisp.dhis.client.sdk.ui.bindings.views;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
 
 import org.hisp.dhis.client.sdk.ui.bindings.R;

@@ -28,7 +28,7 @@
 
 package org.hisp.dhis.client.sdk.android.event;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.hisp.dhis.client.sdk.android.api.utils.DefaultOnSubscribe;
 import org.hisp.dhis.client.sdk.core.common.controllers.SyncStrategy;

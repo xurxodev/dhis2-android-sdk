@@ -6,7 +6,7 @@ import org.hisp.dhis.client.sdk.models.event.Event;
 import org.hisp.dhis.client.sdk.models.program.ProgramRule;
 import org.hisp.dhis.client.sdk.models.program.ProgramRuleVariable;
 import org.hisp.dhis.client.sdk.models.program.ProgramRuleVariableSourceType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ public class RulesEngineFallbackTests {
         assertErrorRuleInEffect(effects, errorMessage, null, null);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void ruleEngineTextFallback() {
         //Metadata
         String errorMessage = "this error will occur if simpleText is empty string";
@@ -83,7 +83,7 @@ public class RulesEngineFallbackTests {
         assertErrorRuleInEffect(effects, errorMessage, null, null);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void ruleEngineExecuteNumberFallback() {
         //Metadata
         String errorMessage = "this error will occur if simpleNumber is 0";

@@ -1,7 +1,7 @@
 package org.hisp.dhis.client.sdk.ui.bindings.commons;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.hisp.dhis.client.sdk.android.api.D2;
 import org.hisp.dhis.client.sdk.android.api.utils.LoggerImpl;

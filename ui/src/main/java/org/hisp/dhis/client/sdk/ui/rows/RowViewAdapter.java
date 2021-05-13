@@ -28,9 +28,9 @@
 
 package org.hisp.dhis.client.sdk.ui.rows;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.RecyclerView.Adapter;
-import android.support.v7.widget.RecyclerView.ViewHolder;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 

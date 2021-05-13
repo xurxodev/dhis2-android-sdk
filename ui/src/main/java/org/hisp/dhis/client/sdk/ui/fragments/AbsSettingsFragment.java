@@ -31,9 +31,9 @@ package org.hisp.dhis.client.sdk.ui.fragments;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
 import org.hisp.dhis.client.sdk.ui.R;
 import org.hisp.dhis.client.sdk.ui.SettingPreferences;

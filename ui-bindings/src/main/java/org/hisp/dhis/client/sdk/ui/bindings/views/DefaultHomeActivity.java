@@ -29,8 +29,9 @@
 package org.hisp.dhis.client.sdk.ui.bindings.views;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import android.view.View;
 
 import org.hisp.dhis.client.sdk.android.api.D2;

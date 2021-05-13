@@ -33,16 +33,16 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.DrawerLayout.DrawerListener;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +58,7 @@ import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
 
 // TODO add support for custom applications in navigation drawer
 public abstract class AbsHomeActivity extends BaseActivity
-        implements OnNavigationItemSelectedListener, DrawerListener, NavigationCallback,
+        implements OnNavigationItemSelectedListener, DrawerLayout.DrawerListener, NavigationCallback,
         OnBackPressedFromFragmentCallback {
 
     private static final String APPS_DASHBOARD_PACKAGE =

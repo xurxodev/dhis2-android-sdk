@@ -37,7 +37,7 @@ import org.hisp.dhis.client.sdk.models.program.ProgramRuleVariable;
 import org.hisp.dhis.client.sdk.models.program.ProgramRuleVariableSourceType;
 import org.hisp.dhis.client.sdk.models.program.ProgramStage;
 import org.joda.time.DateTime;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;

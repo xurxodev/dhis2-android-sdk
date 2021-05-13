@@ -29,7 +29,7 @@
 
 package org.hisp.dhis.client.sdk.ui;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.*;
 
