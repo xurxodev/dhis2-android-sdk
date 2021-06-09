@@ -29,9 +29,9 @@
 ext {
     configuration = [
             buildToolsVersion: "28.0.3",
-            minSdkVersion    : 15,
-            compileSdkVersion: 26,
-            targetSdkVersion : 26,
+            minSdkVersion    : 16,
+            compileSdkVersion: 29,
+            targetSdkVersion : 29,
             versionCode      : 1,
             versionName      : "0.1"
     ]
@@ -41,7 +41,7 @@ ext {
             dhisCommonsVersion : "1.1",
 
             // android libs
-            supportVersion     : "25.1.0",
+            androidXLegacyVersion   : "1.0.0",
             rxAndroidVersion   : "1.2.1",
             dbFlowVersion      : "3.0.1",
             progressBarVersion : "1.2.0",
@@ -52,9 +52,6 @@ ext {
             jacksonVersion     : "2.7.4",
             jodaTimeVersion    : "2.9.2",
             jexlVersion        : "2.1.1",
-            commonsLang3Version: "3.3.2",
-            commonsMath3Version: "3.6",
-            dagger             : "2.2",
 
             // testing libs
             jUnitVersion       : "4.12",
@@ -69,7 +66,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:4.1.2'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
 }

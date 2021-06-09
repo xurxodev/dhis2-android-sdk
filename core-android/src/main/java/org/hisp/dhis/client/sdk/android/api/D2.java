@@ -31,7 +31,7 @@ package org.hisp.dhis.client.sdk.android.api;
 import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.hisp.dhis.client.sdk.android.api.network.NetworkModuleImpl;
 import org.hisp.dhis.client.sdk.android.api.persistence.PersistenceModuleImpl;

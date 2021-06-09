@@ -4,7 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
 
 public class SystemInfoShould {
@@ -12,14 +12,14 @@ public class SystemInfoShould {
     @Rule
     public ExpectedException mExpectedException = ExpectedException.none();
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void return_min_api_version_if_server_version_is_empty() {
         SystemInfo systemInfo = new SystemInfo();
 
         assertThat(systemInfo.getApiVersion(),is(SystemInfo.minSupportedAPIVersion));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void throw_unsupported_server_exception_if_server_version_is_smaller_than_min() {
         mExpectedException.expect(UnsupportedServerVersionException.class);
         SystemInfo systemInfo = new SystemInfo();
@@ -28,7 +28,7 @@ public class SystemInfoShould {
         systemInfo.getApiVersion();
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void return_max_api_version_if_server_version_greater_than_max() {
         SystemInfo systemInfo = new SystemInfo();
         systemInfo.version = "2." + (SystemInfo.maxSupportedAPIVersion + 1);

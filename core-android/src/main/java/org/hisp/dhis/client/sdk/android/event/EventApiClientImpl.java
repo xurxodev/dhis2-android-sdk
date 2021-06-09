@@ -3,7 +3,7 @@ package org.hisp.dhis.client.sdk.android.event;
 import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.call;
 import static org.hisp.dhis.client.sdk.android.api.network.NetworkUtils.unwrap;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.hisp.dhis.client.sdk.core.common.Fields;
 import org.hisp.dhis.client.sdk.core.common.network.ApiException;

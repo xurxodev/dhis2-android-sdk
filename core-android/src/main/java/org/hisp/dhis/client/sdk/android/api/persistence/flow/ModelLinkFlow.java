@@ -28,8 +28,8 @@
 
 package org.hisp.dhis.client.sdk.android.api.persistence.flow;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ConflictAction;

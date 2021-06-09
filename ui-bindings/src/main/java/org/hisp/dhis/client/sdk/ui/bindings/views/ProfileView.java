@@ -1,7 +1,7 @@
 package org.hisp.dhis.client.sdk.ui.bindings.views;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.StringDef;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringDef;
 
 import org.hisp.dhis.client.sdk.ui.models.FormEntity;
 

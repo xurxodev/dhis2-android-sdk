@@ -1,6 +1,6 @@
 package org.hisp.dhis.client.sdk.ui.rows;
 
-import android.support.v7.widget.RecyclerView.ViewHolder;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 

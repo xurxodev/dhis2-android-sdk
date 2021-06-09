@@ -29,9 +29,9 @@
 package org.hisp.dhis.client.sdk.ui.rows;
 
 import android.content.Context;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ViewHolder;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import android.text.Editable;
 import android.text.InputType;
 import android.view.LayoutInflater;

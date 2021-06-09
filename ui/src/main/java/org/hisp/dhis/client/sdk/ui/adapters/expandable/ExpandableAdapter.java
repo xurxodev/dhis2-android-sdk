@@ -1,6 +1,6 @@
 package org.hisp.dhis.client.sdk.ui.adapters.expandable;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 

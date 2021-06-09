@@ -28,8 +28,8 @@
 
 package org.hisp.dhis.client.sdk.ui.rows;
 
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.widget.RecyclerView;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -30,7 +30,7 @@ package org.hisp.dhis.client.sdk.ui;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
 

@@ -38,8 +38,8 @@ import org.hisp.dhis.client.sdk.models.program.ProgramRule;
 import org.hisp.dhis.client.sdk.models.program.ProgramRuleVariable;
 import org.hisp.dhis.client.sdk.models.trackedentity.TrackedEntityAttribute;
 import org.hisp.dhis.client.sdk.models.trackedentity.TrackedEntityDataValue;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class RulesEngineExpressionTests {
     // executed only once (note, since list of programs is
     // static, it means unit tests know will share state, so it means
     // programs should not be modified during runtime)
-    @BeforeClass
+    @BeforeAll
     public static void setUp() throws IOException {
         /*ApiClient.init(
                 "https://play.dhis2.org/dev",
@@ -140,7 +140,7 @@ public class RulesEngineExpressionTests {
         assertErrorRuleInEffect(effects, errorMessage, null, null);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void ruleEngineExecuteRuleWithTwoVariables() {
         //Metadata
         String errorMessage = "this error will occur if both simpleBoolean1 and 2 is true";

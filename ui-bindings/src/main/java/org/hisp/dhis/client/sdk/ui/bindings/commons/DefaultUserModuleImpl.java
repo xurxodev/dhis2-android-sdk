@@ -1,8 +1,8 @@
 package org.hisp.dhis.client.sdk.ui.bindings.commons;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.hisp.dhis.client.sdk.android.api.D2;
 import org.hisp.dhis.client.sdk.android.user.CurrentUserInteractor;

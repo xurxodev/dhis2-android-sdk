@@ -70,7 +70,7 @@ dependencies {
     api project(":core")
 
     // Google
-    api "com.android.support:support-annotations:${libs.supportVersion}"
+    api "androidx.annotation:annotation:1.0.0"
 
     // Square
     implementation "com.squareup.okhttp3:okhttp:${libs.okhttpVersion}"
