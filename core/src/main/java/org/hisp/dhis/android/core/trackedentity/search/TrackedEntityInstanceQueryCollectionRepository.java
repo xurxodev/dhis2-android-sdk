@@ -41,6 +41,7 @@ import org.hisp.dhis.android.core.arch.repositories.children.internal.ChildrenSe
 import org.hisp.dhis.android.core.arch.repositories.collection.ReadOnlyWithUidCollectionRepository;
 import org.hisp.dhis.android.core.arch.repositories.filters.internal.BoolFilterConnector;
 import org.hisp.dhis.android.core.arch.repositories.filters.internal.EqFilterConnector;
+import org.hisp.dhis.android.core.arch.repositories.filters.internal.EqLikeInItemFilterConnector;
 import org.hisp.dhis.android.core.arch.repositories.filters.internal.EqLikeItemFilterConnector;
 import org.hisp.dhis.android.core.arch.repositories.filters.internal.ListFilterConnector;
 import org.hisp.dhis.android.core.arch.repositories.filters.internal.PeriodFilterConnector;
@@ -174,8 +175,8 @@ public final class TrackedEntityInstanceQueryCollectionRepository
      * @param attributeId Attribute uid to use in the filter
      * @return Repository connector
      */
-    public EqLikeItemFilterConnector<TrackedEntityInstanceQueryCollectionRepository> byAttribute(String attributeId) {
-        return connectorFactory.eqLikeItemC(attributeId, filterItem -> {
+    public EqLikeInItemFilterConnector<TrackedEntityInstanceQueryCollectionRepository> byAttribute(String attributeId) {
+        return connectorFactory.eqLikeInItemC(attributeId, filterItem -> {
             List<RepositoryScopeFilterItem> attributes = new ArrayList<>(scope.attribute());
             attributes.add(filterItem);
             return scope.toBuilder().attribute(attributes).build();
