@@ -275,11 +275,17 @@ internal class TrackedEntityInstanceLocalQueryHelper @Inject constructor(
     private fun appendFilterWhere(where: WhereClauseBuilder, items: List<RepositoryScopeFilterItem>) {
         for (item in items) {
             val valueStr =
-                if (item.operator() == FilterItemOperator.LIKE) "%${escapeQuotes(item.value())}%"
-                else escapeQuotes(item.value())
+                when {
+                    item.operator() == FilterItemOperator.LIKE -> "'%${escapeQuotes(item.value())}%'"
+                    item.operator() == FilterItemOperator.IN -> {
+                        val options = item.value().split(";").joinToString { "'${escapeQuotes(it)}'" }
+                        "($options)"
+                    }
+                    else ->  "'${escapeQuotes(item.value())}'"
+                }
 
             val sub = String.format(
-                "SELECT 1 FROM %s %s WHERE %s = %s AND %s = '%s' AND %s %s '%s'",
+                "SELECT 1 FROM %s %s WHERE %s = %s AND %s = '%s' AND %s %s %s",
                 TrackedEntityAttributeValueTableInfo.TABLE_INFO.name(), teavAlias,
                 dot(teavAlias, trackedEntityInstance), dot(teiAlias, IdentifiableColumns.UID),
                 dot(teavAlias, trackedEntityAttribute), escapeQuotes(item.key()),

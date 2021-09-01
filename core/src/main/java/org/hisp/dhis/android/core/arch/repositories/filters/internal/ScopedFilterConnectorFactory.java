@@ -62,6 +62,11 @@ public class ScopedFilterConnectorFactory<R extends BaseRepository, S extends Ba
         return new EqLikeItemFilterConnector<>(key, item -> repositoryFactory.updated(baseScopeFactory.updated(item)));
     }
 
+    public EqLikeInItemFilterConnector<R> eqLikeInItemC(String key, BaseScopeFactory<S,
+            RepositoryScopeFilterItem> baseScopeFactory) {
+        return new EqLikeInItemFilterConnector<>(key, item -> repositoryFactory.updated(baseScopeFactory.updated(item)));
+    }
+
     public PeriodFilterConnector<R> periodConnector(BaseScopeFactory<S, DateFilterPeriod> baseScopeFactory) {
         return new PeriodFilterConnector<>(filter -> repositoryFactory.updated(baseScopeFactory.updated(filter)));
     }
