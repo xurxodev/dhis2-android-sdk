@@ -47,33 +47,43 @@ public class ScopedFilterConnectorFactory<R extends BaseRepository, S extends Ba
     }
 
     public <T> EqFilterConnector<R, T> eqConnector(BaseScopeFactory<S, T> baseScopeFactory) {
-        return new EqFilterConnector<>(value -> repositoryFactory.updated(baseScopeFactory.updated(value)));
+        return new EqFilterConnector<>(
+                value -> repositoryFactory.updated(baseScopeFactory.updated(value)));
     }
 
-    public <T> ListFilterConnector<R, T> listConnector(BaseScopeFactory<S, List<T>> baseScopeFactory) {
-        return new ListFilterConnector<>(list -> repositoryFactory.updated(baseScopeFactory.updated(list)));
+    public <T> ListFilterConnector<R, T> listConnector(
+            BaseScopeFactory<S, List<T>> baseScopeFactory) {
+        return new ListFilterConnector<>(
+                list -> repositoryFactory.updated(baseScopeFactory.updated(list)));
     }
 
     public BoolFilterConnector<R> booleanConnector(BaseScopeFactory<S, Boolean> baseScopeFactory) {
-        return new BoolFilterConnector<>(bool -> repositoryFactory.updated(baseScopeFactory.updated(bool)));
+        return new BoolFilterConnector<>(
+                bool -> repositoryFactory.updated(baseScopeFactory.updated(bool)));
     }
 
     public EqLikeItemFilterConnector<R> eqLikeItemC(String key, BaseScopeFactory<S,
             RepositoryScopeFilterItem> baseScopeFactory) {
-        return new EqLikeItemFilterConnector<>(key, item -> repositoryFactory.updated(baseScopeFactory.updated(item)));
+        return new EqLikeItemFilterConnector<>(key,
+                item -> repositoryFactory.updated(baseScopeFactory.updated(item)));
     }
 
     public EqLikeInItemFilterConnector<R> eqLikeInItemC(String key, BaseScopeFactory<S,
             RepositoryScopeFilterItem> baseScopeFactory) {
-        return new EqLikeInItemFilterConnector<>(key, item -> repositoryFactory.updated(baseScopeFactory.updated(item)));
+        return new EqLikeInItemFilterConnector<>(key,
+                item -> repositoryFactory.updated(baseScopeFactory.updated(item)));
     }
 
-    public PeriodFilterConnector<R> periodConnector(BaseScopeFactory<S, DateFilterPeriod> baseScopeFactory) {
-        return new PeriodFilterConnector<>(filter -> repositoryFactory.updated(baseScopeFactory.updated(filter)));
+    public PeriodFilterConnector<R> periodConnector(
+            BaseScopeFactory<S, DateFilterPeriod> baseScopeFactory) {
+        return new PeriodFilterConnector<>(
+                filter -> repositoryFactory.updated(baseScopeFactory.updated(filter)));
     }
 
-    public PeriodsFilterConnector<R> periodsConnector(BaseScopeFactory<S, List<DateFilterPeriod>> baseScopeFactory) {
-        return new PeriodsFilterConnector<>(filter -> repositoryFactory.updated(baseScopeFactory.updated(filter)));
+    public PeriodsFilterConnector<R> periodsConnector(
+            BaseScopeFactory<S, List<DateFilterPeriod>> baseScopeFactory) {
+        return new PeriodsFilterConnector<>(
+                filter -> repositoryFactory.updated(baseScopeFactory.updated(filter)));
     }
 
     public OrganisationUnitFilterConnector<R> organisationUnitConnector(
