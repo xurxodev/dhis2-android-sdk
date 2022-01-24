@@ -19,7 +19,7 @@ jobs:
           java-version: 1.8
           
       - name: Run Kotlin Linter
-        run: ./gradlew ktlintcheck
+        run: chmod +x runChecks.sh && runChecks.sh
 
       - name: Run Unit Tests
         run: ./gradlew testDebugUnitTest
