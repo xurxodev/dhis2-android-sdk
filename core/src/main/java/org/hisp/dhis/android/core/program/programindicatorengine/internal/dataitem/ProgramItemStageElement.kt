@@ -59,18 +59,19 @@ internal class ProgramItemStageElement : ProgramExpressionItem() {
             val aggregationType: AggregationType? = visitor.programIndicatorContext.programIndicator.aggregationType()
 
             if (candidates.isNotEmpty()) {
-                value =candidates.last().value()
-                    if (AggregationType.LAST == aggregationType || AggregationType.LAST_AVERAGE_ORG_UNIT == aggregationType) {
-                        candidates.last().value()
-                    } else if (AggregationType.AVERAGE == aggregationType) {
-                        val candidatesValues = candidates.map { it.value()!!.toDouble() }
-                        avg(candidatesValues).toString()
-                    } else if (AggregationType.SUM == aggregationType) {
-                        val candidatesValues = candidates.map { it.value()!!.toDouble() }
-                        sum(candidatesValues).toString()
-                    } else {
-                        candidates.last().value()
-                    }
+                value = candidates.last().value()
+                if (AggregationType.LAST == aggregationType ||
+                    AggregationType.LAST_AVERAGE_ORG_UNIT == aggregationType) {
+                    candidates.last().value()
+                } else if (AggregationType.AVERAGE == aggregationType) {
+                    val candidatesValues = candidates.map { it.value()!!.toDouble() }
+                    avg(candidatesValues).toString()
+                } else if (AggregationType.SUM == aggregationType) {
+                    val candidatesValues = candidates.map { it.value()!!.toDouble() }
+                    sum(candidatesValues).toString()
+                } else {
+                    candidates.last().value()
+                }
             }
         }
 
@@ -82,7 +83,7 @@ internal class ProgramItemStageElement : ProgramExpressionItem() {
     }
 
     private fun sum(values: List<Double>): Double {
-        return  values.reduce { acc, value -> acc + value }
+        return values.reduce { acc, value -> acc + value }
     }
 
     private fun avg(values: List<Double>): Double {
