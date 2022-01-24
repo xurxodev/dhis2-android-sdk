@@ -281,7 +281,7 @@ internal class TrackedEntityInstanceLocalQueryHelper @Inject constructor(
                         val options = item.value().split(";").joinToString { "'${escapeQuotes(it)}'" }
                         "($options)"
                     }
-                    else ->  "'${escapeQuotes(item.value())}'"
+                    else -> "'${escapeQuotes(item.value())}'"
                 }
 
             val sub = String.format(

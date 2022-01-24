@@ -27,7 +27,7 @@
  */
 package org.hisp.dhis.android.core.program.programindicatorengine.internal.dataitem
 
-import java.util.*
+import org.hisp.dhis.android.core.common.AggregationType
 import org.hisp.dhis.android.core.event.Event
 import org.hisp.dhis.android.core.event.EventTableInfo
 import org.hisp.dhis.android.core.parser.internal.expression.CommonExpressionVisitor
@@ -41,7 +41,6 @@ import org.hisp.dhis.android.core.program.programindicatorengine.internal.Progra
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityDataValue
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityDataValueTableInfo
 import org.hisp.dhis.parser.expression.antlr.ExpressionParser.ExprContext
-import org.hisp.dhis.android.core.common.AggregationType
 
 internal class ProgramItemStageElement : ProgramExpressionItem() {
     override fun evaluate(ctx: ExprContext, visitor: CommonExpressionVisitor): Any? {
@@ -61,7 +60,8 @@ internal class ProgramItemStageElement : ProgramExpressionItem() {
             if (candidates.isNotEmpty()) {
                 value = candidates.last().value()
                 if (AggregationType.LAST == aggregationType ||
-                    AggregationType.LAST_AVERAGE_ORG_UNIT == aggregationType) {
+                    AggregationType.LAST_AVERAGE_ORG_UNIT == aggregationType
+                ) {
                     candidates.last().value()
                 } else if (AggregationType.AVERAGE == aggregationType) {
                     val candidatesValues = candidates.map { it.value()!!.toDouble() }
